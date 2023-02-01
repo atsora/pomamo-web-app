@@ -1,0 +1,102 @@
+{
+    "default": [
+        "clean",
+        "copy:js",
+        "copy:jslib",
+        "browserify",
+        "copy:webconfig",
+        "copy:img",
+        "copy:css",
+        "lessThemes",
+        "copy:fixedpages",
+        "bake",
+        "replace:html",
+        "copy:custompages",
+        "obfuscator",
+        "replace:obfuscator",
+        "copy:es2015forrelease",
+        "clean:less"
+    ],
+    "release": [
+        "clean",
+        "clean:dist",
+        "copy:js",
+        "copy:jslib",
+        "browserify",
+        "copy:webconfig",
+        "copy:img",
+        "copy:css",
+        "lessThemes",
+        "copy:fixedpages",
+        "bake",
+        "replace:html",
+        "copy:custompages",
+        "obfuscator",
+        "replace:obfuscator",
+        "copy:es2015forrelease",
+        "clean:less"
+    ],
+    "beta": [
+        "clean",
+        "clean:dist",
+        "copy:js",
+        "copy:jslib",
+        "browserify",
+        "copy:webconfig",
+        "copy:img",
+        "copy:css",
+        "lessThemes",
+        "copy:fixedpages",
+        "bake",
+        "replace:html",
+        "copy:custompages",
+        "replace:htmltodist",
+        
+        "copy:es2015forbeta",
+        "clean:less"
+    ],
+    "exports": [
+        "subgrunt:exportsrelease",
+        "copy:exportsrelease",
+        
+        "copy:exportstoreport"
+    ],
+    "exportsdev": [
+        "subgrunt:exportsdev",
+        "copy:exportsdev"
+    ],
+    "dev": [
+        "clean",
+        "subgrunt:exportsdev",
+        "copy:exportsdev",
+        "copy:js",
+        "copy:configEmpty",
+        "copy:jslib",
+        "browserify",
+        "copy:webconfig",
+        "copy:img",
+        "copy:css",
+        "lessThemes",
+        "copy:fixedpages",
+        "bake",
+        "replace:html",
+        "copy:custompages"
+    ],
+    "js": [
+        "copy:js",
+        "copy:jslib",
+        "browserify"
+    ],
+    "css": [
+        "copy:css",
+        "lessThemes"
+    ],
+    "html": [
+        "copy:fixedpages",
+        "bake",
+        "replace:html"
+    ],
+    "linux": [
+        "copy:linux"
+    ]
+}

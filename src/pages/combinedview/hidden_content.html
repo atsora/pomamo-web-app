@@ -1,0 +1,45 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class='single-cell' id='boxtoclone'>
+  <div class="tile">
+    <div class="tile-title combinedview-title">
+      <x-runningbutton></x-runningbutton>
+      <div class="machinedisplay-position">
+        <x-machinedisplay></x-machinedisplay>
+      </div>
+      <x-performancetarget></x-performancetarget>
+    </div>
+    <div class="tile-content">
+      <div class="combinedview-middle-div">
+        <div class="combinedview-leftdisplay">
+          <div class="combinedview-today">Today</div>
+          <div class="combinedview-alarm-div">
+            <x-currenticoncncalarm active='true'></x-currenticoncncalarm>
+          </div>
+        </div>
+        <div class="combinedview-runningslotpie">
+          <x-runningslotpie period-context='combinedview_today' textchange-context='showPercent'></x-runningslotpie>
+        </div>
+        <div class="combinedview-rightdisplay">
+          <x-stacklight></x-stacklight>
+        </div>
+      </div>
+      <div class="combinedview-bottombar">
+        <div class="combinedview-bottomleftbar">
+          <div class="combinedview-bar pulse-bar-div">
+            <x-runningslotbar height=40 period-context='combinedview_6days' motion-context='motion_6day_mach'>
+            </x-runningslotbar>
+          </div>
+          <x-datetimegraduation period-context='combinedview_6days' bottom='true'></x-datetimegraduation>
+        </div>
+        <div class="combinedview-motionpercentage">
+          <x-motionpercentage motion-context='motion_6day_mach'></x-motionpercentage>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

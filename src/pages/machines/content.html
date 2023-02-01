@@ -1,0 +1,100 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<x-periodmanager exclude-now="false" period-context="machines"></x-periodmanager>
+
+<div class="machines-main">
+  <div class="machinetab-list grouparray-dependant">
+    <x-grouparray templateid='boxtoclone' column=1 row=100 forcestaticlist=true></x-grouparray>
+  </div>
+
+  <div class="machinedetails tile grouparray-dependant">
+    <div class="machinetitle tile-title">
+      <x-machinedisplay machine-context="PulseWebApp"></x-machinedisplay>
+    </div>
+    <div class="machine-component" id='coloredbar'>
+      <div class="pulse-bar-div">
+        <div class="div-bar-and-percent">
+          <div class="div-bar">
+            <div class="graduation-bar">
+              <x-datetimegraduation period-context="machines"></x-datetimegraduation>
+            </div>
+            <div class="pulse-bar-div">
+              <div class="top-bar">
+                <x-shiftslotbar machine-context="PulseWebApp" period-context="machines"></x-shiftslotbar>
+                <x-machinestatebar machine-context="PulseWebApp" period-context="machines"></x-machinestatebar>
+                <x-observationstatebar machine-context="PulseWebApp" period-context="machines"></x-observationstatebar>
+              </div>
+              <div class="middle-bar">
+                <x-operationcyclebar machine-context="PulseWebApp" period-context="machines"></x-operationcyclebar>
+                <x-operationslotbar machine-context="PulseWebApp" period-context="machines"></x-operationslotbar>
+                <x-isofileslotbar machine-context="PulseWebApp" period-context="machines"></x-isofileslotbar>
+                <x-reasonslotbar machine-context="PulseWebApp" motion-context="PulseWebApp" period-context="machines">
+                </x-reasonslotbar>
+                <x-cncalarmbar machine-context="PulseWebApp" period-context="machines"></x-cncalarmbar>
+                <x-redstacklightbar machine-context="PulseWebApp" period-context="machines"></x-redstacklightbar>
+                <x-cncvaluebar machine-context="PulseWebApp" period-context="machines"></x-cncvaluebar>
+              </div>
+              <div class="bottom-bar"></div>
+            </div>
+          </div>
+          <div class="right-percent">
+            <x-motionpercentage motion-context="PulseWebApp" machine-context="PulseWebApp" period-context="machines">
+            </x-motionpercentage>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="machine-component" id='perf'>
+      <div class="pulse-bar-div">
+        <x-performancebar machine-context="PulseWebApp" status-context="PulseWebApp" height="60"
+          period-context="machines"></x-performancebar>
+      </div>
+    </div>
+    <div class="machine-component" id='LSN'>
+      <div class="pulse-bar-div">
+        <x-lastserialnumber machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machines">
+        </x-lastserialnumber>
+      </div>
+    </div>
+    <div class="machine-component" id='LMS'>
+      <div class="pulse-bar-div">
+        <x-lastmachinestatus machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machines">
+        </x-lastmachinestatus>
+      </div>
+    </div>
+    <div class="machine-component" id='LWI'>
+      <div class="pulse-bar-div">
+        <x-lastworkinformation machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machines">
+        </x-lastworkinformation>
+      </div>
+    </div>
+    <div class="machine-component" id='seq'>
+      <div class="pulse-bar-div">
+        <x-sequencebar machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machines">
+        </x-sequencebar>
+      </div>
+    </div>
+    <div class="machine-component" id='tool'>
+      <div class="pulse-bar-div">
+        <x-toollifemachine machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machines">
+        </x-toollifemachine>
+      </div>
+    </div>
+    <div class="machine-component" id='cycle'>
+      <div class="pulse-bar-div">
+        <x-cycleprogressbar height="20" machine-context="PulseWebApp" status-context="PulseWebApp"
+          period-context="machines"></x-cycleprogressbar>
+      </div>
+    </div>
+    <div class="machine-component" id='LMST'>
+      <div class="pulse-bar-div">
+        <x-lastmachinestatetemplate machine-context="PulseWebApp" period-context="machines">
+        </x-lastmachinestatetemplate>
+      </div>
+    </div>
+  </div>
+</div>

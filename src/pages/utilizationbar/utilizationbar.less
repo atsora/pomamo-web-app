@@ -1,0 +1,94 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "pulse.exports.light.less"; // Global import
+/*// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-checkpath/x-checkpath.less";
+// @import "x-checkversion/x-checkversion.less";
+// @import "x-checkconfigupdate/x-checkconfigupdate.less";
+// @import "x-checklogin/x-checklogin.less";
+// @import "x-message/x-message.less";
+*/
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-machinemodelegends/x-machinemodelegends.less";
+@import "x-reasongroups/x-reasongroups.less";
+@import "x-motionpercentage/x-motionpercentage.less";
+@import "x-clock/x-clock.less";
+@import "x-periodmanager/x-periodmanager.less";
+@import "x-reasonslotbar/x-reasonslotbar.less";
+@import "x-datetimegraduation/x-datetimegraduation.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-reasonbutton/x-reasonbutton.less";
+@import "x-grouparray/x-grouparray.less"; // New container
+@import "style.less";
+
+
+// Config
+#displaydayshours{
+  float: none !important;
+  max-width: 25% !important;
+  margin-right: 10px;
+}
+
+// MAIN display
+.tile-content{
+  display: flex;
+  flex-direction: column; // ->set height
+  .machineutilizationbar-bar-and-percent{
+    flex-grow: 1; // Strech
+
+    display: flex;
+    flex-direction: row; // align children
+
+    padding-top: 20px;
+
+    .machineutilizationbar-bar-box{
+      flex-grow: 1; // Strech
+      flex-shrink: 99999;
+      overflow: hidden; // for good resize
+      
+      .machineutilizationbar-bar-border{ //==  pulse-bar-div
+       // To see full graduation
+        margin-left: @margin_graduation;
+        margin-right: @margin_graduation;
+      }
+    }
+    .utilizationbar-percent-position{
+      display: flex;
+      flex-direction: column; // align children
+      justify-content: space-evenly;
+      x-motionpercentage{
+        padding-bottom: 24px; // == graduation height
+      }
+    }
+  }
+}
+
+x-datetimegraduation {
+  .datetimegraduation-axis {
+    .domain {
+      stroke: transparent;
+    }
+  }
+}
+
+// CLOCK 
+.clock-div {
+  font-size: 4em;
+  margin-top: 30px;
+  text-align: center;
+}
+@media (max-width: 685px) {
+  .clock-div {
+    height: auto;
+    margin-top: 0;
+  }
+}

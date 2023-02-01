@@ -1,0 +1,67 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "pulse.exports.light.less"; // Global import
+// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-checkpath/x-checkpath.less";
+// @import "x-checkversion/x-checkversion.less";
+// @import "x-checkconfigupdate/x-checkconfigupdate.less";
+// @import "x-checklogin/x-checklogin.less";
+// @import "x-message/x-message.less";
+
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-grouparray/x-grouparray.less";
+@import "x-reasonbutton/x-reasonbutton.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-reasonslotpie/x-reasonslotpie.less";
+@import "x-motionpercentage/x-motionpercentage.less";
+@import "x-reasongroups/x-reasongroups.less";
+@import "x-machinemodelegends/x-machinemodelegends.less";
+@import "style.less";
+
+
+.tile-content{
+  display: flex;
+  flex-direction: column; // align children (only 1 here)
+  .utilizationpie-reasonslotpie-motionpercentage{
+    flex: 1;  // Strech
+
+    padding-top: 12px;
+    
+    display: flex;
+    flex-direction: row; // align children
+    overflow: hidden; // To limit total height
+    .utilizationpie-today {
+      justify-content: center;
+      font-size: 2em;
+      //padding-left: 8px;
+      
+      // for text vertical align
+      //position: absolute;
+      //top: 50%;
+      //transform: translateY(-50%); // tiré de la moitié de sa propre hauteur 
+    }
+
+    .utilizationpie-reasonslotpie{
+      flex: 1; 
+      min-height: 50px;
+      //margin-left: 70px;
+      
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
+
+// PIE COLORS
+/*.reasonslotpie-content{
+  border-top-color: #000000; // intérieur de l'anneau
+}*/

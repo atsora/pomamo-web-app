@@ -1,0 +1,287 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "pulse.exports.light.less"; // Global import
+// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-checkpath/x-checkpath.less";
+// @import "x-checkversion/x-checkversion.less";
+// @import "x-checkconfigupdate/x-checkconfigupdate.less";
+// @import "x-checklogin/x-checklogin.less";
+// @import "x-message/x-message.less";
+
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-grouparray/x-grouparray.less";
+@import "x-reasonbutton/x-reasonbutton.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-currentworkinfo/x-currentworkinfo.less";
+@import "x-freetext/x-freetext.less";
+@import "x-reasonslotpie/x-reasonslotpie.less";
+@import "x-currentsequence/x-currentsequence.less";
+@import "x-currenttool/x-currenttool.less";
+@import "x-currenticoncncalarm/x-currenticoncncalarm.less";
+@import 'x-stacklight/x-stacklight.less';
+@import "x-motionpercentage/x-motionpercentage.less";
+@import "x-motiontime/x-motiontime.less";
+@import "x-motiontime/x-motiontime.less";
+@import "x-datetimegraduation/x-datetimegraduation.less";
+@import "x-cncvaluebar/x-cncvaluebar.less";
+@import "x-reasonslotbar/x-reasonslotbar.less";
+@import "x-machinemodelegends/x-machinemodelegends.less";
+@import "x-performancetarget/x-performancetarget.less";
+@import "x-reasongroups/x-reasongroups.less";
+@import "style.less";
+
+
+.tile-content {
+  display: flex;
+  flex-direction: column; // align children
+  overflow: hidden; // Hide bottom displays when too small
+
+  .machinestatus-top-div { // currentworkinfo
+    margin-top: 4px;
+  }
+
+  .machinestatus-info {
+    display: flex;
+    flex-direction: row; // align children
+    justify-content: space-between;
+
+    width: 100%;
+
+    .machinestatus-today-or-shift-or-week {
+      flex-grow: 1; // Strech
+      font-weight: bold;
+      font-size: 1.5em;
+      line-height: 1.5em;
+
+      //padding-top: 6px;
+      &::before {
+        content: 'Utilization ';
+      }
+
+      span {
+        text-transform: capitalize; // 1st letter = MAJ
+        word-spacing: -100%; // To remove space on the left
+
+        &::before {
+          content: '(';
+        }
+
+        &::after {
+          content: ')';
+        }
+      }
+
+      x-freetext {
+        display: inline-block; // To display Utilization on the same line
+      }
+    }
+
+    .machinestatus-actual {
+      //float: right;
+      margin-left: 10px;
+
+      x-motionpercentage {
+        flex-grow: 1; // Strech
+        text-align: right;
+        font-size: 3em;
+      }
+
+      x-motiontime {
+        display: none; // default
+        flex-grow: 1; // Strech
+        text-align: right;
+        font-size: 3em;
+      }
+    }
+
+    .machinestatus-target {
+      //float: right;
+      margin-left: 10px;
+
+      x-performancetarget {
+        font-weight: bold;
+
+        .performancetarget-span {
+          display: block;
+          text-align: center;
+          font-size: 2em;
+
+          &::before {
+            //content: "target"; == default
+            display: block;
+            font-size: 0.45em;
+            font-weight: normal;
+          }
+        }
+      }
+    }
+  }
+
+  .machinestatus-alarm-pie-stacklight {
+    flex-grow: 2; // To strech
+
+    display: flex;
+    flex-direction: row; // align children
+    align-items: stretch; // = Vertical center
+    justify-content: space-between; // Keep pie in the middle
+
+    min-height: 50px;
+
+    //position: relative;
+
+    .machinestatus-light-div,
+    .machinestatus-tool-and-alarm-div {
+      display: inline-block;
+      //width: 15%;
+      flex-basis: 15%;
+
+      position: relative;
+      padding: 4px;
+
+      min-height: 50px; // height in % not working
+      //box-sizing: border-box;
+
+      x-stacklight {
+        position: relative;
+        max-height: 80%;
+        max-width: 80%;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+      }
+    }
+
+    // Current tool
+    .machinestatus-current-tool-div,
+    .machinestatus-current-sequence-div {
+      position: absolute;
+      top: 20%;
+      width: 100%;
+
+      x-currenttool {
+        font-size: 1.5em;
+
+        .currenttool-data {
+          display: block;
+          text-align: center;
+          font-weight: bold;
+        }
+      }
+    }
+
+    // Alarm
+    .machinestatus-alarm-div {
+      box-sizing: border-box;
+      height: 40%;
+      // Vertical align 
+      position: absolute;
+      width: 100%;
+      transform: translateY(-50%);
+      top: 50%;
+
+      x-currenticoncncalarm {
+        // Make it smaller and centered
+        box-sizing: border-box;
+        position: absolute;
+        height: 80%;
+        width: 80%;
+
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+
+        svg {
+          width: 70%;
+          margin-left: 15%;
+          box-sizing: border-box;
+        }
+      }
+    }
+
+    .machinestatus-reasonslotpie {
+      flex-grow: 2; // To strech
+      flex-shrink: 2;
+
+      display: inline-block;
+      position: relative; // For machinestatus-reasonbutton-position's position
+
+      padding: 4px;
+      box-sizing: border-box;
+
+      x-reasonslotpie {
+        .time-in-pie {
+          fill: @color_text_alternate;
+        }
+      }
+
+      .machinestatus-reasonbutton-position {
+        position: absolute;
+        width: 14%;
+        height: 20%;
+        // Horizontal center + Vertical align (centered)
+        left: 43%; // 50 - width/2
+        top: 30%; // = 40 - height/2 = Not in the middle, but above (to se text too)
+
+        x-reasonbutton {
+          // Center
+          //transform: translate(-50%, -50%); // Not needed !
+        }
+      }
+    }
+  }
+
+  // BOTTOM DISPLAY
+  .machinestatus-weekly-info {
+    border-top: 1px solid @color_window_alternate_border;
+    margin-top: 10px;
+    padding-top: 5px;
+    margin-bottom: 10px;
+  }
+
+  .machinestatus-weekly-bar-position {
+    .pulse-bar-div {
+      margin-left: @margin_graduation;
+      margin-right: @margin_graduation;
+      border-right-width: @border_length;
+      border-left-width: @border_length;
+    }
+
+    x-datetimegraduation {
+      .datetimegraduation-axis {
+        .domain {
+          stroke: transparent;
+        }
+      }
+    }
+  }
+}
+
+// Top display
+x-currentworkinfo {
+  display: block;
+  text-align: center;
+  background-color: @widget_background; // @container_header_color;
+  color: @widget_text;
+  border-bottom: solid 1px @color_window_alternate_border;
+  border-top: solid 1px @color_window_alternate_border;
+  height: 1.5em; // To force height even if no data - ONE LINE
+  padding: 2px 0 0 0; // For Edge top padding....
+  box-sizing: border-box;
+
+  overflow: hidden; // For Chrome, small display = avoid 2 lines
+}
+
+@media (max-width: 685px) {
+  .tile {
+    height: 350px;
+  }
+}

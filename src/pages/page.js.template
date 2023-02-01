@@ -1,0 +1,56 @@
+var pulseConfig = require('pulseConfig');
+var pulsePage = require('pulsePage');
+
+require('x-machinedisplay/x-machinedisplay');
+
+class XXXPage extends pulsePage.BasePage {
+  constructor() {
+    super();
+
+    // General configuration
+    //this.canConfigureColumns = false; // useful only if createTableCell is defined
+    //this.canConfigureRows = false; // useful only if createTableCell is defined
+    //this.showMachineselection = false;
+    //pulseConfig.set('column', '');
+    //pulseConfig.set('row', '');
+  }
+
+  // CONFIG PANEL - Init
+  initOptionValues() {
+  }
+
+  // CONFIG PANEL - Default values
+  setDefaultOptionValues() {
+  }
+
+  // CONFIG PANEL - Function to read custom inputs
+  getOptionValues() {
+    let optionsValues = '';
+    return optionsValues;
+  }
+
+  getMissingConfigs() {
+    let missingConfigs = [];
+
+    let groups = pulseConfig.getArray('group');
+    let machines = pulseConfig.getArray('machine');
+    if ((machines == null || machines.length == 0) &&
+        (groups == null || groups.length == 0)) {
+      missingConfigs.push({
+        selector: 'x-machineselection, #editmachines, .group-machines',
+        message: 'Please select at least one machine before launching the page.'
+      }); 
+    }
+
+    return missingConfigs;
+  }
+
+  buildContent() {
+    //if (pulseConfig.getBool('show???'))
+  }
+
+}
+
+$(document).ready(function() {
+  pulsePage.preparePage(new XXXPage());
+});

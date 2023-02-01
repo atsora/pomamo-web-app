@@ -1,0 +1,30 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+
+@import "pulse.exports.light.less"; // Global import
+
+// Local
+@import "x-validatetoken/x-validatetoken.less";
+@import "style.less";
+
+
+.validate-tile {
+  .tile;
+  min-height: 200px;
+  height: 100%;
+  width: 100%;
+}
+
+
+// No legend and no page options
+#pulse-panel-parameter-content,
+.legend-content,
+.group-pages,
+.group-machines {
+  display: none !important;
+}

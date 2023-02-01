@@ -1,0 +1,1482 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Imports common for all pages
+/* Move to all individual pages
+NEVER ADD x-tag here AND in pages -> we need to choose !
+*/
+
+@import "x-logindisplay/x-logindisplay.less";
+@import "theme.less";
+@import "x-loginpasswordbutton/x-loginpasswordbutton.less";
+@import "x-loginchangepasswordbutton/x-loginchangepasswordbutton.less";
+
+@import "x-loginconnection/x-loginconnection.less";
+
+@menuWidth : 270px;
+
+// STYLES DE BASE
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 1em 0 .5em 0;
+  /* Rapproche le titre du texte. */
+  line-height: 1.2;
+  font-weight: bold;
+  /* Default value. */
+  font-style: normal;
+}
+
+h1 {
+  font-size: 1.65em;
+}
+
+h2 {
+  font-size: 1.4em;
+}
+
+h3 {
+  font-size: 1.15em;
+}
+
+h4 {
+  font-size: 1em;
+}
+
+address {
+  margin: .75em 0;
+  font-style: normal;
+}
+
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+input,
+button,
+select {
+  vertical-align: middle;
+}
+
+.notransition {
+  transition: none !important;
+}
+
+svg {
+  // To see again after hidden at start done in template.html
+  visibility: visible !important;
+}
+
+
+/* TO ADD, but not global ! -> in each page
+a {
+  color: @color_window_alternate;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+a:visited {
+  color: @color_window_alternate;
+}
+*/
+
+// INPUTS
+
+button {
+  cursor: pointer;
+}
+
+button.disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+// MAIN LAYOUT
+
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-size: 16px !important;
+}
+
+.hidden-content {
+  display: none;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  border: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+  font-size: 14px;
+  color: @color_text_alternate;
+
+  a {
+    color: inherit; // = better than fixed @color_text_alternate;
+    //text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  //line-height: 1.4; Problem vertical align between <span> and <a> -> DETAILS
+  background-image: @background_image;
+  background-repeat: repeat;
+  overflow: hidden;
+}
+
+@header_background_color_1: lighten(@color_window, 4%);
+@header_background_color_2: darken(@color_window, 4%);
+
+.pulse-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: @color_window;
+  /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(@header_background_color_1, @header_background_color_2);
+  /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(@header_background_color_1, @header_background_color_2);
+  /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(@header_background_color_1, @header_background_color_2);
+  /* For Firefox 3.6 to 15 */
+  background: linear-gradient(@header_background_color_1, @header_background_color_2);
+  /* Standard syntax */
+  color: fade(@color_text, 90%); // Change color when background is changed to see any text
+  box-shadow: @box_shadow;
+  z-index: 100;
+  border-bottom: 1px solid @color_window_border;
+}
+
+#pulse-inner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 33px; // 32 + 1 -> For IE
+}
+
+#pulse-navigation-and-main {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+
+
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  min-width: 400px;
+  overflow: hidden;
+  //color: @color_text_alternate;
+}
+
+#pulse-panel-navigation {
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  z-index: 51;
+  width: 270px;
+  transition: width 0.2s;
+  background-color: @color_window;
+  color: @color_text;
+  overflow: auto;
+  border-right: 1px solid @color_window_border;
+}
+
+#pulse-panel-parameter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  width: 270px;
+  background-color: @color_window;
+  color: @color_text;
+  overflow: hidden;
+  transition: transform 0.2s ease-out;
+  border-left: 1px solid @color_window_border;
+}
+
+.pulse-mainarea {
+  flex-basis: 100%;
+  flex-grow: 1;
+  flex-shrink: 1;
+
+  box-sizing: border-box;
+  min-width: 400px;
+  overflow-x: hidden;
+  overflow-y: hidden; // NO scroll here -> already managed
+  color: @color_text_alternate;
+}
+
+.pulse-mainarea-full {
+  //position: absolute;
+  display: block;
+  box-sizing: border-box;
+  overflow: auto; // Else strange scrollbars with IE
+  height: 100%; // For live display, for example
+}
+
+.pulse-mainarea-inner {
+  display: block;
+  padding: 7px;
+  box-sizing: border-box;
+  transition: padding-bottom 0.2s ease-out;
+  padding-bottom: 35px; // Default == logoHeight else search logoHeight in code
+  overflow: auto;
+
+  &.gridFullHeight {
+    height: 100%;
+  }
+}
+
+.pulse-mainarea:before {
+  /* customer logo if needed */
+  content: "";
+  background-position: bottom left;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  opacity: 0.3;
+  bottom: 4px;
+  left: 22px;
+  width: 20%;
+  height: 35px;
+  z-index: -1;
+}
+
+.pulse-mainarea:after {
+  /* main logo */
+  content: "";
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  opacity: 0.7;
+  bottom: 4px;
+  right: 22px;
+  width: 20%;
+  height: 35px;
+  z-index: -1;
+}
+
+.pulse-mainarea-bottom {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  text-align: center;
+  color: @color_text_alternate;
+
+  pointer-events: none; // to allow click through - restored in legend-content
+
+  &>div {
+    text-align: center;
+  }
+
+  .legend-content {
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    width: 54%; // 100% - real margin - 2* 20% == LOGO / was max-width
+    background-color: @container_color;
+    color: @container_text_color;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-left: 1px solid darken(@container_color, 10%);
+    border-right: 1px solid darken(@container_color, 10%);
+    border-top: 1px solid darken(@container_color, 10%);
+    box-shadow: @box_shadow;
+    z-index: 25;
+
+    box-sizing: border-box;
+    font-size: 0.9em;
+
+    pointer-events: initial; // restore click to see tooltip
+
+    .legend-toggle {
+      content: "Legend";
+      line-height: 30px;
+      padding: 0 10px;
+      text-align: center;
+      background-color: @container_color;
+      color: @container_text_color;
+      float: left;
+      margin-top: -31px;
+      margin-left: -1px;
+      border-left: 1px solid darken(@container_color, 10%);
+      border-right: 1px solid darken(@container_color, 10%);
+      border-top: 1px solid darken(@container_color, 10%);
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+      cursor: pointer;
+      pointer-events: initial;
+      width: 85px;
+
+      .legend-toggle-icon-up,
+      .legend-toggle-icon-down {
+        width: 14px;
+        height: 20px;
+        float: right;
+        margin: 5px;
+      }
+
+      .legend-toggle-icon-up {
+        .create_svg_hover('double-up');
+        display: none;
+      }
+
+      .legend-toggle-icon-down {
+        .create_svg_hover('double-down');
+      }
+    }
+  }
+
+  .legend-wrapper {
+    transition: transform 0.2s ease-out;
+
+    pointer-events: none; // to allow click through 
+
+    .pulse-legend-icon>svg {
+      filter: url(#innerShadow);
+    }
+
+    &.legendHiddenNoAnimation {
+      transition: none;
+    }
+
+    &.legendHidden {
+      .legend-toggle {
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+
+        .legend-toggle-icon-up {
+          .create_svg_hover('double-up');
+          display: block;
+        }
+
+        .legend-toggle-icon-down {
+          .create_svg_hover('double-down');
+          display: none;
+        }
+      }
+    }
+  }
+
+  .legend-wrapper.legendHiddenNoAnimation
+}
+
+.pulse-mainarea {
+  color: @color_text_alternate;
+  //text-align: center; NOT HERE !!!! Because it breaks all displays inside  --RV
+  //margin-top: 50px;
+
+  &>img {
+    border: 1px solid @color_window_alternate_border;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  &>span {
+    display: block;
+    width: 100%;
+    //text-align: center; // Idem -> TOO global ! --RV
+    margin-top: 10px;
+  }
+}
+
+#pulse-pagination {
+  position: absolute;
+  bottom: 5px;
+  left: 15px;
+  opacity: 0.3;
+  font-size: 25px;
+  font-weight: bold;
+  z-index: -1;
+}
+
+// HEADER
+
+.pulse-header-title {
+  font-size: 21px;
+  margin-top: 3px;
+  margin-left: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.title {
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 fade(darken(@color_text, 60%), 60%), -1px -1px 1px fade(darken(@color_text, 90%), 70%);
+  color: fade(@color_text, 90%); // Idem as above in .pulse-header
+  cursor: default;
+}
+
+.pulse-header-left {
+  display: flex; // pour navbar-apps
+  flex-direction: row;
+  //float: left;
+  border-right: 1px solid @color_window_border;
+  padding: 2px;
+  height: 28px;
+  box-sizing: content-box;
+}
+
+.pulse-header-right {
+  float: right;
+  border-left: 1px solid @color_window_border;
+  padding: 3px 2px 1px 2px;
+  height: 28px;
+  box-sizing: content-box;
+}
+
+.pulse-header-close-to-right {
+  display: flex; // easy align children
+
+  float: right;
+  height: 28px;
+  box-sizing: content-box;
+
+  x-logindisplay {
+    .logindisplay-content {
+      height: 20px; // Fixed height
+      padding: 2px 5px;
+      margin-top: 5px;
+      margin-right: 5px;
+      margin-left: 5px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+      background-color: @color_window_border;
+      color: @color_text;
+      border-radius: 3px;
+      position: relative;
+    }
+  }
+
+  #help-div {
+    height: 20px; // Fixed height
+    padding: 2px 5px;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-left: 5px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: @color_window_border;
+    color: @color_text;
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+
+    -webkit-transition: color 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out;
+
+    #help-icon {
+      .create_svg('question-solid');
+      height: 16px;
+      width: 16px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    &:hover {
+      svg {
+        stroke: @color_highlight  !important;
+        fill: @color_highlight  !important;
+      }
+
+      color: @color_highlight;
+    }
+  }
+}
+
+.pulse-header-center {
+  position: absolute;
+  left: 200px;
+  right: 200px;
+  text-align: center;
+}
+
+.pulse-header-center a {
+  text-decoration: none;
+}
+
+.pulse-header button {
+  height: 28px;
+  width: 28px;
+  border: none;
+  position: relative;
+  background-color: transparent;
+  padding: 0;
+}
+
+#navigationpanelbtn {
+  .create_svg('menu', @color_text, @color_highlight);
+}
+
+#configpanelbtn {
+  .create_svg('actions', @color_text, @color_highlight);
+}
+
+
+//.pulse-header button.withHover:hover svg,
+.pulse-header button.activated svg {
+  stroke: @color_highlight;
+  fill: @color_highlight;
+}
+
+.pulse-header button.disabled svg {
+  stroke: @color_gray;
+  fill: @color_gray;
+}
+
+.pulse-header button.disabled:hover svg {
+  stroke: @color_gray;
+  fill: @color_gray;
+}
+
+.pulse-header-rotation-progress {
+  width: 100%;
+  height: 3px;
+  position: absolute;
+  top: 33px;
+  background-color: transparent;
+}
+
+.pulse-header-rotation-progress>span {
+  background-color: @color_highlight;
+  height: 100%;
+  display: block;
+  position: absolute;
+}
+
+// NAVIGATION Between app
+.navbar-apps {
+  // apps access
+  display: flex;
+  flex-direction: row;
+  //flex-wrap: true;
+  margin-left: 10px;
+
+  .navbar-app-container {
+    cursor: pointer;
+    padding: 2px;
+
+    .navbar-app-content {
+      height: 24px;
+      width: 24px;
+
+      // see .create_svg
+      //background-image: done in js using inlineBackgroundSvg
+      background-repeat: no-repeat;
+
+      svg {
+        height: 100%;
+        width: 100%;
+        // instead of stroke: @color_text; fill: @color_text; cf currentcolor
+        color: @color_text;
+        transition: stroke 0.3s ease-in-out, fill 0.3s ease-in-out;
+      }
+
+      &:hover svg {
+        // instead of stroke: @color_highlight; fill: @color_highlight; cf currentcolor
+        color: @color_highlight;
+      }
+
+      &:disabled svg {
+        color: @color_text;
+        //stroke: @color_text;
+        //fill: @color_text;
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+// NAVIGATION PANEL
+#navbar {}
+
+#navbar>ul {
+  border-bottom: 1px solid @color_window_border_light;
+  padding: 0;
+  margin: 0;
+  display: block;
+
+  &>li {
+    font-weight: bold;
+    color: @color_text;
+    cursor: pointer;
+    position: relative;
+    border-bottom: 1px solid @color_window_border;
+    border-top: 1px solid @color_window_border_light;
+    list-style: none;
+
+    &:hover {
+      background-color: @color_window_hover;
+      //color: @color_text; - not needed
+    }
+
+    &.expandable>span::after {
+      content: '\025BE';
+      font-size: 20px;
+      position: absolute;
+      right: 10px;
+      top: 6px;
+    }
+
+    &.selected {
+      color: @color_highlight;
+      cursor: default;
+
+      svg path {
+        fill: @color_highlight  !important;
+      }
+    }
+
+    &>span.menutext {
+      padding: 12px 10px;
+      display: block;
+      font-size: 0.9em;
+    }
+
+    &>div.menuicon {
+      // background-image: done using js. See create_svg to use currentcolor
+      background-repeat: no-repeat; // for safety
+      // color: NOT @color_text_alternate; //== USE currentcolor = MAIN to fill svg
+
+      svg {
+        padding: 8px 10px 0 4px;
+        height: 22px;
+        width: 22px; // To avoid strange displays if svg is badly defined
+
+        // background-image: done using js. See create_svg to use currentcolor
+        //fill: NOT @color_text_alternate;
+        //color: NOT @color_text_alternate; //== USE currentcolor = parent color:
+      }
+
+      float: left;
+    }
+
+    &>ul {
+      padding: 0;
+      margin: 0;
+      box-shadow: inset 0px 7px 10px -12px #000, inset 0px -7px 10px -12px #000;
+      background-color: @color_window_alternate;
+      color: @color_text_alternate;
+      display: none;
+
+      &>li {
+        display: block;
+        padding: 5px 10px;
+        color: @color_text_alternate;
+        cursor: pointer;
+        font-weight: normal;
+
+        &.selected {
+          padding: 5px 10px 5px 6px;
+          border-left: 4px solid @color_highlight;
+          color: @color_highlight;
+          font-weight: bold;
+          cursor: default;
+        }
+      }
+    }
+
+    &.expandable>span {
+      cursor: pointer;
+    }
+  }
+}
+
+#pulse-inner:not(.navigation-always-visible).pulse-panel-navigation-collapsed #pulse-panel-navigation {
+  //transform: translateX(-@menuWidth);
+  width: 0;
+}
+
+#pulse-inner.navigation-always-visible {
+
+  #navbar>ul>li {
+    height: 40px;
+  }
+
+  .pulse-mainarea {
+    //left: 32px;
+  }
+
+  &.pulse-panel-navigation-collapsed {
+    .menutext {
+      display: none;
+    }
+
+    #pulse-panel-navigation {
+      width: 32px;
+      transition: width 0.2s;
+      overflow: hidden;
+    }
+  }
+}
+
+// PARAMETER PANEL
+
+#pulse-panel-parameter-content {
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  bottom: 30px; // 30 theme
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid @color_window_border;
+  border-top: 1px solid @color_window_border_light;
+  min-height: 48px;
+
+  .param-group {
+    border-bottom: 1px solid @color_window_border_light;
+
+    &.opened {
+      .param-group-content {
+        display: block;
+      }
+    }
+
+    &.missing-config {
+      .param-group-content {
+        display: block;
+      }
+    }
+
+    .param-group-header {
+      padding: 6px;
+      border-bottom: 1px solid @color_window_border;
+      display: flex;
+
+      .param-group-title {
+        flex-grow: 1;
+        /* Strech */
+        display: inline-block;
+        vertical-align: middle;
+        font-weight: bold;
+        font-size: 0.9em;
+        cursor: pointer;
+
+        &::before {
+          /* expandable*/
+          content: '\025BE';
+          font-size: 20px;
+          //position: absolute;
+          //left: 10px;
+          top: 12px;
+        }
+      }
+    }
+
+    .param-group-content {
+      padding: 10px;
+      margin: 0;
+      box-shadow: inset 0px 7px 10px -12px #000, inset 0px -7px 10px -12px #000;
+      background-color: @color_window_alternate;
+      color: @color_text_alternate;
+      display: none;
+      /* changed when opened */
+      font-weight: normal;
+
+      .labelsubgroup {
+        /*::before { // expandable -> NO !
+          content: '\025BE';
+          font-size: 20px;
+          position: absolute;
+          left: 10px;
+          top: 12px;
+          cursor: pointer;
+        }*/
+      }
+
+      .subgroup {
+        border-left: 2px solid @color_highlight;
+        padding-left: 6px;
+
+        font-size: 0.9em;
+      }
+
+      .radiogroup {
+        display: flex;
+        flex-wrap: wrap;
+        padding-top: 4px;
+        padding-bottom: 4px;
+
+        .inlined-radio {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+          align-items: flex-start; // baseline KO
+          padding-right: 4px;
+
+          span {
+            // was label. But can not use general def below
+            //width: initial !important;
+            //line-height: 1em !important;
+          }
+        }
+      }
+
+      // INPUTS
+      input[type="text"],
+      input[type="number"],
+      select {
+        background-color: @input_background_color;
+        color: @input_color;
+        border: 1px solid @input_border_color;
+
+        &.missing-config {
+          color: @color_highlight;
+          font-style: italic;
+        }
+      }
+
+      input[type="text"],
+      input[type="number"],
+      select {
+        float: right;
+      }
+
+      input[type="text"] {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+      }
+
+      input[type="checkbox"] {
+        width: auto;
+        float: right;
+      }
+
+      /*input[type="radio"] {
+        margin-bottom: 5px;
+        //padding-top: 10px;
+      }*/
+
+      >div:first-of-type {
+        label {
+          margin-top: 0 !important;
+        }
+      }
+
+      label {
+        display: inline-block; // Warning, not compatible with : flex-item -> use span with radio button
+        width: 100%;
+        clear: both;
+        margin-top: 10px;
+
+        &>input,
+        &>span {
+          float: right;
+          width: 60%;
+          box-sizing: border-box;
+        }
+
+        &>input[type="radio"] {
+          float: left;
+          width: 20px;
+        }
+
+        &>input[type="checkbox"] {
+          width: auto;
+
+          &:disabled {
+            cursor: default;
+            pointer-events: none;
+            opacity: 0.5; // == simulate disabled
+          }
+        }
+      }
+
+      // To remove +/- buttons -> TODO : maybe add new design (?)
+      /*
+      input[type="number"] {
+        appearance: none; // textfield;
+      }
+      input[type=number]::-webkit-inner-spin-button, 
+      input[type=number]::-webkit-outer-spin-button { 
+        appearance: none;
+      }*/
+
+    }
+  }
+
+  .param-group:empty {
+    border-bottom: none;
+  }
+}
+
+#showurl {
+  margin: 10px;
+  padding: 5px 15px;
+}
+
+#copyurl {
+  margin: 10px;
+  padding: 5px 15px;
+
+  // background color transition for urlcopied  / urlcopyfailed {
+  transition: 0.4s;
+}
+
+.urlcopied {
+  background-color: @color_green !important;
+  content: "success" !important;
+}
+
+.urlcopyfailed {
+  background-color: @color_red !important;
+  content: "failure" !important;
+}
+
+.param-group-button {
+  padding: 2px 10px;
+  width: 5em;
+}
+
+.param-group-button,
+#showurl,
+#copyurl {
+  .button-rounded-shadow;
+
+  text-shadow: 0 1px 0 @input_text_shadow_color;
+  //background-color: @input_background_color;
+  //color: @input_color_bold;
+  //border: 1px solid @input_border_color;
+
+  &:hover {
+    background-color: @input_background_color_hover;
+    color: @input_color_bold;
+    border: 1px solid @input_border_color;
+  }
+}
+
+.pulse-panel-parameter-collapsed #pulse-panel-parameter {
+  transform: translateX(@menuWidth);
+}
+
+#pulse-panel-parameter {
+
+  .machineselection-summary ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+
+    li {
+      list-style: disc;
+      margin-left: 16px;
+    }
+  }
+
+  &>button.btn {
+    margin: 20px 10px;
+  }
+
+  input {
+    //display: block; // removed to allow flex-item
+
+    &[overridden] {
+      font-weight: bold;
+    }
+  }
+
+  p {
+    margin: 5px 0 15px 0;
+  }
+
+}
+
+.machineselection-editbutton {
+  display: none;
+}
+
+.missing-config {
+  //border: solid 2px @color_red; 
+  color: @color_highlight;
+  font-style: italic;
+}
+
+.configuration-bottom-area-login {
+  display: none; // inline-block in home page only
+  // hides x-loginpasswordbutton and x-loginchangepasswordbutton
+}
+
+.configuration-bottom-area {
+  padding: 6px 10px 0 6px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid @color_window_border_light;
+  height: 30px; // 30 theme
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .configuration-bottom-area-switch>span {
+    vertical-align: top;
+    margin-left: 10px;
+  }
+
+  .configuration-bottom-area-version {
+    .version-label {
+      font-size: 0.8em;
+      font-style: italic;
+    }
+  }
+}
+
+// Remove list style for ALL groups
+.group-main {
+  //ol
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+// CENTER TABLE
+.main-table {
+  // global
+  box-sizing: border-box;
+  //height: 100%;
+  width: auto !important;
+  margin: 4px;
+  padding: 4px;
+
+  border-spacing: 0;
+  overflow: hidden;
+
+  //.group {
+  .group-container {
+
+    //ol
+    x-grouparray {
+      width: 100%;
+      height: 100%;
+    }
+
+    .group-single {
+      // li
+      display: inline-block;
+      list-style: none;
+      vertical-align: top;
+      position: relative;
+
+      .single-cell {
+        // == boxtoclone
+        padding: 7px;
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+  }
+}
+
+// CENTER TABLE
+.main-table-box {
+  // with rows AND columns
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%; // == tile
+  //margin: 0;
+  border-spacing: 0;
+  overflow: hidden;
+
+  //.group {
+  .group-main {
+    //ol // or group-container ?
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+
+    x-grouparray {
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+    }
+
+    .group-single {
+      // li
+      display: inline-block;
+      list-style: none;
+      vertical-align: top;
+      position: relative;
+
+      padding: 4px;
+      box-sizing: border-box;
+
+      .single-cell {
+        // == boxtoclone
+        //padding: 4px;
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+  }
+}
+
+/* x-grouparray and other list of x-machinedisplay + pulse-bar-div */
+
+.machine-and-bar-table {
+  // === single column
+  width: auto !important; // to overload tile
+  margin: 4px;
+  box-sizing: border-box;
+
+  .group-main {
+    list-style-type: none;
+    padding: 4px;
+    margin: 0px;
+  }
+
+  .group-single {
+    // == compatible with x-grouparray
+    //width: 99% !important;
+    //margin: 0px 0.5% !important;
+    padding: 4px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row; // align children
+    justify-content: space-between;
+
+    align-items: flex-start; // Alignés sur la ligne du haut
+    vertical-align: middle;
+
+    >x-machinedisplay {
+      width: 15%;
+      box-sizing: border-box;
+    }
+
+    >.pulse-bar-div {
+      width: 85%;
+      box-sizing: border-box;
+    }
+  }
+}
+
+
+// SWITCH //
+
+.switch {
+  position: relative;
+  display: inline-block !important;
+  width: 30px;
+  height: 17px;
+  margin: 0 !important;
+}
+
+.switch input {
+  display: none !important;
+  vertical-align: middle;
+}
+
+.switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  background-color: @color_window_border_light;
+  color: @color_text;
+  border-radius: 17px;
+}
+
+input:checked+.slider {
+  background-color: @color_highlight;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked+.slider::before {
+  -webkit-transform: translateX(13px);
+  -ms-transform: translateX(13px);
+  transform: translateX(13px);
+}
+
+// TILE //
+
+.tile {
+  box-shadow: @box_shadow;
+  background-color: @container_color;
+  color: @container_text_color;
+  border: 1px solid darken(@container_color, 10%);
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.tile-title {
+  display: flex;
+  flex-direction: row; // align children
+  //align-items: stretch;
+
+  position: relative; // For vertical center
+
+  padding: 4px 10px 4px 10px;
+  border-bottom: 1px solid darken(@container_color, 10%);
+  background-color: @container_header_color;
+  color: @container_header_text_color;
+
+  // Managed by flex - test and remove :
+  //height: 40px;
+  //line-height: 40px; /* pour centrage */
+  white-space: nowrap;
+
+  x-reasonbutton {
+    //display: inline-block; // NON ! Attention, "hidden" casse l'arret de rafraichissement --RR
+    width: 32px;
+    height: 32px;
+    margin: auto;
+    margin-right: 4px;
+  }
+
+  x-runningbutton {
+    //display: inline-block; // NON ! --RR
+    width: 32px;
+    height: 32px;
+    margin: auto;
+    margin-right: 4px;
+  }
+
+  x-machinedisplay {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1.8em;
+    line-height: 1.8em; // == Vertical align
+  }
+
+  >x-machinedisplay {
+    // With no machinedisplay-position
+    // auto-width
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+  }
+
+  .machinedisplay-position {
+    // auto-width :
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-x: hidden;
+    overflow-y: hidden; // Hide vertical scrollbar in title
+
+    x-machinedisplay {
+      width: 100%; // for "..."
+    }
+  }
+}
+
+.tile-content {
+  height: 100%;
+  width: 100%;
+  padding: 58px 10px 10px 10px;
+  margin-top: -58px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+
+// DEFAULT / COMMON STYLE FOR X-COMPONENT //
+
+.pulse-bar-div {
+  // outside x-tag. Only for style.
+  .bar-rounded-shadow; // Rounded border + shadow
+
+  font-size: 1em;
+  line-height: 2em; // TO KEEP by default (mandatory for pms page...)
+  //min-height: 2em; // NOT HERE ! Problem in detailed
+
+  // Error -> .pulse-message-div {
+}
+
+x-motionpercentage,
+x-motiontime {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.xmessage-warning {
+  background: none;
+  color: @color_red;
+  background-color: @color_white;
+  border-color: darken(@color_white, 10%);
+  margin: 0;
+  padding: 4px;
+  overflow: auto;
+}
+
+.mastertooltip {
+  display: none;
+  position: absolute;
+  background-color: @color_window;
+  color: @color_text;
+  border-radius: 3px;
+  padding: 4px;
+  box-shadow: @box_shadow;
+  border: 1px solid @color_window_border;
+  z-index: 200;
+}
+
+
+// SMALL SCREEN ADAPTATION //
+
+@media (max-width: 685px) {
+
+  // Panels (navigation and parameter)
+  #pulse-panel-navigation,
+  #pulse-panel-parameter {
+    width: 100%;
+    left: 0;
+    right: 0;
+    border: none;
+
+    .menutext {
+      display: inline-block;
+    }
+  }
+
+  .pulse-mainarea {
+    //left: 0 !important;
+    margin: 0 !important;
+  }
+
+  #pulse-inner.pulse-panel-navigation-collapsed #pulse-panel-navigation {
+    //transform: translateX(-100%) !important;
+    width: 0 !important;
+    transition: width 0.2s;
+  }
+
+  #pulse-inner.pulse-panel-parameter-collapsed #pulse-panel-parameter {
+    transform: translateX(100%) !important;
+  }
+
+  // Cells are all visible (no rotation) and full-width (no columns)
+  .main-table-box,
+  .component-cell,
+  .group-single {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  .component-cell,
+  .group-single,
+  .single-cell {
+    padding: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  // What is scrolled is now the entire mainarea, with the legend at the end
+  .pulse-mainarea {
+    min-width: 0;
+    overflow: auto;
+  }
+
+  .pulse-mainarea-full {
+    position: relative;
+  }
+
+  .pulse-mainarea-inner {
+    padding: 0 !important;
+    height: initial !important;
+  }
+
+  .pulse-mainarea-bottom {
+    width: 100%;
+    border-radius: 0;
+    position: relative;
+    left: unset;
+    transform: unset;
+    margin: 0;
+
+    .legend-wrapper {
+      transform: none !important;
+    }
+
+    .legend-content {
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .legend-toggle {
+      display: none !important;
+    }
+  }
+
+  .pulse-mainarea:after {
+    background-position: center center;
+    position: relative;
+    width: 100%;
+    height: 25px;
+    display: block;
+    margin: 20px 0 15px 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .tile {
+    margin: 0;
+    border-bottom: none;
+  }
+
+  // Logos
+  .pulse-mainarea:before {
+    display: none;
+  }
+
+  .pulse-mainarea:after {
+    opacity: 1;
+  }
+
+  .pulse-mainarea {
+    margin: 20px 0;
+  }
+
+  // Hide pagination
+  #pulse-pagination,
+  .pulse-header-rotation-progress {
+    display: none;
+  }
+}

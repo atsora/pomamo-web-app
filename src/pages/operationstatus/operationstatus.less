@@ -1,0 +1,372 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "pulse.exports.light.less"; // Global import
+// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-checkpath/x-checkpath.less";
+// @import "x-checkversion/x-checkversion.less";
+// @import "x-checkconfigupdate/x-checkconfigupdate.less";
+// @import "x-checklogin/x-checklogin.less";
+// @import "x-message/x-message.less";
+
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-grouparray/x-grouparray.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-defaultpie/x-defaultpie.less";
+@import "x-freetext/x-freetext.less";
+@import "x-currentisofile/x-currentisofile.less";
+@import "x-currentsequence/x-currentsequence.less";
+@import "x-currenttool/x-currenttool.less";
+@import "x-currenticoncncalarm/x-currenticoncncalarm.less";
+@import 'x-stacklight/x-stacklight.less';
+@import "x-currentworkinfo/x-currentworkinfo.less";
+@import "x-workinfo/x-workinfo.less";
+@import "x-production/x-production.less";
+@import "x-toollifemachine/x-toollifemachine.less"; // adapted below
+@import "x-periodmanager/x-periodmanager.less";
+@import "x-datetimegraduation/x-datetimegraduation.less";
+@import "x-shiftslotbar/x-shiftslotbar.less";
+@import "x-machinestatebar/x-machinestatebar.less";
+@import "x-observationstatebar/x-observationstatebar.less";
+@import "x-operationcyclebar/x-operationcyclebar.less";
+@import "x-operationslotbar/x-operationslotbar.less";
+@import "x-isofileslotbar/x-isofileslotbar.less";
+@import "x-reasonslotbar/x-reasonslotbar.less";
+@import "x-cncalarmbar/x-cncalarmbar.less";
+@import "x-redstacklightbar/x-redstacklightbar.less";
+@import "x-cncvaluebar/x-cncvaluebar.less";
+@import "x-motionpercentage/x-motionpercentage.less";
+@import "style.less";
+
+a {
+  color: @color_text;
+}
+
+// tile-content
+.tile-content {
+  display: flex;
+  flex-direction: column; // align children
+  overflow: hidden; // Hide bottom displays when too small
+
+  .big-operation {
+    font-size: 2em;
+  }
+
+  .operationstatus-top-div {
+    // operationstatus-pms-div
+    margin-top: 4px;
+
+    &.big-display {
+      flex-grow: 2; // Strech if middle is hidden only for big-display
+    }
+
+    //height: 60px; // uniform display -> done in children
+  }
+
+  .operationstatus-middle-div {
+    // operationstatus-alarm-pie-stacklight
+    flex-grow: 2; // Strech to available space
+    flex-shrink: 2;
+
+    display: flex;
+    flex-direction: row; // children alignment
+    align-items: stretch; // center; // = Vertical center - Paragon stacklight align
+    justify-content: space-between; // Keep pie in the middle
+
+    min-height: 100px; // To see it always. Warning! Linked to .tile-content{ overflow: hidden; to hide bottom when needed
+
+    .operationstatus-cycleprogress {
+      flex-shrink: 5; // Strech
+      flex-grow: 5;
+      flex-basis: 65%;
+      //height: 100%; // Not compatible with align-items: stretch;
+      box-sizing: border-box;
+      padding: 4px; // To simulate margin around
+    }
+
+    .operationstatus-light-div,
+    .operationstatus-tool-and-alarm-div {
+      display: inline-block;
+      //width: 
+      flex-basis: 15%;
+      flex-grow: 1; // To grow when NO PIE
+
+      // Vertical center :
+      position: relative;
+      // height: 100%; // Not compatible with align-items: stretch;
+      min-height: 50px; // height in % not working at Paragon/Eaton
+
+      x-stacklight {
+        position: relative;
+        max-height: 80%;
+        max-width: 80%;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+      }
+    }
+
+    // Current tool / seq / overrides
+    .operationstatus-current-tool-div,
+    .operationstatus-current-sequence-div,
+    .operationstatus-current-override-div {
+      position: absolute;
+      top: 20%;
+      width: 100%;
+
+      x-currenttool {
+        font-size: 1.5em;
+
+        .currenttool-data {
+          display: block;
+          text-align: center;
+          font-weight: bold;
+        }
+      }
+
+      x-currentcncvalue {
+        .currentcncvalue-data-label {
+          display: inline-block;
+          font-size: 0.6em;
+        }
+
+        .currentcncvalue-data-span {
+          font-style: italic;
+          font-size: 0.9em;
+        }
+      }
+    }
+
+    // Alarm
+    .operationstatus-alarm-left-div {
+      box-sizing: border-box;
+      height: 40%;
+      // Vertical align 
+      position: absolute;
+      width: 100%;
+      transform: translateY(-50%);
+      top: 50%;
+
+      x-currenticoncncalarm {
+        // Make it smaller and centered
+        box-sizing: border-box;
+        position: absolute;
+        height: 80%;
+        width: 80%;
+
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+
+        svg {
+          width: 70%;
+          margin-left: 15%;
+          box-sizing: border-box;
+        }
+      }
+    }
+  }
+
+  .operationstatus-bottom-div {
+    // operationstatus-tool-div & operationstatus-bar & operationstatus-alarm-bottom-div
+    // Auto size and position
+    padding-top: 5px;
+    box-sizing: border-box;
+  }
+
+  .operationstatus-isofile-div {
+    font-size: 1.5em;
+    text-align: center;
+  }
+
+  .operationstatus-alarm-bottom-div {
+    min-height: 45px;
+
+    x-currenticoncncalarm {
+      // Make it smaller and centered
+      box-sizing: border-box;
+      height: 20px;
+      width: 100%;
+
+      .pulse-icon-cncalarm {
+        height: 20px !important;
+        box-sizing: border-box;
+
+        svg {
+          height: 20px;
+          box-sizing: border-box;
+        }
+      }
+    }
+  }
+}
+
+// Top display
+x-currentworkinfo {
+  display: block;
+  text-align: center;
+  background-color: @widget_background; // @container_header_color;
+  color: @widget_text;
+  border-bottom: solid 1px @color_window_alternate_border;
+  border-top: solid 1px @color_window_alternate_border;
+  height: 1.5em; // To force height even if no data - ONE LINE
+  padding: 2px 0 0 0; // For Edge top padding....
+  box-sizing: border-box;
+
+  overflow: hidden; // For Chrome, small display = avoid 2 lines
+}
+
+x-workinfo {
+  display: block;
+  text-align: center;
+  background-color: @widget_background; // @container_header_color;
+  color: @widget_text;
+  border-bottom: solid 1px @color_window_alternate_border;
+  border-top: solid 1px @color_window_alternate_border;
+  height: 1.5em; // To force height even if no data - ONE LINE
+  padding: 2px 0 0 0; // For Edge top padding....
+  box-sizing: border-box;
+
+  overflow: hidden; // For Chrome, small display = avoid 2 lines
+}
+
+x-production {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  min-height: 30px; // uniform display
+
+  &.big-display {
+    font-size: 3.5em !important; // bigger than everything else
+    line-height: 1em; // uniform height
+    height: 2em; // uniform height
+  }
+
+  .production-actual-value:before {
+    content: "Actual ";
+    color: @color_text_alternate;
+  }
+
+  .production-separator:before {
+    content: " - "; // '/' can be added OR min-width
+    padding-left: 2px;
+    padding-right: 2px;
+    box-sizing: border-box;
+  }
+
+  .production-target-value:before {
+    content: "Target ";
+    color: @color_text_alternate;
+  }
+}
+
+// END top display
+
+// Long text linked to pie
+x-freetext {
+  .freetext-content {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.3em;
+  }
+}
+
+// TOOLLIFE - hide un-needed data
+.operationstatus-tool-div {
+  box-sizing: border-box;
+  padding: 5px;
+  width: 100%;
+}
+
+x-toollifemachine {
+  .pulse-cellbar-main {
+    // To start display from right
+    justify-content: flex-end;
+    // To always display data on the right even when overflow is hidden
+    flex-flow: row-reverse nowrap !important;
+
+    overflow: hidden; // only 1 line display
+  }
+
+  .pulse-cellbar-between {
+    display: none !important;
+  }
+
+  .pulse-cellbar-current-data {
+    display: none !important;
+  }
+}
+
+// END TOOLLIFE
+
+// BARS
+.operationstatus-bar {
+  width: 100%;
+  height: 65px; // To avoid different box heights (bar = 40 + gradutation = 25)
+  min-height: 65px; // To avoid small size blink of boxes
+
+  display: flex;
+  flex-direction: row; // align children
+
+  .div-bar {
+    flex-shrink: 99999;
+    flex-grow: 99999;
+    overflow: hidden; // for faster re-size
+
+    .operationstatus-div-bar {
+      display: block;
+      //margin: 5px;
+      // Align with graduation
+      margin-left: @margin_graduation;
+      margin-right: @margin_graduation;
+      border-width: 0px 1px 0px 1px;
+      border-style: solid;
+      border-color: transparent;
+
+      .top-bar {
+        width: auto; //100%;
+      }
+
+      .middle-bar {
+        width: auto; //100%;
+      }
+
+      .bottom-bar {
+        width: auto; //100%;
+      }
+    }
+
+    x-datetimegraduation {
+      .datetimegraduation-axis {
+        .domain {
+          stroke: transparent;
+        }
+      }
+    }
+  }
+
+  .div-percent {
+    min-width: 3em;
+    margin-bottom: 25px; // == graduation
+
+    display: flex;
+    flex-direction: column; // align children
+    justify-content: space-evenly;
+
+    //x-motionpercentage {}
+  }
+}
+
+// end BARS
+
+.legend-content {
+  display: none !important;
+}

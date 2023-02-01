@@ -1,0 +1,147 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "pulse.exports.light.less"; // Global import
+// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+@import "x-machineselection/x-machineselection.less";
+// @import "x-message/x-message.less";
+
+// Local
+// @import "x-loginconnection/x-loginconnection.less";
+@import "style.less";
+
+.tile-title {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.login-tile {
+  .tile;
+
+  .login-tile-title {
+    .tile-title;
+  }
+
+  .login-tile-content {
+    .tile-content;
+
+    .login-roles {
+      display: flex;
+
+      .select-role-div {
+        width: 140px;
+        height: 120px;
+        display: inline-block;
+        text-align: center;
+        margin: 10px 0 50px 0;
+        cursor: pointer;
+
+        div {
+          color: @input_background_color;
+          font-weight: bold;
+          font-size: 2em;
+        }
+
+        .select-role-image {
+          width: 100%;
+          height: 100%;
+          max-height: 200px;
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+          margin-bottom: 10px;
+
+          svg {
+            width: 100%;
+            height: 100%;
+            filter: url(#innerShadow);
+            //fill: @input_background_color; -> done using currentcolor
+
+            //.highlightcolor { -> Global
+
+          }
+        }
+      }
+    }
+
+    /*.operator-image {
+      background-image: url("@{imagedir}/role-operator.svg");
+    }
+    .manager-image {
+      background-image: url("@{imagedir}/role-manager.svg");
+    }*/
+
+    .allow-login-div {
+      display: flex; // To see login/pass on the right
+
+      .allow-login-button {
+        margin-left: 10px;
+        margin-right: 10px;
+
+        .login-hidden {
+          background-image: url('@{imagedir}/login-hidden.svg');
+
+          width: 24px;
+          height: 24px;
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+        }
+
+        .login-visible {
+          background-image: url('@{imagedir}/login-visible.svg');
+
+          width: 24px;
+          height: 24px;
+          background-repeat: no-repeat;
+          background-size: contain;
+          background-position: center;
+        }
+
+        svg {
+          width: 100%;
+          height: 100%;
+          filter: url(#innerShadow);
+          //fill: @input_background_color; -> done using currentcolor
+
+          //.highlightcolor { -> Global
+        }
+      }
+
+      /*
+      x-loginconnection {
+        .loginconnection-content {
+          // idem tile-tile bottom-border
+          border-left: 1px solid darken(@container_color, 10%);
+        }
+      }
+      */
+    }
+  }
+}
+
+
+// No legend and no page options
+#pulse-panel-parameter-content,
+.legend-content,
+.group-pages,
+.group-machines {
+  display: none !important;
+}
+
+// Small screen adaptation
+@media (max-width: 685px) {
+  .select-role-div {
+    width: 100%;
+  }
+
+  .component-cell {
+    margin-bottom: 0px !important;
+  }
+}

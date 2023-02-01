@@ -1,0 +1,76 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class='single-cell' id='boxtoclone' >
+  <div class="tile" >
+    <div class="tile-title">
+      <div class="machinedisplay-position">
+        <x-machinedisplay></x-machinedisplay>
+      </div>
+    </div>
+    <div class="tile-content">
+      <div class="machinestatus-pms-div machinestatus-top-div">
+        <x-currentworkinfo></x-currentworkinfo>
+      </div>
+      <div class="machinestatus-daily-info machinestatus-info">
+        <div class="machinestatus-today-or-shift-or-week">
+          <x-freetext textchange-context='ms-today'></x-freetext>
+        </div>
+        <div class="machinestatus-actual">
+          <x-motionpercentage motion-context= "motion_today_mach"></x-motionpercentage>
+          <x-motiontime motion-context= "motion_today_mach"></x-motiontime>
+        </div>
+        <div class="machinestatus-target">
+          <x-performancetarget></x-performancetarget>
+        </div>
+      </div>
+
+      <div class="machinestatus-alarm-pie-stacklight">
+        <div class="machinestatus-tool-and-alarm-div">
+          <div class="machinestatus-current-tool-div">
+            <x-currenttool></x-currenttool>
+          </div>
+          <div class="machinestatus-current-sequence-div">
+            <x-currentsequence></x-currentsequence>
+          </div>
+          <div class="machinestatus-alarm-div">
+            <x-currenticoncncalarm active="true"></x-currenticoncncalarm>
+          </div>
+        </div>
+        <div class="machinestatus-reasonslotpie">
+          <div class="machinestatus-reasonbutton-position">
+            <x-reasonbutton textchange-context="ms-text-machine-id"></x-reasonbutton>
+          </div>
+          <x-reasonslotpie motion-context="motion_today_mach" period-context="machinestatus_today" textchange-context="ms-text-machine-id"></x-reasonslotpie>
+        </div>
+        <div class="machinestatus-light-div">
+          <x-stacklight></x-stacklight>
+        </div>
+      </div>
+
+      <div class="machinestatus-weekly-info machinestatus-info">
+        <div class="machinestatus-today-or-shift-or-week">
+          <span class="machinestatus-label">Week</span>
+        </div>
+        <div class="machinestatus-actual">
+          <x-motionpercentage motion-context='motion_7days_mach'></x-motionpercentage>
+          <x-motiontime motion-context='motion_7days_mach'></x-motiontime>
+        </div>
+        <div class="machinestatus-target">
+          <x-performancetarget></x-performancetarget>
+        </div>
+      </div>
+
+      <div class="machinestatus-weekly-bar-position">
+        <div class="pulse-bar-div">
+          <x-reasonslotbar height=24 period-context='machinestatus_7days' motion-context='motion_7days_mach'></x-reasonslotbar>
+          <x-cncvaluebar height=6 period-context= 'machinestatus_7days'></x-cncvaluebar>
+        </div>
+        <x-datetimegraduation period-context='machinestatus_7days' bottom='true'></x-datetimegraduation>
+      </div>
+    </div>
+  </div>
+</div>

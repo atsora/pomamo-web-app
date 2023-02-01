@@ -1,0 +1,76 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class='single-cell' id='boxtoclone'>
+  <div class="tile">
+    <div class="tile-title">
+      <!--x-reasonbutton></x-reasonbutton-->
+      <div class="machinedisplay-position">
+        <x-machinedisplay></x-machinedisplay>
+      </div>
+    </div>
+    <div class="tile-content">
+      <div class="operationstatus-pms-div operationstatus-top-div">
+        <x-currentworkinfo></x-currentworkinfo>
+        <x-workinfo></x-workinfo>
+        <x-production></x-production>
+      </div>
+      <div class="operationstatus-alarm-pie-stacklight operationstatus-middle-div">
+        <div class="operationstatus-tool-and-alarm-div">
+          <div class="operationstatus-current-tool-div">
+            <x-currenttool></x-currenttool>
+          </div>
+          <div class="operationstatus-current-sequence-div">
+            <x-currentsequence></x-currentsequence>
+          </div>
+          <div class="operationstatus-current-override-div">
+            <x-currentcncvalue field-id="103"></x-currentcncvalue>
+            <x-currentcncvalue field-id="105"></x-currentcncvalue>
+          </div>
+          <div class="operationstatus-alarm-left-div">
+            <x-currenticoncncalarm active="true"></x-currenticoncncalarm>
+          </div>
+        </div>
+        <div class="operationstatus-cycleprogress">
+          <x-defaultpie textchange-context='pieSubText-machine-id'></x-defaultpie>
+        </div>
+        <div class="operationstatus-light-div">
+          <x-stacklight></x-stacklight>
+        </div>
+      </div>
+      <x-freetext textchange-context='pieSubText-machine-id'></x-freetext>
+      <div class="operationstatus-alarm-bottom-div operationstatus-bottom-div">
+        <x-currenticoncncalarm active="true"></x-currenticoncncalarm>
+      </div>
+      <div class="operationstatus-isofile-div operationstatus-bottom-div">
+        <x-currentisofile></x-currentisofile>
+      </div>
+      <div class="operationstatus-tool-div operationstatus-bottom-div">
+        <x-toollifemachine></x-toollifemachine>
+      </div>
+      <div class="operationstatus-bar operationstatus-bottom-div">
+        <div class="div-bar">
+          <div class="operationstatus-div-bar pulse-bar-div">
+            <!-- Add BAR here -->
+            <div class="top-bar">
+            </div>
+            <div class="middle-bar">
+              <x-reasonslotbar motion-context="motion_machine"></x-reasonslotbar>
+              <x-cncalarmbar></x-cncalarmbar>
+              <x-redstacklightbar></x-redstacklightbar>
+              <x-cncvaluebar></x-cncvaluebar>
+            </div>
+            <div class="bottom-bar"></div>
+          </div>
+          <x-datetimegraduation bottom=true></x-datetimegraduation>
+        </div>
+        <div class="div-percent">
+          <x-motionpercentage motion-context="motion_machine"></x-motionpercentage>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

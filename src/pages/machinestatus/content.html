@@ -1,0 +1,13 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class='main-table-box'>
+  <x-periodmanager id='period-for-week' exclude-now='true' period-context='machinestatus_7days' displaydaysrange=7 displayshiftrange='false' displayweekrange='false'></x-periodmanager>
+
+  <x-periodmanager id='period-for-pie' exclude-now='false' period-context='machinestatus_today'  displayweekrange='false' textchange-context='ms-today' ></x-periodmanager>
+
+  <x-grouparray templateid='boxtoclone' canUseRowsToSetHeight='true' ></x-grouparray>
+</div>

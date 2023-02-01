@@ -1,0 +1,48 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class='one_machine_cell' id='boxtoclone'>
+  <div class="div-machine">
+    <x-machinedisplay></x-machinedisplay>
+    <div class="div-current">
+      <div class="div-current-left">
+        <x-reasonbutton></x-reasonbutton>
+      </div>
+      <div class="div-current-right">
+        <x-productionmachiningstatus bar-style="false"></x-productionmachiningstatus>
+        <x-lastworkinformation cancel-bar-style="true"></x-lastworkinformation>
+        <x-lastshift></x-lastshift>
+        <x-currentcncvalue></x-currentcncvalue>
+      </div>
+    </div>
+  </div>
+  <div class="div-bar">
+    <div class="pulse-bar-div">
+      <div class="top-bar">
+        <x-shiftslotbar period-context="running"></x-shiftslotbar>
+        <x-machinestatebar period-context="running"></x-machinestatebar>
+        <x-observationstatebar period-context="running"></x-observationstatebar>
+      </div>
+      <div class="middle-bar">
+        <x-operationcyclebar period-context="running"></x-operationcyclebar>
+        <x-operationslotbar period-context="running"></x-operationslotbar>
+        <x-isofileslotbar period-context="running"></x-isofileslotbar>
+        <x-productionstatebar motion-context="motion_machine" period-context="running">
+        </x-productionstatebar>
+        <x-reasonslotbar motion-context="motion_machine" period-context="running">
+        </x-reasonslotbar>
+        <x-cncalarmbar period-context="running"></x-cncalarmbar>
+        <x-redstacklightbar period-context="running"></x-redstacklightbar>
+        <x-cncvaluebar period-context="running"></x-cncvaluebar>
+      </div>
+      <div class="bottom-bar"></div>
+    </div>
+  </div>
+  <div class="div-percent">
+    <x-motionpercentage motion-context="motion_machine" period-context="running"></x-motionpercentage>
+    <x-motiontime motion-context="motion_machine" period-context="running"></x-motiontime>
+  </div>
+</div>

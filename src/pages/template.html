@@ -1,0 +1,267 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta charset="UTF-8">
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  <!-- Safari - full screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Chrome - https://developers.google.com/chrome/mobile/docs/installtohomescreen -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
+
+  <!-- the title will be overridden - CUSTOM allowed -->
+  <title>Pomamo</title>
+
+  <style>
+    svg {
+      visibility: hidden;
+    }
+  </style>
+
+  <script>
+    // Initialize theme (before the page is loaded => cannot use PulseConfig here)
+    var currentTheme = 'dark';
+    if (typeof localStorage != 'undefined')
+      currentTheme = JSON.parse(localStorage.getItem('PULSE.PulseWebApp.theme'));
+    /* if (currentTheme == '' || currentTheme == null)
+      currentTheme = JSON.parse(localStorage.getItem('PULSE.pulsewebapp.theme')); */
+    if (currentTheme == '' || currentTheme == null)
+      currentTheme = 'dark';
+
+    var head = document.getElementsByTagName('head')[0];
+    /*{ // For PWC exports - do nothing - included elsewhere */
+    { // For custom PAGES :
+      var s = document.createElement('link');
+      s.setAttribute('type', 'text/css');
+      s.setAttribute('rel', 'stylesheet');
+      // CUSTOM allowed : replace {{pagename}}.css with custom_page.css
+      s.setAttribute('href', './styles/style_' + currentTheme + '/{{pagename}}.css?v=');
+      head.appendChild(s);
+    }
+    { // For customers' specializations :
+      var s = document.createElement('link');
+      s.setAttribute('type', 'text/css');
+      s.setAttribute('rel', 'stylesheet');
+      s.setAttribute('href', './styles/style_' + currentTheme + '/customize.css?v=');
+      head.appendChild(s);
+    }
+  </script>
+
+  <!--script src="https://unpkg.com/@webcomponents/custom-elements"></script-->
+  <script type="text/javascript" src="./lib/jquery/jquery.js?v="></script>
+  <script type="text/javascript" src="./lib/moment/moment.js?v="></script>
+  <script type="text/javascript" src="./lib/d3/d3.min.js?v="></script>
+
+  <script type="text/javascript" src="./scripts/browsersupport.js?v="></script>
+
+  <!--script type="text/javascript" src="./scripts/polyfills.js?v="></script-->
+
+  <script type="text/javascript" src="./scripts/config_pulsecomponent_default.js"></script>
+  <script type="text/javascript" src="./scripts/config_default.js?v="></script>
+  <script type="text/javascript" src="./scripts/config_install.js?v="></script>
+  <script type="text/javascript" src="./scripts/config_custom.js?v="></script>
+
+  <script type="text/javascript" src="./scripts/translation_pulsecomponent_default.js?v="></script>
+  <script type="text/javascript" src="./scripts/translation_default.js?v="></script>
+  <script type="text/javascript" src="./scripts/translation_custom.js?v="></script>
+
+  <!-- for reporting : script type="text/javascript" src="./scripts/pulse.exports.light.js?v="></script-->
+  <!--
+    babel-polyfill:<script type="text/javascript" src="lib/babel-polyfill.js"></script>babel-polyfill:
+  -->
+
+  <!--script type="text/javascript">
+    //# sourceMappingURL=./lib/x_ml.map
+  </script-->
+
+  <!-- CUSTOM allowed : un-comment one of the 2 next lines and remove the 3rd -->
+  <!--script async type="text/javascript" src="./scripts/custom_page.js?v="></script-->
+  <!--script async type="text/javascript" src="./scripts/custom_page_with_machines.js?v="></script-->
+  <script async type="text/javascript" src="./es2015/{{pagename}}.js?v="></script>
+
+  <!-- load the webcomponents loader, which injects the necessary polyfill bundle -->
+  <!--script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script-->
+  <!--script src="https://unpkg.com/@webcomponents/custom-elements"></script-->
+  <!--babel:<script type="text/javascript">//# sourceMappingURL={{pagename}}.js.map</script>babel:-->
+</head>
+
+<body>
+  <div class='hidden-content'>
+    <!-- CUSTOM allowed -->
+    <!--(bake {{pagename}}/hidden_content.html)-->
+  </div>
+
+  <svg style="width: 0;height: 0;float: left;">
+    <defs>
+      <filter color-interpolation-filters="sRGB" id="innerShadow">
+        <feFlood flood-opacity="0.5" flood-color="rgb(0,0,0)" result="flood"></feFlood>
+        <feComposite in="flood" in2="SourceGraphic" operator="out" result="composite1"></feComposite>
+        <feGaussianBlur in="composite1" stdDeviation="2" result="blur"></feGaussianBlur>
+        <feOffset dx="0" dy="1" result="offset"></feOffset>
+        <feComposite in="offset" in2="SourceGraphic" operator="atop"></feComposite>
+      </filter>
+      <filter color-interpolation-filters="sRGB" id="outerShadow">
+        <feFlood flood-opacity="0.5" flood-color="rgb(0,0,0)" result="flood"></feFlood>
+        <feComposite in="flood" in2="SourceGraphic" operator="in" result="composite1"></feComposite>
+        <feGaussianBlur in="composite1" stdDeviation="2" result="blur"></feGaussianBlur>
+        <feOffset dx="0" dy="1" result="offset"></feOffset>
+        <feComposite in="SourceGraphic" in2="offset" operator="over"></feComposite>
+      </filter>
+    </defs>
+  </svg>
+  <div class="pulse-header">
+    <div class="pulse-header-center">
+      <div class="pulse-header-title" class="title">
+        <span></span>
+      </div>
+    </div>
+    <div class="pulse-header-right">
+      <button id="configpanelbtn" class="activated" title="Settings" role="button"></button>
+    </div>
+    <div class="pulse-header-close-to-right">
+    </div>
+    <div class="pulse-header-close-to-right">
+      <x-logindisplay></x-logindisplay>      
+    </div>
+    <div class="pulse-header-left">
+      <button id="navigationpanelbtn" title="Menu" role="button"></button>
+      <div class="navbar-apps">
+      </div>
+    </div>
+  </div>
+  <div class="pulse-header-rotation-progress"></div>
+
+  <div id="pulse-inner">
+    <div id="pulse-navigation-and-main">
+      <div id="pulse-panel-navigation">
+        <div id="navbar">
+          <ul>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pulse-mainarea">
+        <div class="pulse-mainarea-full">
+          <div class="pulse-mainarea-inner">
+            <x-message></x-message>
+            <x-checkserveraccess></x-checkserveraccess>
+            <x-checkpath></x-checkpath>
+            <x-checkcurrenttime></x-checkcurrenttime>
+            <x-checkversion></x-checkversion>
+            <x-checkconfigupdate></x-checkconfigupdate>
+            <x-checklogin></x-checklogin>
+            <!-- CUSTOM allowed -->
+            <!--(bake {{pagename}}/content.html)-->
+          </div>
+        </div>
+        <div class="pulse-mainarea-bottom">
+          <div class="legend-wrapper">
+            <div class="legend-content">
+              <div class="legend-toggle" style="display:none">
+                <div class="legend-toggle-icon-up"></div>
+                <div class="legend-toggle-icon-down"></div>
+                <div class="legend-toggle-label">Legend</div>
+              </div>
+              <!-- CUSTOM allowed -->
+              <!--(bake {{pagename}}/legend.html)-->
+            </div>
+          </div>
+          <div id="pulse-pagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="pulse-panel-parameter">
+      <div id="pulse-panel-parameter-content">
+        <div class="param-group group-machines">
+          <div class="param-group-header group-machines">
+            <div class="param-group-title">Machines</div>
+            <button class="param-group-button" id="editmachines">edit</button>
+          </div>
+          <div class="param-group-content group-machines">
+            <x-machineselection ordering="true"></x-machineselection>
+          </div>
+        </div>
+
+        <!-- CUSTOM allowed - but to avoid without dealing with js too -->
+        <!--(bake {{pagename}}/options.html)-->
+
+        <div class="param-group group-pages">
+          <div class="param-group-header group-pages">
+            <div class="param-group-title group-pages">Page</div>
+            <button class="param-group-button" id="resetpage">reset</button>
+          </div>
+
+          <div class="param-group-content group-pages">
+            <div class="config-row">
+              <label for="gridrow">Rows
+                <input type="number" id="gridrow" value="" step="1" min="1" autocomplete="off" />
+              </label>
+            </div>
+            <div class="config-column">
+              <label for="gridcolumn">Columns
+                <input type="number" id="gridcolumn" value="" step="1" min="1" autocomplete="off" />
+              </label>
+            </div>
+            <div class="config-pagerotation">
+              <label for="pagerotation">Rotation (s)
+                <input type="number" id="pagerotation" value="" step="5" min="10" autocomplete="off" />
+              </label>
+            </div>
+            <div class="config-pagetitle">
+              <label for="pagetitle">Custom title
+                <input type="text" id="pagetitle" value="" autocomplete="off" />
+              </label>
+            </div>
+            <div class="config-showlegend">
+              <label for="showlegend">Show Legend
+                <input type="checkbox" id="showlegend" autocomplete="off" />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-default" id="showurl">Display URL</button>
+        <button class="btn btn-default" id="copyurl">Copy URL</button>
+      </div>
+
+      <div class="configuration-bottom-area-login">
+        <x-loginpasswordbutton showastext="true"></x-loginpasswordbutton>
+        <x-loginchangepasswordbutton showastext="true"></x-loginchangepasswordbutton>
+      </div>
+
+      <div class="configuration-bottom-area">
+        <div class="configuration-bottom-area-switch">
+          <label class="switch">
+            <input id="darkthemebtn" type="checkbox">
+            <div class="slider round"></div>
+          </label>
+          <span>Dark theme</span>
+        </div>
+        <div class="configuration-bottom-area-version">
+          <label class="version-label">
+            WebAppVersion
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

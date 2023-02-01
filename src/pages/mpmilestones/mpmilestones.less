@@ -1,0 +1,50 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "pulse.exports.light.less"; // Global import
+// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-message/x-message.less";
+
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-grouparray/x-grouparray.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-milestonesmanager/x-milestonesmanager.less";
+
+@import "style.less";
+
+/*
+.tile-content {
+  .mpmilestones-main-div {
+    x-milestonesmanager {
+
+    }
+  }
+}*/
+
+// No legend
+.legend-content {
+  display: none !important;
+}
+
+// Small screen adaptation
+@media (max-width: 685px) {
+  .select-role-div {
+    width: 100%;
+  }
+
+  .component-cell {
+    margin-bottom: 0px !important;
+  }
+
+  .tile-content {
+    height: 300px;
+  }
+}

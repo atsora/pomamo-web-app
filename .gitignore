@@ -1,0 +1,19 @@
+*~
+*.bak
+/_build
+/about
+/bower_components
+/dist
+/dist-es2015
+/node_modules
+package-lock.json
+*.msi
+Installer/CustomActions/Visual studio projects/*/.vs
+Installer/CustomActions/Visual studio projects/*/*/bin
+Installer/CustomActions/Visual studio projects/*/*/obj
+bin
+obj
+.vs
+/.bashrc
+/Installer/Resources/Components/H_dist_files/heat_dist_files.wxs
+/project.code-workspace

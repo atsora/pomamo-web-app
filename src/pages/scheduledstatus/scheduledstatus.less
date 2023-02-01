@@ -1,0 +1,69 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "x-grouparray/x-grouparray.less";
+
+@import "pulse.exports.light.less"; // Global import
+// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-checkpath/x-checkpath.less";
+// @import "x-checkversion/x-checkversion.less";
+// @import "x-checkconfigupdate/x-checkconfigupdate.less";
+// @import "x-checklogin/x-checklogin.less";
+// @import "x-message/x-message.less";
+
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-lastmachinestatetemplate/x-lastmachinestatetemplate.less";
+
+@import "style.less";
+
+.machine-and-bar-table {
+  // include .tile;
+  // width:100%; // NO !!! 
+
+  .group-main {
+    display: flex;
+    flex-direction: column;
+
+    .group-single {
+      order: 999999999; // default = bottom = more than 2 years in minutes
+    }
+  }
+
+  .one-machine-cell {
+    // == group-single // could be display:contents when available
+    width: 100%;
+    box-sizing: border-box;
+    //margin: 0;
+    display: flex;
+    flex-direction: row; // align children
+    justify-content: space-between;
+
+    align-items: flex-start; // Alignés sur la ligne du haut
+    vertical-align: middle;
+
+    >.div-machine {
+      width: 15%;
+      box-sizing: border-box;
+      line-height: 2em; // == vertical align
+    }
+
+    >.div-bar {
+      width: 85%;
+      box-sizing: border-box;
+    }
+  }
+}
+
+
+.legend-content{
+  display: none !important;
+}

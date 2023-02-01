@@ -1,0 +1,39 @@
+.browsererror-title {
+  font-size: 4em;
+  font-weight: bold;
+  text-align: center;
+  margin: auto;
+}
+
+.browsererror-links {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* chrome / firefox / edge  */
+.browsererror-link {
+  display: flex;
+  flex-direction: column;
+
+  margin: 20px;
+  font-size: 1.1m;
+  text-align: center;
+}
+
+.browsererror-link img {
+  /* Use default :
+  height: 150px;
+  width: 150px; */
+  margin: 10px;
+}
+
+.browsererror-main {
+  font-size: 1.4em;
+  line-height: 1.8em;
+  width: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+/* .browsererror-text {}*/

@@ -1,0 +1,33 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class='main-table running-page'>
+  <!--periodtoolbartable-->
+  <div class='one_machine_cell top_cell'>
+    <div class="div-machine">
+      <div class="div-current">
+        <label class="label-current">Current:</label>
+        <x-clock display-seconds=false></x-clock>
+      </div>
+    </div>
+    <div class="div-bar">
+      <x-periodtoolbar period-context="running" ></x-periodtoolbar>
+    </div>
+    <div class="div-percent"></div>
+  </div>
+</div>
+
+<div class='main-table tile running-page'>
+  <div class='one_machine_cell'>
+    <div class="div-machine"></div>
+    <div class="div-bar">
+      <x-datetimegraduation period-context="running"></x-datetimegraduation>
+    </div>
+    <div class="div-percent"></div>
+  </div>
+
+  <x-grouparray templateid='boxtoclone' column=1></x-grouparray>
+</div>

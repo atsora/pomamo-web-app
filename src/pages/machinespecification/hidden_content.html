@@ -1,0 +1,69 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class='single-cell' id='boxtoclone'>
+  <div class="tile">
+    <div class="tile-title">
+      <!--x-reasonbutton></x-reasonbutton-->
+      <div class="machinedisplay-position">
+        <x-machinedisplay></x-machinedisplay>
+      </div>
+    </div>
+    <div class="tile-content">
+      <!-- TODAY -->
+      <div class="machinepecification-line">
+        <div class="machinepecification-period-div">
+          <span class="machinepecification-period-span">Today</span>
+        </div>
+        <div class="machinepecification-bar">
+          <div class="machinepecification-bar-border pulse-bar-div">
+            <x-reasonslotbar height=70 period-context="periodContextToday" motion-context="motionContextToday"></x-reasonslotbar>
+            <x-cncvaluebar height=25 period-context="periodContextToday"></x-cncvaluebar>
+          </div>
+          <x-datetimegraduation bottom=true period-context="periodContextToday"></x-datetimegraduation>
+        </div>
+        <div class="machinepecification-motion">
+          <x-motionpercentage motion-context='motionContextToday'></x-motionpercentage>
+          <x-motiontime motion-context='motionContextToday'></x-motiontime>
+        </div>
+      </div>
+      <!-- YESTERDAY -->
+      <div class="machinepecification-line">
+        <div class="machinepecification-period-div">
+          <span class="machinepecification-period-span">Yesterday</span>
+        </div>
+        <div class="machinepecification-bar">
+          <div class="machinepecification-bar-border pulse-bar-div">
+            <x-runningslotbar height=95 period-context="periodContextYesterday" motion-context="motionContextYesterday"></x-runningslotbar>
+          </div>
+          <x-datetimegraduation bottom=true period-context="periodContextYesterday"></x-datetimegraduation>
+        </div>
+        <div class="machinepecification-motion">
+          <x-motionpercentage motion-context='motionContextYesterday'></x-motionpercentage>
+          <x-motiontime motion-context='motionContextYesterday'></x-motiontime>
+        </div>
+      </div>
+      <!-- Last 7 days -->
+      <div class="machinepecification-line">
+        <div class="machinepecification-period-div">
+          <span class="machinepecification-period-span">Last 7 days</span>
+        </div>
+        <div class="machinepecification-bar">
+          <div class="machinepecification-bar-border pulse-bar-div">
+            <x-runningslotbar height=95 period-context="periodContextLast7Days" motion-context="motionContextLast7Days"></x-runningslotbar>
+          </div>
+          <x-datetimegraduation bottom=true period-context="periodContextLast7Days"></x-datetimegraduation>
+        </div>
+        <div class="machinepecification-motion">
+          <x-motionpercentage motion-context='motionContextLast7Days'></x-motionpercentage>
+          <x-motiontime motion-context='motionContextLast7Days'></x-motiontime>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

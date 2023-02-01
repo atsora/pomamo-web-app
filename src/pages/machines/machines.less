@@ -1,0 +1,261 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "pulse.exports.light.less"; // Global import
+// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-checkpath/x-checkpath.less";
+// @import "x-checkversion/x-checkversion.less";
+// @import "x-checkconfigupdate/x-checkconfigupdate.less";
+// @import "x-checklogin/x-checklogin.less";
+// @import "x-message/x-message.less";
+
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-grouparray/x-grouparray.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-machinetab/x-machinetab.less";
+@import "x-lastserialnumber/x-lastserialnumber.less";
+@import "x-lastworkinformation/x-lastworkinformation.less";
+@import "x-lastmachinestatetemplate/x-lastmachinestatetemplate.less";
+@import "x-setupmachine/x-setupmachine.less"; // included in previous one... maybe
+@import "x-lastmachinestatus/x-lastmachinestatus.less";
+
+@import "x-periodmanager/x-periodmanager.less";
+@import "x-shiftslotbar/x-shiftslotbar.less";
+@import "x-machinestatebar/x-machinestatebar.less";
+@import "x-observationstatebar/x-observationstatebar.less";
+@import "x-operationcyclebar/x-operationcyclebar.less";
+@import "x-operationslotbar/x-operationslotbar.less";
+@import "x-isofileslotbar/x-isofileslotbar.less";
+@import "x-reasonslotbar/x-reasonslotbar.less";
+@import "x-cncalarmbar/x-cncalarmbar.less";
+@import "x-redstacklightbar/x-redstacklightbar.less";
+@import "x-cncvaluebar/x-cncvaluebar.less";
+
+@import "x-motionpercentage/x-motionpercentage.less";
+@import "x-motiontime/x-motiontime.less";
+
+@import "x-savemachinestatetemplate/x-savemachinestatetemplate.less";
+@import "x-sequencebar/x-sequencebar.less";
+@import "x-cycleprogressbar/x-cycleprogressbar.less";
+@import "x-performancebar/x-performancebar.less";
+@import "x-toollifemachine/x-toollifemachine.less";
+
+@import "x-datetimepicker/x-datetimepicker.less";
+@import "x-datetimegraduation/x-datetimegraduation.less";
+@import "x-cyclesinperiod/x-cyclesinperiod.less";
+
+@import 'x-reasongroups/x-reasongroups.less';
+@import 'x-fieldlegends/x-fieldlegends.less';
+@import 'x-machinemodelegends/x-machinemodelegends.less';
+
+@import "style.less";
+
+
+.machines-main {
+  border: none;
+  margin: 4px;
+  padding: 0;
+  //position:relative;
+  // width: 100%; AVOID ! Else not centered
+
+  display: flex;
+  flex-direction: row; // children alignment
+  align-items: stretch;
+
+  .machinetab-list {
+    border: 0;
+    margin-top: 30px;
+    min-width: 200px;
+    //max-width: 18%;
+    flex-basis: 200px;
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    &.grouparray-in-error{
+      flex-grow: 10;
+    }
+
+    // Format x-grouparray :
+    .group {
+      .group-main {
+        //ol
+        list-style-type: none;
+        padding: 0px;
+        margin: 0px;
+        //width: 200px; // Could be done in another way
+        width: 100%;
+        min-height: 400px; // To show error when no machine
+
+        // For message position :
+        position: relative;
+
+        /*x-grouparray{
+          //width: 100%;
+          //height: 100%;
+        }*/
+
+        .single-machine-tab {
+          width: 200px; // Could be done in another way
+        }
+
+        .group-single {
+          // li
+          display: inline-block;
+          list-style: none;
+          //vertical-align: top;
+          //position: relative;
+
+          //.{ // == boxtoclone
+          // MACHINE TAB
+          x-machinetab {
+            .machinetab-machine-cell {
+              background-color: @container_color;
+              color: @container_text_color;
+              opacity: 0.6; // WAS @not-selected-machine-background;
+
+              &.active {
+                background-color: @container_color;
+                opacity: 1;
+                border: 1px solid @container_text_color_transparent;
+              }
+            }
+
+            .machinetab-modecolor-undefined {
+              border-right-color: @color_text_alternate;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .machinedetails {
+    /* included tile */
+    //flex-grow: 1;  // Strech to available space
+    //flex-shrink: 1; // Not more than available space
+    
+    &.grouparray-in-error{
+      display: none;
+    }
+
+    overflow: hidden; // To avoid too wide display width scrollbar
+    box-sizing: border-box; // to include margin for width = 100%
+    //width:100%;
+    //margin:0;
+    padding: 10px 20px;
+    //vertical-align:top;
+
+    flex-basis: 80%;
+    flex-shrink: 1;
+    flex-grow: 1;
+
+    .machinetitle {
+      /* included tile-title */
+
+      margin-bottom: 15px;
+
+      x-machinedisplay {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    &>.machine-component {
+      //margin-bottom: 20px;
+      width: 100%;
+
+      >.pulse-bar-div {
+        margin-bottom: 20px; // replace component margin (is ignored when hidden)
+
+        /* Default : all bars hidden */
+        //display: none; // Can not be done here, else page is always empty :/
+        .right-percent {
+          display: none;
+        }
+
+        // local :
+        font-size: 1em;
+        line-height: 2em;
+
+        >div {
+          min-height: 2em; // Moved to div to hide empty bars
+        }
+
+        .div-bar-and-percent {
+          display: flex;
+          flex-direction: row; // children alignment
+
+          .div-bar {
+            flex-shrink: 99999;
+            flex-grow: 99999;
+            overflow: hidden; // for faster re-size
+
+            margin-bottom: 10px; // to create space around
+            margin-top: 10px; // to create space around
+
+            .pulse-bar-div {
+              // sub-bar
+              //.bar-rounded-shadow; // Rounded border + shadow
+              // align with graduation
+              margin-right: @margin_graduation; //23px;
+              margin-left: @margin_graduation; //24px;
+            }
+          }
+
+          .right-percent {
+            margin-top: 24px; // == graduation height
+            width: 80px;
+            flex-shrink: 0;
+
+            display: flex;
+            flex-direction: column-reverse; // children alignment - to strech
+            justify-content: space-evenly;
+
+            x-motionpercentage {
+              font-size: 2em;
+              line-height: 2em;
+            }
+          }
+        }
+      }
+    }
+  }
+
+}
+
+// end machines-main
+
+
+
+
+// main bars margin (padding can not be used everywhere)
+x-cycleprogressbar,
+x-performancebar {
+  margin: 10px;
+}
+
+/* cycleprogressbar */
+.cycleprogressbar-progressbar {
+  .bar-rounded-shadow; // LIKE .pulse-bar-div
+}
+
+/* performance bar */
+/*x-performancebar{
+  .performancebar {
+    //border: 1px solid @color_text_alternate;
+  }
+}*/
+
+// BARS
+/*.middle-bar{
+  width: auto; //100%;
+}*/
+// end BARS

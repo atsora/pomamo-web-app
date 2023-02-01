@@ -1,0 +1,244 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "pulse.exports.light.less"; // Global import
+//// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-checkpath/x-checkpath.less";
+// @import "x-checkversion/x-checkversion.less";
+// @import "x-checkconfigupdate/x-checkconfigupdate.less";
+// @import "x-checklogin/x-checklogin.less";
+// @import "x-message/x-message.less";
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-grouparray/x-grouparray.less";
+@import "x-runningbutton/x-runningbutton.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-runningslotpie/x-runningslotpie.less";
+@import "x-currenticoncncalarm/x-currenticoncncalarm.less";
+@import 'x-stacklight/x-stacklight.less';
+@import "x-motionpercentage/x-motionpercentage.less";
+@import "x-datetimegraduation/x-datetimegraduation.less";
+@import "x-runningslotbar/x-runningslotbar.less";
+@import "x-machinemodelegends/x-machinemodelegends.less";
+@import "x-runninglegends/x-runninglegends.less";
+@import "x-performancetarget/x-performancetarget.less";
+
+@import "style.less";
+
+// Title
+.combinedview-title{
+  x-performancetarget {
+    min-height: 1em; // To force visibility (and loading data)
+    margin: auto 0; // Vertical center
+    .performancetarget-content{
+      .performancetarget-span{
+        // Same as machine display
+        font-weight: bold;
+        //font-style: italic;
+        font-size: 2.5em;
+        //line-height: 1.4em; // == font-size for vertical center
+
+        &::before {
+          font-size: 0.5em;
+        }
+      }
+    }
+  }
+}
+
+// tile-content
+.tile-content {
+  display: flex;
+  flex-direction: column; // align children
+  overflow: hidden; // Hide bottom displays when to small
+
+  .combinedview-middle-div {
+    flex-grow: 1; // Strech to available space
+    display: flex;
+    flex-direction: row; // children alignment
+
+    min-height: 100px; // To see it always. Warning! Linked to .tile-content{ overflow: hidden; to hide bottom when needed
+
+    position: relative; // for text vertical align
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+
+    //padding-left: 24px;  // Align with bottom bar 
+    padding-top: 12px;
+
+    .combinedview-runningslotpie {
+      flex-grow: 2; // Strech
+      position: relative;
+
+      /*x-runningslotpie {}*/
+
+      /*
+      .combinedview-motionpercentageday{
+        display: inline-block;
+        position: absolute;
+        // Vertical center + size
+        height: 20%;
+        top: 40%;
+        // Horizontal
+        width: 40%;
+        left: 30%;
+        
+        x-motionpercentage {
+          margin: auto;
+          font-weight: bold;
+          //font-size: 3em; // overload main in pie/gauge
+          height: 100%;
+          width: 100%;
+          .motionpercentage {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            .motionpercentage-text {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              text-align: center;
+              font-size: 3em; // overload main in pie/gauge
+            }
+            .motionpercentage-svg{ // Pending
+              height: 100%;
+              width: 100%;
+              fill: @color_text_alternate;; // == pulse-mainarea color
+            }
+          }
+        }
+      }
+      */
+    }
+
+    .combinedview-leftdisplay,
+    .combinedview-rightdisplay {
+      display: inline-block;
+      min-width: 15%;
+      max-width: 25%;
+      flex-grow: 1; // Strech to allow "Today" display
+      //height: 100%;
+    }
+
+    .combinedview-leftdisplay {
+      position: relative;
+      box-sizing: border-box;
+      //padding: 20px;
+      height: 100%;
+
+      .combinedview-today {
+        //padding-left: 6px;
+        // for text vertical align -> On top
+        position: absolute;
+        top: 0;
+        left: 0;
+        // Same as machine display ??
+        font-weight: bold;
+        font-size: 2em;
+      }
+
+      .combinedview-alarm-div {
+        box-sizing: border-box;
+        height: 35%;
+        // Vertical align 
+        position: absolute;
+        width: 100%;
+        transform: translateY(-50%);
+        top: 50%;
+
+        x-currenticoncncalarm {
+          box-sizing: border-box;
+          position: absolute;
+          height: 100%;
+          width: 80%;
+          left: 10%;
+
+          .pulse-icon-cncalarm {
+            width: 100%;
+            height: 50%;
+            transform: translateY(50%);
+            top: 50%;
+          }
+
+          /*svg {
+            width: 70%;
+            margin-left: 15%;
+            box-sizing: border-box;
+          }*/
+        }
+      }
+    }
+
+    .combinedview-rightdisplay {
+      height: 100%;
+      box-sizing: border-box;
+      padding: 20px;
+      /*x-stacklight {
+        //display: block;
+        //padding: 0 15%;
+      }*/
+    }
+  }
+
+  // BOTTOM DISPLAY
+  .combinedview-bottombar {
+    display: flex;
+    flex-direction: row; // children alignment
+
+    margin-top: 15px;
+    height: 80px;
+    box-sizing: border-box;
+
+    .combinedview-bottomleftbar {
+      flex-grow: 99999;
+      flex-shrink: 99999;
+
+      .combinedview-bar {
+        margin-left: @margin_graduation;
+        margin-right: @margin_graduation;
+        border-right-width: @border_length;
+        border-left-width: @border_length;
+        /*x-runningslotbar{
+        }*/
+      }
+
+      x-datetimegraduation {
+        .datetimegraduation-axis {
+          .domain {
+            stroke: transparent;
+          }
+        }
+      }
+    }
+
+    .combinedview-motionpercentage {
+      margin-bottom: 24px; // To remove graduation height
+      width: 80px;
+      flex-shrink: 0;
+
+      display: flex;
+      flex-direction: column; // children alignment
+      justify-content: space-evenly;
+
+      x-motionpercentage {
+        font-weight: bold;
+        font-size: 2em;
+      }
+    }
+  }
+}
+
+@media (max-width: 685px) {
+  .tile-content {
+    height: 300px;
+  }
+}

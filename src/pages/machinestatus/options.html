@@ -1,0 +1,101 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class="param-group group-options">
+  <div class="param-group-header group-options">
+    <div class="param-group-title group-options">Options</div>
+    <button class="param-group-button" id="resetoptions">reset</button>
+  </div>
+
+  <div class="param-group-content group-options">
+    <!-- Operation -->
+    <div class="labelsubgroup">
+      <label for="showworkinfo">Show operation
+        <input type="checkbox" id="showworkinfo" autocomplete="off" />
+      </label>
+    </div>
+    <!-- Pie period -->
+    <div>
+      <label>Utilization pie period</label>
+      <div class="subgroup radiogroup">
+        <div class='inlined-radio'>
+          <input type="radio" id="pierangeisday" name="pieperiod" value="pierangeisday">
+          <span for="pierangeisday">current day</span>
+        </div>
+        <div class='inlined-radio'>
+          <input type="radio" id="displayshiftrange" name="pieperiod" value="displayshiftrange">
+          <span for="displayshiftrange">current shift</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current % or time -->
+    <div>
+      <label>Display utilization </label>
+      <div class="subgroup radiogroup">
+        <div class='inlined-radio'>
+          <input type="radio" id="displaymotionpercent" name="motiondisplay" value="displaymotionpercent">
+          <span for="displaymotionpercent">percent</span>
+        </div>
+        <div class='inlined-radio'>
+          <input type="radio" id="displaymotiontime" name="motiondisplay" value="displaymotiontime">
+          <span for="displaymotiontime">time</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current target settings -->
+    <div>
+      <label for="showtarget">Show utilization target
+        <input type="checkbox" id="showtarget" autocomplete="off" /></label>
+    </div>
+
+    <!-- Current tool settings -->
+    <label for="showcurrent">Current...
+      <input type="checkbox" id="showcurrent" autocomplete="off" />
+    </label>
+    <!-- Current tool / sequence / none -->
+    <div class="subgroup radiogroup showcurrentdetails">
+      <div class='inlined-radio'>
+        <input type="radio" id="showcurrenttool" name="showcurrent" value="showcurrenttool" />
+        <span for="showcurrenttool">tool</span>
+      </div>
+      <div class='inlined-radio'>
+        <input type="radio" id="showcurrentsequence" name="showcurrent" value="showcurrentsequence" />
+        <span for="showcurrentsequence">sequence</span>
+      </div>
+    </div>
+
+    <!-- Current alarm settings -->
+    <div>
+      <label for="showalarm">Show current alarm
+        <input type="checkbox" id="showalarm" autocomplete="off" /></label>
+    </div>
+
+    <!-- Current stacklight settings -->
+    <div>
+      <label for="showstacklight">Show stack lights
+        <input type="checkbox" id="showstacklight" autocomplete="off" /></label>
+    </div>
+
+    <!-- Current weekly settings -->
+    <div>
+      <label for="showweeklybar">Show second utilization bar
+        <input type="checkbox" id="showweeklybar" autocomplete="off" /></label>
+    </div>
+    <!--Weekly = curretn week or last 7 days -->
+    <div class="subgroup radiogroup showweeklydetails">
+      <div class='inlined-radio'>
+        <input type="radio" id="showlast7days" name="showweeklyperiod" value="showlast7days" />
+        <span for="showlast7days">last 7 days</span>
+      </div>
+      <div class='inlined-radio'>
+        <input type="radio" id="showcurrentweek" name="showweeklyperiod" value="showcurrentweek" />
+        <span for="showcurrentweek">current week</span>
+      </div>
+    </div>
+  </div>
+</div>

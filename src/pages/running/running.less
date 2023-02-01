@@ -1,0 +1,150 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "x-grouparray/x-grouparray.less";
+
+@import "pulse.exports.light.less"; // Global import
+/*// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-checkpath/x-checkpath.less";
+// @import "x-checkversion/x-checkversion.less";
+// @import "x-checkconfigupdate/x-checkconfigupdate.less";
+// @import "x-checklogin/x-checklogin.less";
+// @import "x-message/x-message.less";
+*/
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-machinedisplay/x-machinedisplay.less";
+
+@import "x-productionmachiningstatus/x-productionmachiningstatus.less";
+@import "x-currentcncvalue/x-currentcncvalue.less";
+@import "x-lastshift/x-lastshift.less";
+
+@import "x-datetimegraduation/x-datetimegraduation.less";
+@import "x-shiftslotbar/x-shiftslotbar.less";
+@import "x-machinestatebar/x-machinestatebar.less";
+@import "x-observationstatebar/x-observationstatebar.less";
+@import "x-operationcyclebar/x-operationcyclebar.less";
+@import "x-operationslotbar/x-operationslotbar.less";
+@import "x-isofileslotbar/x-isofileslotbar.less";
+@import "x-productionstatebar/x-productionstatebar.less";
+@import "x-reasonslotbar/x-reasonslotbar.less";
+@import "x-cncalarmbar/x-cncalarmbar.less";
+@import "x-redstacklightbar/x-redstacklightbar.less";
+@import "x-cncvaluebar/x-cncvaluebar.less";
+
+@import "x-motionpercentage/x-motionpercentage.less";
+@import "x-motiontime/x-motiontime.less";
+@import "x-periodtoolbar/x-periodtoolbar.less";
+@import "x-reasonbutton/x-reasonbutton.less";
+@import "x-clock/x-clock.less";
+
+// Legends :
+@import 'x-productionstatelegends/x-productionstatelegends.less';
+@import 'x-reasongroups/x-reasongroups.less';
+@import 'x-fieldlegends/x-fieldlegends.less';
+@import 'x-machinemodelegends/x-machinemodelegends.less';
+
+@import "style.less";
+
+/*a {
+  color: @color_text_alternate; // == idem mainarea
+  text-decoration: none;
+}
+a:visited {
+  color: @color_text_alternate;
+}
+a:hover {
+  text-decoration: underline;
+}*/
+.running-page {
+  .one_machine_cell {
+    display: flex;
+    flex-direction: row; // align children
+    padding: 0 4px;
+    &.top_cell {
+      align-items: center;
+    }
+
+    .div-machine {
+      width: 20%;
+
+      //<x-machinedisplay></x-machinedisplay>
+      .div-current {
+        .bar-rounded-shadow;
+
+        padding: 4px;
+        min-height: 32px;
+
+        display: flex;
+        flex-direction: row; // align children
+
+        .label-current,
+        .clock-div {
+          display: inline-block;
+          padding: 0 5px;
+        }
+
+        .label-current {
+          margin-top: 7px; // For quick vertical align -> To check and change
+        }
+
+        .div-current-left {
+          //<x-reasonbutton></x-reasonbutton>
+          height: 32px;
+          width: 32px;
+        }
+
+        .div-current-right {
+          flex-grow: 1;
+          padding-left: 4px;
+          width: 80%; // to allow '...'
+
+          display: flex;
+          flex-direction: column; // align children
+
+          font-size: 0.8em;
+        }
+      }
+    }
+
+    .div-bar {
+      flex: 1;
+      overflow: hidden; // For fast resize
+
+      min-height: 2em;
+
+      .pulse-bar-div {
+        //.bar-rounded-shadow; // Rounded border + shadow -> in style.less
+
+        // align with graduation
+        margin-right: @margin_graduation; //23px;
+        margin-left: @margin_graduation; //24px;
+        // Space between bars :
+        margin-top: 18px;
+        //margin-bottom: 0px;
+      }
+    }
+
+    .div-percent {
+      width: 5em;
+      margin-top: 18px;
+
+      display: flex;
+      flex-direction: column; // align children
+      justify-content: space-evenly;
+
+      x-motionpercentage,
+      x-motiontime {
+        font-size: 1.3em;
+        line-height: 1.3em;
+      }
+    }
+  }
+}

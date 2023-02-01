@@ -1,0 +1,97 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "pulse.exports.light.less"; // Global import
+// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-checkpath/x-checkpath.less";
+// @import "x-checkversion/x-checkversion.less";
+// @import "x-message/x-message.less";
+
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-grouparray/x-grouparray.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-currentcncvalue/x-currentcncvalue.less";
+@import "x-datetimegraduation/x-datetimegraduation.less";
+@import "x-reasonslotbar/x-reasonslotbar.less";
+@import "x-runningslotbar/x-runningslotbar.less";
+@import "x-cncvaluebar/x-cncvaluebar.less";
+@import "x-motionpercentage/x-motionpercentage.less";
+@import "x-motiontime/x-motiontime.less";
+@import "x-periodmanager/x-periodmanager.less";
+@import "x-reasongroups/x-reasongroups.less";
+@import "x-fieldlegends/x-fieldlegends.less";
+@import "x-runninglegends/x-runninglegends.less";
+@import "style.less";
+
+
+x-machinedisplay {
+  text-align: center;
+}
+
+.tile-content{
+  display: flex;
+  flex-direction: column; // align children
+
+  .machinepecification-line{
+    display: flex;
+    flex-direction: row; // align children
+
+    margin: 20px 0;
+    width: 100%;
+
+    .machinepecification-period-div{
+      width: 18ex; // To make them all the same width
+      flex-shrink: 0;
+      text-align: right;
+
+      .machinepecification-period-span {
+        font-size: 1.5em;
+        font-weight: bold;
+        // Vertical center
+        height: 95px; // hauteur du parent 
+        line-height: 95px; // hauteur de ligne (identique) 
+        white-space: nowrap; // interdiction de passer à la ligne
+      }
+    }
+
+    .machinepecification-bar{
+      flex-shrink: 99999;
+      flex-grow: 99999; // Strech
+      overflow: hidden; // for faster re-size
+
+      .machinepecification-bar-border {
+        margin-left: @margin_graduation;
+        margin-right: @margin_graduation;
+        width: auto;
+      }
+    }
+
+    .machinepecification-motion{
+      width: 12ex;
+      flex-shrink: 0;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+
+      margin-bottom: 30px; // To ignore graduation height
+      
+      //x-motionpercentage, x-motiontime {}
+    }
+  }
+}
+x-datetimegraduation {
+  .datetimegraduation-axis {
+    .domain {
+      stroke: transparent;
+    }
+  }
+}

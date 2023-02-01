@@ -1,0 +1,31 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class='single-cell' id='boxtoclone'>
+  <div class="tile">
+    <div class="tile-title">
+      <!--x-reasonbutton></x-reasonbutton-->
+      <div class="machinedisplay-position">
+        <x-machinedisplay></x-machinedisplay>
+      </div>
+      <div class="btn-title-div">
+        <x-zoominpagebutton></x-zoominpagebutton>
+      </div>
+      <div class="btn-title-div">
+        <x-showrunningdialogbutton></x-showrunningdialogbutton>
+      </div>
+    </div>
+    <div class="tile-content">
+      <div class="mit-top-div">
+        <x-workinfo></x-workinfo>
+      </div>
+      <div class="mit-pie-div">
+        <x-partproductionstatuspie textchange-context='pieSubText-group-id'></x-partproductionstatuspie>
+        <x-freetext textchange-context='pieSubText-group-id'></x-freetext>
+      </div>
+    </div>
+  </div>
+</div>

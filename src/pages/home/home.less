@@ -1,0 +1,35 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+@import "pulse.exports.light.less"; // Global import
+//// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+@import "x-machineselection/x-machineselection.less";
+@import "x-message/x-message.less";
+
+// Local
+@import "style.less";
+
+.configuration-bottom-area-login { // Nearly the same display as .configuration-bottom-area
+  display: inline-block !important; //in home page only
+  // show x-loginpasswordbutton and x-loginchangepasswordbutton
+  
+  padding: 6px 10px 0 6px;
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  border-top: 1px solid @color_window_border_light;
+  height: 50px;
+  box-sizing: border-box;
+}
+
+// No legend and no page options
+#pulse-panel-parameter-content,
+.legend-content, .group-pages, .group-machines {
+  display: none !important;
+}

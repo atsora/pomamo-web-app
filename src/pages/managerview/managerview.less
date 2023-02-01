@@ -1,0 +1,119 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global :
+@import "pulse.customdialog.less";
+
+@import "pulse.exports.light.less"; // Global import
+// @import "x-checkcurrenttime/x-checkcurrenttime.less";
+// @import "x-checkpath/x-checkpath.less";
+// @import "x-checkversion/x-checkversion.less";
+// @import "x-checkconfigupdate/x-checkconfigupdate.less";
+// @import "x-checklogin/x-checklogin.less";
+// @import "x-message/x-message.less";
+
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "x-grouparray/x-grouparray.less";
+@import "x-currentcncvalue/x-currentcncvalue.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-datetimegraduation/x-datetimegraduation.less";
+@import "x-machinestatebar/x-machinestatebar.less";
+@import "x-observationstatebar/x-observationstatebar.less";
+@import "x-operationcyclebar/x-operationcyclebar.less";
+@import "x-operationslotbar/x-operationslotbar.less";
+@import "x-reasonslotbar/x-reasonslotbar.less";
+@import "x-redstacklightbar/x-redstacklightbar.less";
+@import "x-cncvaluebar/x-cncvaluebar.less";
+@import "x-isofileslotbar/x-isofileslotbar.less";
+@import "x-motionpercentage/x-motionpercentage.less";
+@import "x-motiontime/x-motiontime.less";
+@import "x-reasongroups/x-reasongroups.less";
+@import "x-fieldlegends/x-fieldlegends.less";
+@import "x-reasonbutton/x-reasonbutton.less";
+@import "x-machinemodelegends/x-machinemodelegends.less";
+@import "style.less";
+
+/*.pulse-mainarea-inner {
+  padding: 14px;
+}*/
+
+.main-table {
+  // see running-table for inspiration
+  /* included tile */
+
+  display: flex;
+  flex-direction: column; // align children
+
+  .one_machine_cell {
+    display: flex;
+    flex-direction: row; // align children
+    &.top_cell {
+     align-items: center;
+    }
+
+    .div-status {
+      flex-shrink: 0; // Aucune réduction
+      height: 32px;
+      width: 32px;
+    }
+
+    .div-machine {
+      flex-shrink: 0; // Aucune réduction
+      width: 180px; // Fixe - not % else strange behavior for graduation
+      padding-left: 6px;
+      //.div-current
+    }
+
+    .div-bar {
+      flex-grow: 99999;
+      flex-shrink: 99999;
+      overflow: hidden; // To avoid too big graduation
+
+      padding: 6px 0;
+
+      .pulse-bar-div {
+        //.bar-rounded-shadow; // Rounded border + shadow -> in style.less
+        // align with graduation
+        margin-right: @margin_graduation; //23px;
+        margin-left: @margin_graduation; //24px;
+        // local :
+        font-size: 1em;
+        line-height: 2em;
+
+        //>div {
+        //min-height: 2em; //Avoid ! Else blank zone under bars
+        //}
+        >.middle-bar {
+          min-height: 2em;
+        }
+      }
+    }
+
+    .div-percent {
+      flex-shrink: 0; // Aucune réduction
+      //padding: 6px 0;
+      width: 80px; // Forced & fixed because of graduation on top - DO NOT use %
+
+      display: flex;
+      flex-direction: column; // align children
+      justify-content: space-evenly;
+
+      font-size: 1em;
+      //x-motionpercentage, x-motiontime {}
+    }
+  }
+}
+
+// Machine + current
+.machinedisplay {
+  font-weight: bold;
+}
+
+.currentcncvalue {
+  text-align: center;
+}
