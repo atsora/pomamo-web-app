@@ -17,3 +17,4 @@ obj
 /.bashrc
 /Installer/Resources/Components/H_dist_files/heat_dist_files.wxs
 /project.code-workspace
+*.log

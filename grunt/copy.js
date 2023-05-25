@@ -3,13 +3,13 @@ module.exports = {
     files: [
       {
         expand: true,
-        cwd: 'node_modules/@lemoineat/pomamo-web-components/about/exports/scripts/',
+        cwd: 'node_modules/@atsora/pomamo-web-components/about/exports/scripts/',
         src: ['pulse.exports*.js'],
         dest: 'dist-es2015/scripts/'
       },
       {
         expand: true,
-        cwd: 'node_modules/@lemoineat/pomamo-web-components/about/exports/',
+        cwd: 'node_modules/@atsora/pomamo-web-components/about/exports/',
         src: ['*/pulse.exports*.css'],
         dest: 'dist-es2015/styles/'
       }
@@ -19,13 +19,13 @@ module.exports = {
     files: [
       {
         expand: true,
-        cwd: 'node_modules/@lemoineat/pomamo-web-components/about/exports/obfusc/',
+        cwd: 'node_modules/@atsora/pomamo-web-components/about/exports/obfusc/',
         src: ['pulse.exports*.js'],
         dest: 'dist-es2015/scripts/'
       },
       {
         expand: true,
-        cwd: 'node_modules/@lemoineat/pomamo-web-components/about/exports/',
+        cwd: 'node_modules/@atsora/pomamo-web-components/about/exports/',
         src: ['*/pulse.exports*.css'],
         dest: 'dist-es2015/styles/'
       }
@@ -47,7 +47,7 @@ module.exports = {
       },
       {
         expand: true,
-        cwd: 'node_modules/@lemoineat/pomamo-web-components/about/exports/images/',
+        cwd: 'node_modules/@atsora/pomamo-web-components/about/exports/images/',
         src: ['*.*'],
         dest: '../ReportWebApp/pulse.reporting/src/main/webapp/images'
       }
@@ -57,7 +57,7 @@ module.exports = {
     files: [
       {
         expand: true,
-        cwd: 'node_modules/@lemoineat/pomamo-web-components/images/',
+        cwd: 'node_modules/@atsora/pomamo-web-components/images/',
         src: ['*.svg','*.png','*.jpg','*.ico'],
         dest: 'dist-es2015/images/'
       },
@@ -123,7 +123,7 @@ module.exports = {
       },
       {
         expand: true,
-        cwd: 'node_modules/@lemoineat/pomamo-web-components/libraries/',
+        cwd: 'node_modules/@atsora/pomamo-web-components/libraries/',
         src: ['translation*.js', 'config*.js'],
         dest: 'dist-es2015/scripts/'
       }

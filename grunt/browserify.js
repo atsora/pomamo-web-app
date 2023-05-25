@@ -13,7 +13,7 @@ module.exports = {
         'common_page.js:pulsePage'
       ],
       browserifyOptions: {
-        paths: ['./', 'src/scripts/', 'node_modules/@lemoineat/pomamo-web-components/libraries/', 'node_modules/@lemoineat/pomamo-web-components/'],
+        paths: ['./', 'src/scripts/', 'node_modules/@atsora/pomamo-web-components/libraries/', 'node_modules/@atsora/pomamo-web-components/'],
         debug: true /* for source map */
       }
     },

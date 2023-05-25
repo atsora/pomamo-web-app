@@ -1,20 +1,23 @@
 {
-  "name": "@lemoineat/pomamo-web-app",
+  "name": "@atsora/pomamo-web-app",
   "version": "13.0.0",
-  "author": "Lemoine Automation Technologies <nrelange@lemoinetechnologies.com>",
+  "contributors": [
+    "Lemoine Automation Technologies <nrelange@lemoinetechnologies.com>",
+    "Nicolas Relange <nicolas@atsora.eu>"
+  ],
   "license": "Apache-2.0",
   "dependencies": {
+    "@atsora/pomamo-web-components": "~13.0.0",
     "@bower_components/classlist": "components/classList.js#*",
     "@bower_components/jquery": "jquery/jquery-dist#~2.1.4",
     "@bower_components/json2-js": "bramski/JSON-js#~1.0.0",
     "@bower_components/momentjs": "moment/moment#~2.10.6",
     "@bower_components/webcomponentsjs": "Polymer/webcomponentsjs#~0.7.14",
     "@webcomponents/webcomponentsjs": "^2.4.3",
-    "core-js": "~3.6.5",
+    "core-js": "~3.30.2",
     "d3": "^6.2.0",
     "grunt-cli": "^1.3.2",
     "markdown-it": "^12.0.4",
-    "@lemoineat/pomamo-web-components": "~13.0.0",
     "regenerator-runtime": "~0.13.5"
   },
   "devDependencies": {
@@ -25,7 +28,7 @@
     "grunt": "^1.6.0",
     "grunt-babel": "~8.0.0",
     "grunt-bake": "^1.9.0",
-    "grunt-browserify": "~5.3.0",
+    "grunt-browserify": "~6.0.0",
     "grunt-contrib-clean": "~1.0.0",
     "grunt-contrib-concat": "~1.0.0",
     "grunt-contrib-copy": "~1.0.0",
@@ -33,16 +36,15 @@
     "grunt-contrib-obfuscator": "^8.0.0",
     "grunt-jsdoc": "^2.4.1",
     "grunt-less-themes": "~0.0.5",
-    "grunt-replace": "~1.0.1",
+    "grunt-replace": "~2.0.2",
     "grunt-shell": "~2.1.0",
     "grunt-subgrunt": "^1.2.0",
-    "javascript-obfuscator": "^2.0.0",
-    "load-grunt-config": "^3.0.1",
-    "matchdep": "^2.0.0",
+    "javascript-obfuscator": "^4.0.2",
+    "load-grunt-config": "^4.0.1",
     "time-grunt": "^1.4.0"
   },
   "optionalDependencies": {
-    "fsevents": "^1.2.13"
+    "chokidar": "^3.5.3"
   },
   "engines": {
     "node": ">=12.0.0",

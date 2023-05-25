@@ -3,10 +3,10 @@ module.exports = {
   build : {
     options : {
       themes: ['dark', 'light'],
-      themeDir: 'node_modules/@lemoineat/pomamo-web-components/libraries/themes',
+      themeDir: 'node_modules/@atsora/pomamo-web-components/libraries/themes',
       output: 'dist-es2015/styles',
       relativeUrls : false,
-      paths : ['src/styles/', 'node_modules/@lemoineat/pomamo-web-components/', 'node_modules/@lemoineat/pomamo-web-components/libraries/', 'dist-es2015/styles/'],
+      paths : ['src/styles/', 'node_modules/@atsora/pomamo-web-components/', 'node_modules/@atsora/pomamo-web-components/libraries/', 'dist-es2015/styles/'],
       themeImport: 'dist-es2015/styles/theme.less' // tmp file created and used here 
     },
     files: [
