@@ -25,40 +25,6 @@ module.exports = {
       }
     ]
   },
-  babel: {
-    options: {
-      patterns: [
-        {
-          match: /es2015/g,
-          replacement: 'babel'
-        },
-        {
-          match: /<!--babel:/g,
-          replacement: ''
-        },
-        {
-          match: /babel:-->/g,
-          replacement: ''
-        }/*,
-        {
-          match: /<!--babel-polyfill:/g,
-          replacement: ''
-        },
-        {
-          match: /babel-polyfill:-->/g,
-          replacement: ''
-        }*/
-      ]
-    },
-    files: [
-      {
-        expand: true,                      // Enable dynamic expansion.
-        cwd: 'dist-es2015/',               // Src matches are relative to this path.
-        src: ['*.html'],                   // Actual pattern(s) to match.
-        dest: 'dist/',                     // Destination path prefix.
-      }
-    ]
-  },
   htmltodist:{ // Intead of babel or obfuscator
     options: {
       patterns: [
@@ -84,15 +50,6 @@ module.exports = {
           match: /es2015/g,
           replacement: 'scripts'
         }
-        /*,
-        {
-          match: /<!--babel-polyfill:/g,
-          replacement: ''
-        },
-        {
-          match: /babel-polyfill:-->/g,
-          replacement: ''
-        }*/
       ]
     },
     files: [

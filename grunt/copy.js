@@ -166,22 +166,11 @@ module.exports = {
   jslib: {
     files: [
       { 'dist-es2015/lib/jquery/jquery.js': 'node_modules/@bower_components/jquery/dist/jquery.min.js' },
-      { 'dist-es2015/lib/jquery-mockjax/jquery.mockjax.js': 'node_modules/@bower_components/jquery-mockjax/jquery.mockjax.js' },
       { 'dist-es2015/lib/moment/moment.js': 'node_modules/@bower_components/momentjs/min/moment-with-locales.min.js' },
       { 'dist-es2015/lib/d3/d3.min.js': 'node_modules/d3/dist/d3.min.js' }
     ]
   },
-  babelbeta: {
-    files: [
-      {
-        expand: true,
-        cwd: 'dist/babel/',
-        src: ['**/*.js', '**/*.map'],
-        dest: 'dist/scripts'
-      }
-    ]
-  },
-  es2015forrelease: {
+  release: {
     files: [
       {
         expand: true,
@@ -189,11 +178,9 @@ module.exports = {
         src: ['images/**', 'lib/**', 'scripts/**', 'styles/**'],
         dest: 'dist/'
       }
-      /*,{ 'dist/lib/babel-polyfill.js': 'node_modules/babel-polyfill/dist/polyfill.min.js' }*/
     ]
   },
-  // was releasewithoutbabel
-  es2015forbeta: {
+  beta: {
     files: [
       {
         expand: true,
@@ -207,10 +194,6 @@ module.exports = {
         src: ['*.js'],
         dest: 'dist/scripts/'
       }
-      /*,
-      { 'dist/web.config': 'dist-es2015/web.config' },
-      { 'dist/.htaccess': 'dist-es2015/.htaccess' }*/
-      /*,{ 'dist/lib/babel-polyfill.js': 'node_modules/babel-polyfill/dist/polyfill.min.js' }*/
     ]
   },
   linux: {

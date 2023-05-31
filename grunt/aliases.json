@@ -14,7 +14,7 @@
         "copy:custompages",
         "obfuscator",
         "replace:obfuscator",
-        "copy:es2015forrelease",
+        "copy:release",
         "clean:less"
     ],
     "release": [
@@ -33,7 +33,7 @@
         "copy:custompages",
         "obfuscator",
         "replace:obfuscator",
-        "copy:es2015forrelease",
+        "copy:release",
         "clean:less"
     ],
     "beta": [
@@ -51,8 +51,7 @@
         "replace:html",
         "copy:custompages",
         "replace:htmltodist",
-        
-        "copy:es2015forbeta",
+        "copy:beta",
         "clean:less"
     ],
     "exports": [
