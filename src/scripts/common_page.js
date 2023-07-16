@@ -132,7 +132,7 @@ var populateNavigationPanel = function () {
     // if current app -> selected
     //let tmpContexts = new Array();
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
-    if (app == 'PulseWebApp') {
+    if ((app == 'PulseWebApp') || (app == 'AtrackingWebApp')) {
       if (tmpContexts.length == 0)
         appImg.addClass('selected');
     }
@@ -166,11 +166,12 @@ var populateNavigationPanel = function () {
     // Tooltip, link...
     let targetUrl = window.location.href;
     switch (app) {
+      case 'AtrackingWebApp':
       case 'PulseWebApp': {
         if (null == pulseUtility.getURLParameter(window.location.href, 'AppContext')) {
           currentAppIsAllowed = true;
         }
-        pulseUtility.addToolTip(link, 'Pulse Web app');
+        pulseUtility.addToolTip(link, 'Atsora Tracking Web app');
 
         // Remove AppContext
         targetUrl = pulseUtility.removeURLParameter(targetUrl, 'AppContext');
@@ -227,6 +228,7 @@ var populateNavigationPanel = function () {
         targetUrl = pulseUtility.changePageName(targetUrl, 'index'); // or firstpage
         //changeApplication :
         targetUrl = targetUrl.replace('PulseWebApp', app);
+        targetUrl = targetUrl.replace('AtrackingWebApp', app);
 
         // Add 'path' if exists in url :
         let tmpPath = pulseUtility.getURLParameterValues(window.location.href, 'path');
@@ -256,7 +258,7 @@ var populateNavigationPanel = function () {
     }
   }
 
-  // 2- PAGES : Pulse web app or live pages
+  // 2- PAGES : Atsora Tracking web app or live pages
   if (displayedPages == null || displayedPages.length == 0) {
     $('#pulse-panel-navigation').hide();
     $('#navigationpanelbtn').addClass('disabled');
@@ -479,7 +481,7 @@ var populateConfigPanel = function (currentPageMethods) {
     // Display / Dispatch
     //_setPageTitle();
     let pageName = pulseConfig.getPageName();
-    let title1 = pulseConfig.pulseTranslate('general.title', 'Pulse');
+    let title1 = pulseConfig.pulseTranslate('general.title', 'Atsora Tracking');
     let title2 = pulseConfig.pulseTranslate('pages.' + pageName + '.title', '');
     /*if (pageName == 'index') {
       // Replace by the name of the role, if specified
@@ -1050,7 +1052,7 @@ exports.preparePage = function (currentPageMethods) {
   });
 
   // == _setPageTitle
-  let title1 = pulseConfig.pulseTranslate('general.title', 'Pulse');
+  let title1 = pulseConfig.pulseTranslate('general.title', 'Atsora Tracking');
   let title2 = pulseConfig.pulseTranslate('pages.' + pageName + '.title', '');
   /*if (pageName == 'index') {
     // Replace by the name of the role, if specified

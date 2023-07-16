@@ -10,7 +10,7 @@ PULSE_TRANSLATION.pages = {
     title: 'Index'
   },
   login: {
-    title: 'Pulse'
+    title: 'Login'
   },
   home: {
     title: 'Home'
