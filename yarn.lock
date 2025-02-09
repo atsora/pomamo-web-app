@@ -35,41 +35,36 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.23.0.tgz#da950e622420bf96ca0d0f2909cdddac3acd8719"
   integrity sha512-vvPKKdMemU85V9WE/l5wZEmImpCtLqbnTvqDS2U1fJ96KrxoW7KrXhNsNCblQlg8Ck4b85yxdTyelsMUgFUXiw==
 
-"@bower_components/classlist@components/classList.js#*", "@bower_components/classlist@github:components/classList.js#*":
+"@bower_components/classlist@components/classList.js#*":
   version "0.0.0"
-  uid "05641a9162aa7c0f21b8b5ebbb3088b77978eb2a"
   resolved "https://codeload.github.com/components/classList.js/tar.gz/05641a9162aa7c0f21b8b5ebbb3088b77978eb2a"
 
-"@bower_components/jquery-mockjax@github:jakerella/jquery-mockjax#~1.6.0":
+"@bower_components/jquery-mockjax@jakerella/jquery-mockjax#~1.6.0":
   version "1.6.2"
   resolved "https://codeload.github.com/jakerella/jquery-mockjax/tar.gz/e718591fafa9c7a6d5fe4b65f12e3d23c51bbf86"
 
-"@bower_components/jquery-mockjax@github:jakerella/jquery-mockjax#~2.6.0":
-  version "2.6.0"
-  resolved "https://codeload.github.com/jakerella/jquery-mockjax/tar.gz/2a143bc79bb075c81aa748361a4a7fe91af0f4ad"
-  dependencies:
-    jquery ">=1.5.2"
+"@bower_components/jquery-mockjax@jakerella/jquery-mockjax#~2.6.0":
+  version "2.6.1"
+  resolved "https://codeload.github.com/jakerella/jquery-mockjax/tar.gz/4ca7ace3daf8cfb54134555ee91c4b1cff671065"
 
-"@bower_components/jquery@github:jquery/jquery-dist#~2.1.4", "@bower_components/jquery@jquery/jquery-dist#~2.1.4":
+"@bower_components/jquery@jquery/jquery-dist#~2.1.4":
   version "2.1.4"
   resolved "https://codeload.github.com/jquery/jquery-dist/tar.gz/7751e69b615c6eca6f783a81e292a55725af6b85"
 
-"@bower_components/json2-js@bramski/JSON-js#~1.0.0", "@bower_components/json2-js@github:bramski/JSON-js#~1.0.0":
+"@bower_components/json2-js@bramski/JSON-js#~1.0.0":
   version "0.0.0"
-  uid "8fa79c111f78b5a56b071e48d92b57a33b161270"
   resolved "https://codeload.github.com/bramski/JSON-js/tar.gz/8fa79c111f78b5a56b071e48d92b57a33b161270"
 
-"@bower_components/moment@github:moment/moment#>=2.10.5":
-  version "2.29.4"
-  resolved "https://codeload.github.com/moment/moment/tar.gz/000ac1800e620f770f4eb31b5ae908f6167b0ab2"
+"@bower_components/moment@moment/moment#>=2.10.5":
+  version "2.30.1"
+  resolved "https://codeload.github.com/moment/moment/tar.gz/485d9a7d709bd5f3869a7ad24630cf0746d072dc"
 
-"@bower_components/momentjs@github:moment/moment#~2.10.6", "@bower_components/momentjs@moment/moment#~2.10.6":
+"@bower_components/momentjs@moment/moment#~2.10.6":
   version "2.10.6"
   resolved "https://codeload.github.com/moment/moment/tar.gz/f3fbef9d9875bbff340b527dbe3f1c447a942f69"
 
-"@bower_components/webcomponentsjs@Polymer/webcomponentsjs#~0.7.14", "@bower_components/webcomponentsjs@github:Polymer/webcomponentsjs#~0.7.14":
+"@bower_components/webcomponentsjs@Polymer/webcomponentsjs#~0.7.14":
   version "0.7.24"
-  uid "8a2e40557b177e2cca0def2553f84c8269c8f93e"
   resolved "https://codeload.github.com/Polymer/webcomponentsjs/tar.gz/8a2e40557b177e2cca0def2553f84c8269c8f93e"
 
 "@javascript-obfuscator/escodegen@2.2.2":
@@ -1656,7 +1651,18 @@ grunt-browserify@~6.0.0:
     resolve "^1.1.6"
     watchify "^4.0.0"
 
-grunt-cli@^1.4.3, grunt-cli@~1.4.3:
+grunt-cli@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/grunt-cli/-/grunt-cli-1.5.0.tgz#24fa92225946b2002c535c7583a003e15203876f"
+  integrity sha512-rILKAFoU0dzlf22SUfDtq2R1fosChXXlJM5j7wI6uoW8gwmXDXzbUvirlKZSYCdXl3LXFbR+8xyS+WFo+b6vlA==
+  dependencies:
+    grunt-known-options "~2.0.0"
+    interpret "~1.1.0"
+    liftup "~3.0.1"
+    nopt "~5.0.0"
+    v8flags "^4.0.1"
+
+grunt-cli@~1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/grunt-cli/-/grunt-cli-1.4.3.tgz#22c9f1a3d2780bf9b0d206e832e40f8f499175ff"
   integrity sha512-9Dtx/AhVeB4LYzsViCjUQkd0Kw0McN2gYpdmGYKtE2a5Yt7v1Q+HYZVWhqXc/kGnxlMtqKDxSwotiGeFmkrCoQ==
@@ -2208,11 +2214,6 @@ jit-grunt@0.10.0:
   resolved "https://registry.yarnpkg.com/jit-grunt/-/jit-grunt-0.10.0.tgz#008c3a7fe1e96bd0d84e260ea1fa1783457f79c2"
   integrity sha512-eT/f4c9wgZ3buXB7X1JY1w6uNtAV0bhrbOGf/mFmBb0CDNLUETJ/VRoydayWOI54tOoam0cz9RooVCn3QY1WoA==
 
-jquery@>=1.5.2:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
-  integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
-
 js-string-escape@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/js-string-escape/-/js-string-escape-1.0.1.tgz#e2625badbc0d67c7533e9edc1068c587ae4137ef"
@@ -2660,6 +2661,13 @@ nopt@~4.0.1:
   dependencies:
     abbrev "1"
     osenv "^0.1.4"
+
+nopt@~5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/nopt/-/nopt-5.0.0.tgz#530942bb58a512fccafe53fe210f13a25355dc88"
+  integrity sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==
+  dependencies:
+    abbrev "1"
 
 normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"
@@ -3620,6 +3628,11 @@ uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+v8flags@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/v8flags/-/v8flags-4.0.1.tgz#98fe6c4308317c5f394d85a435eb192490f7e132"
+  integrity sha512-fcRLaS4H/hrZk9hYwbdRM35D0U8IYMfEClhXxCivOojl+yTRAZH3Zy2sSy6qVCiGbV9YAtPssP6jaChqC9vPCg==
 
 v8flags@~3.2.0:
   version "3.2.0"

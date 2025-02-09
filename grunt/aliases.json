@@ -57,7 +57,6 @@
     "exports": [
         "subgrunt:exportsrelease",
         "copy:exportsrelease",
-        
         "copy:exportstoreport"
     ],
     "exportsdev": [
