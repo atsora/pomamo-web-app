@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-//var PULSE_TRANSLATION = PULSE_TRANSLATION || {};
+//var ATSORA_CATALOG = ATSORA_CATALOG || {};
 // If do not exists, it IS an error. The file translation_pusecomponent_default.js is not included ?
 
-PULSE_TRANSLATION.pages = {
+ATSORA_CATALOG.pages = {
   index: {
     title: 'Index'
   },

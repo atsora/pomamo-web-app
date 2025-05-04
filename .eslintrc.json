@@ -19,8 +19,8 @@
         "window": true,
 		"document": true,
         "xtag": true,
-        "PULSE_COMPONENT_TRANSLATION": true,
-        "PULSE_TRANSLATION": true,
+        "ATSORA_COMPONENT_CATALOG": true,
+        "ATSORA_CATALOG": true,
 		"PULSE_DEFAULT_CONFIG": true,
         "LEM_CONFIG_DEFAULT":true
     },

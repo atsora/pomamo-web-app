@@ -2,6 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-/*PULSE_TRANSLATION.pages.mycustompage = {
+/*ATSORA_CATALOG.pages.mycustompage = {
   title: 'My custom Page'
 };*/
