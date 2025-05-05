@@ -27,7 +27,7 @@ require('x-periodmanager/x-periodmanager');
 require('x-reasongroups/x-reasongroups');
 require('x-fieldlegends/x-fieldlegends');
 require('x-reasonbutton/x-reasonbutton');
-
+require('x-tr/x-tr');
 
 class ManagerViewPage extends pulsePage.BasePage {
   constructor() {
@@ -175,7 +175,7 @@ class ManagerViewPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate('error.machineRequired', 'Please select at least one machine')
       });
     }
 

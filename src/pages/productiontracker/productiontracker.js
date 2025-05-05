@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -13,6 +14,7 @@ require('x-periodmanager/x-periodmanager');
 require('x-ancestors/x-ancestors');
 require('x-machinedisplay/x-machinedisplay');
 require('x-productiontrackertable/x-productiontrackertable');
+require('x-tr/x-tr');
 
 class ProductionTrackerPage extends pulsePage.BasePage {
   constructor() {
@@ -149,7 +151,7 @@ class ProductionTrackerPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate ('error.machineRequired','Please select at least one machine')
       });
     }
 

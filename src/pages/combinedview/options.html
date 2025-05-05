@@ -1,29 +1,30 @@
 <!--
 Copyright (C) 2009-2023 Lemoine Automation Technologies
+Copyright (C) 2025 Atsora Solutions
 
 SPDX-License-Identifier: Apache-2.0
 -->
 
 <div class="param-group group-options">
   <div class="param-group-header group-options">
-    <div class="param-group-title group-options">Options</div>
-    <button class="param-group-button" id="resetoptions">reset</button>
+    <div class="param-group-title group-options"><x-tr key="options.title" default="Options"></x-tr> </div>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" default="reset"></x-tr></button>
   </div>
 
   <div class="param-group-content group-options">
     <!-- Current target settings -->
     <div>
-      <label for="showtarget">Show utilization target
+      <label for="showtarget"><x-tr key="options.showUtilizationTarget" default="Show utilization target"></x-tr>
         <input type="checkbox" id="showtarget" autocomplete="off" /></label>
     </div>
     <div>
       <!-- Current alarm settings -->
-      <label for="showalarm">Show current alarm
+      <label for="showalarm"><x-tr key="options.showCurrentAlarm" default="Show current alarm"></x-tr>
         <input type="checkbox" id="showalarm" autocomplete="off" /></label>
     </div>
     <div>
       <!-- Current alarm settings -->
-      <label for="showstacklight">Show stack lights
+      <label for="showstacklight"><x-tr key="options.showStackLights" default="Show stack lights"></x-tr>
         <input type="checkbox" id="showstacklight" autocomplete="off" /></label>
     </div>
   </div>

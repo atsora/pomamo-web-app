@@ -21,7 +21,6 @@ function get_browser () {
 }
 
 function changePageName(href, newPageName) {
-  //let href = window.location.href; // ".../pagename.html?xxx"
   let splitUrl = href.split('?');
   if (splitUrl.length < 1) {
     return ''; // No change - enable to change page name
@@ -39,24 +38,11 @@ function changePageName(href, newPageName) {
 
 var browser = get_browser();
 
-// if (navigator  &&  navigator.userAgent.match( /MSIE/i ))  
 if ('IE' == browser.name) {
-  //if ( browser.version < 9 ){// versions under 9 are not supported by jQuery 2.1.3
-  // Do not used pulseDialog, nor jquery !!!
   var href = window.location.href;
-  //var newPage =
   window.location.href = changePageName(href, 'browsererror');
-  /* Code to clean page AND display message
-  var html = document.createElement('html');
-  html.textContent = 'Internet Explorer is not supported. Please use a modern Internet Browser (Firefox, Chrome, Edge >= 86) instead';
-  //'For a better user experience, you must avoid using Internet Explorer.'; // I18N
-  html.className = 'browser-error';
-  while (document.lastChild) {
-    document.removeChild(document.lastChild);
-  }
-  document.appendChild(html);
-  */
 }
+
 // Prepare next task :
 /*
 if (('Chrome' != browser.name)

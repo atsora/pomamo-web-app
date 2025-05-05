@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -24,7 +25,6 @@ require('x-toollifemachine/x-toollifemachine');
 
 /* For Bar display and some defaultpie */
 require('x-periodmanager/x-periodmanager');
-//require('x-motionpercentage/x-motionpercentage');
 require('x-datetimegraduation/x-datetimegraduation');
 require('x-shiftslotbar/x-shiftslotbar');
 require('x-machinestatebar/x-machinestatebar');
@@ -39,6 +39,7 @@ require('x-isofileslotbar/x-isofileslotbar');
 /* end Bar display  */
 require('x-motionpercentage/x-motionpercentage');
 
+require('x-tr/x-tr');
 
 class OperationStatusPage extends pulsePage.BasePage {
   constructor() {
@@ -845,10 +846,7 @@ class OperationStatusPage extends pulsePage.BasePage {
 
     let productionpercentinpie = pulseConfig.getDefaultString('productionpercentinpie');
     $('#productionpercentinpie').prop('checked', 'true' == productionpercentinpie);
-    //$('#productionpercentinpie').change(); // Done below
-    //$('#productionpercentinpie').removeAttr('overridden');
     $('#productionactualonlyinpie').prop('checked', 'actualonly' == productionpercentinpie);
-    //$('#productionactualonlyinpie').change(); // Done below
     $('#productionactualtargetinpie').prop('checked',
       ('true' != productionpercentinpie && 'actualonly' != productionpercentinpie));
     $('#productionactualtargetinpie').change();
@@ -1096,7 +1094,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate('error.machineRequired', 'Please select at least one machine')
       });
     }
 
@@ -1144,12 +1142,6 @@ class OperationStatusPage extends pulsePage.BasePage {
         pulseUtility.getURLParameter(url, 'thresholdorangeproduction'));
       url = pulseUtility.removeURLParameter(url, 'thresholdorangeproduction');
     }
-    /*if (-1 != url.search('hidesecondproductiondisplay')) {
-      needReload = true;
-      pulseConfig.set('hidesecondproductiondisplay',
-        pulseUtility.getURLParameter(url, 'hidesecondproductiondisplay'));
-      url = pulseUtility.removeURLParameter(url, 'hidesecondproductiondisplay');
-    }*/
     if (-1 != url.search('showcurrenttool=')) {
       needReload = true;
       pulseConfig.set('showcurrenttool',

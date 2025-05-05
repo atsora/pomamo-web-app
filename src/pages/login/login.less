@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ * Copyright (C) 2025 Atsora Solutions
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -8,12 +9,9 @@
 @import "pulse.customdialog.less";
 
 @import "pulse.exports.light.less"; // Global import
-// @import "x-checkcurrenttime/x-checkcurrenttime.less";
 @import "x-machineselection/x-machineselection.less";
-// @import "x-message/x-message.less";
 
 // Local
-// @import "x-loginconnection/x-loginconnection.less";
 @import "style.less";
 
 .tile-title {
@@ -70,13 +68,6 @@
       }
     }
 
-    /*.operator-image {
-      background-image: url("@{imagedir}/role-operator.svg");
-    }
-    .manager-image {
-      background-image: url("@{imagedir}/role-manager.svg");
-    }*/
-
     .allow-login-div {
       display: flex; // To see login/pass on the right
 
@@ -113,15 +104,6 @@
           //.highlightcolor { -> Global
         }
       }
-
-      /*
-      x-loginconnection {
-        .loginconnection-content {
-          // idem tile-tile bottom-border
-          border-left: 1px solid darken(@container_color, 10%);
-        }
-      }
-      */
     }
   }
 }

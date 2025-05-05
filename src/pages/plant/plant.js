@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -8,6 +9,7 @@ var pulseSvg = require('pulseSvg');
 
 require('x-machinedisplay/x-machinedisplay');
 require('x-reasonbutton/x-reasonbutton');
+require('x-tr/x-tr');
 
 class PlantPage extends pulsePage.BasePage {
   constructor() {
@@ -32,17 +34,6 @@ class PlantPage extends pulsePage.BasePage {
 
   getMissingConfigs () {
     let missingConfigs = [];
-    /*
-        let groups = pulseConfig.getArray('group');
-        let machines = pulseConfig.getArray('machine');
-        if ((machines == null || machines.length == 0) &&
-            (groups == null || groups.length == 0)) {
-          missingConfigs.push({
-            selector: 'x-machineselection, #editmachines, .group-machines',
-            message: 'Please select at least one machine before launching the page.'
-          }); 
-        }
-    */
     return missingConfigs;
   }
 
@@ -62,8 +53,6 @@ class PlantPage extends pulsePage.BasePage {
         let button = $('<x-reasonbutton></x-reasonbutton>')
           .attr('machine-id', machid)
           .addClass('pulse-added-in-svg'); // Keep it for isVisible call
-
-        //let foreign = $('<foreignObject></foreignObject>'); IMPOSSIBLE TO DO IT THAT WAY !
 
         let foreign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
 

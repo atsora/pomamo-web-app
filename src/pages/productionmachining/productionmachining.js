@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -8,6 +9,7 @@ var pulsePage = require('pulsePage');
 require('x-grouparray/x-grouparray');
 require('x-productionmachiningstatus/x-productionmachiningstatus');
 require('x-machinedisplay/x-machinedisplay');
+require('x-tr/x-tr');
 
 class ProductionMachiningPage extends pulsePage.BasePage {
   constructor() {
@@ -26,7 +28,7 @@ class ProductionMachiningPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate('error.machineRequired', 'Please select at least one machine')
       });
     }
 
@@ -34,7 +36,6 @@ class ProductionMachiningPage extends pulsePage.BasePage {
   }
 
   buildContent () {
-    //let col = 1; // pulseConfig.getInt('column'); -> not a LIVE page == NO column
   }
 
 }

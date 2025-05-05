@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -7,8 +8,7 @@ var pulseLogin = require('pulseLogin');
 var pulseConfig = require('pulseConfig');
 var pulsePage = require('pulsePage');
 var pulseSvg = require('pulseSvg');
-
-//require('x-loginconnection/x-loginconnection');
+require('x-tr/x-tr');
 
 class LoginPage extends pulsePage.BasePage {
   constructor() {
@@ -20,18 +20,9 @@ class LoginPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  // This method is run only if missing config (cf getMissingConfigs)
-  /*buildContent () {
-  }*/
-
 }
 
 $(document).ready(function () {
-  // if login.html does not exists -> load it ????
-  /*if (-1 == window.location.href.indexOf('login.html')) {
-    window.open(window.location.href + 'login.html', '_self');
-  }*/
-
   // Same as buildContent = remove extra URL parameters
   let url = window.location.href;
   if (-1 != url.search('AppContext=')) {

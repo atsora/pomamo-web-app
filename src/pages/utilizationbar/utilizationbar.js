@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -18,6 +19,7 @@ require('x-machinemodelegends/x-machinemodelegends');
 require('x-reasongroups/x-reasongroups');
 
 require('x-grouparray/x-grouparray');
+require('x-tr/x-tr');
 
 
 class UtilizationBarPage extends pulsePage.BasePage {
@@ -71,7 +73,6 @@ class UtilizationBarPage extends pulsePage.BasePage {
 
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'displaydaysrange' });
-      //eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'displayhoursrange' });
     };
 
     $('#displaydayshours').bind('input', changeDaysHours);
@@ -124,14 +125,14 @@ class UtilizationBarPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate ('error.machineRequired', 'Please select at least one machine')
       });
     }
 
     if (pulseConfig.getInt('displaydayshours') == 0) {
       missingConfigs.push({
         selector: 'label[for="displaydayshours"], label[for="displaydayshours"], .group-options',
-        message: 'Please specify at least 1 hour.'
+        message: pulseConfig.pulseTranslate ('error.min1hour', 'Please select at least 1 hour')
       });
     }
 

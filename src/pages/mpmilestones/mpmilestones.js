@@ -9,6 +9,7 @@ require('x-milestonesmanager/x-milestonesmanager');
 require('x-machinedisplay/x-machinedisplay');
 
 require('x-grouparray/x-grouparray');
+require('x-tr/x-tr');
 
 class MilestonesPage extends pulsePage.BasePage {
   constructor() {
@@ -41,7 +42,7 @@ class MilestonesPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate('error.machineRequired', 'Please select at least one machine')
       });
     }
 

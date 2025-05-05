@@ -19,6 +19,7 @@ require('x-defaultpie/x-defaultpie');
 require('x-freetext/x-freetext');
 require('x-zoominpagebutton/x-zoominpagebutton');
 require('x-showrunningdialogbutton/x-showrunningdialogbutton');
+require('x-tr/x-tr');
 
 class ManagementInformationTerminalPage extends pulsePage.BasePage {
   constructor() {
@@ -176,10 +177,7 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
     // Pie
     let productionpercentinpie = pulseConfig.getDefaultString('productionpercentinpie');
     $('#productionpercentinpie').prop('checked', 'true' == productionpercentinpie);
-    //$('#productionpercentinpie').change(); // Done below
-    //$('#productionpercentinpie').removeAttr('overridden');
     $('#productionactualonlyinpie').prop('checked', 'actualonly' == productionpercentinpie);
-    //$('#productionactualonlyinpie').change(); // Done below
     $('#productionactualtargetinpie').prop('checked',
       ('true' != productionpercentinpie && 'actualonly' != productionpercentinpie));
     $('#productionactualtargetinpie').change();
@@ -250,7 +248,7 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate('error.machineRequired', 'Please select at least one machine')
       });
     }
 

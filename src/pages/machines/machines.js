@@ -1,9 +1,9 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
 var pulseConfig = require('pulseConfig');
-//var pulseUtility = require('pulseUtility');
 var pulsePage = require('pulsePage');
 
 require('x-grouparray/x-grouparray');
@@ -13,7 +13,6 @@ require('x-lastserialnumber/x-lastserialnumber');
 require('x-lastworkinformation/x-lastworkinformation');
 require('x-lastmachinestatetemplate/x-lastmachinestatetemplate');
 require('x-lastmachinestatus/x-lastmachinestatus');
-/* Replace x-reasoncncbar */
 require('x-periodmanager/x-periodmanager');
 require('x-datetimegraduation/x-datetimegraduation');
 require('x-shiftslotbar/x-shiftslotbar');
@@ -26,7 +25,6 @@ require('x-cncalarmbar/x-cncalarmbar');
 require('x-redstacklightbar/x-redstacklightbar');
 require('x-cncvaluebar/x-cncvaluebar');
 require('x-isofileslotbar/x-isofileslotbar');
-/* end replace reasoncncbar */
 require('x-motionpercentage/x-motionpercentage');
 require('x-motiontime/x-motiontime');
 
@@ -36,13 +34,13 @@ require('x-cycleprogressbar/x-cycleprogressbar');
 require('x-performancebar/x-performancebar');
 require('x-toollifemachine/x-toollifemachine');
 
-//require('x-datetimepicker/x-datetimepicker');
-//require('x-datetimerange/x-datetimerange');
 require('x-cyclesinperiod/x-cyclesinperiod');
 
 require('x-reasongroups/x-reasongroups');
 require('x-fieldlegends/x-fieldlegends');
 require('x-machinemodelegends/x-machinemodelegends');
+
+require('x-tr/x-tr');
 
 class MachinesPage extends pulsePage.BasePage {
   constructor() {
@@ -62,7 +60,7 @@ class MachinesPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate ('error.machineRequired', 'Please select at least one machine')
       });
     }
 

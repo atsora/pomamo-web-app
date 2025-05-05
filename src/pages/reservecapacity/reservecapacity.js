@@ -9,9 +9,6 @@ var eventBus = require('eventBus');
 
 require('x-groupsingroup/x-groupsingroup');
 
-//require('x-periodmanager/x-periodmanager');
-//require('x-ancestors/x-ancestors');
-//require('x-machinedisplay/x-machinedisplay');
 require('x-chartreservecapacity/x-chartreservecapacity');
 
 class ReserveCapacityPage extends pulsePage.BasePage {
@@ -195,7 +192,7 @@ class ReserveCapacityPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate ('error.machineRequired','Please select at least one machine')
       });
     }
 

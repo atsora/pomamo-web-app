@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -95,6 +96,7 @@ require('x-sequencebar/x-sequencebar');
 require('x-setupmachine/x-setupmachine');
 require('x-shiftslotbar/x-shiftslotbar');
 require('x-stacklight/x-stacklight');
+require('x-tr/x-tr');
 require('x-toollifemachine/x-toollifemachine');
 require('x-workinfo/x-workinfo');
 require('x-workinfoslotlist/x-workinfoslotlist');
@@ -113,7 +115,7 @@ class CustomPageWithMachineSelection extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate('error.machineRequired', 'Please select at least one machine')
       });
     }
 

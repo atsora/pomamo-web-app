@@ -1,33 +1,34 @@
 <!--
 Copyright (C) 2009-2023 Lemoine Automation Technologies
+Copyright (C) 2025 Atsora Solutions
 
 SPDX-License-Identifier: Apache-2.0
 -->
 
 <div class="param-group group-options">
   <div class="param-group-header group-options">
-    <div class="param-group-title">Options</div>
-    <button class="param-group-button" id="resetoptions">reset</button>
+    <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" default="reset"></x-tr></button>
   </div>
 
   <div class="param-group-content group-options">
     <div class="labelsubgroup">
-      <label for="threshold">Highlight part count</label>
+      <label for="threshold"><x-tr key="options.highlightPartCount" default="Highlight part count"></x-tr></label>
       <div class="subgroup thresholdunitispart">
         <div class="radiogroup  ">
           <div class='inlined-radio'>
             <input type="radio" id="thresholdunitispercent" name="thresholdunitispart" value="thresholdunitispercent" />
-            <span for="thresholdunitispercent">percent</span>
+            <span for="thresholdunitispercent"><x-tr key="content.percent" default="percent"></x-tr></span>
           </div>
           <div class='inlined-radio'>
             <input type="radio" id="thresholdunitispart" name="thresholdunitispart" value="thresholdunitispart" />
-            <span for="thresholdunitispart">part</span>
+            <span for="thresholdunitispart"><x-tr key="content.part" default="part"></x-tr></span>
           </div>
         </div>
-        <label for="thresholdorangeproduction">Orange
+        <label for="thresholdorangeproduction"><x-tr key="thresholdOrange" default="Orange"></x-tr>
           <input type="number" id="thresholdorangeproduction" value="0" step="1" min="0" autocomplete="off" />
         </label>
-        <label for="thresholdredproduction">Red
+        <label for="thresholdredproduction"><x-tr key="thresholdRed" default="Red"></x-tr>
           <input type="number" id="thresholdredproduction" value="0" step="1" min="0" autocomplete="off" />
         </label>
       </div>
@@ -36,7 +37,7 @@ SPDX-License-Identifier: Apache-2.0
 
   <div class="param-group-content group-options">
     <div class="labelsubgroup">
-      <label for="showreservecapacity">Show reserve capacity
+      <label for="showreservecapacity"><x-tr key="showReserveCapacity" default="Show reserve capacity"></x-tr>
         <input type="checkbox" id="showreservecapacity" autocomplete="off" />
       </label>
     </div>

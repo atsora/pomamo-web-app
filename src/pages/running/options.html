@@ -1,13 +1,14 @@
 <!--
 Copyright (C) 2009-2023 Lemoine Automation Technologies
+Copyright (C) 2025 Atsora Solutions
 
 SPDX-License-Identifier: Apache-2.0
 -->
 
 <div class="param-group group-options">
   <div class="param-group-header group-options">
-    <div class="param-group-title">Options</div>
-    <button class="param-group-button" id="resetoptions">reset</button>
+    <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" default="reset"></x-tr></button>
   </div>
 
   <div class="param-group-content group-options">
@@ -18,11 +19,11 @@ SPDX-License-Identifier: Apache-2.0
         <div class="radiogroup">
           <div class='inlined-radio'>
             <input type="radio" id="showreasonbar" name="coloredbar" value="showreasonbar">
-            <span for="showreasonbar">reason</span>
+            <span for="showreasonbar"><x-tr key="content.reason" default="reason"></x-tr></span>
           </div>
           <div class='inlined-radio'>
             <input type="radio" id="showproductionbar" name="coloredbar" value="showproductionbar">
-            <span for="showproductionbar">production state</span>
+            <span for="showproductionbar"><x-tr key="content.productionState" default="production state"></x-tr></span>
           </div>
         </div>
       </div>

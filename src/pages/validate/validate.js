@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -15,8 +16,6 @@ class ValidatePage extends pulsePage.BasePage {
     this.canConfigureColumns = false; // useful only if createTableCell is defined
     this.canConfigureRows = false; // useful only if createTableCell is defined
     this.showMachineselection = false;
-    //pulseConfig.set('column', '');
-    //pulseConfig.set('row', '');
   }
 
   // CONFIG PANEL - Init

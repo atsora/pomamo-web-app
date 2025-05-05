@@ -38,7 +38,7 @@ class XXXPage extends pulsePage.BasePage {
         (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: 'Please select at least one machine before launching the page.'
+        message: pulseConfig.pulseTranslate ('error.machineRequired', 'Please select at least one machine')
       }); 
     }
 

@@ -1,10 +1,12 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
 //var pulseConfig = require('pulseConfig');
 var pulsePage = require('pulsePage');
 var pulseUtility = require('pulseUtility');
+require('x-tr/x-tr');
 
 //require('x-loginconnection/x-loginconnection');
 
