@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -51,6 +52,7 @@ ATSORA_CATALOG.content = {
   percent: '%',
   productionState: 'production state',
   reason: 'reason',
+  reports: 'Reports',
   sequence: 'sequence',
   time: 'time',
   today: 'Today',
@@ -79,7 +81,7 @@ ATSORA_CATALOG.pages = {
     title: 'Machines'
   },
   machinespecification: {
-    title: 'Machine display'
+    title: 'Machine display: day and week'
   },
   productionmachining: {
     title: 'Production machining status'

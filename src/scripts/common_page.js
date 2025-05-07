@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -22,7 +23,6 @@ require('x-machineselection/x-machineselection');
 require('x-modificationmanager/x-modificationmanager');
 require('x-loginpasswordbutton/x-loginpasswordbutton');
 require('x-loginchangepasswordbutton/x-loginchangepasswordbutton');
-//
 require('x-loginconnection/x-loginconnection');
 
 exports.BasePage = class BasePage {
@@ -209,9 +209,9 @@ var populateNavigationPanel = function () {
 
       } break;
       case 'Reports': {// use reportpath = 'http://serveraddress:8080/pulsereporting/
-        pulseUtility.addToolTip(link, 'Reports');
+        pulseUtility.addToolTip(link, pulseConfig.pulseTranslate ('content.reports', 'Reports'));
 
-        targetUrl = pulseConfig.getString('reportpath', 'http://serveraddress:8080/pulsereporting/'); // Default
+        targetUrl = pulseConfig.getString('reportpath', 'http://serveraddress:8080/atrackingreporting/'); // Default
 
         link.attr('target', '_blank'); // To open in a new tab
       } break;
