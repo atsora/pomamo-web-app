@@ -39,13 +39,31 @@ ATSORA_CATALOG.options = {
   toolsExpiring: 'Outils expirés'
 }
 
+ATSORA_CATALOG.parameters = {
+  columns: 'Colonnes',
+  copyUrl: "Copier l'URL",
+  customTitle: 'Titre personnalisé',
+  darkTheme: 'Thème sombre',
+  displayUrl: "Afficher l'URL",
+  editButton: 'Éditer',
+  machines: 'Machines',
+  page: 'Page',
+  resetButton: "Remise à zéro",
+  rotations: "Rotation(s)",
+  rows: "Lignes",
+  showLegend: "Afficher la légende",
+  webAppVersion: "Version de la web app"
+}
+
 ATSORA_CATALOG.content = {
   actual: 'données courantes',
   actualVsTarget: 'données courantes/objectif',
+  currentColon: 'Actuellement :',
   currentDay: 'Jour courant',
   currentShift: 'Équipe courante',
   currentWeek: 'Semaine courante',
   last7days: '7 derniers jours',
+  legend: 'Légende',
   overrides: 'potentiomètres',
   part: 'pièce',
   percent: '%',

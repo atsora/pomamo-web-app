@@ -169,7 +169,7 @@ SPDX-License-Identifier: Apache-2.0
               <div class="legend-toggle" style="display:none">
                 <div class="legend-toggle-icon-up"></div>
                 <div class="legend-toggle-icon-down"></div>
-                <div class="legend-toggle-label">Legend</div>
+                <div class="legend-toggle-label"><x-tr key="content.legend" default="Legend"></x-tr></div>
               </div>
               <!-- CUSTOM allowed -->
               <!--(bake {{pagename}}/legend.html)-->
@@ -184,8 +184,8 @@ SPDX-License-Identifier: Apache-2.0
       <div id="pulse-panel-parameter-content">
         <div class="param-group group-machines">
           <div class="param-group-header group-machines">
-            <div class="param-group-title">Machines</div>
-            <button class="param-group-button" id="editmachines">edit</button>
+            <div class="param-group-title"><x-tr key="parameters.machines" default="Machines"></x-tr></div>
+            <button class="param-group-button" id="editmachines"><x-tr key="parameters.editButton" default="edit"></x-tr></button>
           </div>
           <div class="param-group-content group-machines">
             <x-machineselection ordering="true"></x-machineselection>
@@ -197,41 +197,41 @@ SPDX-License-Identifier: Apache-2.0
 
         <div class="param-group group-pages">
           <div class="param-group-header group-pages">
-            <div class="param-group-title group-pages">Page</div>
-            <button class="param-group-button" id="resetpage">reset</button>
+            <div class="param-group-title group-pages"><x-tr key="parameters.page" default="Page"></x-tr></div>
+            <button class="param-group-button" id="resetpage"><x-tr key="parameters.resetButton" default="Reset"></x-tr></button>
           </div>
 
           <div class="param-group-content group-pages">
             <div class="config-row">
-              <label for="gridrow">Rows
+              <label for="gridrow"><x-tr key="parameters.rows" default="Rows"></x-tr>
                 <input type="number" id="gridrow" value="" step="1" min="1" autocomplete="off" />
               </label>
             </div>
             <div class="config-column">
-              <label for="gridcolumn">Columns
+              <label for="gridcolumn"><x-tr key="parameters.columns" default="Columns"></x-tr>
                 <input type="number" id="gridcolumn" value="" step="1" min="1" autocomplete="off" />
               </label>
             </div>
             <div class="config-pagerotation">
-              <label for="pagerotation">Rotation (s)
+              <label for="pagerotation"><x-tr key="parameters.rotations" default="Rotation (s)"></x-tr>
                 <input type="number" id="pagerotation" value="" step="5" min="10" autocomplete="off" />
               </label>
             </div>
             <div class="config-pagetitle">
-              <label for="pagetitle">Custom title
+              <label for="pagetitle"><x-tr key="parameters.customTitle" default="Custom title"></x-tr>
                 <input type="text" id="pagetitle" value="" autocomplete="off" />
               </label>
             </div>
             <div class="config-showlegend">
-              <label for="showlegend">Show Legend
+              <label for="showlegend"><x-tr key="parameters.showLegend" default="Show Legend"></x-tr>
                 <input type="checkbox" id="showlegend" autocomplete="off" />
               </label>
             </div>
           </div>
         </div>
 
-        <button class="btn btn-default" id="showurl">Display URL</button>
-        <button class="btn btn-default" id="copyurl">Copy URL</button>
+        <button class="btn btn-default" id="showurl"><x-tr key="parameters.displayUrl" default="Display URL"></x-tr></button>
+        <button class="btn btn-default" id="copyurl"><x-tr key="parameters.copyUrl" default="Copy URL"></x-tr></button>
       </div>
 
       <div class="configuration-bottom-area-login">
@@ -245,11 +245,10 @@ SPDX-License-Identifier: Apache-2.0
             <input id="darkthemebtn" type="checkbox">
             <div class="slider round"></div>
           </label>
-          <span>Dark theme</span>
+          <span><x-tr key="parameters.darkTheme" default="Dark theme"></x-tr></span>
         </div>
         <div class="configuration-bottom-area-version">
-          <label class="version-label">
-            WebAppVersion
+          <label class="version-label"><x-tr key="parameters.webAppVersion" default="Web app version"></x-tr>
           </label>
         </div>
       </div>

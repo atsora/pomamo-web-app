@@ -40,13 +40,31 @@ ATSORA_CATALOG.options = {
   toolsExpiring: 'Expiring tools'
 }
 
+ATSORA_CATALOG.parameters = {
+  columns: 'Columns',
+  copyUrl: 'Copy URL',
+  customTitle: 'Custom title',
+  darkTheme: 'Dark theme',
+  displayUrl: 'Display URL',
+  editButton: 'Edit',
+  machines: 'Machines',
+  page: 'Page',
+  resetButton: "Reset",
+  rotations: "Rotation(s)",
+  rows: "Rows",
+  showLegend: "Show legend",
+  webAppVersion: "Web app version"
+}
+
 ATSORA_CATALOG.content = {
   actual: 'actual',
   actualVsTarget: 'actual/target',
+  currentColon: 'Current:',
   currentDay: 'Current day',
   currentShift: 'Current shift',
   currentWeek: 'Current week',
   last7days: 'Last 7 days',
+  legend: 'Legend',
   overrides: 'overrides',
   part: 'part',
   percent: '%',
