@@ -15,6 +15,7 @@ ATSORA_CATALOG.options = {
   highlightPartCount: 'Mettre en avant le nombre de pièces',
   resetButton: 'remise à zéro',
   showAlarms: 'Afficher les alarmes',
+  showBar: 'Afficher la barre',
   showClock: "Afficher l'horloge",
   showCurrentAlarm: "Afficher l'alarme courante",
   showNcProgram: "Afficher le programme d'usinage",

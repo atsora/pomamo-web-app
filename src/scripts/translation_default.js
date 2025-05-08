@@ -16,6 +16,7 @@ ATSORA_CATALOG.options = {
   highlightPartCount: 'Highlight part count',
   resetButton: 'reset',
   showAlarms: 'Show alarms',
+  showBar: 'Show bar',
   showClock: 'Show clock',
   showCurrentAlarm: 'Show current alarm',
   showNcProgram: "Show NC program",
