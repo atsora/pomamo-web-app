@@ -49,7 +49,7 @@ ATSORA_CATALOG.parameters = {
   editButton: 'Éditer',
   machines: 'Machines',
   page: 'Page',
-  resetButton: "Remise à zéro",
+  resetButton: "Réinitialiser",
   rotations: "Rotation(s)",
   rows: "Lignes",
   showLegend: "Afficher la légende",
@@ -116,7 +116,7 @@ ATSORA_CATALOG.pages = {
 
   // Manager, operator and LIVE
   managementinformationterminal: {
-    title: 'Vue exploratrice manager'
+    title: "Vue exploratrice"
   },
   operationstatus: {
     title: "État des opérations"
@@ -154,15 +154,14 @@ ATSORA_CATALOG.pages = {
     title: 'Vue combinée',
     options: {
       title: 'Options',
-      reset: 'Remise à zéro',
-
+      reset: 'Réinitialiser'
     }
   },
   machinestatus: {
     title: 'État des machines'
   },
   managerview: {
-    title: 'Vue manager'
+    title: "Vue responsable d'atelier"
   },
   motionsummary: {
     title: 'Statut courant'
