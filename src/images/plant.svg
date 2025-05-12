@@ -7,7 +7,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:pomamo="http://pomamo.org/plantview"
+   xmlns:atsora="http://www.atsora.io/plantview"
    width="210mm"
    height="297mm"
    viewBox="0 0 210 297"
@@ -86,8 +86,8 @@
        height="42.333332"
        x="28.726189"
        y="58.964287"
-	   class="pulse-add-button"
-	   pulse:machineid="18" />
+	     class="machine"
+	     atsora:machineid="18" />
     <rect
        style="fill:transparent;fill-rule:evenodd;stroke-width:0.264583;stroke:#0000ff"
        id="rect34"
@@ -95,7 +95,7 @@
        height="108.1012"
        x="77.863091"
        y="124.73214"
-	   class="pulse-add-button"
-	   pulse:machineid="57" />
+	     class="machine"
+	     atsora:machineid="57" />
   </g>
 </svg>

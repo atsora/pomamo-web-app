@@ -43,16 +43,16 @@ class PlantPage extends pulsePage.BasePage {
   }
 
   static fillSVG () {
-    // Search for class pulse-add-button and added parameters in SVG
+    // Search for class machine and added parameters in SVG
     // pulse-machine-id
-    let divToFill = $('.svg-plant-display').find('.pulse-add-button');
+    let divToFill = $('.svg-plant-display').find('.machine');
     for (let i = 0; i < divToFill.length; i++) {
-      if (divToFill[i].hasAttribute('pulse:machineid')) {
-        let machid = divToFill[i].getAttribute('pulse:machineid'); // getAttributeNS failed
+      if (divToFill[i].hasAttribute('atsora:machineid')) {
+        let machid = divToFill[i].getAttribute('atsora:machineid'); // getAttributeNS failed
 
         let button = $('<x-reasonbutton></x-reasonbutton>')
           .attr('machine-id', machid)
-          .addClass('pulse-added-in-svg'); // Keep it for isVisible call
+          .addClass('svg-embedded'); // Keep it for isVisible call
 
         let foreign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
 

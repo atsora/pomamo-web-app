@@ -1,13 +1,13 @@
 {
   "name": "@atsora/pomamo-web-app",
-  "version": "17.0.0",
+  "version": "18.0.0",
   "contributors": [
     "Lemoine Automation Technologies <nrelange@lemoinetechnologies.com>",
     "Nicolas Relange <nicolas@atsora.eu>"
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@atsora/pomamo-web-components": "~14.0.0",
+    "@atsora/pomamo-web-components": "~18.0.0",
     "@bower_components/classlist": "components/classList.js#*",
     "@bower_components/jquery": "jquery/jquery-dist#~2.1.4",
     "@bower_components/json2-js": "bramski/JSON-js#~1.0.0",
