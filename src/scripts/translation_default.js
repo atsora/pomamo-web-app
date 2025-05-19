@@ -64,6 +64,7 @@ ATSORA_CATALOG.content = {
   currentDay: 'Current day',
   currentShift: 'Current shift',
   currentWeek: 'Current week',
+  inProgress: 'in progress',
   last7days: 'Last 7 days',
   legend: 'Legend',
   overrides: 'overrides',
@@ -77,6 +78,15 @@ ATSORA_CATALOG.content = {
   today: 'Today',
   tool: 'tool',
   yesterday: 'Yesterday'
+}
+
+ATSORA.CATALOG.dialog = {
+  confirmation: 'Confirmation',
+  error: 'Error',
+  information: 'Information',
+  select: 'Select',
+  wait: 'Please wait...',
+  warning: 'Warning'
 }
 
 ATSORA_CATALOG.error = {
