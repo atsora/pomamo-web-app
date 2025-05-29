@@ -80,7 +80,7 @@ ATSORA_CATALOG.content = {
   yesterday: 'Yesterday'
 }
 
-ATSORA.CATALOG.dialog = {
+ATSORA_CATALOG.dialog = {
   confirmation: 'Confirmation',
   error: 'Error',
   information: 'Information',

@@ -36,7 +36,7 @@ module.exports = {
       {
         expand: true,
         cwd: 'dist-es2015/scripts/',
-        src: ['pulse.exports.light.js', 'translation_component_default.js', 'config_component_default.js'],
+        src: ['pulse.exports.light.js', 'translation_component_*.js', 'config_component_*.js'],
         dest: '../ReportWebApp/pulse.reporting/src/main/webapp/js'
       },
       {
