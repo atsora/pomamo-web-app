@@ -16,7 +16,7 @@ var PULSE_DEFAULT_CONFIG = PULSE_DEFAULT_CONFIG || {};
  */
 
 /* ********** ********** ********** ********** ********** ********** */
-// general : Specific pulse web app - prepare use lem* module
+// general : Specific web app - prepare use lem* module
 /* ********** ********** ********** ********** ********** ********** */
 var LEM_CONFIG_DEFAULT = LEM_CONFIG_DEFAULT || {};
 LEM_CONFIG_DEFAULT.appName = "PulseWebApp";

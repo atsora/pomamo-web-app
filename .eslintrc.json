@@ -17,11 +17,13 @@
         "tagConfig": true,
         "translation": true,
         "window": true,
-		"document": true,
+		    "document": true,
         "xtag": true,
+        "ATSORA_LOCALE_COMPONENT_CATALOG": true,
+        "ATSORA_LOCALE_CATALOG": true,
         "ATSORA_COMPONENT_CATALOG": true,
         "ATSORA_CATALOG": true,
-		"PULSE_DEFAULT_CONFIG": true,
+        "PULSE_DEFAULT_CONFIG": true,
         "LEM_CONFIG_DEFAULT":true
     },
     "parserOptions": {

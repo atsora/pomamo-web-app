@@ -6,7 +6,7 @@
 //var ATSORA_CATALOG = ATSORA_CATALOG || {};
 // If do not exists, it IS an error. The file translation_pusecomponent_default.js is not included ?
 
-ATSORA_CATALOG.options = {
+ATSORA_LOCALE_CATALOG.default.options = {
   title: 'Options',
   alarmsUnknown: 'show unknown alarms',
   alarmsWithDetails: 'with alarm details',
@@ -41,7 +41,7 @@ ATSORA_CATALOG.options = {
   toolsExpiring: 'Expiring tools'
 }
 
-ATSORA_CATALOG.parameters = {
+ATSORA_LOCALE_CATALOG.default.parameters = {
   columns: 'Columns',
   copyUrl: 'Copy URL',
   customTitle: 'Custom title',
@@ -57,7 +57,7 @@ ATSORA_CATALOG.parameters = {
   webAppVersion: "Web app version"
 }
 
-ATSORA_CATALOG.content = {
+ATSORA_LOCALE_CATALOG.default.content = {
   actual: 'actual',
   actualVsTarget: 'actual/target',
   currentColon: 'Current:',
@@ -80,7 +80,7 @@ ATSORA_CATALOG.content = {
   yesterday: 'Yesterday'
 }
 
-ATSORA_CATALOG.dialog = {
+ATSORA_LOCALE_CATALOG.default.dialog = {
   confirmation: 'Confirmation',
   error: 'Error',
   information: 'Information',
@@ -89,12 +89,12 @@ ATSORA_CATALOG.dialog = {
   warning: 'Warning'
 }
 
-ATSORA_CATALOG.error = {
+ATSORA_LOCALE_CATALOG.default.error = {
   machineRequired: 'Please select at least one machine',
   min1hour: 'Please select at least one hour'
 }
 
-ATSORA_CATALOG.pages = {
+ATSORA_LOCALE_CATALOG.default.pages = {
   index: {
     title: 'Index'
   },
@@ -182,3 +182,6 @@ ATSORA_CATALOG.pages = {
     title: 'Plant'
   }
 };
+
+// Force the locale of the catalog
+ATSORA_CATALOG = ATSORA_LOCALE_CATALOG.default;

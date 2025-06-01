@@ -5,7 +5,7 @@
 //var ATSORA_CATALOG = ATSORA_CATALOG || {};
 // If do not exists, it IS an error. The file translation_pusecomponent_default.js is not included ?
 
-ATSORA_CATALOG.options = {
+ATSORA_LOCALE_CATALOG.fr.options = {
   title: 'Options',
   alarmsUnknown: 'montrer les alarmes inconnues',
   alarmsWithDetails: "avec détails d'alarmes",
@@ -40,7 +40,7 @@ ATSORA_CATALOG.options = {
   toolsExpiring: 'Outils expirés'
 }
 
-ATSORA_CATALOG.parameters = {
+ATSORA_LOCALE_CATALOG.fr.parameters = {
   columns: 'Colonnes',
   copyUrl: "Copier l'URL",
   customTitle: 'Titre personnalisé',
@@ -56,7 +56,7 @@ ATSORA_CATALOG.parameters = {
   webAppVersion: "Version de la web app"
 }
 
-ATSORA_CATALOG.content = {
+ATSORA_LOCALE_CATALOG.fr.content = {
   actual: 'données courantes',
   actualVsTarget: 'données courantes/objectif',
   currentColon: 'Actuellement :',
@@ -79,7 +79,7 @@ ATSORA_CATALOG.content = {
   yesterday: 'Hier'
 }
 
-ATSORA_CATALOG.dialog = {
+ATSORA_LOCALE_CATALOG.fr.dialog = {
   confirmation: 'Confirmation',
   error: 'Erreur',
   information: 'Information',
@@ -88,12 +88,12 @@ ATSORA_CATALOG.dialog = {
   warning: 'Attention'
 }
 
-ATSORA_CATALOG.error = {
+ATSORA_LOCALE_CATALOG.fr.error = {
   machineRequired: 'Prière de sélectionner au-moins une machine',
   min1hour: 'Prière de sélectionner au-moins une heure'
 }
 
-ATSORA_CATALOG.pages = {
+ATSORA_LOCALE_CATALOG.fr.pages = {
   index: {
     title: 'Index'
   },
@@ -180,3 +180,6 @@ ATSORA_CATALOG.pages = {
     title: 'Vue atelier'
   }
 };
+
+// Force the locale of the catalog
+ATSORA_LOCALE_CATALOG = ATSORA_CATALOG.default;
