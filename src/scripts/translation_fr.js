@@ -81,6 +81,7 @@ ATSORA_LOCALE_CATALOG.fr.content = {
 
 ATSORA_LOCALE_CATALOG.fr.dialog = {
   confirmation: 'Confirmation',
+  details: 'Détails',
   error: 'Erreur',
   information: 'Information',
   select: 'Sélectionner',
@@ -182,4 +183,4 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
 };
 
 // Force the locale of the catalog
-ATSORA_LOCALE_CATALOG = ATSORA_CATALOG.default;
+ATSORA_CATALOG = ATSORA_LOCALE_CATALOG.fr;
