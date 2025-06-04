@@ -47,8 +47,8 @@ class PlantPage extends pulsePage.BasePage {
     // pulse-machine-id
     let divToFill = $('.svg-plant-display').find('.machine');
     for (let i = 0; i < divToFill.length; i++) {
-      if (divToFill[i].hasAttribute('atsora:machineid')) {
-        let machid = divToFill[i].getAttribute('atsora:machineid'); // getAttributeNS failed
+      if (divToFill[i].hasAttribute('atsora:machine-id')) {
+        let machid = divToFill[i].getAttribute('atsora:machine-id'); // getAttributeNS failed
 
         let button = $('<x-reasonbutton></x-reasonbutton>')
           .attr('machine-id', machid)
