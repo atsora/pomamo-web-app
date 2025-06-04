@@ -27,5 +27,6 @@ node_modules/grunt-cli/bin/grunt beta --pomamoversion=x.x.x
 Here are the files to translate:
 
 - pomamo-web-components/config_component_[fr|de].js
-- pomamo-web-components/translation_component_[fr|de].js
-- pomamo-web-app/src/scripts/translation_[fr|de].js
+- pomamo-web-components/translation_component_default.js
+- pomamo-web-app/src/scripts/translation_default.js
+- pomamo-web-app/src/scripts/translation_locale_[fr|de].js
