@@ -15,3 +15,7 @@
 // uncomment to add the ProductionTracker page for the manager or live role
 //PULSE_DEFAULT_CONFIG.roles.manager.displayedPages.push('productiontracker');
 //PULSE_DEFAULT_CONFIG.roles.live.displayedPages.push('productiontracker');
+
+// uncomment to add the plant page for the manager or live role
+//PULSE_DEFAULT_CONFIG.roles.manager.displayedPages.push('plant');
+//PULSE_DEFAULT_CONFIG.roles.live.displayedPages.push('plant');

@@ -143,6 +143,9 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   mpmilestones: {
     title: 'Milestones'
   },
+  plant: {
+    title: 'Plant'
+  },
   reservecapacity: {
     title: 'Reserve capacity'
   },
@@ -180,9 +183,6 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   },
   motionsummary: {
     title: 'Motion summary'
-  },
-  plant:{
-    title: 'Plant'
   }
 };
 
@@ -323,6 +323,9 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   mpmilestones: {
     title: ''
   },
+  plant: {
+    title: 'Vue atelier'
+  },
   reservecapacity: {
     title: 'Capacité de réserve'
   },
@@ -359,9 +362,6 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   },
   motionsummary: {
     title: 'Statut courant'
-  },
-  plant:{
-    title: 'Vue atelier'
   }
 };
 

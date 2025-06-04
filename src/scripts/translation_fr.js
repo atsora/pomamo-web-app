@@ -140,6 +140,9 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   mpmilestones: {
     title: ''
   },
+  plant: {
+    title: 'Vue atelier'
+  },
   reservecapacity: {
     title: 'Capacité de réserve'
   },
@@ -176,9 +179,6 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   },
   motionsummary: {
     title: 'Statut courant'
-  },
-  plant:{
-    title: 'Vue atelier'
   }
 };
 
