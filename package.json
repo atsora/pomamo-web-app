@@ -1,18 +1,24 @@
 {
   "name": "@atsora/pomamo-web-app",
+  "description": "Pomamo web app",
   "version": "18.0.0",
   "contributors": [
     "Lemoine Automation Technologies <nrelange@lemoinetechnologies.com>",
     "Nicolas Relange <nicolas@atsora.eu>"
   ],
   "license": "Apache-2.0",
+  "files": [
+    "**",
+    "!.git/**",
+    "!.gitignore",
+    "!.gitattributes",
+    "!.eslintrc.json",
+    "!.vscode/**"
+  ],
   "dependencies": {
-    "@atsora/pomamo-web-components": "~18.0.0",
-    "@bower_components/classlist": "components/classList.js#*",
-    "@bower_components/jquery": "jquery/jquery-dist#~2.1.4",
-    "@bower_components/json2-js": "bramski/JSON-js#~1.0.0",
-    "@bower_components/momentjs": "moment/moment#~2.10.6",
-    "@bower_components/webcomponentsjs": "Polymer/webcomponentsjs#~0.7.14",
+    "@atsora/pomamo-web-components": "portal:../pomamo-web-components",
+    "@bower_components/jquery": "jquery/jquery-dist#2.1.4",
+    "@bower_components/momentjs": "moment/moment#2.30.1",
     "@webcomponents/webcomponentsjs": "^2.4.3",
     "core-js": "~3.30.2",
     "d3": "^6.2.0",
@@ -34,7 +40,6 @@
     "grunt-replace": "~2.0.2",
     "grunt-shell": "~2.1.0",
     "grunt-subgrunt": "^1.2.0",
-    "javascript-obfuscator": "^4.0.2",
     "load-grunt-config": "^4.0.1",
     "time-grunt": "^1.4.0"
   },
@@ -47,5 +52,6 @@
   },
   "scripts": {
     "postinstall": "node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@bower_components'), 'bower_components', 'junction') } catch (e) { }\""
-  }
+  },
+  "packageManager": "yarn@4.9.2"
 }

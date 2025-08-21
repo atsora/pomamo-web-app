@@ -32,6 +32,7 @@ require('x-savemachinestatetemplate/x-savemachinestatetemplate');
 require('x-sequencebar/x-sequencebar'); // to remove 6.0
 require('x-cycleprogressbar/x-cycleprogressbar');
 require('x-performancebar/x-performancebar');
+require('x-productionmachiningstatus/x-productionmachiningstatus');
 require('x-toollifemachine/x-toollifemachine');
 
 require('x-cyclesinperiod/x-cyclesinperiod');
@@ -39,6 +40,10 @@ require('x-cyclesinperiod/x-cyclesinperiod');
 require('x-reasongroups/x-reasongroups');
 require('x-fieldlegends/x-fieldlegends');
 require('x-machinemodelegends/x-machinemodelegends');
+
+// Pies
+require('x-partproductionstatuspie/x-partproductionstatuspie');
+require('x-performancegauge/x-performancegauge');
 
 require('x-tr/x-tr');
 
