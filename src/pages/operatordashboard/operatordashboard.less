@@ -1,0 +1,449 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* =========================
+   Imports
+   ========================= */
+// Global
+@import "pulse.customdialog.less";
+@import "pulse.exports.light.less"; // Global import
+
+// Components
+@import "x-machineselection/x-machineselection.less";
+@import "x-grouparray/x-grouparray.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-machinetab/x-machinetab.less";
+@import "x-lastserialnumber/x-lastserialnumber.less";
+@import "x-lastworkinformation/x-lastworkinformation.less";
+@import "x-lastmachinestatetemplate/x-lastmachinestatetemplate.less";
+@import "x-setupmachine/x-setupmachine.less";
+@import "x-lastmachinestatus/x-lastmachinestatus.less";
+@import "x-periodmanager/x-periodmanager.less";
+@import "x-shiftslotbar/x-shiftslotbar.less";
+@import "x-machinestatebar/x-machinestatebar.less";
+@import "x-observationstatebar/x-observationstatebar.less";
+@import "x-operationcyclebar/x-operationcyclebar.less";
+@import "x-operationslotbar/x-operationslotbar.less";
+@import "x-isofileslotbar/x-isofileslotbar.less";
+@import "x-reasonslotbar/x-reasonslotbar.less";
+@import "x-cncalarmbar/x-cncalarmbar.less";
+@import "x-redstacklightbar/x-redstacklightbar.less";
+@import "x-cncvaluebar/x-cncvaluebar.less";
+@import "x-periodtoolbar/x-periodtoolbar.less";
+@import "x-motionpercentage/x-motionpercentage.less";
+@import "x-motiontime/x-motiontime.less";
+@import "x-savemachinestatetemplate/x-savemachinestatetemplate.less";
+@import "x-sequencebar/x-sequencebar.less";
+@import "x-cycleprogressbar/x-cycleprogressbar.less";
+@import "x-performancebar/x-performancebar.less";
+@import "x-toollifemachine/x-toollifemachine.less";
+@import "x-productiontrackergraph/x-productiontrackergraph.less";
+@import "x-productiontrackertable/x-productiontrackertable.less";
+@import "x-datetimepicker/x-datetimepicker.less";
+@import "x-datetimegraduation/x-datetimegraduation.less";
+@import "x-cyclesinperiod/x-cyclesinperiod.less";
+@import "x-reasongroups/x-reasongroups.less";
+@import "x-fieldlegends/x-fieldlegends.less";
+@import "x-machinemodelegends/x-machinemodelegends.less";
+@import "style.less";
+
+
+
+.main-content {
+  margin: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 100%;
+
+  .machinetab-list {
+    margin-top: 30px;
+    min-width: 200px;
+    flex-basis: 200px;
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    &.grouparray-in-error {
+      flex-grow: 10;
+    }
+
+    .group {
+      .group-main {
+        list-style-type: none;
+        width: 100%;
+        min-height: 400px;
+        position: relative;
+
+        .single-machine-tab {
+          width: 200px;
+        }
+
+        .group-single {
+          display: inline-block;
+          list-style: none;
+
+          x-machinetab {
+            .machinetab-machine-cell {
+              background-color: @container_color;
+              color: @container_text_color;
+              opacity: 0.6;
+
+              &.active {
+                background-color: @container_color;
+                opacity: 1;
+                border: 1px solid @container_text_color_transparent;
+              }
+            }
+
+            .machinetab-modecolor-undefined {
+              border-right-color: @color_text_alternate;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .dashboard-content {
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    flex-basis: 80%;
+    flex-shrink: 1;
+    flex-grow: 1;
+
+    .nav-content {
+      display: inline-flex;
+      width: 100%;
+
+      .machine-title {
+        margin-bottom: 15px;
+        margin-right: 2em;
+        width: 50%;
+
+        x-machinedisplay {
+          width: 100%;
+          text-align: center;
+        }
+      }
+
+      .info-content {
+        display: inline-flex;
+        column-gap: 1.5em;
+        width: 50%;
+        justify-content: center;
+
+        .text-box {
+          width: 33%;
+          font-size: 1.4em;
+          justify-content: center;
+          display: flex;
+          align-items: center;
+          text-align: center;
+        }
+      }
+
+
+
+    }
+
+
+
+    .stats-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: 2em;
+      margin-top: 2em;
+      height: 35em;
+
+      .numbers-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 8px;
+        width: 25%;
+        height: 100%;
+
+        .specificnumber-content {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          row-gap: 0.5em;
+
+          .title-number-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            column-gap: 0.5em;
+          }
+
+          .number-content {
+            font-weight: bold;
+            font-size: 70px;
+
+            x-partproductionstatuspie {
+              margin-top: 0.2em;
+
+              svg {
+                width: 2em;
+                height: 1.5em;
+
+                circle,
+                rect {
+                  display: none;
+                }
+
+                text {
+                  font-weight: bold;
+                  font-size: 2.1em;
+                  fill: #dfdfdf;
+                }
+              }
+            }
+          }
+
+          x-motionpercentage {
+            line-height: 2em;
+            margin-top: -2em;
+
+            .motionpercentage {
+              display: flex;
+              justify-content: center;
+
+              span {
+                font-size: 2em;
+                font-weight: bold;
+              }
+            }
+          }
+        }
+
+        .performance-content {
+          margin-top: 0.45em;
+
+        }
+
+        .scraps-content {
+          margin-top: 7.3em;
+
+          .scrap-button {
+            display: flex;
+            align-items: center;
+            column-gap: 0.5em;
+          }
+        }
+      }
+
+      .trackergraph-content {
+        width: 50%;
+      }
+    }
+
+    .changedtools-content {
+      .title-number-content {
+        margin-left: 2em;
+      }
+
+      .toollifemachine-content {
+        margin-top: 1em;
+
+        x-toollifemachine {
+          .pulse-cellbar-main {
+            justify-content: flex-end;
+            flex-flow: row-reverse nowrap !important;
+            overflow: hidden;
+          }
+
+          .pulse-cellbar-between {
+            display: none !important;
+          }
+
+          .pulse-cellbar-current-data {
+            display: none !important;
+          }
+
+          .toollifemachine-tools {
+            flex-direction: row;
+            column-gap: 0.5em;
+          }
+        }
+      }
+    }
+
+    .chronology-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      row-gap: 8px;
+      column-gap: 4em;
+      margin-top: 2em;
+      margin-bottom: 2em;
+
+      .chart-chronology {
+        flex: 1;
+
+        .machine-component {
+          width: 100%;
+
+          >.pulse-bar-div {
+            margin-bottom: 20px;
+            font-size: 1em;
+            line-height: 2em;
+
+            >div {
+              min-height: 2em;
+            }
+
+            .div-bar-and-percent {
+              display: flex;
+              flex-direction: row;
+
+              .div-bar {
+                flex-shrink: 99999;
+                flex-grow: 99999;
+                overflow: hidden;
+                margin-bottom: 10px;
+                margin-top: 10px;
+
+                .pulse-bar-div {
+                  margin-right: @margin_graduation;
+                  margin-left: @margin_graduation;
+                }
+              }
+
+            }
+          }
+        }
+      }
+    }
+
+    .dashboard-footer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .stops-content {
+        width: 30%;
+        margin-right: 40px;
+
+        .pulse-cellbar-main {
+          height: unset;
+          display: flex;
+          justify-content: center;
+          filter: opacity(100%);
+
+          .pulse-cellbar-current-data {
+            display: none;
+          }
+
+          .pulse-cellbar-past-data {
+            border-left: none;
+            height: unset;
+            display: flex;
+            justify-content: center;
+          }
+
+          .pulse-cellbar-past-data:hover {
+            background-color: unset;
+          }
+        }
+      }
+
+      .period-content {
+
+        margin-right: 36px;
+        width: 50%;
+
+        .periodtoolbar-toolbar {
+          border: none;
+          margin: unset;
+          display: flex;
+
+          .content-period-buttons {
+            display: none;
+          }
+
+          .content-zoom-buttons {
+            display: none;
+          }
+
+          .periodtoolbar-li-text {
+            margin-left: 36px;
+            margin-right: 40px;
+            width: 100%;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+
+            .periodtoolbar-display {
+              display: flex;
+              align-items: center;
+            }
+          }
+
+          .periodtoolbar-li-btn {
+            padding-left: 1em;
+            padding-right: 1em;
+            height: 32px;
+            display: flex;
+            align-items: center;
+          }
+        }
+
+      }
+
+      .dailydate-content {
+        margin-right: 40px;
+        width: 100px;
+        font-weight: bold;
+      }
+
+      .hour-content {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+
+.border {
+  border: 0.5px solid white;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 4px;
+}
+
+.text {
+  font-weight: bold;
+  font-size: small;
+}
+
+.text-box {
+  color: #2172FF;
+  font-weight: bold;
+  font-size: 1.5em;
+  padding-left: 24px;
+  padding-right: 24px;
+
+}
+
+.btn {
+  border-color: #FF7C35;
+  background-color: #FF7C35;
+  color: #101521;
+  font-family: inherit;
+  font-weight: 500;
+
+}
+
+.btn:hover {
+  border-color: #FCA975;
+  background-color: #FCA975;
+  transition: 0.1s;
+  cursor: pointer;
+}
