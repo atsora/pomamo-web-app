@@ -51,6 +51,7 @@ __metadata:
     "@bower_components/moment": "moment/moment#2.30.1"
     "@bower_components/momentjs": "moment/moment#2.30.1"
     "@webcomponents/webcomponentsjs": "npm:^2.4.3"
+    chart.js: "npm:^4.5.0"
     chokidar: "npm:^3.5.3"
     core-js: "npm:~3.30.2"
     d3: "npm:^6.2.0"
@@ -189,6 +190,13 @@ __metadata:
   version: 5.4.0
   resolution: "@javascript-obfuscator/estraverse@npm:5.4.0"
   checksum: 10c0/e7a710addb3c7598154ceae494536230ce555a9b5bae95e1d627d34ffc9665ab6a31da2cc583ab088e477243c1a9cd3b1122c414bedacb217312808c09c8fd22
+  languageName: node
+  linkType: hard
+
+"@kurkle/color@npm:^0.3.0":
+  version: 0.3.4
+  resolution: "@kurkle/color@npm:0.3.4"
+  checksum: 10c0/0e9fd55c614b005c5f0c4c755bca19ec0293bc7513b4ea3ec1725234f9c2fa81afbc78156baf555c8b9cb0d305619253c3f5bca016067daeebb3d00ebb4ea683
   languageName: node
   linkType: hard
 
@@ -996,6 +1004,15 @@ __metadata:
   version: 0.0.2
   resolution: "charenc@npm:0.0.2"
   checksum: 10c0/a45ec39363a16799d0f9365c8dd0c78e711415113c6f14787a22462ef451f5013efae8a28f1c058f81fc01f2a6a16955f7a5fd0cd56247ce94a45349c89877d8
+  languageName: node
+  linkType: hard
+
+"chart.js@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "chart.js@npm:4.5.0"
+  dependencies:
+    "@kurkle/color": "npm:^0.3.0"
+  checksum: 10c0/f12c7f9a238ee7ce6d3f7111628e9daba86bb8ff8e54cfe63525fde6ded9003c72c4c8d2c7d5702539dc0aff7e682dfec058660ade8d03a970da002656d4ac91
   languageName: node
   linkType: hard
 
