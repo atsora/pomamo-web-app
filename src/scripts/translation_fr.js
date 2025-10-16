@@ -37,7 +37,11 @@ ATSORA_LOCALE_CATALOG.fr.options = {
   timeFrameSelection: 'Période : ',
   thresholdOrange: 'Orange',
   thresholdRed: 'Rouge',
-  toolsExpiring: 'Outils expirés'
+  toolsExpiring: 'Outils expirés',
+  showChangedTools: 'Afficher les informations d\'outils',
+  showProductionGauge: 'Afficher la jauge de performance',
+  thresholdMode: 'Mode de seuil',
+  target: 'Objectif'
 }
 
 ATSORA_LOCALE_CATALOG.fr.parameters = {
@@ -76,7 +80,11 @@ ATSORA_LOCALE_CATALOG.fr.content = {
   time: 'heure',
   today: "Aujourd'hui",
   tool: 'outil',
-  yesterday: 'Hier'
+  yesterday: 'Hier',
+  reference: 'Référence',
+  performance: 'Performance',
+  changedtools: 'Changement d\'outils',
+  state: 'État',
 }
 
 ATSORA_LOCALE_CATALOG.fr.dialog = {
@@ -108,6 +116,9 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   // Manager and operator views
   machines: {
     title: 'Machines'
+  },
+  operatordashboard: {
+    title: 'Tableau de bord'
   },
   machinespecification: {
     title: 'Affichage jour/semaine par machine'
