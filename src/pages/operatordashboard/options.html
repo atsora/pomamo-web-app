@@ -1,5 +1,61 @@
 <!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
 Copyright (C) 2025 Atsora Solutions
 
 SPDX-License-Identifier: Apache-2.0
 -->
+
+<div class="param-group group-options">
+    <div class="param-group-header group-options">
+        <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
+        <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
+                default="reset"></x-tr></button>
+    </div>
+
+    <div class="param-group-content group-options">
+
+        <div class="labelsubgroup">
+            <label for="showChangedTools"><x-tr key="options.showChangedTools" default="Show tool information"></x-tr>
+                <input type="checkbox" id="showChangedTools" autocomplete="off"/>
+            </label>
+        </div>
+
+        <!-- Production gauge settings -->
+        <div class="labelsubgroup">
+            <label for="showproductiongauge"><x-tr key="options.showProductionGauge" default="Show production gauge"></x-tr>
+                <input type="checkbox" id="showproductiongauge" autocomplete="off"/>
+            </label>
+            <div class="subgroup radiogroup showproductiongaugedetails">
+                <div class='inlined-radio'>
+                    <input type="radio" id="productiongaugepercent" name="showproductiongauge" value="productiongaugepercent"/>
+                    <span for="productiongaugepercent"><x-tr key="content.percent" default="percent"></x-tr></span>
+                </div>
+                <div class='inlined-radio'>
+                    <input type="radio" id="productiongaugeratio" name="showproductiongauge" value="productiongaugeratio"/>
+                    <span for="productiongaugeratio"><x-tr key="content.actualVsTarget" default="actual/target"></x-tr></span>
+                </div>
+
+                <label><x-tr key="options.thresholdMode" default="Threshold mode"></x-tr></label>
+                <div class='inlined-radio'>
+                    <input type="radio" id="thresholdmodepercentage" name="thresholdmode" value="percentage"/>
+                    <span for="thresholdmodepercentage"><x-tr key="content.percent" default="percent"></x-tr></span>
+                </div>
+                <div class='inlined-radio'>
+                    <input type="radio" id="thresholdmodepiece" name="thresholdmode" value="piece"/>
+                    <span for="thresholdmodepiece"><x-tr key="content.part" default="part"></x-tr></span>
+                </div>
+
+                <label for="thresholdtargetproductiongauge"><x-tr key="options.target" default="Target"></x-tr>
+                    <input type="number" id="thresholdtargetproductiongauge" value="0" step="1" min="0" autocomplete="off"/>
+                </label>
+
+                <label for="thresholdorangeproductiongauge"><x-tr key="options.thresholdOrange" default="Orange"></x-tr>
+                    <input type="number" id="thresholdorangeproductiongauge" value="0" step="1" min="0" autocomplete="off"/>
+                </label>
+                <label for="thresholdredproductiongauge"><x-tr key="options.thresholdRed" default="Red"></x-tr>
+                    <input type="number" id="thresholdredproductiongauge" value="0" step="1" min="0" autocomplete="off"/>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

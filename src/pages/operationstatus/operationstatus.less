@@ -250,9 +250,8 @@ x-production {
     height: 2em; // uniform height
   }
 
-  .production-actual-value:before {
-    content: "Actual ";
-    color: @color_text_alternate;
+  .production-2-on-3 {
+    display: inline-flex;
   }
 
   .production-separator:before {
@@ -260,12 +259,13 @@ x-production {
     padding-left: 2px;
     padding-right: 2px;
     box-sizing: border-box;
+    white-space: pre;
   }
 
-  .production-target-value:before {
-    content: "Target ";
-    color: @color_text_alternate;
+  .production-clock-content {
+    display: none;
   }
+
 }
 
 // END top display
