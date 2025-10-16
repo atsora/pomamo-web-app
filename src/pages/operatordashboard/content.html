@@ -12,21 +12,33 @@ SPDX-License-Identifier: Apache-2.0
     <div class="dashboard-content tile grouparray-dependant">
         <div class="nav-content">
             <div class="machine-title tile-title">
-                <x-machinedisplay machine-context="PulseWebApp"></x-machinedisplay>
-                <x-reasonbutton machine-context="PulseWebApp"></x-reasonbutton>
+                <div class="machine-name">
+                    <x-machinedisplay machine-context="PulseWebApp"></x-machinedisplay>
+                    <x-reasonbutton machine-context="PulseWebApp"></x-reasonbutton>
+                </div>
+                <div>
+                    <x-lastmachinestatus period-context="operatordashboard" machine-context="PulseWebApp"
+                        status-context="PulseWebApp"></x-lastmachinestatus>
+                </div>
 
             </div>
             <div class="info-content">
-
-                <div class="text-box border">
-                    <span>Nom operateur</span>
+                <div class="text-box border btn secondary-btn info-box">
+                    <x-workinfo machine-context="PulseWebApp"></x-workinfo>
+                    <x-tr class="text" key="content.reference" default="Reference"></x-tr>
                 </div>
-                <div class="text-box border">
-                    <span>Nom piece</span>
-                </div>
-                <div class="text-box border">
-                    <span>Nb pieces faites / Nb total à faire</span>
-                </div>
+                <!--<div class="text-box border btn secondary-btn info-box">
+                    <div>
+                        <span>3212</span>
+                        <span class="divider">/</span>
+                        <span>5200</span>
+                    </div>
+                    
+                    <div class="info-subtext">
+                        <span class="text">Fait sur OF</span>
+                        <span class="text todo">A faire</span>
+                    </div>
+                </div>-->
             </div>
         </div>
 
@@ -34,58 +46,35 @@ SPDX-License-Identifier: Apache-2.0
         <div class="stats-content">
             <div class="numbers-content">
                 <div class="specificnumber-content">
-                    <div class="title-number-content">
-                        <span class="text">Production à </span>
-                        <x-clock id="clock_prod" display-seconds=false display-24h=true></x-clock>
-                    </div>
-                    <div class="number-content">
-                        <x-partproductionstatuspie machine-context="PulseWebApp"
-                            display-current-production=true></x-partproductionstatuspie>
-                    </div>
+                    <x-production machine-context="PulseWebApp"></x-production>
                 </div>
                 <div class="specificnumber-content">
-                    <div class="title-number-content">
-                        <span class="text">Objectif à </span>
-                        <x-clock id="clock_goal" display-seconds=false display-24h=true></x-clock>
-                    </div>
-                    <div class="number-content">
-                        <x-partproductionstatuspie machine-context="PulseWebApp"
-                            display-current-goal=true></x-partproductionstatuspie>
-                    </div>
-                </div>
-                <div class="specificnumber-content">
-                    <div class="title-number-content">
-                        <span class="text">Objectif fin d'équipe</span>
-                    </div>
-                    <div class="number-content">
-                        <span class="goalendproduction">320</span>
-                    </div>
+                    <x-productionshiftgoal machine-context="PulseWebApp"
+                        class="title-number-content text"></x-productionshiftgoal>
                 </div>
             </div>
             <div class="numbers-content">
                 <div class="specificnumber-content performance-content">
                     <div class="title-number-content">
-                        <span class="text">Taux de performance</span>
+                        <x-tr class="text" key="content.performance" default="Performance"></x-tr>
                     </div>
                     <div>
-                        <x-performancegauge machine-context="PulseWebApp"
-                            period-context="operatordashboard"></x-performancegauge>
-                        <x-motionpercentage motion-context="PulseWebApp"
-                            machine-context="PulseWebApp"></x-motionpercentage>
+                        <x-productiongauge machine-context="PulseWebApp" display-mode="percent"></x-productiongauge>
                     </div>
                 </div>
-                <div class="specificnumber-content scraps-content">
+                
+                <!--<div class="specificnumber-content scraps-content">
                     <div class="title-number-content">
                         <span class="text">Rebuts équipe</span>
                     </div>
                     <div class="number-content">
                         <span>12</span>
                     </div>
-                    <div class="text-box border btn scrap-button">
+                    <div class="text-box border btn scrap-button body-btn">
                         <i class="fa-solid fa-trash-can-arrow-up"></i>
                         <span>Déclarer rebuts</span>
                     </div>
-                </div>
+                </div>-->
             </div>
             <div class="numbers-content trackergraph-content">
                 <x-productiontrackergraph period-context="operatordashboard"
@@ -94,7 +83,7 @@ SPDX-License-Identifier: Apache-2.0
         </div>
         <div class="changedtools-content">
             <div class="title-number-content">
-                <span class="text">Changement outils</span>
+                <x-tr class="text" key="content.changedtools" default="Change of tools"></x-tr>
             </div>
             <div class="toollifemachine-content">
                 <x-toollifemachine machine-context="PulseWebApp" status-context="PulseWebApp"
@@ -103,7 +92,7 @@ SPDX-License-Identifier: Apache-2.0
         </div>
         <div class="chronology-content">
             <div class="title-number-content">
-                <span class="text">Etat</span>
+                <x-tr class="text" key="content.state" default="State"></x-tr>
             </div>
             <div class="chart-chronology">
                 <div class="machine-component" id='coloredbar'>
@@ -116,15 +105,9 @@ SPDX-License-Identifier: Apache-2.0
                                 </div>
                                 <div class="pulse-bar-div">
                                     <div class="middle-bar">
-                                        <x-operationcyclebar machine-context="PulseWebApp"
-                                            period-context="operatordashboard"></x-operationcyclebar>
-                                        <x-isofileslotbar machine-context="PulseWebApp"
-                                            period-context="operatordashboard"></x-isofileslotbar>
                                         <x-reasonslotbar machine-context="PulseWebApp" motion-context="PulseWebApp"
                                             period-context="operatordashboard">
                                         </x-reasonslotbar>
-                                        <x-cncalarmbar machine-context="PulseWebApp"
-                                            period-context="operatordashboard"></x-cncalarmbar>
                                         <x-redstacklightbar machine-context="PulseWebApp"
                                             period-context="operatordashboard"></x-redstacklightbar>
                                         <x-cncvaluebar machine-context="PulseWebApp"
@@ -139,7 +122,7 @@ SPDX-License-Identifier: Apache-2.0
             </div>
         </div>
         <div class="dashboard-footer">
-            <div class="stops-content border text-box btn">
+            <div class="stops-content text-box btn secondary-btn">
                 <x-lastmachinestatus period-context="operatordashboard" machine-context="PulseWebApp"
                     status-context="PulseWebApp"></x-lastmachinestatus>
             </div>
@@ -152,7 +135,7 @@ SPDX-License-Identifier: Apache-2.0
                 <x-clock display-date=true></x-clock>
             </div>
             <div class="hour-content">
-                <x-clock display-seconds=false display-24h=true></x-clock>
+                <x-clock display-seconds=false></x-clock>
             </div>
         </div>
     </div>
