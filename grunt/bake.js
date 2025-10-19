@@ -116,6 +116,15 @@ module.exports = {
       dest: 'dist-es2015/operationstatus.html'
     }]
   },
+  operatordashboard: {
+    options: {
+      content: { pagename: 'operatordashboard' }
+    },
+    files: [{
+      src: 'src/pages/template.html',
+      dest: 'dist-es2015/operatordashboard.html'
+    }]
+  },
   performancebar: {
     options: {
       content: { pagename: 'performancebar' }

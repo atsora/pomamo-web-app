@@ -130,30 +130,6 @@ PULSE_DEFAULT_CONFIG.pages = {
       },
     }
   },
-  operatordashboard: {
-    showChangedTools: true,
-    enableGroups: true,
-    displayshiftrange: true,
-    lastmachinestatus: 'stopclassification',
-    componentsToDisplay: [
-      'x-lastmachinestatus',
-    ],
-    openStopClassification: true,
-    productiongauge: {
-      showproductiongauge: true,
-      showpercent: true,
-      thresholdmode: 'percentage', // 'percentage' or 'piece'
-      target: 70,
-      red: 40,
-      orange: 60
-    },
-    showcoloredbar: {
-      cncvalue: true,
-      click: {
-        allbars: 'change',
-      },
-    }
-  },
   machinespecification: {
     enableGroups: true,
     row: 1,
@@ -239,6 +215,30 @@ PULSE_DEFAULT_CONFIG.pages = {
       /*click: {
         allbars: 'none' // each bar can be overloaded. Possible values: none, change, popup, details
       },*/
+    }
+  },
+  operatordashboard: {
+    showChangedTools: true,
+    enableGroups: true,
+    displayshiftrange: true,
+    lastmachinestatus: 'stopclassification',
+    componentsToDisplay: [
+      'x-lastmachinestatus',
+    ],
+    openStopClassification: true,
+    productiongauge: {
+      showproductiongauge: true,
+      showpercent: true,
+      thresholdmode: 'percentage', // 'percentage' or 'piece'
+      target: 70,
+      red: 40,
+      orange: 60
+    },
+    showcoloredbar: {
+      cncvalue: true,
+      click: {
+        allbars: 'change',
+      },
     }
   },
   plant: {
@@ -356,7 +356,7 @@ PULSE_DEFAULT_CONFIG.roles.live.displayedPages = [
 PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [ // ALL 
   'running', 'productionmachining',
   'scheduledstatus',
-  'toollife', 'machines',
+  'toollife', 'machines', 'operatordashboard',
   'operationstatus',
   'managementinformationterminal',
   'utilizationbar', 'utilizationpie',
