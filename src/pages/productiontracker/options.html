@@ -13,18 +13,8 @@ SPDX-License-Identifier: Apache-2.0
 
   <div class="param-group-content group-options">
     <div class="labelsubgroup">
-      <label for="threshold"><x-tr key="options.highlightPartCount" default="Highlight part count"></x-tr></label>
+      <label for="threshold"><x-tr key="options.showPartCount" default="Show part count"></x-tr></label>
       <div class="subgroup thresholdunitispart">
-        <div class="radiogroup  ">
-          <div class='inlined-radio'>
-            <input type="radio" id="thresholdunitispercent" name="thresholdunitispart" value="thresholdunitispercent" />
-            <span for="thresholdunitispercent"><x-tr key="content.percent" default="percent"></x-tr></span>
-          </div>
-          <div class='inlined-radio'>
-            <input type="radio" id="thresholdunitispart" name="thresholdunitispart" value="thresholdunitispart" />
-            <span for="thresholdunitispart"><x-tr key="content.part" default="part"></x-tr></span>
-          </div>
-        </div>
         <label for="thresholdorangeproduction"><x-tr key="thresholdOrange" default="Orange"></x-tr>
           <input type="number" id="thresholdorangeproduction" value="0" step="1" min="0" autocomplete="off" />
         </label>

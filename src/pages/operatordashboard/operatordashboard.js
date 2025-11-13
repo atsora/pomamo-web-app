@@ -29,6 +29,7 @@ require('x-production/x-production');
 require('x-tr/x-tr');
 require('x-openstopclassificationlistener/x-openstopclassificationlistener');
 require('x-productiongauge/x-productiongauge');
+require('x-scrapstatus/x-scrapstatus');
 
 class MachinesDetailsPage extends pulsePage.BasePage {
   constructor() {
@@ -55,42 +56,123 @@ class MachinesDetailsPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  initOptionValues() {
-    const showChangedToolsCheckbox = document.getElementById('showChangedTools');
-    showChangedToolsCheckbox.checked = pulseConfig.getBool('showChangedTools');
-    if (pulseConfig.getDefaultBool('showChangedTools') !== pulseConfig.getBool('showChangedTools')) {
-      showChangedToolsCheckbox.setAttribute('overridden', 'true');
+  // Initialize an option checkbox
+  _showOption(option, functionCheck, functionUncheck) {
+    const checkbox = document.getElementById(option);
+    checkbox.checked = pulseConfig.getBool(option);
+    if (pulseConfig.getDefaultBool(option) !== pulseConfig.getBool(option)) {
+      checkbox.setAttribute('overridden', 'true');
     }
-    showChangedToolsCheckbox.addEventListener('change', function (event) {
-      pulseConfig.set('showChangedTools', showChangedToolsCheckbox.checked);
-      if (event.target.checked) {
-        document.querySelector('.changedtools-content').style.display = 'block';
-      } else {
-        document.querySelector('.changedtools-content').style.display = 'none';
-      }
-    });
 
-    showChangedToolsCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+    checkbox.addEventListener('change', function (event) {
+      pulseConfig.set(option, checkbox.checked);
+      if (functionCheck && event.target.checked) {
+        functionCheck();
+      }
+      else if (functionUncheck) {
+        functionUncheck();
+      }
+    })
+    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  initOptionValues() {
+    // Show changed tools
+    this._showOption('showChangedTools', function () {
+      document.querySelector('.changedtools-content').style.display = 'block';
+    },
+      function () {
+        document.querySelector('.changedtools-content').style.display = 'none';
+      });
+
+
+    // Open stop classification
+    this._showOption('openStopClassification', this._createOpenStopClassificationListener, this._deleteOpenStopClassificationListener);
+
+    // Stop classification reopen delay
+    this._reopenStopClassificationDelay();
+
 
     // Production gauge options
-    const showProductionGaugeCheckbox = document.getElementById('showproductiongauge');
-    showProductionGaugeCheckbox.checked = pulseConfig.getBool('productiongauge.showproductiongauge');
-    if (pulseConfig.getDefaultBool('productiongauge.showproductiongauge') !== pulseConfig.getBool('productiongauge.showproductiongauge')) {
-      showProductionGaugeCheckbox.setAttribute('overridden', 'true');
-    }
-    showProductionGaugeCheckbox.addEventListener('change', function (event) {
-      pulseConfig.set('productiongauge.showproductiongauge', showProductionGaugeCheckbox.checked);
-      const gaugeElements = document.querySelectorAll('.performance-content');
-      if (event.target.checked) {
+    this._showOption('showproductiongauge',
+      function () {
+        const gaugeElements = document.querySelectorAll('.performance-content');
         gaugeElements.forEach(el => el.style.display = 'flex');
         document.querySelector('.showproductiongaugedetails').style.display = 'block';
-      } else {
+      },
+      function () {
+        const gaugeElements = document.querySelectorAll('.performance-content');
         gaugeElements.forEach(el => el.style.display = 'none');
         document.querySelector('.showproductiongaugedetails').style.display = 'none';
-      }
-    });
+      });
 
     // Display mode: percent or ratio
+    this._productionGaugeDisplayMode();
+
+    // Thresholds
+    const thresholdTarget = document.getElementById('thresholdtargetproductiongauge');
+    const thresholdRedInput = document.getElementById('thresholdredproductiongauge');
+
+    thresholdTarget.value = pulseConfig.getFloat('thresholdorangeproduction', 80);
+    thresholdRedInput.value = pulseConfig.getFloat('thresholdredproduction', 60);
+
+    if (pulseConfig.getDefaultFloat('thresholdorangeproduction') !== pulseConfig.getFloat('thresholdorangeproduction')) {
+      thresholdTarget.setAttribute('overridden', 'true');
+    }
+    if (pulseConfig.getDefaultFloat('thresholdredproduction') !== pulseConfig.getFloat('thresholdredproduction')) {
+      thresholdRedInput.setAttribute('overridden', 'true');
+    }
+
+    thresholdTarget.addEventListener('change', function () {
+      this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true)
+    }.bind(this));
+
+    thresholdRedInput.addEventListener('change', function () {
+      this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true)
+    }.bind(this));
+  }
+
+  // Create the open stop classification listener element
+  _createOpenStopClassificationListener() {
+    document.querySelector('.openStopClassificationDetails').style.display = 'block';
+    const container = document.body || document.documentElement;
+    let existing = container.querySelector('x-openstopclassificationlistener');
+    if (!existing) {
+      let listener = document.createElement('x-openstopclassificationlistener');
+      listener.setAttribute('machine-context', 'PulseWebApp');
+      listener.setAttribute('period-context', 'operatordashboard');
+      listener.setAttribute('status-context', 'PulseWebApp');
+      container.appendChild(listener);
+    }
+  }
+
+  // Delete the open stop classification listener element
+  _deleteOpenStopClassificationListener() {
+    document.querySelector('.openStopClassificationDetails').style.display = 'none';
+    const container = document.body || document.documentElement;
+    let existing = container.querySelector('x-openstopclassificationlistener');
+    if (existing) {
+      existing.remove();
+    }
+  }
+
+  // Initialize the reopen stop classification delay input
+  _reopenStopClassificationDelay() {
+    const stopClassificationReopenDelayInput = document.getElementById('stopClassificationReopenDelay');
+    stopClassificationReopenDelayInput.value = pulseConfig.getInt('stopClassificationReopenDelay', 5);
+    if (pulseConfig.getDefaultInt('stopClassificationReopenDelay') !== pulseConfig.getInt('stopClassificationReopenDelay')) {
+      stopClassificationReopenDelayInput.setAttribute('overridden', 'true');
+    }
+    stopClassificationReopenDelayInput.addEventListener('change', function () {
+      const value = parseInt(stopClassificationReopenDelayInput.value);
+      if (!isNaN(value) && value >= 0) {
+        pulseConfig.set('stopClassificationReopenDelay', value);
+      }
+    });
+  }
+
+  // Initialize the production gauge display mode radios
+  _productionGaugeDisplayMode() {
     const showPercentRadio = document.getElementById('productiongaugepercent');
     const showRatioRadio = document.getElementById('productiongaugeratio');
 
@@ -122,172 +204,63 @@ class MachinesDetailsPage extends pulsePage.BasePage {
         });
       }
     });
+  }
 
-    // Thresholds
-    const thresholdTarget = document.getElementById('thresholdtargetproductiongauge');
-    const thresholdOrangeInput = document.getElementById('thresholdorangeproductiongauge');
-    const thresholdRedInput = document.getElementById('thresholdredproductiongauge');
-    const thresholdModePercentageRadio = document.getElementById('thresholdmodepercentage');
-    const thresholdModePieceRadio = document.getElementById('thresholdmodepiece');
-
-    thresholdTarget.value = pulseConfig.getFloat('productiongauge.target', 80);
-    thresholdOrangeInput.value = pulseConfig.getFloat('productiongauge.orange', 80);
-    thresholdRedInput.value = pulseConfig.getFloat('productiongauge.red', 50);
-    
-    // Threshold mode
-    const thresholdMode = pulseConfig.get('productiongauge.thresholdmode', 'percentage');
-    if (thresholdMode === 'piece') {
-      thresholdModePieceRadio.checked = true;
-    } else {
-      thresholdModePercentageRadio.checked = true;
+  // Verify threshold values
+  _verficationThresholds(targetValue, redValue) {
+    // Find or create error message element
+    let errorMessage = document.getElementById('thresholdErrorMessage');
+    if (!errorMessage) {
+      errorMessage = document.createElement('div');
+      errorMessage.id = 'thresholdErrorMessage';
+      errorMessage.style.color = 'red';
+      errorMessage.style.fontSize = '0.9em';
+      errorMessage.style.marginTop = '5px';
+      document.querySelector('.showproductiongaugedetails').appendChild(errorMessage);
     }
 
-    if (pulseConfig.getDefaultFloat('productiongauge.target') !== pulseConfig.getFloat('productiongauge.target')) {
-      thresholdTarget.setAttribute('overridden', 'true');
-    }
-    if (pulseConfig.getDefaultFloat('productiongauge.orange') !== pulseConfig.getFloat('productiongauge.orange')) {
-      thresholdOrangeInput.setAttribute('overridden', 'true');
-    }
-    if (pulseConfig.getDefaultFloat('productiongauge.red') !== pulseConfig.getFloat('productiongauge.red')) {
-      thresholdRedInput.setAttribute('overridden', 'true');
-    }
-    if (pulseConfig.getDefault('productiongauge.thresholdmode') !== pulseConfig.get('productiongauge.thresholdmode')) {
-      thresholdModePercentageRadio.setAttribute('overridden', 'true');
-      thresholdModePieceRadio.setAttribute('overridden', 'true');
+    // Check if values are valid numbers
+    if (isNaN(redValue) || isNaN(targetValue)) {
+      errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdNaNError', 'Threshold values must be valid numbers');
+      errorMessage.style.display = 'block';
+      return false;
     }
 
-    // Validation function for thresholds
-    const validateThresholds = function () {
-      const targetValue = parseFloat(thresholdTarget.value);
-      const orangeValue = parseFloat(thresholdOrangeInput.value);
-      const redValue = parseFloat(thresholdRedInput.value);
-      const thresholdMode = thresholdModePieceRadio.checked ? 'piece' : 'percentage';
 
-      // Find or create error message element
-      let errorMessage = document.getElementById('thresholdErrorMessage');
-      if (!errorMessage) {
-        errorMessage = document.createElement('div');
-        errorMessage.id = 'thresholdErrorMessage';
-        errorMessage.style.color = 'red';
-        errorMessage.style.fontSize = '0.9em';
-        errorMessage.style.marginTop = '5px';
-        thresholdRedInput.parentNode.parentNode.appendChild(errorMessage);
-      }
+    // values between 0 and 100
+    if (redValue < 0 || targetValue <= 0) {
+      errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdPositiveError', 'Threshold values must be positive');
+      errorMessage.style.display = 'block';
+      return false;
+    }
 
-      // Check if values are valid numbers
-      if (isNaN(orangeValue) || isNaN(redValue) || isNaN(targetValue)) {
-        errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdNaNError', 'Threshold values must be valid numbers');
-        errorMessage.style.display = 'block';
-        return false;
-      }
+    // In percentage mode: orange > red (normal logic)
+    if (Number(targetValue) <= Number(redValue)) {
+      errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdError', 'Target threshold must be greater than red threshold');
+      errorMessage.style.display = 'block';
+      return false;
+    }
 
-      // Check if target is positive
-      if (targetValue <= 0) {
-        errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdPositiveError', 'Target value must be positive');
-        errorMessage.style.display = 'block';
-        return false;
-      }
+    // Percentage cannot exceed 100
+    if (redValue > 100 || targetValue > 100) {
+      errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdMaxError', 'Percentage values cannot exceed 100');
+      errorMessage.style.display = 'block';
+      return false;
+    }
 
-      // Validation depends on mode
-      if (thresholdMode === 'piece') {
-        // Piece mode: orange and red cannot be negative
-        if (orangeValue < 0 || redValue < 0) {
-          errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdPositiveError', 'Threshold values must be positive');
-          errorMessage.style.display = 'block';
-          return false;
-        }
-        
-        // In piece mode: red > orange (inverted logic)
-        // Example: target=10, orange=2 (applies at 8), red=5 (applies at 5)
-        if (redValue <= orangeValue) {
-          errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdPieceError', 'In piece mode, red threshold must be greater than orange threshold');
-          errorMessage.style.display = 'block';
-          return false;
-        }
-        
-        // Values cannot exceed target
-        if (orangeValue > targetValue || redValue > targetValue) {
-          errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdExceedTargetError', 'Threshold values cannot exceed target value');
-          errorMessage.style.display = 'block';
-          return false;
-        }
-      } else {
-        // Percentage mode: values between 0 and 100
-        if (orangeValue < 0 || redValue < 0) {
-          errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdPositiveError', 'Threshold values must be positive');
-          errorMessage.style.display = 'block';
-          return false;
-        }
-        
-        // In percentage mode: orange > red (normal logic)
-        if (orangeValue <= redValue) {
-          errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdError', 'Orange threshold must be greater than red threshold');
-          errorMessage.style.display = 'block';
-          return false;
-        }
-        
-        // Percentage cannot exceed 100
-        if (orangeValue > 100 || redValue > 100 || targetValue > 100) {
-          errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdMaxError', 'Percentage values cannot exceed 100');
-          errorMessage.style.display = 'block';
-          return false;
-        }
-      }
-      
-      errorMessage.style.display = 'none';
-      return true;
-    };
+    // store values
+    pulseConfig.set('thresholdorangeproduction', parseFloat(targetValue));
+    pulseConfig.set('thresholdredproduction', parseFloat(redValue));
 
-    thresholdModePercentageRadio.addEventListener('change', function () {
-      if (thresholdModePercentageRadio.checked) {
-        pulseConfig.set('productiongauge.thresholdmode', 'percentage');
-        validateThresholds(); // Re-validate when mode changes
-        eventBus.EventBus.dispatchToAll('configChangeEvent',
-          { 'config': 'productiongauge' });
-      }
-    });
+    errorMessage.style.display = 'none';
 
-    thresholdModePieceRadio.addEventListener('change', function () {
-      if (thresholdModePieceRadio.checked) {
-        pulseConfig.set('productiongauge.thresholdmode', 'piece');
-        validateThresholds(); // Re-validate when mode changes
-        eventBus.EventBus.dispatchToAll('configChangeEvent',
-          { 'config': 'productiongauge' });
-      }
-    });
+    // Dispatch to update displays
+    eventBus.EventBus.dispatchToAll('configChangeEvent',
+      {
+        config: 'thresholdsupdated'
+      });
 
-    thresholdTarget.addEventListener('change', function () {
-      if (validateThresholds()) {
-        pulseConfig.set('productiongauge.target', parseFloat(thresholdTarget.value));
-        eventBus.EventBus.dispatchToAll('configChangeEvent',
-          { 'config': 'productiongauge' });
-      }
-    });
-
-    thresholdOrangeInput.addEventListener('change', function () {
-      if (validateThresholds()) {
-        pulseConfig.set('productiongauge.orange', parseFloat(thresholdOrangeInput.value));
-        eventBus.EventBus.dispatchToAll('configChangeEvent',
-          { 'config': 'productiongauge' });
-      }
-    });
-
-    thresholdRedInput.addEventListener('change', function () {
-      if (validateThresholds()) {
-        pulseConfig.set('productiongauge.red', parseFloat(thresholdRedInput.value));
-        eventBus.EventBus.dispatchToAll('configChangeEvent',
-          { 'config': 'productiongauge' });
-      }
-    });
-
-    // Initial validation
-    validateThresholds();
-
-
-
-    showProductionGaugeCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-
-
+    return true;
   }
 
   setDefaultOptionValues() {
@@ -296,9 +269,19 @@ class MachinesDetailsPage extends pulsePage.BasePage {
     showChangedToolsCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
     showChangedToolsCheckbox.removeAttribute('overridden');
 
+    const openStopClassificationCheckbox = document.getElementById('openStopClassification');
+    openStopClassificationCheckbox.checked = pulseConfig.getDefaultBool('openStopClassification');
+    openStopClassificationCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+    openStopClassificationCheckbox.removeAttribute('overridden');
+
+    const stopClassificationReopenDelayInput = document.getElementById('stopClassificationReopenDelay');
+    stopClassificationReopenDelayInput.value = pulseConfig.getDefaultInt('stopClassificationReopenDelay', 0);
+    stopClassificationReopenDelayInput.dispatchEvent(new Event('change', { bubbles: true }));
+    stopClassificationReopenDelayInput.removeAttribute('overridden');
+
     // Production gauge
     const showProductionGaugeCheckbox = document.getElementById('showproductiongauge');
-    showProductionGaugeCheckbox.checked = pulseConfig.getDefaultBool('productiongauge.showproductiongauge');
+    showProductionGaugeCheckbox.checked = pulseConfig.getDefaultBool('showproductiongauge');
     showProductionGaugeCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
     showProductionGaugeCheckbox.removeAttribute('overridden');
 
@@ -315,32 +298,17 @@ class MachinesDetailsPage extends pulsePage.BasePage {
     showRatioRadio.removeAttribute('overridden');
 
     const thresholdTarget = document.getElementById('thresholdtargetproductiongauge');
-    const thresholdOrangeInput = document.getElementById('thresholdorangeproductiongauge');
     const thresholdRedInput = document.getElementById('thresholdredproductiongauge');
-    const thresholdModePercentageRadio = document.getElementById('thresholdmodepercentage');
-    const thresholdModePieceRadio = document.getElementById('thresholdmodepiece');
-    
-    thresholdTarget.value = pulseConfig.getDefaultFloat('productiongauge.target', 80);
-    thresholdOrangeInput.value = pulseConfig.getDefaultFloat('productiongauge.orange', 80);
-    thresholdRedInput.value = pulseConfig.getDefaultFloat('productiongauge.red', 50);
-    
-    const defaultThresholdMode = pulseConfig.getDefault('productiongauge.thresholdmode', 'percentage');
-    if (defaultThresholdMode === 'piece') {
-      thresholdModePieceRadio.checked = true;
-      thresholdModePieceRadio.dispatchEvent(new Event('change', { bubbles: true }));
-    } else {
-      thresholdModePercentageRadio.checked = true;
-      thresholdModePercentageRadio.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-    
+
+    thresholdTarget.value = pulseConfig.getDefaultFloat('thresholdorangeproduction', 80);
+    thresholdRedInput.value = pulseConfig.getDefaultFloat('thresholdredproduction', 60);
+
     thresholdTarget.dispatchEvent(new Event('change', { bubbles: true }));
-    thresholdOrangeInput.dispatchEvent(new Event('change', { bubbles: true }));
     thresholdRedInput.dispatchEvent(new Event('change', { bubbles: true }));
+
     thresholdTarget.removeAttribute('overridden');
-    thresholdOrangeInput.removeAttribute('overridden');
     thresholdRedInput.removeAttribute('overridden');
-    thresholdModePercentageRadio.removeAttribute('overridden');
-    thresholdModePieceRadio.removeAttribute('overridden');
+
   }
 
   getOptionValues() {
@@ -354,12 +322,24 @@ class MachinesDetailsPage extends pulsePage.BasePage {
       optionsValues += '&showChangedTools=false';
     }
 
+    // Open stop classification
+    const openStopClassificationCheckbox = document.getElementById('openStopClassification');
+    if (openStopClassificationCheckbox.checked) {
+      optionsValues += '&openStopClassification=true';
+    } else {
+      optionsValues += '&openStopClassification=false';
+    }
+
+    // Stop classification reopen delay
+    const stopClassificationReopenDelayInput = document.getElementById('stopClassificationReopenDelay');
+    optionsValues += '&stopClassificationReopenDelay=' + stopClassificationReopenDelayInput.value;
+
     // Production gauge
     const showProductionGaugeCheckbox = document.getElementById('showproductiongauge');
     if (showProductionGaugeCheckbox.checked) {
-      optionsValues += '&productiongauge.showproductiongauge=true';
+      optionsValues += '&showproductiongauge=true';
     } else {
-      optionsValues += '&productiongauge.showproductiongauge=false';
+      optionsValues += '&showproductiongauge=false';
     }
 
     const showPercentRadio = document.getElementById('productiongaugepercent');
@@ -370,20 +350,10 @@ class MachinesDetailsPage extends pulsePage.BasePage {
     }
 
     const thresholdTarget = document.getElementById('thresholdtargetproductiongauge');
-    const thresholdOrangeInput = document.getElementById('thresholdorangeproductiongauge');
     const thresholdRedInput = document.getElementById('thresholdredproductiongauge');
-    const thresholdModePercentageRadio = document.getElementById('thresholdmodepercentage');
-    const thresholdModePieceRadio = document.getElementById('thresholdmodepiece');
-    
+
     optionsValues += '&productiongauge.target=' + thresholdTarget.value;
-    optionsValues += '&productiongauge.orange=' + thresholdOrangeInput.value;
     optionsValues += '&productiongauge.red=' + thresholdRedInput.value;
-    
-    if (thresholdModePieceRadio.checked) {
-      optionsValues += '&productiongauge.thresholdmode=piece';
-    } else {
-      optionsValues += '&productiongauge.thresholdmode=percentage';
-    }
 
     return optionsValues;
   }
@@ -445,21 +415,6 @@ class MachinesDetailsPage extends pulsePage.BasePage {
     document.querySelectorAll('.productionshiftgoal-data').forEach(el => {
       el.classList.add('number-content');
     });
-
-    if (pulseConfig.getDefaultBool('openStopClassification')) {
-      // Install a headless listener component to open the dialog when needed
-      const container = document.body || document.documentElement;
-      // Remove any previous
-      let existing = container.querySelector('x-openstopclassificationlistener');
-      if (!existing) {
-        let listener = document.createElement('x-openstopclassificationlistener');
-        // Wire contexts so it receives the same machine and period signals
-        listener.setAttribute('machine-context', 'PulseWebApp');
-        listener.setAttribute('period-context', 'operatordashboard');
-        listener.setAttribute('status-context', 'PulseWebApp');
-        container.appendChild(listener);
-      }
-    }
 
   }
 

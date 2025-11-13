@@ -219,20 +219,17 @@ PULSE_DEFAULT_CONFIG.pages = {
   },
   operatordashboard: {
     showChangedTools: true,
+    showproductiongauge: true,
+    openStopClassification: true, // Enable automatic opening of stop classification dialog
+    stopClassificationReopenDelay: 7, // Delay in seconds before reopening stop classification dialog after close
     enableGroups: true,
     displayshiftrange: true,
     lastmachinestatus: 'stopclassification',
     componentsToDisplay: [
       'x-lastmachinestatus',
     ],
-    openStopClassification: true,
     productiongauge: {
-      showproductiongauge: true,
       showpercent: true,
-      thresholdmode: 'percentage', // 'percentage' or 'piece'
-      target: 70,
-      red: 40,
-      orange: 60
     },
     showcoloredbar: {
       cncvalue: true,

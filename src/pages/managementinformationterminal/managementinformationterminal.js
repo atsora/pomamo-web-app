@@ -32,7 +32,8 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Init
-  initOptionValues () {
+  initOptionValues() {
+    var self = this;
     // Prepare custom inputs / Visibilities
 
     // showworkinfo = Show Operation
@@ -119,32 +120,17 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
         { 'config': 'productionpercentinpie' });
     });
 
-    // Highlight part count
-    if (pulseConfig.getDefaultBool('thresholdunitispart') != pulseConfig.getBool('thresholdunitispart'))
-      $('#thresholdunitispart').attr('overridden', 'true');
-    $('#thresholdunitispart').prop('checked', pulseConfig.getBool('thresholdunitispart'));
-    $('#thresholdunitispercent').prop('checked', !pulseConfig.getBool('thresholdunitispart'));
-
-    $('#thresholdunitispart').change(function () {
-      pulseConfig.set('thresholdunitispart', $('#thresholdunitispart').is(':checked'));
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'thresholdunitispart' });
-    });
-    $('#thresholdunitispercent').change(function () {
-      pulseConfig.set('thresholdunitispart', !$('#thresholdunitispercent').is(':checked'));
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'thresholdunitispart' });
-    });
-
     $('#thresholdorangeproduction').val(pulseConfig.getInt('thresholdorangeproduction'));
     var changeOrange = function () {
-      $(this).attr('overridden', true);
-      // Store
-      if (pulseUtility.isInteger($('#thresholdorangeproduction').val())) {
-        pulseConfig.set('thresholdorangeproduction', $('#thresholdorangeproduction').val());
-        // Display / Dispatch
-        eventBus.EventBus.dispatchToAll('configChangeEvent',
-          { 'config': 'thresholdorangeproduction' });
+      // Verify thresholds
+      if (self._verficationThresholds($('#thresholdorangeproduction').val(), $('#thresholdredproduction').val())) {
+        $(this).attr('overridden', true);
+        // Store
+        if (pulseUtility.isInteger($('#thresholdorangeproduction').val())) {
+          // Display / Dispatch
+          eventBus.EventBus.dispatchToAll('configChangeEvent',
+            { 'config': 'thresholdorangeproduction' });
+        }
       }
     };
     $('#thresholdorangeproduction').bind('input', changeOrange);
@@ -152,13 +138,15 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
 
     $('#thresholdredproduction').val(pulseConfig.getInt('thresholdredproduction'));
     var changeRed = function () {
-      $(this).attr('overridden', true);
-      // Store
-      if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
-        pulseConfig.set('thresholdredproduction', $('#thresholdredproduction').val());
-        // Display / Dispatch
-        eventBus.EventBus.dispatchToAll('configChangeEvent',
-          { 'config': 'thresholdredproduction' });
+      // verify thresholds
+      if (self._verficationThresholds($('#thresholdorangeproduction').val(), $('#thresholdredproduction').val())) {
+        $(this).attr('overridden', true);
+        // Store
+        if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
+          // Display / Dispatch
+          eventBus.EventBus.dispatchToAll('configChangeEvent',
+            { 'config': 'thresholdredproduction' });
+        }
       }
     };
     $('#thresholdredproduction').bind('input', changeRed);
@@ -166,8 +154,64 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
 
   }
 
+  // Verification of thresholds
+  _verficationThresholds(targetValue, redValue) {
+    // Find or create error message element
+    let errorMessage = document.getElementById('thresholdErrorMessage');
+    if (!errorMessage) {
+      errorMessage = document.createElement('div');
+      errorMessage.id = 'thresholdErrorMessage';
+      errorMessage.style.color = 'red';
+      errorMessage.style.fontSize = '0.9em';
+      errorMessage.style.marginTop = '5px';
+      document.querySelector('.thresholdunitispart').appendChild(errorMessage);
+    }
+
+    // Check if values are valid numbers
+    if (isNaN(redValue) || isNaN(targetValue)) {
+      errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdNaNError', 'Threshold values must be valid numbers');
+      errorMessage.style.display = 'block';
+      return false;
+    }
+
+    // values between 0 and 100
+    if (redValue < 0 || targetValue <= 0) {
+      errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdPositiveError', 'Threshold values must be positive');
+      errorMessage.style.display = 'block';
+      return false;
+    }
+
+    // In percentage mode: orange > red (normal logic)
+    if (Number(targetValue) <= Number(redValue)) {
+      errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdError', 'Target threshold must be greater than red threshold');
+      errorMessage.style.display = 'block';
+      return false;
+    }
+
+    // Percentage cannot exceed 100
+    if (redValue > 100 || targetValue > 100) {
+      errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdMaxError', 'Percentage values cannot exceed 100');
+      errorMessage.style.display = 'block';
+      return false;
+    }
+
+    // Store values
+    pulseConfig.set('thresholdorangeproduction', parseFloat(targetValue));
+    pulseConfig.set('thresholdredproduction', parseFloat(redValue));
+
+    errorMessage.style.display = 'none';
+
+    // Dispatch to update displays
+    eventBus.EventBus.dispatchToAll('configChangeEvent',
+      {
+        config: 'thresholdsupdated'
+      });
+
+    return true;
+  }
+
   // CONFIG PANEL - Default values
-  setDefaultOptionValues () {
+  setDefaultOptionValues() {
 
     // showworkinfo
     $('#showworkinfo').prop('checked', pulseConfig.getDefaultBool('showworkinfo'));
@@ -182,14 +226,6 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
       ('true' != productionpercentinpie && 'actualonly' != productionpercentinpie));
     $('#productionactualtargetinpie').change();
 
-    // Highlight
-    $('#thresholdunitispart').prop('checked', pulseConfig.getDefaultBool('thresholdunitispart'));
-    $('#thresholdunitispart').change();
-    $('#thresholdunitispart').removeAttr('overridden');
-
-    $('#thresholdunitispercent').prop('checked', !pulseConfig.getDefaultBool('thresholdunitispart'));
-    $('#thresholdunitispercent').change();
-
     $('#thresholdorangeproduction').val(pulseConfig.getDefaultInt('thresholdorangeproduction'));
     $('#thresholdorangeproduction').change();
     $('#thresholdorangeproduction').removeAttr('overridden');
@@ -200,7 +236,7 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Function to read custom inputs
-  getOptionValues () {
+  getOptionValues() {
     let optionsValues = '';
 
     // showworkinfo
@@ -222,12 +258,6 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
       optionsValues += '&productionpercentinpie=actualtarget';
     }
 
-    // Highlight
-    let thresholdunitispart = $('#thresholdunitispart').is(':checked');
-    if (thresholdunitispart)
-      optionsValues += '&thresholdunitispart=true';
-    else
-      optionsValues += '&thresholdunitispart=false';
 
     if (pulseUtility.isInteger($('#thresholdorangeproduction').val())) {
       optionsValues += '&thresholdorangeproduction=' + $('#thresholdorangeproduction').val();
@@ -239,7 +269,7 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
     return optionsValues;
   }
 
-  getMissingConfigs () {
+  getMissingConfigs() {
     let missingConfigs = [];
 
     let groups = pulseConfig.getArray('group');
@@ -255,7 +285,7 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  buildContent () {
+  buildContent() {
     // Remove config from displayed URL and store them
     let needReload = false;
     let url = window.location.href;
@@ -278,12 +308,6 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
       url = pulseUtility.removeURLParameter(url, 'toollabelname');
     }
 
-    if (-1 != url.search('thresholdunitispart=')) {
-      needReload = true;
-      pulseConfig.set('thresholdunitispart',
-        pulseUtility.getURLParameter(url, 'thresholdunitispart'));
-      url = pulseUtility.removeURLParameter(url, 'thresholdunitispart');
-    }
     if (-1 != url.search('thresholdorangeproduction=')) {
       needReload = true;
       pulseConfig.set('thresholdorangeproduction',
