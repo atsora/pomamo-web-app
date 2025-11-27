@@ -1,0 +1,149 @@
+/*
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+
+// Global
+@import "style.less";
+@import "pulse.exports.light.less";
+
+@import "x-periodmanager/x-periodmanager.less";
+@import "x-grouparray/x-grouparray.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-reasonbutton/x-reasonbutton.less";
+@import "x-lastmachinestatus/x-lastmachinestatus.less";
+@import "x-production/x-production.less";
+@import "x-productionshiftgoal/x-productionshiftgoal.less";
+@import "x-productiongauge/x-productiongauge.less";
+
+
+
+// Positioning
+
+.tile-title {
+  flex-direction: column;
+
+  .trsview-top-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: -10px;
+
+    x-machinedisplay {
+      .machinedisplay-data {
+        text-align: center;
+      }
+    }
+
+    x-reasonbutton {
+      margin: 0 0 0 15px;
+    }
+  }
+
+  x-lastmachinestatus {
+    .pulse-cellbar-main {
+      justify-content: center;
+
+      .pulse-cellbar-last {
+        display: none;
+      }
+
+      .pulse-cellbar-first {
+        border: unset !important;
+
+        .lastmachinestatus-reason-label {
+          display: none;
+        }
+
+        .pulse-missing-data {
+          display: none !important;
+        }
+
+        #questionmarkcurrentcell {
+          display: none !important;
+        }
+      }
+    }
+  }
+}
+
+
+.tile-content {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+
+  .trs-number {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+    row-gap: 5px;
+    margin: 20px 0 10px 0;
+
+    x-production {
+      .production-2-on-3 {
+        display: flex;
+        flex-direction: column;
+        row-gap: 5px;
+
+        .production-actual-value {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .production-actual-separator {
+            display: none;
+          }
+        }
+
+        .production-target-value {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .production-target-separator {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  .trs-gauge {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+
+    x-productiongauge {
+      .productiongauge-gauge {
+        flex: unset;
+      }
+    }
+  }
+}
+
+// Text 
+
+.tile-content {
+
+  span,
+  div {
+    // Combine hauteur (8cqh) et largeur (3cqw) pour s'adapter aux deux dimensions
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .production-number-actual,
+  .production-number-target,
+  .productionshiftgoal-data {
+    font-size: 60px;
+  }
+
+  .productiongauge-text {
+    font-size: 40px;
+  }
+
+}
