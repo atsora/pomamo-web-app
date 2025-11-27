@@ -499,7 +499,18 @@
           display: flex;
 
           .content-period-buttons {
-            display: none;
+            display: flex;
+
+            li {
+              display: none;
+            }
+
+            li:has(.periodtoolbar-home),
+            li:has(.periodtoolbar-day),
+            li:has(.periodtoolbar-shift) {
+              display: flex;
+              margin-right: 20px;
+            }
           }
 
           .content-zoom-buttons {
@@ -571,8 +582,8 @@
     }
 
     .customDialogCloseBox {
-        height: unset;
-        padding-top: 7px;
+      height: unset;
+      padding-top: 7px;
     }
   }
 

@@ -31,7 +31,7 @@ require('x-openstopclassificationlistener/x-openstopclassificationlistener');
 require('x-productiongauge/x-productiongauge');
 require('x-scrapstatus/x-scrapstatus');
 
-class MachinesDetailsPage extends pulsePage.BasePage {
+class OperatorDashboardPage extends pulsePage.BasePage {
   constructor() {
     super();
 
@@ -421,5 +421,5 @@ class MachinesDetailsPage extends pulsePage.BasePage {
 }
 
 $(document).ready(function () {
-  pulsePage.preparePage(new MachinesDetailsPage());
+  pulsePage.preparePage(new OperatorDashboardPage());
 });

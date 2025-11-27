@@ -45,7 +45,8 @@
   flex-direction: column; // align children
   overflow: hidden; // Hide bottom displays when too small
 
-  .machinestatus-top-div { // currentworkinfo
+  .machinestatus-top-div {
+    // currentworkinfo
     margin-top: 4px;
   }
 
@@ -62,21 +63,18 @@
       font-size: 1.5em;
       line-height: 1.5em;
 
-      //padding-top: 6px;
-      &::before {
-        content: 'Utilization ';
-      }
+      x-freetext {
+        span {
+          text-transform: capitalize; // 1st letter = MAJ
+          word-spacing: -100%; // To remove space on the left
 
-      span {
-        text-transform: capitalize; // 1st letter = MAJ
-        word-spacing: -100%; // To remove space on the left
+          &::before {
+            content: '(';
+          }
 
-        &::before {
-          content: '(';
-        }
-
-        &::after {
-          content: ')';
+          &::after {
+            content: ')';
+          }
         }
       }
 
