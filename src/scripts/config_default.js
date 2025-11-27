@@ -297,6 +297,9 @@ PULSE_DEFAULT_CONFIG.pages = {
     displaydaysrange: 1,
     displayhoursrange: 0
   },
+  trsview: {
+    enableGroups: true,
+  },
   utilizationpie: {
     enableGroups: true,
     displayshiftrange: false
@@ -327,7 +330,8 @@ PULSE_DEFAULT_CONFIG.roles.manager.displayedPages = [
   //'machines',
   'operationstatus',
   'managementinformationterminal',
-  'machinestatus'
+  'machinestatus',
+  'trsview',
 ];
 PULSE_DEFAULT_CONFIG.roles.support.displayedPages = [
   'running',
@@ -348,7 +352,8 @@ PULSE_DEFAULT_CONFIG.roles.live.displayedPages = [
   //'machinespecification',
   'operationstatus',
   'managementinformationterminal',
-  'managerview'
+  'managerview',
+  'trsview',
 ];
 PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [ // ALL 
   'running', 'productionmachining',
@@ -362,7 +367,8 @@ PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [ // ALL
   'motionsummary', 'combinedview', 'machinestatus',
   'machinespecification',
   'managerview',
-  'plant'
+  'plant',
+  'trsview'
 ];
 
 // TOOLS
@@ -577,6 +583,9 @@ PULSE_DEFAULT_CONFIG.rolespages = {
     },
     machinespecification: {
       showoverwriterequired: false // Define default to allow overload
+    },
+    trsview: {
+      canUseRowsToSetHeight: true
     }
   },
   manager: {

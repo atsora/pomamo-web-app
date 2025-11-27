@@ -206,6 +206,15 @@ module.exports = {
       dest: 'dist-es2015/toollife.html'
     }]
   },
+  trsview: {
+    options: {
+      content: { pagename: 'trsview' }
+    },
+    files: [{
+      src: 'src/pages/template.html',
+      dest: 'dist-es2015/trsview.html'
+    }]
+  },
   utilizationbar: {
     options: {
       content: { pagename: 'utilizationbar' }
