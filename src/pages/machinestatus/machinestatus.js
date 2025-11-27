@@ -288,12 +288,12 @@ class MachineStatusPage extends pulsePage.BasePage {
       if (weeklyshowcurrentweek) {
         $('#period-for-week')[0].setAttribute('exclude-now', 'false');
         $('#period-for-week')[0].setAttribute('displayweekrange', 'true');
-        $('.machinestatus-label').html('Week');
+        $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.week', 'Week'));
       }
       else {
         $('#period-for-week')[0].setAttribute('exclude-now', 'true');
         $('#period-for-week')[0].setAttribute('displayweekrange', 'false');
-        $('.machinestatus-label').html('7 days');
+        $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.days', '(7 days)'));
       }
     });
 
@@ -306,12 +306,12 @@ class MachineStatusPage extends pulsePage.BasePage {
       if (weeklyshowcurrentweek) {
         $('#period-for-week')[0].setAttribute('exclude-now', 'false');
         $('#period-for-week')[0].setAttribute('displayweekrange', 'true');
-        $('.machinestatus-label').html('Week');
+        $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.week', 'Week'));
       }
       else {
         $('#period-for-week')[0].setAttribute('exclude-now', 'true');
         $('#period-for-week')[0].setAttribute('displayweekrange', 'false');
-        $('.machinestatus-label').html('7 days');
+        $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.days', '(7 days)'));
       }
     });
   }
@@ -637,12 +637,12 @@ class MachineStatusPage extends pulsePage.BasePage {
     if (weeklyshowcurrentweek) {
       $('#period-for-week')[0].setAttribute('exclude-now', 'false');
       $('#period-for-week')[0].setAttribute('displayweekrange', 'true');
-      $('.machinestatus-label').html('Week');
+      $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.week', 'Week'));
     }
     else {
       $('#period-for-week')[0].setAttribute('exclude-now', 'true');
       $('#period-for-week')[0].setAttribute('displayweekrange', 'false');
-      $('.machinestatus-label').html('7 days');
+      $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.days', '(7 days)'));
     }
 
     let showcncbar = pulseConfig.getBool('displayCNCValueBar');
