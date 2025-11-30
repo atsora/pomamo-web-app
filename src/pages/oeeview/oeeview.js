@@ -1,4 +1,3 @@
-// Copyright (C) 2009-2023 Lemoine Automation Technologies
 // Copyright (C) 2025 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -19,7 +18,7 @@ require('x-productiongauge/x-productiongauge');
 
 
 
-class TrsViewPage extends pulsePage.BasePage {
+class OeeViewPage extends pulsePage.BasePage {
   constructor() {
     super();
   }
@@ -211,5 +210,5 @@ class TrsViewPage extends pulsePage.BasePage {
 }
 
 $(document).ready(function () {
-  pulsePage.preparePage(new TrsViewPage());
+  pulsePage.preparePage(new OeeViewPage());
 });
