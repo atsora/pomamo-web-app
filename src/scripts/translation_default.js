@@ -133,11 +133,14 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   machines: {
     title: 'Machines'
   },
-  operatordashboard: {
-    title: 'Dashboard'
-  },
   machinespecification: {
     title: 'Machine display: day and week'
+  },
+  oeeview: {
+    title: 'OEE view'
+  },
+  operatordashboard: {
+    title: 'Dashboard'
   },
   productionmachining: {
     title: 'Production machining status'
@@ -336,6 +339,9 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   // Manager and operator views
   machines: {
     title: 'Machines'
+  },
+  oeeview: {
+    title: 'Vue TRS'
   },
   operatordashboard: {
     title: 'Tableau de bord'

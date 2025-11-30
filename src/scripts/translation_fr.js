@@ -130,6 +130,9 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   machines: {
     title: 'Machines'
   },
+  oeeview: {
+    title: 'Vue TRS'
+  },
   operatordashboard: {
     title: 'Tableau de bord'
   },
