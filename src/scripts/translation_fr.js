@@ -96,7 +96,7 @@ ATSORA_LOCALE_CATALOG.fr.content = {
   yesterday: 'Hier',
   reference: 'Référence',
   performance: 'Performance',
-  changedtools: 'Changement d\'outils',
+  changedtools: 'Outils',
   state: 'État',
 }
 

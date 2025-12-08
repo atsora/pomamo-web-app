@@ -16,10 +16,8 @@ SPDX-License-Identifier: Apache-2.0
                     <x-machinedisplay machine-context="PulseWebApp"></x-machinedisplay>
                     <x-reasonbutton machine-context="PulseWebApp"></x-reasonbutton>
                 </div>
-                <div>
-                    <x-lastmachinestatus period-context="operatordashboard" machine-context="PulseWebApp"
-                        status-context="PulseWebApp"></x-lastmachinestatus>
-                </div>
+                <x-lastmachinestatus period-context="operatordashboard" machine-context="PulseWebApp"
+                    status-context="PulseWebApp"></x-lastmachinestatus>
 
             </div>
             <div class="info-content">
@@ -33,10 +31,10 @@ SPDX-License-Identifier: Apache-2.0
 
         <div class="stats-content">
             <div class="numbers-content">
-                <div class="specificnumber-content">
+                <div class="specificnumber-content production-content">
                     <x-production machine-context="PulseWebApp"></x-production>
                 </div>
-                <div class="specificnumber-content">
+                <div class="specificnumber-content goal-content">
                     <x-productionshiftgoal machine-context="PulseWebApp"
                         class="title-number-content text"></x-productionshiftgoal>
                 </div>
@@ -46,9 +44,7 @@ SPDX-License-Identifier: Apache-2.0
                     <div class="title-number-content">
                         <x-tr class="text" key="content.performance" default="Performance"></x-tr>
                     </div>
-                    <div>
-                        <x-productiongauge machine-context="PulseWebApp" display-mode="percent"></x-productiongauge>
-                    </div>
+                    <x-productiongauge machine-context="PulseWebApp" display-mode="percent"></x-productiongauge>
                 </div>
             </div>
             <div class="numbers-content trackergraph-content">
