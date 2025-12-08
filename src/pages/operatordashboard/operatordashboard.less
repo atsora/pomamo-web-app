@@ -32,8 +32,266 @@
 @import "x-productiongauge/x-productiongauge.less";
 @import "x-scrapstatus/x-scrapstatus.less";
 @import "style.less";
+/*
+body {
+  font-size: clamp(0px, 1.48vh, 14px);
 
+  .pulse-mainarea-inner {
+    height: 100%;
+    padding-bottom: clamp(0px, 3.7vh, 35px);
 
+    .main-content {
+      overflow: auto;
+      margin-top: clamp(0px, 0.42vh, 4px) !important;
+      margin-bottom: clamp(0px, 0.42vh, 4px) !important;
+      //max-height: 912.233px;
+      height: 99%;
+
+      .machinetab-list {
+        margin-top: clamp(0px, 3.2vh, 30px);
+
+        .group-main {
+          min-height: unset !important;
+
+          .group-single {
+            height: 16.5%;
+            max-height: 91.5px;
+
+            .single-machine-tab {
+              height: 100%;
+
+              x-machinetab {
+                height: 78.7%;
+                margin: clamp(0px, 1vh, 8px) 0;
+
+                .machinetab-modecolor {
+                  border-top: clamp(0px, 3vh, 22px) solid transparent;
+                  border-bottom: clamp(0px, 3vh, 22px) solid transparent;
+                }
+
+                .machinetab-machine-cell {
+                  padding-top: clamp(0px, 1.1vh, 5%);
+                  padding-bottom: clamp(0px, 1.1vh, 5%);
+                }
+
+                .machinetab-icons {
+                  height: 70%;
+
+                  x-currenticonunansweredreason {
+                    height: 100%;
+                    margin: clamp(0px, 0.5vh, 4px);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .dashboard-content {
+        padding: clamp(0px, 1.06vh, 10px) 20px;
+
+        .nav-content {
+          height: 9%;
+          box-sizing: border-box;
+
+          .machine-title {
+            height: 88.73%;
+            padding-bottom: clamp(0px, 0.42vh, 4px);
+            padding-top: clamp(0px, 0.42vh, 4px);
+
+            .machine-name {
+              height: 59.91%;
+              column-gap: clamp(0px, 2vh, 1.5em);
+
+              x-machinedisplay {
+                font-size: clamp(0px, 2.66vh, 1.8em);
+              }
+
+              x-reasonbutton {
+                height: clamp(0px, 3.38vh, 32px);
+                width: clamp(0px, 3.38vh, 32px);
+              }
+            }
+
+            x-lastmachinestatus {
+              height: 28.81%;
+
+              .lastmachinestatus-reason-data {
+                font-size: clamp(0px, 2.11vh, 20px);
+              }
+            }
+          }
+
+          .info-content {
+            height: 100%;
+
+            .text-box {
+              font-size: clamp(0px, 2vh, 1.4em);
+              padding-bottom: clamp(0px, 1.27vh, 12px);
+              padding-top: clamp(0px, 1.27vh, 12px);
+
+              .text {
+                font-size: clamp(0px, 1.58vh, 15px);
+              }
+            }
+          }
+        }
+
+        .stats-content {
+          height: 55.6%;
+          box-sizing: border-box;
+          margin-top: clamp(0px, 2vh, 2em);
+
+          .numbers-content {
+            row-gap: unset; //clamp(0px, 3.17vh, 30px);
+
+            .performance-content {
+              height: 100%;
+              justify-content: unset !important;
+              row-gap: clamp(0px, 1.06vh, 10px);
+
+              x-tr {
+                font-size: clamp(0px, 2.11vh, 20px);
+              }
+
+              svg {
+                width: clamp(0px, 433vh, 240px);
+                height: clamp(0px, 34vh, 190.083px);
+              }
+
+              .productiongauge-text {
+                font-size: clamp(0px, 3.7vh, 2.5em);
+              }
+
+            }
+          }
+
+          .production-content {
+            height: 66%;
+
+            x-production {
+              height: 100%;
+
+              .production-content {
+                height: 100%;
+
+                .production-2-on-3 {
+                  height: 100%;
+                  row-gap: unset; //clamp(0px, 1.58vh, 15px);
+
+                  .production-actual-value {
+                    height: 50%;
+
+                    .production-content-text-actual {
+                      font-size: clamp(0px, 2.11vh, 20px);
+                    }
+
+                    .production-number-actual {
+                      font-size: clamp(0px, 8.45vh, 80px);
+                    }
+                  }
+
+                  .production-target-value {
+                    height: 50%;
+
+                    .production-content-text-target {
+                      font-size: clamp(0px, 2.11vh, 20px);
+                    }
+
+                    .production-number-target {
+                      font-size: clamp(0px, 8.45vh, 80px);
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          .goal-content {
+            height: 33%;
+
+            x-productionshiftgoal {
+              height: 100%;
+
+              .productionshiftgoal-content {
+                height: 100%;
+
+                span {
+                  font-size: clamp(0px, 2.11vh, 20px);
+                }
+
+                .productionshiftgoal-data {
+                  font-size: clamp(0px, 8.45vh, 80px);
+                }
+              }
+            }
+          }
+        }
+
+        .changedtools-content {
+          height: 8.3%;
+          box-sizing: border-box;
+
+          x-tr {
+            font-size: clamp(0px, 2.11vh, 20px);
+          }
+
+          .toollifemachine-content {
+            margin-top: clamp(0px, 1.48vh, 14px);
+            height: 49.59%;
+
+            x-toollifemachine {
+              height: 100%;
+
+              .pulse-cellbar-main {
+                height: 100% !important;
+              }
+            }
+          }
+        }
+
+        .chronology-content {
+          height: 11.9%;
+          box-sizing: border-box;
+          margin-top: clamp(0px, 3vh, 28px);
+          margin-bottom: clamp(0px, 3vh, 28px);
+
+          x-tr {
+            font-size: clamp(0px, 2.11vh, 20px);
+          }
+
+          .chart-chronology {
+            height: 100%;
+
+            .machine-component {
+              height: 100%;
+
+              .pulse-bar-div {
+                height: 100%;
+                margin-bottom: clamp(0px, 2.11vh, 20px);
+
+                .div-bar-and-percent {
+                  height: 100%;
+
+                  .div-bar {
+                    margin-top: clamp(0px, 1.06vh, 10px);
+                    margin-bottom: clamp(0px, 1.06vh, 10px);
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .dashboard-footer {
+          height: 6.6%;
+          box-sizing: border-box;
+        }
+      }
+    }
+  }
+}*/
 
 .main-content {
   margin: 4px;
@@ -121,10 +379,14 @@
           x-machinedisplay {
             text-align: center;
             flex-grow: unset;
+            font-size: 1.5em;
+
           }
 
           x-reasonbutton {
             margin-left: unset;
+            width: 22px;
+            height: 22px;
           }
         }
 
@@ -147,7 +409,7 @@
               border-right: none;
               padding-left: 24px;
               padding-right: 24px;
-              font-size: 20px;
+              font-size: 16px;
               font-family: inherit;
               font-weight: 500;
 
@@ -234,7 +496,7 @@
       flex-direction: row;
       align-items: center;
       margin-left: 2em;
-      margin-top: 2em;
+      margin-top: 1em;
       height: 35em;
 
       .numbers-content {
@@ -244,6 +506,10 @@
         row-gap: 30px;
         width: 25%;
         height: 100%;
+
+        @media (max-height: 842px) {
+          row-gap: 15px;
+        }
 
         .specificnumber-content {
           display: flex;
@@ -258,12 +524,20 @@
               flex-direction: column;
               row-gap: 15px;
 
+              @media (max-height: 842px) {
+                row-gap: 7.5px;
+              }
+
               .production-actual-value {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 font-size: 80px;
                 font-weight: bold;
+
+                @media (max-height: 842px) {
+                  font-size: 50px;
+                }
               }
 
               .production-content-text-actual {
@@ -276,6 +550,10 @@
                 align-items: center;
                 font-size: 80px;
                 font-weight: bold;
+
+                @media (max-height: 842px) {
+                  font-size: 50px;
+                }
               }
 
               .production-content-text-target {
@@ -314,6 +592,10 @@
           .number-content {
             font-weight: bold;
             font-size: 80px;
+
+            @media (max-height: 842px) {
+              font-size: 50px;
+            }
           }
 
           x-motionpercentage {
@@ -355,16 +637,31 @@
 
       .trackergraph-content {
         width: 50%;
+
+        .productiontrackergraph-content {
+          @media (max-height: 842px) {
+            align-items: start;
+          }
+        }
       }
     }
 
     .changedtools-content {
+      margin-top: -60px;
+      display: flex;
+
+      @media (max-height: 842px) {
+        margin-top: -183px;
+      }
+
+
       .title-number-content {
-        margin-left: 2em;
+        align-items: center;
+        display: flex;
+        margin-right: 10px;
       }
 
       .toollifemachine-content {
-        margin-top: 1em;
 
         x-toollifemachine {
           .pulse-cellbar-main {
@@ -395,8 +692,8 @@
       align-items: center;
       row-gap: 8px;
       column-gap: 4em;
-      margin-top: 2em;
-      margin-bottom: 2em;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
 
       .chart-chronology {
         flex: 1;
@@ -439,10 +736,10 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+      justify-content: space-between;
 
       .stops-content {
         width: 30%;
-        margin-right: 16px;
 
         .pulse-cellbar-main {
           height: unset;
@@ -490,16 +787,20 @@
 
       .period-content {
 
-        margin-right: 26px;
-        width: 50%;
+        .border {
+          border: 0.5px solid #AAA;
+          padding: 8px 12px;
+          border-radius: 4px;
+        }
 
         .periodtoolbar-toolbar {
-          border: none;
           margin: unset;
           display: flex;
+          gap: 10px;
 
           .content-period-buttons {
             display: flex;
+            gap: 10px;
 
             li {
               display: none;
@@ -509,7 +810,6 @@
             li:has(.periodtoolbar-day),
             li:has(.periodtoolbar-shift) {
               display: flex;
-              margin-right: 20px;
             }
           }
 
@@ -518,8 +818,7 @@
           }
 
           .periodtoolbar-li-text {
-            margin-left: 36px;
-            margin-right: 40px;
+            margin: 4px 0px;
             width: 100%;
             height: 24px;
             display: flex;
@@ -535,18 +834,16 @@
           }
 
           .periodtoolbar-li-btn {
-            padding-left: 1em;
-            padding-right: 1em;
             height: 24px;
             display: flex;
             align-items: center;
+            margin: 4px 0px;
           }
         }
 
       }
 
       .dailydate-content {
-        margin-right: 30px;
         width: 100px;
         font-weight: bold;
 
@@ -605,9 +902,6 @@
 .text-box {
   font-weight: bold;
   font-size: 1.5em;
-  padding-left: 24px;
-  padding-right: 24px;
-
 }
 
 .btn {

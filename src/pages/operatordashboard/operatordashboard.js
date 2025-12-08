@@ -78,12 +78,34 @@ class OperatorDashboardPage extends pulsePage.BasePage {
 
   initOptionValues() {
     // Show changed tools
+    const updateChronologyMargin = () => {
+      const chronology = document.querySelector('.chronology-content');
+      const changedToolsVisible = document.querySelector('.changedtools-content') &&
+        getComputedStyle(document.querySelector('.changedtools-content')).display !== 'none';
+
+      if (!chronology) return;
+
+      if (changedToolsVisible) {
+        chronology.style.marginTop = '1.5em';
+      } else {
+        if (window.innerHeight <= 842) {
+          chronology.style.marginTop = '-160px';
+        } else {
+          chronology.style.marginTop = '-55px';
+        }
+      }
+    };
+
     this._showOption('showChangedTools', function () {
-      document.querySelector('.changedtools-content').style.display = 'block';
+      document.querySelector('.changedtools-content').style.display = 'flex';
+      updateChronologyMargin();
     },
       function () {
         document.querySelector('.changedtools-content').style.display = 'none';
+        updateChronologyMargin();
       });
+
+    window.addEventListener('resize', updateChronologyMargin);
 
 
     // Open stop classification
@@ -400,11 +422,7 @@ class OperatorDashboardPage extends pulsePage.BasePage {
       $('x-fieldlegends').hide();
     }
 
-    document.querySelectorAll('.periodtoolbar-li-btn').forEach(el => {
-      el.classList.add('border');
-    });
-
-    document.querySelectorAll('.periodtoolbar-li-text').forEach(el => {
+    document.querySelectorAll('.periodtoolbar-toolbar').forEach(el => {
       el.classList.add('border');
     });
 

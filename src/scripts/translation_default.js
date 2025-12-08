@@ -99,7 +99,7 @@ ATSORA_LOCALE_CATALOG.default.content = {
   yesterday: 'Yesterday',
   reference: 'Reference',
   performance: 'Performance',
-  changedtools: 'Change of tools',
+  changedtools: 'Tools',
   state: 'State',
 }
 
@@ -306,7 +306,7 @@ ATSORA_LOCALE_CATALOG.fr.content = {
   yesterday: 'Hier',
   reference: 'Référence',
   performance: 'Performance',
-  changedtools: 'Changement d\'outils',
+  changedtools: 'Outils',
   state: 'État',
 }
 
