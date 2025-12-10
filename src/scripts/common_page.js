@@ -209,7 +209,7 @@ var populateNavigationPanel = function () {
 
       } break;
       case 'Reports': {// use reportpath = 'http://serveraddress:8080/pulsereporting/
-        pulseUtility.addToolTip(link, pulseConfig.pulseTranslate ('content.reports', 'Reports'));
+        pulseUtility.addToolTip(link, pulseConfig.pulseTranslate('content.reports', 'Reports'));
 
         targetUrl = pulseConfig.getString('reportpath', 'http://serveraddress:8080/atrackingreporting/'); // Default
 
@@ -407,6 +407,12 @@ var animatePanels = function () {
 var populateConfigPanel = function (currentPageMethods) {
   // Connect the "edit" button to the machine selection
   $('#editmachines').click(
+    function () {
+      $('x-machineselection').get(0).changeMachineSelection();
+    }.bind($('x-machineselection').get(0))
+  );
+
+  $('#machineselectionbtn').click(
     function () {
       $('x-machineselection').get(0).changeMachineSelection();
     }.bind($('x-machineselection').get(0))
@@ -921,6 +927,38 @@ var showLegend = function () {
   // later do not work... why? -- tmp Hack : called inside each legend - DO NOT rename legend-content
 };
 
+// Enter fullscreen mode for the whole document
+var enterFullScreen = function () {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { // Safari
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { // IE11
+    elem.msRequestFullscreen();
+  }
+}
+
+// Exit fullscreen mode if the document is currently in fullscreen
+var exitFullScreen = function () {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) { // Safari
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) { // IE11
+    document.msExitFullscreen();
+  }
+}
+
+// Check if the document is currently displayed in fullscreen mode
+var isFullScreen = function () {
+  return !!(
+    document.fullscreenElement ||
+    document.webkitFullscreenElement ||
+    document.msFullscreenElement
+  );
+}
+
 /**
  * Prepare the main page with an object describing how to fill it
  * 
@@ -1042,6 +1080,16 @@ exports.preparePage = function (currentPageMethods) {
   });
   */
 
+  // Handle fullscreen button click, toggle fullscreen mode
+  $('#fullscreenbtn').click(function (e) {
+    if (isFullScreen()) {
+      exitFullScreen();
+    } else {
+      enterFullScreen();
+    }
+  });
+
+
   // Display elements
   let pageName = window.location.href.replace(/(.*\/)([^\\]*)(\.html.*)/, '$2');
 
@@ -1117,6 +1165,8 @@ exports.preparePage = function (currentPageMethods) {
   // Inline svg. The latest possible
   pulseSvg.inlineBackgroundSvg('#navigationpanelbtn');
   pulseSvg.inlineBackgroundSvg('#configpanelbtn');
+  pulseSvg.inlineBackgroundSvg('#fullscreenbtn');
+  pulseSvg.inlineBackgroundSvg('#machineselectionbtn');
   pulseSvg.inlineBackgroundSvg('#help-icon');
   pulseSvg.inlineBackgroundSvg('.legend-toggle-icon-up');
   pulseSvg.inlineBackgroundSvg('.legend-toggle-icon-down');
