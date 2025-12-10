@@ -17,8 +17,7 @@
 @import "x-production/x-production.less";
 @import "x-productionshiftgoal/x-productionshiftgoal.less";
 @import "x-productiongauge/x-productiongauge.less";
-
-
+@import "x-periodtoolbar/x-periodtoolbar.less";
 
 // Positioning
 
@@ -116,6 +115,7 @@
     width: 50%;
     display: flex;
     justify-content: center;
+    margin: 20px 0;
 
     x-productiongauge {
       .productiongauge-gauge {
@@ -125,13 +125,15 @@
   }
 }
 
+x-periodtoolbar {
+  margin-bottom: 10px;
+}
+
 // Text 
 
 .tile-content {
-
   span,
   div {
-    // Combine hauteur (8cqh) et largeur (3cqw) pour s'adapter aux deux dimensions
     font-size: 20px;
     font-weight: bold;
   }
@@ -143,7 +145,7 @@
   }
 
   .productiongauge-text {
-    font-size: 40px;
+    font-size: 35px;
   }
 
 }

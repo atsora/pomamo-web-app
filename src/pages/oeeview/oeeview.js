@@ -15,6 +15,7 @@ require('x-lastmachinestatus/x-lastmachinestatus');
 require('x-production/x-production');
 require('x-productionshiftgoal/x-productionshiftgoal');
 require('x-productiongauge/x-productiongauge');
+require('x-periodtoolbar/x-periodtoolbar');
 
 
 
@@ -24,7 +25,46 @@ class OeeViewPage extends pulsePage.BasePage {
   }
 
   buildContent() {
+    this._updateComponents(true);
+    let showPeriodToolBar = pulseConfig.getBool('showPeriodtoolbar');
 
+    if (showPeriodToolBar) {
+      const container = document.getElementsByClassName('main-table-box')[0];
+
+      const periodToolBar = document.createElement('x-periodtoolbar');
+      periodToolBar.setAttribute('period-context', 'oeeview');
+      periodToolBar.setAttribute('displayshiftrange', true);
+
+      eventBus.EventBus.removeEventListenerBySignal(this, 'dateTimeRangeChangeEvent');
+      eventBus.EventBus.addEventListener(this,
+        'dateTimeRangeChangeEvent',
+        'oeeview',
+        this._onDateTimeRangeChange.bind(this));
+
+      const groupArray = container.querySelector('x-grouparray');
+      container.insertBefore(periodToolBar, groupArray);
+    }
+  }
+
+  _onDateTimeRangeChange(event) {
+    let newRange = event.target.daterange;
+    if (!newRange._lower || !newRange._upper) return false;
+
+    const now = new Date();
+
+    const isIncluded = now >= newRange._lower && now < newRange._upper;
+
+    this._updateComponents(isIncluded);
+  }
+
+  _updateComponents(isNowIncluded) {
+    document.querySelectorAll('x-productionshiftgoal').forEach(el => {
+      if (isNowIncluded) {
+        el.style.display = '';
+      } else {
+        el.style.display = 'none';
+      }
+    });
   }
 
   getMissingConfigs() {
