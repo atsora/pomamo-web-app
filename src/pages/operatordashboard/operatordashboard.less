@@ -31,267 +31,8 @@
 @import "x-productionshiftgoal/x-productionshiftgoal.less";
 @import "x-productiongauge/x-productiongauge.less";
 @import "x-scrapstatus/x-scrapstatus.less";
+@import "x-periodmanager/x-periodmanager.less";
 @import "style.less";
-/*
-body {
-  font-size: clamp(0px, 1.48vh, 14px);
-
-  .pulse-mainarea-inner {
-    height: 100%;
-    padding-bottom: clamp(0px, 3.7vh, 35px);
-
-    .main-content {
-      overflow: auto;
-      margin-top: clamp(0px, 0.42vh, 4px) !important;
-      margin-bottom: clamp(0px, 0.42vh, 4px) !important;
-      //max-height: 912.233px;
-      height: 99%;
-
-      .machinetab-list {
-        margin-top: clamp(0px, 3.2vh, 30px);
-
-        .group-main {
-          min-height: unset !important;
-
-          .group-single {
-            height: 16.5%;
-            max-height: 91.5px;
-
-            .single-machine-tab {
-              height: 100%;
-
-              x-machinetab {
-                height: 78.7%;
-                margin: clamp(0px, 1vh, 8px) 0;
-
-                .machinetab-modecolor {
-                  border-top: clamp(0px, 3vh, 22px) solid transparent;
-                  border-bottom: clamp(0px, 3vh, 22px) solid transparent;
-                }
-
-                .machinetab-machine-cell {
-                  padding-top: clamp(0px, 1.1vh, 5%);
-                  padding-bottom: clamp(0px, 1.1vh, 5%);
-                }
-
-                .machinetab-icons {
-                  height: 70%;
-
-                  x-currenticonunansweredreason {
-                    height: 100%;
-                    margin: clamp(0px, 0.5vh, 4px);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-
-      .dashboard-content {
-        padding: clamp(0px, 1.06vh, 10px) 20px;
-
-        .nav-content {
-          height: 9%;
-          box-sizing: border-box;
-
-          .machine-title {
-            height: 88.73%;
-            padding-bottom: clamp(0px, 0.42vh, 4px);
-            padding-top: clamp(0px, 0.42vh, 4px);
-
-            .machine-name {
-              height: 59.91%;
-              column-gap: clamp(0px, 2vh, 1.5em);
-
-              x-machinedisplay {
-                font-size: clamp(0px, 2.66vh, 1.8em);
-              }
-
-              x-reasonbutton {
-                height: clamp(0px, 3.38vh, 32px);
-                width: clamp(0px, 3.38vh, 32px);
-              }
-            }
-
-            x-lastmachinestatus {
-              height: 28.81%;
-
-              .lastmachinestatus-reason-data {
-                font-size: clamp(0px, 2.11vh, 20px);
-              }
-            }
-          }
-
-          .info-content {
-            height: 100%;
-
-            .text-box {
-              font-size: clamp(0px, 2vh, 1.4em);
-              padding-bottom: clamp(0px, 1.27vh, 12px);
-              padding-top: clamp(0px, 1.27vh, 12px);
-
-              .text {
-                font-size: clamp(0px, 1.58vh, 15px);
-              }
-            }
-          }
-        }
-
-        .stats-content {
-          height: 55.6%;
-          box-sizing: border-box;
-          margin-top: clamp(0px, 2vh, 2em);
-
-          .numbers-content {
-            row-gap: unset; //clamp(0px, 3.17vh, 30px);
-
-            .performance-content {
-              height: 100%;
-              justify-content: unset !important;
-              row-gap: clamp(0px, 1.06vh, 10px);
-
-              x-tr {
-                font-size: clamp(0px, 2.11vh, 20px);
-              }
-
-              svg {
-                width: clamp(0px, 433vh, 240px);
-                height: clamp(0px, 34vh, 190.083px);
-              }
-
-              .productiongauge-text {
-                font-size: clamp(0px, 3.7vh, 2.5em);
-              }
-
-            }
-          }
-
-          .production-content {
-            height: 66%;
-
-            x-production {
-              height: 100%;
-
-              .production-content {
-                height: 100%;
-
-                .production-2-on-3 {
-                  height: 100%;
-                  row-gap: unset; //clamp(0px, 1.58vh, 15px);
-
-                  .production-actual-value {
-                    height: 50%;
-
-                    .production-content-text-actual {
-                      font-size: clamp(0px, 2.11vh, 20px);
-                    }
-
-                    .production-number-actual {
-                      font-size: clamp(0px, 8.45vh, 80px);
-                    }
-                  }
-
-                  .production-target-value {
-                    height: 50%;
-
-                    .production-content-text-target {
-                      font-size: clamp(0px, 2.11vh, 20px);
-                    }
-
-                    .production-number-target {
-                      font-size: clamp(0px, 8.45vh, 80px);
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-          .goal-content {
-            height: 33%;
-
-            x-productionshiftgoal {
-              height: 100%;
-
-              .productionshiftgoal-content {
-                height: 100%;
-
-                span {
-                  font-size: clamp(0px, 2.11vh, 20px);
-                }
-
-                .productionshiftgoal-data {
-                  font-size: clamp(0px, 8.45vh, 80px);
-                }
-              }
-            }
-          }
-        }
-
-        .changedtools-content {
-          height: 8.3%;
-          box-sizing: border-box;
-
-          x-tr {
-            font-size: clamp(0px, 2.11vh, 20px);
-          }
-
-          .toollifemachine-content {
-            margin-top: clamp(0px, 1.48vh, 14px);
-            height: 49.59%;
-
-            x-toollifemachine {
-              height: 100%;
-
-              .pulse-cellbar-main {
-                height: 100% !important;
-              }
-            }
-          }
-        }
-
-        .chronology-content {
-          height: 11.9%;
-          box-sizing: border-box;
-          margin-top: clamp(0px, 3vh, 28px);
-          margin-bottom: clamp(0px, 3vh, 28px);
-
-          x-tr {
-            font-size: clamp(0px, 2.11vh, 20px);
-          }
-
-          .chart-chronology {
-            height: 100%;
-
-            .machine-component {
-              height: 100%;
-
-              .pulse-bar-div {
-                height: 100%;
-                margin-bottom: clamp(0px, 2.11vh, 20px);
-
-                .div-bar-and-percent {
-                  height: 100%;
-
-                  .div-bar {
-                    margin-top: clamp(0px, 1.06vh, 10px);
-                    margin-bottom: clamp(0px, 1.06vh, 10px);
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        .dashboard-footer {
-          height: 6.6%;
-          box-sizing: border-box;
-        }
-      }
-    }
-  }
-}*/
 
 .main-content {
   margin: 4px;
@@ -328,14 +69,14 @@ body {
 
           x-machinetab {
             .machinetab-machine-cell {
-              background-color: @container_color;
-              color: @container_text_color;
+              background-color: @box_color;
+              color: @box_text_color;
               opacity: 0.6;
 
               &.active {
-                background-color: @container_color;
+                background-color: @box_color;
                 opacity: 1;
-                border: 1px solid @container_text_color_transparent;
+                border: 1px solid @box_text_color_transparent;
               }
             }
 
@@ -356,12 +97,26 @@ body {
     flex-shrink: 1;
     flex-grow: 1;
 
+    @media (max-width: 1000px) {
+      // mobile
+      overflow: auto;
+      row-gap: 25px;
+      display: flex;
+      flex-direction: column;
+    }
+
     .nav-content {
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
       width: 100%;
+
+      @media (max-width: 1000px) {
+        // mobile
+        flex-direction: column;
+        row-gap: 15px;
+      }
 
       .machine-title {
         display: flex;
@@ -371,6 +126,12 @@ body {
         margin-right: 2em;
         width: 65%;
         border-radius: 4px;
+
+        @media (max-width: 1000px) {
+          // mobile
+          margin-right: 0;
+          width: 90%;
+        }
 
         .machine-name {
           display: flex;
@@ -437,8 +198,21 @@ body {
         justify-content: center;
         align-items: center;
 
+        @media (max-width: 1000px) {
+          // mobile
+          width: 90%;
+          display: flex;
+          flex-direction: column;
+          row-gap: 10px;
+        }
+
         .info-box {
-          width: 40%;
+          width: 35%;
+
+          @media (max-width: 1000px) {
+            // mobile
+            width: auto;
+          }
         }
 
         .text-box {
@@ -484,10 +258,6 @@ body {
             }
           }
         }
-
-        .info-box {
-          width: 35%;
-        }
       }
     }
 
@@ -499,6 +269,15 @@ body {
       margin-top: 1em;
       height: 35em;
 
+      @media (max-width: 1000px) {
+        // mobile
+        flex-direction: column;
+        row-gap: 25px;
+        margin-left: 0;
+        margin-top: 0;
+        height: auto;
+      }
+
       .numbers-content {
         display: flex;
         flex-direction: column;
@@ -509,6 +288,12 @@ body {
 
         @media (max-height: 842px) {
           row-gap: 15px;
+        }
+
+        @media (max-width: 1000px) {
+          // mobile
+          width: auto;
+          height: auto;
         }
 
         .specificnumber-content {
@@ -621,6 +406,10 @@ body {
 
           x-productiongauge .productiongauge-text {
             font-size: 2.5em;
+
+            @media (max-width: 1000px) {
+              font-size: 1.8em;
+            }
           }
         }
 
@@ -638,9 +427,18 @@ body {
       .trackergraph-content {
         width: 50%;
 
+        @media (max-width: 1000px) {
+          // mobile
+          display: none !important;
+        }
+
         .productiontrackergraph-content {
-          @media (max-height: 842px) {
+          @media (max-width: 1500px) or (max-height: 842px) {
             align-items: start;
+          }
+
+          @media (min-width: 1560px) and (max-height: 842px) {
+            max-width: 704px;
           }
         }
       }
@@ -652,6 +450,18 @@ body {
 
       @media (max-height: 842px) {
         margin-top: -183px;
+      }
+
+      @media (max-width: 1000px) {
+        // mobile
+        margin-top: unset !important;
+      }
+
+      x-tr {
+        @media (max-width: 1000px) {
+          // mobile
+          font-size: 16px;
+        }
       }
 
 
@@ -694,6 +504,11 @@ body {
       column-gap: 4em;
       margin-top: 1.5em;
       margin-bottom: 0.5em;
+
+      @media (max-width: 1000px) {
+        // mobile
+        display: none !important;
+      }
 
       .chart-chronology {
         flex: 1;
@@ -738,8 +553,18 @@ body {
       align-items: center;
       justify-content: space-between;
 
+      @media (max-width: 1000px) { // mobile
+        justify-content: center;
+        flex-direction: column;
+      }
+
       .stops-content {
         width: 30%;
+
+        @media (max-width: 1000px) {
+          // mobile
+          width: auto;
+        }
 
         .pulse-cellbar-main {
           height: unset;
@@ -786,6 +611,14 @@ body {
       }
 
       .period-content {
+
+        @media (min-width: 1100px) {
+          width: 50%;
+        }
+
+        @media (max-width: 1000px) {
+          display: none !important;
+        }
 
         .border {
           border: 0.5px solid #AAA;
@@ -847,6 +680,11 @@ body {
         width: 100px;
         font-weight: bold;
 
+        @media (max-width: 1000px) {
+          // mobile
+          display: none !important;
+        }
+
         .clock-div {
           height: unset;
           font-size: 1.2em;
@@ -856,6 +694,11 @@ body {
       .hour-content {
         font-weight: bold;
         font-size: 1.5em;
+
+        @media (max-width: 1000px) {
+          // mobile
+          display: none !important;
+        }
       }
     }
   }
@@ -866,12 +709,14 @@ body {
     height: unset;
 
     .customDialogTitle {
-      font-size: 2vw;
-      font-weight: 500;
-      margin-top: 0.5em;
-      padding-bottom: 0.3em;
-      width: 100%;
-      text-align: center;
+      @media (min-width: 1000px) { // mobile
+        font-size: 2vw;
+        font-weight: 500;
+        margin-top: 0.5em;
+        padding-bottom: 0.3em;
+        width: 100%;
+        text-align: center;
+      }
     }
 
     .customDialogHelpBox {
@@ -886,12 +731,26 @@ body {
 
 }
 
+.pulse-mainarea-bottom {
+  @media (max-width: 1000px) {
+    // mobile
+    display: none !important;
+  }
+}
 
-.border {
-  border: 0.5px solid #AAA;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  border-radius: 4px;
+.pulse-mainarea-full {
+  @media (max-width: 1000px) {
+    // mobile
+    height: auto;
+  }
+}
+
+.pulse-header-close-to-right:has(#fullscreenbtn) {
+
+  @media (max-width: 1000px) {
+    // mobile
+    display: none;
+  }
 }
 
 .text {
@@ -908,6 +767,12 @@ body {
   font-family: inherit;
   font-weight: 500;
 
+}
+
+.border {
+  border: 0.5px solid #AAA;
+  padding: 8px 12px;
+  border-radius: 4px;
 }
 
 .body-btn {
@@ -929,4 +794,12 @@ body {
 .secondary-btn {
   border-color: #AAA;
   background-color: transparent;
+}
+
+
+@media (min-width: 1000px) {
+
+  x-periodmanager {
+    display: none;
+  }
 }

@@ -25,6 +25,31 @@ class OeeViewPage extends pulsePage.BasePage {
   }
 
   buildContent() {
+    // URL parameters
+    let needReload = false;
+    let url = window.location.href;
+    if (-1 != url.search('productiongauge.showpercent=')) {
+      needReload = true;
+      pulseConfig.set('productiongauge.showpercent',
+        pulseUtility.getURLParameter(url, 'productiongauge.showpercent'));
+      url = pulseUtility.removeURLParameter(url, 'productiongauge.showpercent');
+    }
+    if (-1 != url.search('productiongauge.target=')) {
+      needReload = true;
+      pulseConfig.set('productiongauge.target',
+        pulseUtility.getURLParameter(url, 'productiongauge.target', ''));
+      url = pulseUtility.removeURLParameter(url, 'productiongauge.target');
+    }
+    if (-1 != url.search('productiongauge.red=')) {
+      needReload = true;
+      pulseConfig.set('productiongauge.red',
+        pulseUtility.getURLParameter(url, 'productiongauge.red', ''));
+      url = pulseUtility.removeURLParameter(url, 'productiongauge.red');
+    }
+    if (needReload) {
+      window.open(url, '_self');
+    }
+
     this._updateComponents(true);
     let showPeriodToolBar = pulseConfig.getBool('showPeriodtoolbar');
 
