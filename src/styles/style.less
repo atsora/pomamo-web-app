@@ -302,13 +302,13 @@ body {
     margin: auto;
     text-align: center;
     width: 54%; // 100% - real margin - 2* 20% == LOGO / was max-width
-    background-color: @container_color;
-    color: @container_text_color;
+    background-color: @box_color;
+    color: @box_text_color;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
-    border-left: 1px solid darken(@container_color, 10%);
-    border-right: 1px solid darken(@container_color, 10%);
-    border-top: 1px solid darken(@container_color, 10%);
+    border-left: 1px solid darken(@box_color, 10%);
+    border-right: 1px solid darken(@box_color, 10%);
+    border-top: 1px solid darken(@box_color, 10%);
     box-shadow: @box_shadow;
     z-index: 25;
 
@@ -322,14 +322,14 @@ body {
       line-height: 30px;
       padding: 0 10px;
       text-align: center;
-      background-color: @container_color;
-      color: @container_text_color;
+      background-color: @box_color;
+      color: @box_text_color;
       float: left;
       margin-top: -31px;
       margin-left: -1px;
-      border-left: 1px solid darken(@container_color, 10%);
-      border-right: 1px solid darken(@container_color, 10%);
-      border-top: 1px solid darken(@container_color, 10%);
+      border-left: 1px solid darken(@box_color, 10%);
+      border-right: 1px solid darken(@box_color, 10%);
+      border-top: 1px solid darken(@box_color, 10%);
       border-top-left-radius: 3px;
       border-top-right-radius: 3px;
       cursor: pointer;
@@ -1254,9 +1254,9 @@ input:checked+.slider::before {
 
 .tile {
   box-shadow: @box_shadow;
-  background-color: @container_color;
-  color: @container_text_color;
-  border: 1px solid darken(@container_color, 10%);
+  background-color: @box_color;
+  color: @box_text_color;
+  border: 1px solid darken(@box_color, 10%);
   box-sizing: border-box;
   width: 100%;
   height: 100%;
@@ -1270,9 +1270,9 @@ input:checked+.slider::before {
   position: relative; // For vertical center
 
   padding: 4px 10px 4px 10px;
-  border-bottom: 1px solid darken(@container_color, 10%);
-  background-color: @container_header_color;
-  color: @container_header_text_color;
+  border-bottom: 1px solid darken(@box_color, 10%);
+  background-color: @box_header_color;
+  color: @box_header_text_color;
 
   // Managed by flex - test and remove :
   //height: 40px;
@@ -1426,7 +1426,10 @@ x-motiontime {
   // What is scrolled is now the entire mainarea, with the legend at the end
   .pulse-mainarea {
     min-width: 0;
-    overflow: auto;
+  }
+
+  #pulse-navigation-and-main {
+    min-width: 0;
   }
 
   .pulse-mainarea-full {
@@ -1485,13 +1488,15 @@ x-motiontime {
     opacity: 1;
   }
 
-  .pulse-mainarea {
-    margin: 20px 0;
-  }
-
   // Hide pagination
   #pulse-pagination,
   .pulse-header-rotation-progress {
     display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .pulse-mainarea {
+    overflow: auto;
   }
 }

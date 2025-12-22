@@ -30,6 +30,7 @@ require('x-tr/x-tr');
 require('x-openstopclassificationlistener/x-openstopclassificationlistener');
 require('x-productiongauge/x-productiongauge');
 require('x-scrapstatus/x-scrapstatus');
+require('x-periodmanager/x-periodmanager');
 
 class OperatorDashboardPage extends pulsePage.BasePage {
   constructor() {
@@ -381,6 +382,56 @@ class OperatorDashboardPage extends pulsePage.BasePage {
   }
 
   buildContent() {
+    // URL parameters
+    let needReload = false;
+    let url = window.location.href;
+    if (-1 != url.search('showChangedTools=')) {
+      needReload = true;
+      pulseConfig.set('showChangedTools',
+        pulseUtility.getURLParameter(url, 'showChangedTools'));
+      url = pulseUtility.removeURLParameter(url, 'showChangedTools');
+    }
+    if (-1 != url.search('openStopClassification=')) {
+      needReload = true;
+      pulseConfig.set('openStopClassification',
+        pulseUtility.getURLParameter(url, 'openStopClassification', ''));
+      url = pulseUtility.removeURLParameter(url, 'openStopClassification');
+    }
+    if (-1 != url.search('stopClassificationReopenDelay=')) {
+      needReload = true;
+      pulseConfig.set('stopClassificationReopenDelay',
+        pulseUtility.getURLParameter(url, 'stopClassificationReopenDelay', ''));
+      url = pulseUtility.removeURLParameter(url, 'stopClassificationReopenDelay');
+    }
+    if (-1 != url.search('showproductiongauge=')) {
+      needReload = true;
+      pulseConfig.set('showproductiongauge',
+        pulseUtility.getURLParameter(url, 'showproductiongauge', ''));
+      url = pulseUtility.removeURLParameter(url, 'showproductiongauge');
+    }
+    if (-1 != url.search('productiongauge.showpercent=')) {
+      needReload = true;
+      pulseConfig.set('productiongauge.showpercent',
+        pulseUtility.getURLParameter(url, 'productiongauge.showpercent', ''));
+      url = pulseUtility.removeURLParameter(url, 'productiongauge.showpercent');
+    }
+    if (-1 != url.search('productiongauge.target=')) {
+      needReload = true;
+      pulseConfig.set('productiongauge.target',
+        pulseUtility.getURLParameter(url, 'productiongauge.target', ''));
+      url = pulseUtility.removeURLParameter(url, 'productiongauge.target');
+    }
+    if (-1 != url.search('productiongauge.red=')) {
+      needReload = true;
+      pulseConfig.set('productiongauge.red',
+        pulseUtility.getURLParameter(url, 'productiongauge.red', ''));
+      url = pulseUtility.removeURLParameter(url, 'productiongauge.red');
+    }
+    if (needReload) {
+      window.open(url, '_self');
+    }
+
+
     // show Bars
     let showBar = pulseConfig.getBool('showcoloredbar.cycle', false);
     if (showBar) {
