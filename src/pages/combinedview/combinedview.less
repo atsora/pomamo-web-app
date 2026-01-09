@@ -33,12 +33,12 @@
 @import "style.less";
 
 // Title
-.combinedview-title{
+.combinedview-title {
   x-performancetarget {
     min-height: 1em; // To force visibility (and loading data)
-    margin: auto 0; // Vertical center
-    .performancetarget-content{
-      .performancetarget-span{
+
+    .performancetarget-content {
+      .performancetarget-span {
         // Same as machine display
         font-weight: bold;
         //font-style: italic;
@@ -53,8 +53,47 @@
   }
 }
 
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+}
+
+.tile-title {
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+  align-items: center;
+
+  .combinedview-title-left {
+    display: flex;
+    column-gap: 6px;
+    align-items: center;
+    width: 57%;
+    justify-content: end;
+  }
+
+  .combinedview-title-right {
+    width: 43%;
+    justify-content: end;
+    display: flex;
+  }
+
+  x-runningbutton {
+    margin: 0;
+  }
+
+  .machinedisplay-position {
+    flex-grow: unset;
+    flex-shrink: unset;
+  }
+
+  x-performancetarget {
+    margin-left: auto;
+  }
+}
+
 // tile-content
 .tile-content {
+  border-radius: @border_radius;
   display: flex;
   flex-direction: column; // align children
   overflow: hidden; // Hide bottom displays when to small
@@ -77,47 +116,6 @@
     .combinedview-runningslotpie {
       flex-grow: 2; // Strech
       position: relative;
-
-      /*x-runningslotpie {}*/
-
-      /*
-      .combinedview-motionpercentageday{
-        display: inline-block;
-        position: absolute;
-        // Vertical center + size
-        height: 20%;
-        top: 40%;
-        // Horizontal
-        width: 40%;
-        left: 30%;
-        
-        x-motionpercentage {
-          margin: auto;
-          font-weight: bold;
-          //font-size: 3em; // overload main in pie/gauge
-          height: 100%;
-          width: 100%;
-          .motionpercentage {
-            position: relative;
-            height: 100%;
-            width: 100%;
-            .motionpercentage-text {
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              text-align: center;
-              font-size: 3em; // overload main in pie/gauge
-            }
-            .motionpercentage-svg{ // Pending
-              height: 100%;
-              width: 100%;
-              fill: @color_text_alternate;; // == pulse-mainarea color
-            }
-          }
-        }
-      }
-      */
     }
 
     .combinedview-leftdisplay,

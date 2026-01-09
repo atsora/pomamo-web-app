@@ -26,17 +26,41 @@
 
 
 // Config
-#displaydayshours{
+#displaydayshours {
   float: none !important;
   max-width: 25% !important;
   margin-right: 10px;
 }
 
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+}
+
+.tile-title {
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+  row-gap: 6px;
+  align-items: center;
+  justify-content: center;
+
+  x-reasonbutton {
+    margin: 0;
+  }
+
+  .machinedisplay-position {
+    flex-grow: unset;
+    flex-shrink: unset;
+  }
+}
+
 // MAIN display
-.tile-content{
+.tile-content {
+  border-radius: @border_radius;
   display: flex;
   flex-direction: column; // ->set height
-  .machineutilizationbar-bar-and-percent{
+
+  .machineutilizationbar-bar-and-percent {
     flex-grow: 1; // Strech
 
     display: flex;
@@ -44,22 +68,25 @@
 
     padding-top: 20px;
 
-    .machineutilizationbar-bar-box{
+    .machineutilizationbar-bar-box {
       flex-grow: 1; // Strech
       flex-shrink: 99999;
       overflow: hidden; // for good resize
-      
-      .machineutilizationbar-bar-border{ //==  pulse-bar-div
-       // To see full graduation
+
+      .machineutilizationbar-bar-border {
+        //==  pulse-bar-div
+        // To see full graduation
         margin-left: @margin_graduation;
         margin-right: @margin_graduation;
       }
     }
-    .utilizationbar-percent-position{
+
+    .utilizationbar-percent-position {
       display: flex;
       flex-direction: column; // align children
       justify-content: space-evenly;
-      x-motionpercentage{
+
+      x-motionpercentage {
         padding-bottom: 24px; // == graduation height
       }
     }
@@ -80,6 +107,7 @@ x-datetimegraduation {
   margin-top: 30px;
   text-align: center;
 }
+
 @media (max-width: 685px) {
   .clock-div {
     height: auto;

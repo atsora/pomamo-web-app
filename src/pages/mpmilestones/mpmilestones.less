@@ -20,14 +20,27 @@
 
 @import "style.less";
 
-/*
-.tile-content {
-  .mpmilestones-main-div {
-    x-milestonesmanager {
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+}
 
+.tile-title {
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+
+  x-machinedisplay {
+    text-align: center;
+
+    span {
+      width: auto;
     }
   }
-}*/
+}
+
+.tile-content {
+  border-radius: @border_radius;
+}
 
 // No legend
 .legend-content {

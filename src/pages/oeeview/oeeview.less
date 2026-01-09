@@ -21,8 +21,15 @@
 
 // Positioning
 
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+}
+
 .tile-title {
   flex-direction: column;
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
 
   .oeeview-top-title {
     display: flex;
@@ -73,6 +80,7 @@
   display: flex;
   flex-direction: row;
   overflow: hidden;
+  border-radius: @border_radius;
 
   .oee-number {
     display: flex;
@@ -127,6 +135,12 @@
 
 x-periodtoolbar {
   margin-bottom: 10px;
+
+  .periodtoolbar ol.periodtoolbar-toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 // Text 

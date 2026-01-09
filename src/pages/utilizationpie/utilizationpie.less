@@ -22,34 +22,57 @@
 @import "x-machinemodelegends/x-machinemodelegends.less";
 @import "style.less";
 
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @box_header_color;
+}
 
-.tile-content{
+.tile-title {
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+
+  x-reasonbutton {
+    margin: 0;
+  }
+
+  .machinedisplay-position {
+    flex-grow: unset;
+    flex-shrink: unset;
+  }
+}
+
+.tile-content {
+  border-radius: @border_radius;
   display: flex;
   flex-direction: column; // align children (only 1 here)
-  .utilizationpie-reasonslotpie-motionpercentage{
-    flex: 1;  // Strech
+
+  .utilizationpie-reasonslotpie-motionpercentage {
+    flex: 1; // Strech
 
     padding-top: 12px;
-    
+
     display: flex;
     flex-direction: row; // align children
     overflow: hidden; // To limit total height
+
     .utilizationpie-today {
       justify-content: center;
       font-size: 2em;
       //padding-left: 8px;
-      
+
       // for text vertical align
       //position: absolute;
       //top: 50%;
       //transform: translateY(-50%); // tiré de la moitié de sa propre hauteur 
     }
 
-    .utilizationpie-reasonslotpie{
-      flex: 1; 
+    .utilizationpie-reasonslotpie {
+      flex: 1;
       min-height: 50px;
       //margin-left: 70px;
-      
+
       height: 100%;
       width: 100%;
     }

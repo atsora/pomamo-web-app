@@ -18,32 +18,87 @@
 @import "x-groupsingroup/x-groupsingroup.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-productiontrackertable/x-productiontrackertable.less";
+@import "x-zoominpagebutton/x-zoominpagebutton.less";
+@import "x-showrunningdialogbutton/x-showrunningdialogbutton.less";
 @import "style.less";
 
-/*a {
-  color: @color_text;
-}*/
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+  overflow: auto;
+}
+
+.tile-title {
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 50px;
+  .machinedisplay-position {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    x-machinedisplay {
+      text-align: center;
+
+      span {
+        width: auto;
+      }
+    }
+  }
+
+  .btn-title-div {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.tile-content {
+  border-radius: @border_radius;
+}
 
 // Use Full screen
-.pulse-mainarea-inner,.main-table-box,.single-cell {
+.pulse-mainarea-inner,
+.main-table-box,
+.single-cell {
   box-sizing: border-box;
   height: 100%;
 }
-.main-table-box{
+
+.main-table-box {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
 
-  .sub-title{
+  .sub-title {
     display: flex;
     flex-direction: row;
 
-    >x-ancestors{
+    >x-ancestors {
       width: max-content;
-      .ancestors-content{
+      font-size: 1.5em;
+
+      .ancestors-content {
         display: inline-flex;
+        margin-left: 4px;
+        background-color: @color_background;
+        border-radius: @border_radius_small;
+        border: 1px solid @color_window_border;
+        padding: 6px 12px;
+
+        a:hover {
+          color: @color_text;
+        }
+
+        svg:hover {
+          fill: @color_text;
+        }
       }
     }
+
     /*>x-machinedisplay{
       width: max-content;
       font-weight: normal;
@@ -70,8 +125,9 @@ x-groupsingroup {
   max-height: 95%;
   flex-grow: 9999;
 }
+
 // tile-content
-.tile-content{
+.tile-content {
   /*display: flex;
   flex-direction: column; // align children
   overflow: hidden;  // Hide bottom displays when to small
@@ -80,14 +136,14 @@ x-groupsingroup {
   width: 100%;
   height: 100%;
 
-  .production-tracker-pie-div{
+  .production-tracker-pie-div {
     box-sizing: border-box;
     padding: 4px; // To simulate margin around
     width: 100%;
-    height: 100%;    
+    height: 100%;
   }
 }
 
-.legend-content{
+.legend-content {
   display: none !important;
 }

@@ -33,9 +33,21 @@ x-machinedisplay {
   text-align: center;
 }
 
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+}
+
+.tile-title {
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+  background-color: @color_background;
+}
+
 .tile-content{
   display: flex;
   flex-direction: column; // align children
+  border-radius: @border_radius;
 
   .machinepecification-line{
     display: flex;

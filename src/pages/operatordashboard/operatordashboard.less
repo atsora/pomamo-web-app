@@ -35,7 +35,6 @@
 @import "style.less";
 
 .main-content {
-  margin: 4px;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -76,7 +75,7 @@
               &.active {
                 background-color: @box_color;
                 opacity: 1;
-                border: 1px solid @box_text_color_transparent;
+                border: 1px solid @color_window_border;
               }
             }
 
@@ -96,6 +95,8 @@
     flex-basis: 80%;
     flex-shrink: 1;
     flex-grow: 1;
+    background-color: @color_background;
+    border-radius: @border_radius;
 
     @media (max-width: 1000px) {
       // mobile
@@ -125,7 +126,9 @@
         align-items: center;
         margin-right: 2em;
         width: 65%;
-        border-radius: 4px;
+        border-radius: @border_radius_small;
+        background-color: transparent;
+        border: 1px solid @color_window_border;
 
         @media (max-width: 1000px) {
           // mobile
@@ -173,6 +176,7 @@
               font-size: 16px;
               font-family: inherit;
               font-weight: 500;
+              border-radius: @border_radius_small;
 
               .pulse-missing-data {
                 display: none;
@@ -181,11 +185,6 @@
               .lastmachinestatus-reason-label {
                 display: none;
               }
-            }
-
-            .pulse-cellbar-current-data:hover {
-              background-color: unset;
-              color: #6faef5;
             }
           }
         }
@@ -553,7 +552,8 @@
       align-items: center;
       justify-content: space-between;
 
-      @media (max-width: 1000px) { // mobile
+      @media (max-width: 1000px) {
+        // mobile
         justify-content: center;
         flex-direction: column;
       }
@@ -582,24 +582,17 @@
             display: flex;
             justify-content: center;
             border-right-width: 0.5px;
+            border-left-color: @color_window_border;
 
             .pulse-missing-data {
               display: none;
             }
           }
 
-          .pulse-cellbar-past-data:hover {
-            background-color: unset;
-            color: #6faef5;
-          }
-
           .pulse-cellbar-cell-missing {
             color: #101521;
             background-color: #FF7C35;
             border: none !important;
-            box-shadow:
-              inset 4px 4px 4px rgba(0, 0, 0, 0.25),
-              inset -4px -4px 4px rgba(0, 0, 0, 0.25);
           }
 
           .pulse-cellbar-cell-missing:hover {
@@ -621,9 +614,9 @@
         }
 
         .border {
-          border: 0.5px solid #AAA;
+          border: 1px solid @color_window_border;
           padding: 8px 12px;
-          border-radius: 4px;
+          border-radius: @border_radius_small;
         }
 
         .periodtoolbar-toolbar {
@@ -705,14 +698,16 @@
 }
 
 .customeDialog-stopclassification {
+  overflow: auto;
+  
   .customDialogHeader {
     height: unset;
 
     .customDialogTitle {
-      @media (min-width: 1000px) { // mobile
+      @media (min-width: 1000px) {
+        // mobile
         font-size: 2vw;
         font-weight: 500;
-        margin-top: 0.5em;
         padding-bottom: 0.3em;
         width: 100%;
         text-align: center;
@@ -720,7 +715,7 @@
     }
 
     .customDialogHelpBox {
-      height: 15px;
+      padding-top: 5px !important;
     }
 
     .customDialogCloseBox {
@@ -770,32 +765,23 @@
 }
 
 .border {
-  border: 0.5px solid #AAA;
+  border: 1px solid @color_window_border;
   padding: 8px 12px;
-  border-radius: 4px;
+  border-radius: @border_radius_small;
 }
 
 .body-btn {
   border: none;
-  background-color: #FF7C35;
-  color: #101521;
+  background-color: @color_orange;
+  color: @color_window;
   transition: 0.1s;
   cursor: pointer;
-  box-shadow:
-    inset 4px 4px 4px rgba(0, 0, 0, 0.25),
-    inset -4px -4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .body-btn:hover {
   border: none;
   background-color: #FCA975;
 }
-
-.secondary-btn {
-  border-color: #AAA;
-  background-color: transparent;
-}
-
 
 @media (min-width: 1000px) {
 

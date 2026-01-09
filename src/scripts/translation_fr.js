@@ -17,7 +17,7 @@ ATSORA_LOCALE_CATALOG.fr.options = {
   openStopClassification: 'Ouvrir automatiquement la fenêtre de classification des arrêts',
   productionActualVsTarget: 'production courante/objectif',
   productiongauge: 'Jauge de production',
-  resetButton: 'remise à zéro',
+  resetButton: 'Remise à zéro',
   showAlarms: 'Afficher les alarmes',
   showBar: 'Afficher la barre',
   showClock: "Afficher l'horloge",

@@ -24,8 +24,21 @@
 @import "style.less";
 
 .machine-and-bar-table {
-  // include .tile;
-  // width:100%; // NO !!! 
+  border-radius: @border_radius;
+
+  .group-main {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 24px;
+    row-gap: 16px;
+
+    .group-single {
+      border-radius: @border_radius_small;
+      border: 1px solid @color_window_border;
+      padding: 12px;
+    }
+  }
+
 
   .one-machine-cell{ // == group-single // could be display:contents when available
     width: 100%;

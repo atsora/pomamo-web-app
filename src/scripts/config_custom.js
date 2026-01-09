@@ -19,3 +19,5 @@
 // uncomment to add the plant page for the manager or live role
 //PULSE_DEFAULT_CONFIG.roles.manager.displayedPages.push('plant');
 //PULSE_DEFAULT_CONFIG.roles.live.displayedPages.push('plant');
+
+PULSE_DEFAULT_CONFIG.general.displayshiftrange = 'true';

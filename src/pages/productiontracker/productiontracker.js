@@ -14,6 +14,8 @@ require('x-periodmanager/x-periodmanager');
 require('x-ancestors/x-ancestors');
 require('x-machinedisplay/x-machinedisplay');
 require('x-productiontrackertable/x-productiontrackertable');
+require('x-zoominpagebutton/x-zoominpagebutton');
+require('x-showrunningdialogbutton/x-showrunningdialogbutton');
 require('x-tr/x-tr');
 
 class ProductionTrackerPage extends pulsePage.BasePage {

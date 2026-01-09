@@ -21,12 +21,31 @@
 @import "x-machinemodelegends/x-machinemodelegends.less";
 @import "style.less";
 
-.tile-content{
-  /*display: flex;
-  flex-direction: column; // align children
-  overflow: hidden; // Hide bottom displays when to small
-  */
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
 }
+
+.tile-title{
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+  justify-content: center;
+  align-items: center;
+
+  x-reasonbutton {
+    margin: 0;
+  }
+
+  .machinedisplay-position {
+    flex-grow: unset;
+    flex-shrink: unset;
+  }
+}
+
+.tile-content{
+  border-radius: @border_radius;
+}
+
 // GAUGE position
 .machineperformancegauge {
   display: inline-block;
@@ -47,7 +66,7 @@ x-motionpercentage {
 .performancegauge-svg { position: relative; }
 
 .needle {
-  fill: @color_text_alternate;
+  fill: @color_needle;
 }
 
 .tick {

@@ -1042,6 +1042,11 @@ exports.preparePage = function (currentPageMethods) {
     cache: false
   }); /*remove cache for IE and Edge */
 
+  // Add appcontext-live class if AppContext is 'live'
+  if ('live' == pulseUtility.getURLParameter(window.location.href, 'AppContext')) {
+    $('.pulse-content').addClass('appcontext-live');
+  }
+
   // Create common elements - MUST BE DONE FIRST !!! Before ALL other xTag
   //initializeCheckers();- DONE in html
 
