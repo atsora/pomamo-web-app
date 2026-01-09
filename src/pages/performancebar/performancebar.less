@@ -23,10 +23,33 @@
 @import "x-machinemodelegends/x-machinemodelegends.less";
 @import "style.less";
 
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+}
+
+.tile-title {
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+  justify-content: center;
+  align-items: center;
+  column-gap: 6px;
+
+  x-reasonbutton {
+    margin: 0;
+  }
+
+  .machinedisplay-position {
+    flex-grow: unset;
+    flex-shrink: unset;
+  }
+}
+
 .tile-content{
   display: flex;
   flex-direction: row; // align children
   align-items: stretch;
+  border-radius: @border_radius;
 
   .performancebar-bar-border{
     flex-grow: 1; // Strech

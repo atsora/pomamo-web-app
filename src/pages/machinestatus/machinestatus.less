@@ -40,10 +40,29 @@
 @import "style.less";
 
 
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+}
+
+.tile-title {
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+
+  x-machinedisplay {
+    text-align: center;
+    
+    span {
+      width: auto;
+    }
+  }
+}
+
 .tile-content {
   display: flex;
   flex-direction: column; // align children
   overflow: hidden; // Hide bottom displays when too small
+  border-radius: @border_radius;
 
   .machinestatus-top-div {
     // currentworkinfo
@@ -239,7 +258,6 @@
 
   // BOTTOM DISPLAY
   .machinestatus-weekly-info {
-    border-top: 1px solid @color_window_alternate_border;
     margin-top: 10px;
     padding-top: 5px;
     margin-bottom: 10px;

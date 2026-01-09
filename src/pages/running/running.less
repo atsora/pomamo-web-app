@@ -47,23 +47,40 @@
 
 @import "style.less";
 
-/*a {
-  color: @color_text_alternate; // == idem mainarea
-  text-decoration: none;
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
 }
-a:visited {
-  color: @color_text_alternate;
-}
-a:hover {
-  text-decoration: underline;
-}*/
+
 .running-page {
+  x-grouparray {
+    .group-main {
+      display: flex;
+      flex-direction: column;
+      row-gap: 22px;
+      padding: 12px;
+
+      li {
+        border-radius: @border_radius_small;
+        border: 1px solid @color_window_border;
+        padding: 12px;
+      }
+    }
+  }
+
   .one_machine_cell {
     display: flex;
     flex-direction: row; // align children
     padding: 0 4px;
+
     &.top_cell {
       align-items: center;
+
+      .div-current {
+        background-color: @color_background !important;
+        border: 1px solid @color_window_border;
+        margin-left: -8px;
+      }
     }
 
     .div-machine {
@@ -73,9 +90,9 @@ a:hover {
       .div-current {
         .bar-rounded-shadow;
 
+        background-color: transparent;
         padding: 4px;
         min-height: 32px;
-
         display: flex;
         flex-direction: row; // align children
 
@@ -120,9 +137,10 @@ a:hover {
         // align with graduation
         margin-right: @margin_graduation; //23px;
         margin-left: @margin_graduation; //24px;
-        // Space between bars :
-        margin-top: 18px;
-        //margin-bottom: 0px;
+      }
+
+      .periodtoolbar-toolbar {
+        border: 1px solid @color_window_border;
       }
     }
 

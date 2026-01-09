@@ -49,6 +49,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  row-gap: 12px;
 
   .sub-title {
     display: flex;
@@ -56,27 +57,25 @@
 
     >x-ancestors {
       width: max-content;
+      font-size: 1.5em;
 
       .ancestors-content {
         display: inline-flex;
-      }
-    }
+        margin-left: 4px;
+        background-color: @color_background;
+        border-radius: @border_radius_small;
+        border: 1px solid @color_window_border;
+        padding: 6px 12px;
 
-    /*>x-machinedisplay{
-      width: max-content;
-      font-weight: normal;
-      padding-left: 4px;
+        a:hover {
+          color: @color_text;
+        }
 
-      &.pulsecomponent-context-ParamValidation{
-        display: none;
-      }
-
-      .machinedisplay-data{
-        &::before {
-          content: ' > ';
+        svg:hover {
+          fill: @color_text;
         }
       }
-    }*/
+    }
   }
 }
 
@@ -89,21 +88,48 @@ x-groupsingroup {
   flex-grow: 9999;
 }
 
-//tile-title
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+}
+
 .tile-title {
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  .machinedisplay-position {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    x-machinedisplay {
+      text-align: center;
+
+      span {
+        width: auto;
+      }
+    }
+  }
+
   .btn-title-div {
-    margin: auto; // vertical center
+    position: relative;
+    z-index: 1;
   }
 }
 
-// tile-content
 .tile-content {
+  border-radius: @border_radius;
+
   display: flex;
   flex-direction: column; // align children
-  overflow: hidden;  // Hide bottom displays when to small
+  overflow: hidden; // Hide bottom displays when to small
 
   pointer-events: none; //TODO : TMP - to remove to allow click on pie for example - that means rework global .tile / .tile-title / .tile-content
-  
+
   .mit-top-div {
     margin-top: 4px;
   }
@@ -148,17 +174,19 @@ x-groupsingroup {
 x-workinfo {
   display: block;
   text-align: center;
-  background-color: @widget_background; // @box_header_color;
-  color: @widget_text;
-  border-bottom: solid 1px @color_window_alternate_border;
-  border-top: solid 1px @color_window_alternate_border;
-  height: 1.5em; // To force height even if no data - ONE LINE
+  color: @color_text;
+  min-height: 1.5em; // To force height even if no data - ONE LINE
   padding: 2px 0 0 0; // For Edge top padding....
   box-sizing: border-box;
-
   overflow: hidden; // For Chrome, small display = avoid 2 lines
+  margin-bottom: 6px;
+
+  .workinfo-singledata {
+    font-size: 22px;
+  }
+  
 }
 
-.legend-content{
+.legend-content {
   display: none !important;
 }

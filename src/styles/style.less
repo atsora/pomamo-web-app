@@ -16,7 +16,7 @@ NEVER ADD x-tag here AND in pages -> we need to choose !
 
 @import "x-loginconnection/x-loginconnection.less";
 
-@menuWidth : 270px;
+@menuWidth : 271px;
 
 // STYLES DE BASE
 
@@ -120,6 +120,7 @@ body {
   position: relative;
   margin: 0;
   padding: 0;
+  height: 100%;
   min-height: 100%;
   border: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -137,81 +138,74 @@ body {
   }
 
   //line-height: 1.4; Problem vertical align between <span> and <a> -> DETAILS
-  background-image: @background_image;
+  //background-image: @background_image;
   background-repeat: repeat;
   overflow: hidden;
+  background-color: @color_background;
 }
 
 @header_background_color_1: lighten(@color_window, 4%);
 @header_background_color_2: darken(@color_window, 4%);
 
+.pulse-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.appcontext-live {
+  .pulse-mainarea {
+    margin-right: 0px !important;
+  }
+
+  #navbar li {
+    justify-content: left !important;
+    margin-left: 7px !important;
+    padding: 7px 0 7px 6.5px;
+  }
+}
+
 .pulse-header {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  background: @color_window;
-  /* For browsers that do not support gradients */
-  background: -webkit-linear-gradient(@header_background_color_1, @header_background_color_2);
-  /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(@header_background_color_1, @header_background_color_2);
-  /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(@header_background_color_1, @header_background_color_2);
-  /* For Firefox 3.6 to 15 */
-  background: linear-gradient(@header_background_color_1, @header_background_color_2);
+  padding: 0.5rem 0;
   /* Standard syntax */
   color: fade(@color_text, 90%); // Change color when background is changed to see any text
-  box-shadow: @box_shadow;
   z-index: 100;
-  border-bottom: 1px solid @color_window_border;
 }
 
 #pulse-inner {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 33px; // 32 + 1 -> For IE
+  margin-top: -3px;
+  height: 100%;
 }
 
 #pulse-navigation-and-main {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-
-
   box-sizing: border-box;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
   min-width: 400px;
   overflow: hidden;
-  //color: @color_text_alternate;
+  height: 100%;
 }
 
 #pulse-panel-navigation {
   flex-grow: 0;
   flex-shrink: 0;
-
   z-index: 51;
   width: 270px;
   transition: width 0.2s;
-  background-color: @color_window;
   color: @color_text;
   overflow: auto;
-  border-right: 1px solid @color_window_border;
 }
 
 #pulse-panel-parameter {
   position: absolute;
-  top: 0;
+  top: 48px;
   right: 0;
   bottom: 0;
   z-index: 50;
   width: 270px;
-  background-color: @color_window;
+  background-color: @color_background;
   color: @color_text;
   overflow: hidden;
   transition: transform 0.2s ease-out;
@@ -222,12 +216,14 @@ body {
   flex-basis: 100%;
   flex-grow: 1;
   flex-shrink: 1;
-
   box-sizing: border-box;
   min-width: 400px;
   overflow-x: hidden;
   overflow-y: hidden; // NO scroll here -> already managed
   color: @color_text_alternate;
+  border: 1px solid @color_window_border;
+  border-radius: @border_radius;
+  margin: 0 7px 7px 0;
 }
 
 .pulse-mainarea-full {
@@ -236,11 +232,12 @@ body {
   box-sizing: border-box;
   overflow: auto; // Else strange scrollbars with IE
   height: 100%; // For live display, for example
+  background-color: @color_window;
 }
 
 .pulse-mainarea-inner {
   display: block;
-  padding: 7px;
+  padding: 21px;
   box-sizing: border-box;
   transition: padding-bottom 0.2s ease-out;
   padding-bottom: 35px; // Default == logoHeight else search logoHeight in code
@@ -255,13 +252,13 @@ body {
   /* customer logo if needed */
   content: "";
   background-image: @customer_logo;
-  background-position: bottom left;
+  background-position: top right;
   background-repeat: no-repeat;
   background-size: contain;
   position: absolute;
   opacity: 0.3;
-  bottom: 4px;
-  left: 22px;
+  top: 7px;
+  right: 237px;
   width: 20%;
   height: 35px;
   z-index: -1;
@@ -271,15 +268,15 @@ body {
   /* main logo */
   content: "";
   background-image: @product_logo;
-  background-position: bottom right;
+  background-position: top left;
   background-repeat: no-repeat;
   background-size: contain;
   position: absolute;
   opacity: 0.7;
-  bottom: 4px;
-  right: 22px;
+  top: 11px;
+  left: 131px;
   width: 20%;
-  height: 35px;
+  height: 24px;
   z-index: -1;
 }
 
@@ -309,7 +306,6 @@ body {
     border-left: 1px solid darken(@box_color, 10%);
     border-right: 1px solid darken(@box_color, 10%);
     border-top: 1px solid darken(@box_color, 10%);
-    box-shadow: @box_shadow;
     z-index: 25;
 
     box-sizing: border-box;
@@ -449,33 +445,44 @@ body {
 
 .pulse-header-right {
   float: right;
-  border-left: 1px solid @color_window_border;
   padding: 3px 2px 1px 2px;
   height: 28px;
   box-sizing: content-box;
+  border-radius: @border_radius_small;
+
+  &:hover {
+    background-color: @color_highlight_alternate;
+  }
 }
 
 .pulse-header-close-to-right {
   display: flex; // easy align children
-
+  border-radius: @border_radius_small;
   float: right;
   height: 28px;
   box-sizing: content-box;
-  border-left: 1px solid @color_window_border;
   padding: 3px 2px 1px 2px;
+
+  &:hover {
+    background-color: @color_highlight_alternate;
+  }
+
+  &:has(x-logindisplay):hover {
+    background-color: transparent;
+  }
 
   x-logindisplay {
     .logindisplay-content {
       height: 20px; // Fixed height
       padding: 2px 5px;
-      margin-top: 2px;
-      margin-right: 5px;
-      margin-left: 5px;
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
-      background-color: @color_window_border;
-      color: @color_text;
+      color: @color_text_button;
       border-radius: 3px;
       position: relative;
+      border: 1px solid @color_window_border;
+
+      &:hover {
+        background-color: @color_background_alternate;
+      }
     }
   }
 
@@ -485,7 +492,6 @@ body {
     margin-top: 5px;
     margin-right: 5px;
     margin-left: 5px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
     background-color: @color_window_border;
     color: @color_text;
     border-radius: 3px;
@@ -539,19 +545,26 @@ body {
 }
 
 #navigationpanelbtn {
-  .create_svg('menu', @color_text, @color_highlight);
+  padding: 2px 4px 2px 4px;
+  border-radius: @border_radius_small;
+  margin-left: 7.5px;
+  .create_svg('menu', @color_text_alternate, @color_text_alternate);
+
+  &:hover {
+    background-color: @color_highlight_alternate;
+  }
 }
 
 #fullscreenbtn {
-  .create_svg('fullscreen', @color_text, @color_highlight);
+  .create_svg('fullscreen', @color_text_alternate, @color_text_alternate);
 }
 
 #machineselectionbtn {
-  .create_svg('machineselection', @color_text, @color_highlight);
+  .create_svg('machineselection', @color_text_alternate, @color_text_alternate);
 }
 
 #configpanelbtn {
-  .create_svg('actions', @color_text, @color_highlight);
+  .create_svg('actions', @color_text_alternate, @color_text_alternate);
 }
 
 
@@ -574,9 +587,8 @@ body {
 .pulse-header-rotation-progress {
   width: 100%;
   height: 3px;
-  position: absolute;
-  top: 33px;
   background-color: transparent;
+  position: relative
 }
 
 .pulse-header-rotation-progress>span {
@@ -596,11 +608,12 @@ body {
 
   .navbar-app-container {
     cursor: pointer;
-    padding: 2px;
+    display: flex;
+    align-items: center;
 
     .navbar-app-content {
-      height: 24px;
-      width: 24px;
+      height: 32px;
+      width: 32px;
 
       // see .create_svg
       //background-image: done in js using inlineBackgroundSvg
@@ -610,13 +623,15 @@ body {
         height: 100%;
         width: 100%;
         // instead of stroke: @color_text; fill: @color_text; cf currentcolor
-        color: @color_text;
+        color: @color_text_alternate;
         transition: stroke 0.3s ease-in-out, fill 0.3s ease-in-out;
+        padding: 4px;
+        box-sizing: border-box;
       }
 
       &:hover svg {
-        // instead of stroke: @color_highlight; fill: @color_highlight; cf currentcolor
-        color: @color_highlight;
+        border-radius: @border_radius_small;
+        background-color: @color_background_alternate;
       }
 
       &:disabled svg {
@@ -630,26 +645,37 @@ body {
 }
 
 // NAVIGATION PANEL
-#navbar {}
 
 #navbar>ul {
-  border-bottom: 1px solid @color_window_border_light;
   padding: 0;
   margin: 0;
   display: block;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  align-items: left;
 
   &>li {
     font-weight: bold;
-    color: @color_text;
+    color: @color_text_alternate;
     cursor: pointer;
     position: relative;
-    border-bottom: 1px solid @color_window_border;
-    border-top: 1px solid @color_window_border_light;
     list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 7px 0;
+    border-radius: @border_radius_small;
+
+    &:has(.tooltip_disabled) {
+      justify-content: left;
+      margin-left: 7px;
+      column-gap: 10px;
+      padding-left: 6.5px
+    }
+
 
     &:hover {
-      background-color: @color_window_hover;
-      //color: @color_text; - not needed
+      background-color: @color_highlight_alternate;
     }
 
     &.expandable>span::after {
@@ -670,9 +696,9 @@ body {
     }
 
     &>span.menutext {
-      padding: 12px 10px;
       display: block;
       font-size: 0.9em;
+      align-content: center;
     }
 
     &>div.menuicon {
@@ -681,7 +707,6 @@ body {
       // color: NOT @color_text_alternate; //== USE currentcolor = MAIN to fill svg
 
       svg {
-        padding: 8px 10px 0 4px;
         height: 22px;
         width: 22px; // To avoid strange displays if svg is badly defined
 
@@ -696,7 +721,6 @@ body {
     &>ul {
       padding: 0;
       margin: 0;
-      box-shadow: inset 0px 7px 10px -12px #000, inset 0px -7px 10px -12px #000;
       background-color: @color_window_alternate;
       color: @color_text_alternate;
       display: none;
@@ -725,18 +749,19 @@ body {
 }
 
 #pulse-inner:not(.navigation-always-visible).pulse-panel-navigation-collapsed #pulse-panel-navigation {
-  //transform: translateX(-@menuWidth);
   width: 0;
+}
+
+.pulse-panel-navigation-collapsed {
+  ul {
+    align-items: center;
+  }
 }
 
 #pulse-inner.navigation-always-visible {
 
   #navbar>ul>li {
-    height: 40px;
-  }
-
-  .pulse-mainarea {
-    //left: 32px;
+    min-width: 35px;
   }
 
   &.pulse-panel-navigation-collapsed {
@@ -745,7 +770,7 @@ body {
     }
 
     #pulse-panel-navigation {
-      width: 32px;
+      width: 49px;
       transition: width 0.2s;
       overflow: hidden;
     }
@@ -786,6 +811,7 @@ body {
       display: flex;
 
       .param-group-title {
+        color: @color_text_alternate;
         flex-grow: 1;
         /* Strech */
         display: inline-block;
@@ -795,12 +821,13 @@ body {
         cursor: pointer;
 
         &::before {
-          /* expandable*/
           content: '\025BE';
           font-size: 20px;
-          //position: absolute;
-          //left: 10px;
           top: 12px;
+        }
+
+        &:hover {
+          color: @color_text;
         }
       }
     }
@@ -808,23 +835,10 @@ body {
     .param-group-content {
       padding: 10px;
       margin: 0;
-      box-shadow: inset 0px 7px 10px -12px #000, inset 0px -7px 10px -12px #000;
       background-color: @color_window_alternate;
-      color: @color_text_alternate;
+      color: @color_text;
       display: none;
-      /* changed when opened */
       font-weight: normal;
-
-      .labelsubgroup {
-        /*::before { // expandable -> NO !
-          content: '\025BE';
-          font-size: 20px;
-          position: absolute;
-          left: 10px;
-          top: 12px;
-          cursor: pointer;
-        }*/
-      }
 
       .subgroup {
         border-left: 2px solid @color_highlight;
@@ -846,12 +860,6 @@ body {
           justify-content: flex-start;
           align-items: flex-start; // baseline KO
           padding-right: 4px;
-
-          span {
-            // was label. But can not use general def below
-            //width: initial !important;
-            //line-height: 1em !important;
-          }
         }
       }
 
@@ -885,10 +893,54 @@ body {
         float: right;
       }
 
-      /*input[type="radio"] {
-        margin-bottom: 5px;
-        //padding-top: 10px;
-      }*/
+      &>input[type="radio"] {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border: 1px solid @color_window_border;
+        border-radius: 50%;
+        background-color: @color_window;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+
+        &:checked {
+          background-color: @color_window;
+          border-color: @color_highlight;
+          border-width: 2px;
+
+          &::after {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: @color_highlight;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+
+          &:hover {
+            border-color: lighten(@color_highlight, 15%);
+
+            &::after {
+              background-color: lighten(@color_highlight, 15%);
+            }
+          }
+        }
+
+        &:hover {
+          border-color: @color_window_border_light;
+        }
+
+        &:disabled {
+          cursor: default;
+          pointer-events: none;
+          opacity: 0.5;
+        }
+      }
 
       >div:first-of-type {
         label {
@@ -915,7 +967,37 @@ body {
         }
 
         &>input[type="checkbox"] {
-          width: auto;
+          appearance: none;
+          width: 16px;
+          height: 16px;
+          border: 1px solid @color_window_border ;
+          border-radius: 3px;
+          background-color: @color_window;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:checked {
+            background-color: @color_highlight;
+            border-color: @color_highlight;
+
+            &::after {
+              content: '✓';
+              display: block;
+              text-align: center;
+              color: @color_window;
+              font-size: 16px;
+              line-height: 12px;
+            }
+
+            &:hover {
+              border-color: lighten(@color_highlight, 15%);
+              background-color: lighten(@color_highlight, 15%);
+            }
+          }
+
+          &:hover {
+            border-color: @color_window_border_light;
+          }
 
           &:disabled {
             cursor: default;
@@ -924,17 +1006,6 @@ body {
           }
         }
       }
-
-      // To remove +/- buttons -> TODO : maybe add new design (?)
-      /*
-      input[type="number"] {
-        appearance: none; // textfield;
-      }
-      input[type=number]::-webkit-inner-spin-button, 
-      input[type=number]::-webkit-outer-spin-button { 
-        appearance: none;
-      }*/
-
     }
   }
 
@@ -974,17 +1045,6 @@ body {
 #showurl,
 #copyurl {
   .button-rounded-shadow;
-
-  text-shadow: 0 1px 0 @input_text_shadow_color;
-  //background-color: @input_background_color;
-  //color: @input_color_bold;
-  //border: 1px solid @input_border_color;
-
-  &:hover {
-    background-color: @input_background_color_hover;
-    color: @input_color_bold;
-    border: 1px solid @input_border_color;
-  }
 }
 
 .pulse-panel-parameter-collapsed #pulse-panel-parameter {
@@ -1253,10 +1313,8 @@ input:checked+.slider::before {
 // TILE //
 
 .tile {
-  box-shadow: @box_shadow;
-  background-color: @box_color;
+  background-color: @color_background;
   color: @box_text_color;
-  border: 1px solid darken(@box_color, 10%);
   box-sizing: border-box;
   width: 100%;
   height: 100%;
@@ -1264,23 +1322,14 @@ input:checked+.slider::before {
 
 .tile-title {
   display: flex;
-  flex-direction: row; // align children
-  //align-items: stretch;
-
-  position: relative; // For vertical center
-
+  flex-direction: row;
+  position: relative;
   padding: 4px 10px 4px 10px;
-  border-bottom: 1px solid darken(@box_color, 10%);
-  background-color: @box_header_color;
+  background-color: @color_background_alternate;
   color: @box_header_text_color;
-
-  // Managed by flex - test and remove :
-  //height: 40px;
-  //line-height: 40px; /* pour centrage */
   white-space: nowrap;
 
   x-reasonbutton {
-    //display: inline-block; // NON ! Attention, "hidden" casse l'arret de rafraichissement --RR
     width: 32px;
     height: 32px;
     margin: auto;
@@ -1288,7 +1337,6 @@ input:checked+.slider::before {
   }
 
   x-runningbutton {
-    //display: inline-block; // NON ! --RR
     width: 32px;
     height: 32px;
     margin: auto;
@@ -1299,12 +1347,10 @@ input:checked+.slider::before {
     font-weight: bold;
     text-transform: uppercase;
     font-size: 1.8em;
-    line-height: 1.8em; // == Vertical align
+    line-height: 1.8em;
   }
 
   >x-machinedisplay {
-    // With no machinedisplay-position
-    // auto-width
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: auto;
@@ -1369,7 +1415,6 @@ x-motiontime {
   color: @color_text;
   border-radius: 3px;
   padding: 4px;
-  box-shadow: @box_shadow;
   border: 1px solid @color_window_border;
   z-index: 200;
 }
@@ -1437,7 +1482,7 @@ x-motiontime {
   }
 
   .pulse-mainarea-inner {
-    padding: 0 !important;
+    padding: 0px !important;
     height: initial !important;
   }
 

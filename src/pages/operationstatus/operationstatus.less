@@ -50,11 +50,30 @@ a {
   color: @color_text;
 }
 
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+}
+
+.tile-title {
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+
+  x-machinedisplay {
+    text-align: center;
+
+    span {
+      width: auto;
+    }
+  }
+}
+
 // tile-content
 .tile-content {
   display: flex;
   flex-direction: column; // align children
   overflow: hidden; // Hide bottom displays when too small
+  border-radius: @border_radius;
 
   .big-operation {
     font-size: 2em;
@@ -227,15 +246,16 @@ x-currentworkinfo {
 x-workinfo {
   display: block;
   text-align: center;
-  background-color: @widget_background; // @box_header_color;
-  color: @widget_text;
-  border-bottom: solid 1px @color_window_alternate_border;
-  border-top: solid 1px @color_window_alternate_border;
-  height: 1.5em; // To force height even if no data - ONE LINE
+  color: @color_text;
+  min-height: 1.5em; // To force height even if no data - ONE LINE
   padding: 2px 0 0 0; // For Edge top padding....
   box-sizing: border-box;
-
   overflow: hidden; // For Chrome, small display = avoid 2 lines
+  margin-bottom: 6px;
+
+  .workinfo-singledata {
+    font-size: 22px;
+  }
 }
 
 x-production {

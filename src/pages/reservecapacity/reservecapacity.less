@@ -47,15 +47,27 @@ x-groupsingroup {
   flex-grow: 9999;
 }
 
-//tile-title
-//.tile-title { }
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+}
+
+.tile-title { 
+  border-top-left-radius: @border_radius;
+  border-top-right-radius: @border_radius;
+  
+  x-machinedisplay {
+    text-align: center;
+
+    span {
+      width: auto;
+    }
+  }
+}
 
 // tile-content
 .tile-content {
-  /*display: flex;
-  flex-direction: column; // align children
-  overflow: hidden;  // Hide bottom displays when to small
-  */
+  border-radius: @border_radius;
   box-sizing: border-box;
   width: 100%;
   height: 100%;

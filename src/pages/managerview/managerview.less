@@ -48,12 +48,37 @@
 
   display: flex;
   flex-direction: column; // align children
+  border-radius: @border_radius;
+
+  x-grouparray {
+    .one_machine_cell {
+      border-radius: @border_radius;
+      border: 1px solid @color_window_border;
+      padding: 16px;
+      margin: 0 12px;
+    }
+
+    .group-main {
+      display: flex;
+      flex-direction: column; 
+      row-gap: 24px;
+
+      li:first-of-type {
+        margin-top: 18px;
+      }
+
+      li:last-of-type {
+        margin-bottom: 22px;
+      }
+    }
+  }
 
   .one_machine_cell {
     display: flex;
     flex-direction: row; // align children
+
     &.top_cell {
-     align-items: center;
+      align-items: center;
     }
 
     .div-status {
@@ -73,8 +98,6 @@
       flex-grow: 99999;
       flex-shrink: 99999;
       overflow: hidden; // To avoid too big graduation
-
-      padding: 6px 0;
 
       .pulse-bar-div {
         //.bar-rounded-shadow; // Rounded border + shadow -> in style.less
