@@ -50,6 +50,13 @@
 .tile {
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+  margin: 4px 0 4px 0;
+  padding-top: 4px;
+}
+
+.main-table {
+  margin: 0 4px 4px 0;
+  padding-top: 0;
 }
 
 .running-page {
@@ -80,6 +87,7 @@
         background-color: @color_background !important;
         border: 1px solid @color_window_border;
         margin-left: -8px;
+        padding: 5.5px 4px !important;
       }
     }
 
@@ -139,8 +147,17 @@
         margin-left: @margin_graduation; //24px;
       }
 
-      .periodtoolbar-toolbar {
-        border: 1px solid @color_window_border;
+      .periodtoolbar {
+        display: flex;
+        justify-content: center;
+
+        .periodtoolbar-toolbar {
+          border: 1px solid @color_window_border;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: fit-content;
+        }
       }
     }
 

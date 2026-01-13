@@ -48,7 +48,6 @@
 .main-table-box {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   row-gap: 12px;
 
   .sub-title {
@@ -86,11 +85,17 @@ x-groupsingroup {
   box-sizing: border-box;
   max-height: 95%;
   flex-grow: 9999;
+
+  .groupsingroup-subgroup {
+    padding-top: 0 !important;
+  }
 }
 
 .tile {
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+  padding-top: 0;
+  margin-top: 0 !important;
 }
 
 .tile-title {
@@ -99,6 +104,7 @@ x-groupsingroup {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  min-height: 50px;
 
   .machinedisplay-position {
     position: absolute;
@@ -184,7 +190,7 @@ x-workinfo {
   .workinfo-singledata {
     font-size: 22px;
   }
-  
+
 }
 
 .legend-content {
