@@ -134,18 +134,32 @@
 }
 
 x-periodtoolbar {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 
-  .periodtoolbar ol.periodtoolbar-toolbar {
+  .periodtoolbar {
     display: flex;
     justify-content: center;
-    align-items: center;
+
+    ol.periodtoolbar-toolbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid @color_window_border;
+      width: fit-content;
+    }
+  }
+}
+
+x-grouparray {
+  .group-single {
+    padding-top: 0 !important;
   }
 }
 
 // Text 
 
 .tile-content {
+
   span,
   div {
     font-size: 20px;

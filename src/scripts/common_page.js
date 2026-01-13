@@ -327,8 +327,11 @@ var setNavigationLinks = function () {
   $('#navbar > ul > li.expandable > span').click(function () {
     let previousState = $(this).parent().find('ul').is(':visible');
     $('#navbar > ul > li > ul').hide();
-    if (!previousState)
+    $('#navbar > ul > li > span').css('align-content', 'center');
+    if (!previousState) {
       $(this).parent().find('ul').show();
+      $('#navbar > ul > li > span').css('align-content', 'start');
+    }
   });
 
   let fullURL = window.location.pathname;

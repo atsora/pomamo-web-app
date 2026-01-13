@@ -176,6 +176,7 @@ body {
 #pulse-inner {
   margin-top: -3px;
   height: 100%;
+  overflow: auto;
 }
 
 #pulse-navigation-and-main {
@@ -588,7 +589,8 @@ body {
   width: 100%;
   height: 3px;
   background-color: transparent;
-  position: relative
+  position: relative;
+  flex-shrink: 0;
 }
 
 .pulse-header-rotation-progress>span {
@@ -683,7 +685,12 @@ body {
       font-size: 20px;
       position: absolute;
       right: 10px;
-      top: 6px;
+      top: 0px;
+    }
+
+    &.expandable {
+      display: flex;
+      flex-direction: column;
     }
 
     &.selected {
@@ -724,6 +731,7 @@ body {
       background-color: @color_window_alternate;
       color: @color_text_alternate;
       display: none;
+      border-radius: @border_radius_small;
 
       &>li {
         display: block;
