@@ -746,7 +746,7 @@ var populateConfigPanel = function (currentPageMethods) {
     //let title = document.title; -> I'd like to bookmark it. But not possible for the moment
 
     // Display the built url = 'prompt' = generic
-    pulseCustomDialog.openInfo(url, 'URL to bookmark');
+    pulseCustomDialog.openInfo(url, pulseConfig.pulseTranslate('content.bookmark', 'URL to bookmark'));
   });
 
   //// BUTTON "copyurl"
@@ -762,20 +762,20 @@ var populateConfigPanel = function (currentPageMethods) {
       tmp.select();
       if (document.execCommand('copy')) {
         $('#copyurl').addClass('urlcopied');
-        $('#copyurl').html('Success');
+        $('#copyurl').html(pulseConfig.pulseTranslate('content.success', 'Success'));
 
         setTimeout(function () {
           $('#copyurl').removeClass('urlcopied');
-          $('#copyurl').html('Copy URL');
+          $('#copyurl').html(pulseConfig.pulseTranslate('content.copyurl', 'Copy URL'));
         }, 3000);
 
       } else {
         $('#copyurl').addClass('urlcopyfailed');
-        $('#copyurl').html('Failure');
+        $('#copyurl').html(pulseConfig.pulseTranslate('content.failure', 'Failure'));
 
         setTimeout(function () {
           $('#copyurl').removeClass('urlcopyfailed');
-          $('#copyurl').html('Copy URL');
+          $('#copyurl').html(pulseConfig.pulseTranslate('content.copyurl', 'Copy URL'));
         }, 3000);
       }
       document.body.removeChild(tmp);
@@ -783,21 +783,21 @@ var populateConfigPanel = function (currentPageMethods) {
       navigator.clipboard.writeText(url_to_copy).then(
         function () {
           $('#copyurl').addClass('urlcopied');
-          $('#copyurl').html('Success');
+          $('#copyurl').html(pulseConfig.pulseTranslate('content.success', 'Success'));
 
           setTimeout(function () {
             $('#copyurl').removeClass('urlcopied');
-            $('#copyurl').html('Copy URL');
+            $('#copyurl').html(pulseConfig.pulseTranslate('content.copyurl', 'Copy URL'));
           }, 3000);
         })
         .catch(
           function () {
             $('#copyurl').addClass('urlcopyfailed');
-            $('#copyurl').html('Failure');
+            $('#copyurl').html(pulseConfig.pulseTranslate('content.failure', 'Failure'));
 
             setTimeout(function () {
               $('#copyurl').removeClass('urlcopyfailed');
-              $('#copyurl').html('Copy URL');
+              $('#copyurl').html(pulseConfig.pulseTranslate('content.copyurl', 'Copy URL'));
             }, 3000);
           });
     }

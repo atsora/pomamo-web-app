@@ -177,6 +177,7 @@ body {
   margin-top: -3px;
   height: 100%;
   overflow: auto;
+  filter: blur(0px);
 }
 
 #pulse-navigation-and-main {
@@ -201,7 +202,7 @@ body {
 
 #pulse-panel-parameter {
   position: absolute;
-  top: 48px;
+  top: 0px;
   right: 0;
   bottom: 0;
   z-index: 50;
@@ -249,10 +250,10 @@ body {
   }
 }
 
-.pulse-mainarea:before {
+.pulse-header:before {
   /* customer logo if needed */
   content: "";
-  background-image: @customer_logo;
+  //background-image: @customer_logo;
   background-position: top right;
   background-repeat: no-repeat;
   background-size: contain;
@@ -265,7 +266,7 @@ body {
   z-index: -1;
 }
 
-.pulse-mainarea:after {
+.pulse-header:after {
   /* main logo */
   content: "";
   background-image: @product_logo;

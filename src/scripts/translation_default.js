@@ -76,11 +76,14 @@ ATSORA_LOCALE_CATALOG.default.parameters = {
 ATSORA_LOCALE_CATALOG.default.content = {
   actual: 'actual',
   actualVsTarget: 'actual/target',
+  bookmark: 'URL to bookmark',
+  copyurl : 'Copy URL',
   currentColon: 'Current:',
   currentDay: 'Current day',
   currentShift: 'Current shift',
   currentWeek: 'Current week',
   days: '(7 days)',
+  failure: 'failure',
   inProgress: 'in progress',
   last7days: 'Last 7 days',
   legend: 'Legend',
@@ -101,6 +104,7 @@ ATSORA_LOCALE_CATALOG.default.content = {
   performance: 'Performance',
   changedtools: 'Tools',
   state: 'State',
+  success: 'Success',
 }
 
 ATSORA_LOCALE_CATALOG.default.dialog = {
@@ -283,11 +287,14 @@ ATSORA_LOCALE_CATALOG.fr.parameters = {
 ATSORA_LOCALE_CATALOG.fr.content = {
   actual: 'données courantes',
   actualVsTarget: 'données courantes/objectif',
+  bookmark: 'URL à enregistrer',
+  copyurl : 'Copier URL',
   currentColon: 'Actuellement :',
   currentDay: 'Jour courant',
   currentShift: 'Équipe courante',
   currentWeek: 'Semaine courante',
   days: '(7 jours)',
+  failure: 'Échec',
   inProgress: 'en cours',
   last7days: '7 derniers jours',
   legend: 'Légende',
@@ -308,6 +315,7 @@ ATSORA_LOCALE_CATALOG.fr.content = {
   performance: 'Performance',
   changedtools: 'Outils',
   state: 'État',
+  success: 'Succès',
 }
 
 ATSORA_LOCALE_CATALOG.fr.dialog = {
