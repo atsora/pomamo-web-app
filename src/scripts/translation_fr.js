@@ -73,11 +73,14 @@ ATSORA_LOCALE_CATALOG.fr.parameters = {
 ATSORA_LOCALE_CATALOG.fr.content = {
   actual: 'données courantes',
   actualVsTarget: 'données courantes/objectif',
+  bookmark: 'URL à enregistrer',
+  copyurl : 'Copier URL',
   currentColon: 'Actuellement :',
   currentDay: 'Jour courant',
   currentShift: 'Équipe courante',
   currentWeek: 'Semaine courante',
   days: '(7 jours)',
+  failure: 'Échec',
   inProgress: 'en cours',
   last7days: '7 derniers jours',
   legend: 'Légende',
@@ -98,6 +101,7 @@ ATSORA_LOCALE_CATALOG.fr.content = {
   performance: 'Performance',
   changedtools: 'Outils',
   state: 'État',
+  success: 'Succès',
 }
 
 ATSORA_LOCALE_CATALOG.fr.dialog = {
