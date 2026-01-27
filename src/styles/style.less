@@ -151,6 +151,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0; // allow children to shrink inside flex column
 }
 
 .appcontext-live {
@@ -171,12 +172,14 @@ body {
   /* Standard syntax */
   color: fade(@color_text, 90%); // Change color when background is changed to see any text
   z-index: 100;
+  flex: 0 0 auto; // keep natural height, don't steal remaining space
 }
 
 #pulse-inner {
   margin-top: -3px;
-  height: 100%;
-  overflow: auto;
+  flex: 1 1 auto; // take remaining height below header
+  min-height: 0; // required so inner scroll areas can size correctly
+  height: auto;
   filter: blur(0px);
 }
 
@@ -188,6 +191,7 @@ body {
   min-width: 400px;
   overflow: hidden;
   height: 100%;
+  min-height: 0;
 }
 
 #pulse-panel-navigation {

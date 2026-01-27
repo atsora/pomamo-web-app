@@ -79,6 +79,10 @@
 
     &.top_cell {
       align-items: center;
+
+      .div-percent {
+        width: 80px;
+      }
     }
 
     .div-status {
@@ -100,17 +104,11 @@
       overflow: hidden; // To avoid too big graduation
 
       .pulse-bar-div {
-        //.bar-rounded-shadow; // Rounded border + shadow -> in style.less
-        // align with graduation
-        margin-right: @margin_graduation; //23px;
-        margin-left: @margin_graduation; //24px;
+        margin-right: 31px; 
         // local :
         font-size: 1em;
         line-height: 2em;
 
-        //>div {
-        //min-height: 2em; //Avoid ! Else blank zone under bars
-        //}
         >.middle-bar {
           min-height: 2em;
         }
@@ -120,7 +118,7 @@
     .div-percent {
       flex-shrink: 0; // Aucune réduction
       //padding: 6px 0;
-      width: 80px; // Forced & fixed because of graduation on top - DO NOT use %
+      //width: 80px; // Forced & fixed because of graduation on top - DO NOT use %
 
       display: flex;
       flex-direction: column; // align children
