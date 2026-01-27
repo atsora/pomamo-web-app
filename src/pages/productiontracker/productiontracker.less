@@ -26,6 +26,9 @@
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%; // Take full available height
 }
 
 .tile-title {
@@ -58,6 +61,12 @@
 
 .tile-content {
   border-radius: @border_radius;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-grow: 1; // Grow to fill available space
+  flex-shrink: 1; // Can shrink if needed
+  min-height: 0; // Allow flex children to shrink below content size
 }
 
 // Use Full screen

@@ -196,6 +196,8 @@ PULSE_DEFAULT_CONFIG.pages = {
     enableGroups: true,
     showworkinfo: true,
     showworkinfobig: false,
+    showcurrentmachinestatuslogo: true,
+    showcurrentmachinestatusletter: false,
     showproduction: true,
     productionpercent: 'actualtarget', // 'true' or 'actualonly' or 'actualtarget'
     productionpercentinpie: 'true',    // 'true' or 'actualonly' or 'actualtarget'

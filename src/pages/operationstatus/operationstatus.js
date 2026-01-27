@@ -1,3 +1,4 @@
+
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
 // Copyright (C) 2025 Atsora Solutions
 //
@@ -22,6 +23,8 @@ require('x-freetext/x-freetext');
 require('x-currentisofile/x-currentisofile');
 require('x-stacklight/x-stacklight');
 require('x-toollifemachine/x-toollifemachine');
+require('x-reasonbutton/x-reasonbutton');
+require('x-lastmachinestatus/x-lastmachinestatus');
 
 /* For Bar display and some defaultpie */
 require('x-periodmanager/x-periodmanager');
@@ -129,6 +132,36 @@ class OperationStatusPage extends pulsePage.BasePage {
         $('.operationstatus-top-div').addClass('big-operation');
       }
     });
+
+    //showcurrentmachinestatuslogo
+    $('#showcurrentmachinestatuslogo').prop('checked', pulseConfig.getBool('showcurrentmachinestatuslogo'));
+    if (pulseConfig.getDefaultBool('showcurrentmachinestatuslogo') != pulseConfig.getBool('showcurrentmachinestatuslogo'))
+      $('#showcurrentmachinestatuslogo').attr('overridden', 'true');
+    $('#showcurrentmachinestatuslogo').change(function () {
+      pulseConfig.set('showcurrentmachinestatuslogo', $('#showcurrentmachinestatuslogo').is(':checked'));
+      if ($('#showcurrentmachinestatuslogo').is(':checked')) {
+        $('x-reasonbutton').show();
+      }
+      else {
+        $('x-reasonbutton').hide();
+      }
+    });
+    $('#showcurrentmachinestatuslogo').change(); // To show / Hide x-reasonbutton
+    
+    //showcurrentmachinestatusletter
+    $('#showcurrentmachinestatusletter').prop('checked', pulseConfig.getBool('showcurrentmachinestatusletter'));
+    if (pulseConfig.getDefaultBool('showcurrentmachinestatusletter') != pulseConfig.getBool('showcurrentmachinestatusletter'))
+      $('#showcurrentmachinestatusletter').attr('overridden', 'true');
+    $('#showcurrentmachinestatusletter').change(function () {
+      pulseConfig.set('showcurrentmachinestatusletter', $('#showcurrentmachinestatusletter').is(':checked'));
+      if ($('#showcurrentmachinestatusletter').is(':checked')) {
+        $('x-lastmachinestatus').show();
+      }
+      else {
+        $('x-lastmachinestatus').hide();
+      }
+    });
+    $('#showcurrentmachinestatusletter').change(); // To show / Hide x-lastmachinestatus
 
     //showproductionoperation = Show Part Count
     $('#showproductionoperation').prop('checked', pulseConfig.getBool('showproduction'));
@@ -796,6 +829,16 @@ class OperationStatusPage extends pulsePage.BasePage {
     $('#showworkinfo').change();
     $('#showworkinfo').removeAttr('overridden');
 
+        // showmachinestatuslogo
+    $('#showcurrentmachinestatuslogo').prop('checked', pulseConfig.getDefaultBool('showcurrentmachinestatuslogo'));
+    $('#showcurrentmachinestatuslogo').change();
+    $('#showcurrentmachinestatuslogo').removeAttr('overridden');
+
+        // showmachinestatusletter
+    $('#showcurrentmachinestatusletter').prop('checked', pulseConfig.getDefaultBool('showcurrentmachinestatusletter'));
+    $('#showcurrentmachinestatusletter').change();
+    $('#showcurrentmachinestatusletter').removeAttr('overridden');
+
     // operation size
     //$('#showworkinfosmall').prop('checked', 'true' != pulseConfig.getString('showworkinfobig'));
     $('#showworkinfobig').prop('checked', 'true' == pulseConfig.getString('showworkinfobig'));
@@ -943,6 +986,22 @@ class OperationStatusPage extends pulsePage.BasePage {
     }
     else {
       optionsValues += '&showworkinfobig=false';
+    }
+
+    // Machine status logo
+    if ($('#showcurrentmachinestatuslogo').is(':checked')) {
+      optionsValues += '&showcurrentmachinestatuslogo=true';
+    }
+    else {
+      optionsValues += '&showcurrentmachinestatuslogo=false';
+    }
+
+    // Machine status letter
+    if ($('#showcurrentmachinestatusletter').is(':checked')) {
+      optionsValues += '&showcurrentmachinestatusletter=true';
+    }
+    else {
+      optionsValues += '&showcurrentmachinestatusletter=false';
     }
 
     // Prod
