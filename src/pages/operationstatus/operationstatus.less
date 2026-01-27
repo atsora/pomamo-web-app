@@ -53,17 +53,110 @@ a {
 .tile {
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+  display: flex;
+  flex-direction: column;
+  height: 100%; // Take full available height
+}
+
+.machinedisplay-position {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+
+  x-machinedisplay {
+    display: inline-block;
+    width: auto;
+    max-width: fit-content;
+    flex-shrink: 0;
+    margin-left: 0;
+  }
+
+  x-reasonbutton {
+    width: 30px !important;
+    height: 30px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: 0;
+  }
+  x-reasonbutton svg {
+    margin-top: 2px;
+    width: 1.5em !important;
+  }
 }
 
 .tile-title {
   border-top-left-radius: @border_radius;
   border-top-right-radius: @border_radius;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 0 !important;
+  flex-shrink: 0;
 
-  x-machinedisplay {
-    text-align: center;
+  x-lastmachinestatus {
+    width: 100%;
+  }
 
-    span {
-      width: auto;
+  .lastmachinestatus-current-reason-only {
+    display: flex;
+    align-items: center;
+    
+    .pulse-cellbar-main {
+      display: flex !important;
+      justify-content: center !important;
+      width: 100% !important;
+      height: unset !important;
+      align-items: center !important;
+      filter: opacity(100%) !important;
+
+      .pulse-cellbar-between {
+        display: none !important;
+      }
+
+      .pulse-cellbar-past-data {
+        display: none !important;
+      }
+
+      .pulse-cellbar-current-data {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        height: unset !important;
+        padding: 0 !important;
+        border: none !important;
+        background: none !important;
+        color: inherit !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+
+        &::before,
+        &::after {
+          display: none !important;
+          content: none !important;
+        }
+
+        // Hide everything except reason data
+        i,
+        .lastmachinestatus-reason-label,
+        svg,
+        .pulse-missing-data {
+          display: none !important;
+        }
+
+        .lastmachinestatus-reason-data {
+          display: inline !important;
+          text-align: center !important;
+          width: auto !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          flex: 0 !important;
+        }
+      }
     }
   }
 }
@@ -72,8 +165,11 @@ a {
 .tile-content {
   display: flex;
   flex-direction: column; // align children
-  overflow: hidden; // Hide bottom displays when too small
+  overflow: hidden; // Clip overflowing content
   border-radius: @border_radius;
+  flex-grow: 1; // Grow to fill available space
+  flex-shrink: 1; // Can shrink if needed
+  min-height: 0; // Allow flex children to shrink below content size
 
   .big-operation {
     font-size: 2em;
@@ -82,6 +178,7 @@ a {
   .operationstatus-top-div {
     // operationstatus-pms-div
     margin-top: 4px;
+    flex-shrink: 1; // Can shrink if needed
 
     &.big-display {
       flex-grow: 2; // Strech if middle is hidden only for big-display
@@ -94,13 +191,12 @@ a {
     // operationstatus-alarm-pie-stacklight
     flex-grow: 2; // Strech to available space
     flex-shrink: 2;
+    min-height: 0; // Allow flex to shrink below content size
 
     display: flex;
     flex-direction: row; // children alignment
     align-items: stretch; // center; // = Vertical center - Paragon stacklight align
     justify-content: space-between; // Keep pie in the middle
-
-    min-height: 100px; // To see it always. Warning! Linked to .tile-content{ overflow: hidden; to hide bottom when needed
 
     .operationstatus-cycleprogress {
       flex-shrink: 5; // Strech
@@ -199,6 +295,7 @@ a {
     // Auto size and position
     padding-top: 5px;
     box-sizing: border-box;
+    flex-shrink: 1; // Can shrink if needed
   }
 
   .operationstatus-isofile-div {
@@ -207,7 +304,7 @@ a {
   }
 
   .operationstatus-alarm-bottom-div {
-    min-height: 45px;
+    min-height: 0; // Allow flex to shrink
 
     x-currenticoncncalarm {
       // Make it smaller and centered
@@ -330,8 +427,9 @@ x-toollifemachine {
 // BARS
 .operationstatus-bar {
   width: 100%;
-  height: 65px; // To avoid different box heights (bar = 40 + gradutation = 25)
-  min-height: 65px; // To avoid small size blink of boxes
+  height: auto; // Flexible height
+  min-height: 0; // Allow flex to shrink
+  margin-top: auto; // Push to bottom
 
   display: flex;
   flex-direction: row; // align children

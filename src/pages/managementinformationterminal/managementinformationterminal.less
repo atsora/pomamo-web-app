@@ -96,6 +96,9 @@ x-groupsingroup {
   border: 1px solid @color_window_border;
   padding-top: 0;
   margin-top: 0 !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%; // Take full available height
 }
 
 .tile-title {
@@ -129,10 +132,12 @@ x-groupsingroup {
 
 .tile-content {
   border-radius: @border_radius;
-
   display: flex;
   flex-direction: column; // align children
   overflow: hidden; // Hide bottom displays when to small
+  flex-grow: 1; // Grow to fill available space
+  flex-shrink: 1; // Can shrink if needed
+  min-height: 0; // Allow flex children to shrink below content size
 
   pointer-events: none; //TODO : TMP - to remove to allow click on pie for example - that means rework global .tile / .tile-title / .tile-content
 

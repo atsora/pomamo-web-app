@@ -24,6 +24,9 @@
 .tile {
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+  display: flex;
+  flex-direction: column;
+  height: 100%; // Take full available height
 }
 
 .tile-title {
@@ -81,6 +84,9 @@
   flex-direction: row;
   overflow: hidden;
   border-radius: @border_radius;
+  flex-grow: 1; // Grow to fill available space
+  flex-shrink: 1; // Can shrink if needed
+  min-height: 0; // Allow flex children to shrink below content size
 
   .oee-number {
     display: flex;
