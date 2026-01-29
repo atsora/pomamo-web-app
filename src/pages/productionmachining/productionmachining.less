@@ -26,14 +26,12 @@
   .group-main{
     display: flex;
     flex-direction: column;
-    row-gap: 16px;
+    row-gap: 12px;
     padding: 16px 24px;
 
     .group-single{
       order: 999999; // default = bottom
-      border: 1px solid @color_window_border;
       border-radius: @border_radius_small;
-      padding: 12px
     }
   }
   .one-machine-cell{ // == group-single // could be display:contents when available
@@ -58,7 +56,6 @@
     }
 
     .pulse-bar-div {
-      background-color: @color_background;
       border: 1px solid @color_window_border;
     }
   }
