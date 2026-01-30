@@ -6,53 +6,83 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <div class="param-group group-options">
-    <div class="param-group-header group-options">
-        <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
-        <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
-                default="reset"></x-tr></button>
+  <div class="param-group-header group-options">
+    <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
+        default="reset"></x-tr></button>
+  </div>
+
+  <div class="param-group-content group-options">
+
+    <div class="labelsubgroup">
+      <label for="showChangedTools"><x-tr key="options.showChangedTools" default="Show tool information"></x-tr>
+        <input type="checkbox" id="showChangedTools" autocomplete="off" />
+      </label>
     </div>
 
-    <div class="param-group-content group-options">
-
-        <div class="labelsubgroup">
-            <label for="showChangedTools"><x-tr key="options.showChangedTools" default="Show tool information"></x-tr>
-                <input type="checkbox" id="showChangedTools" autocomplete="off"/>
-            </label>
-        </div>
-
-        <div class="labelsubgroup">
-            <label for="openStopClassification"><x-tr key="options.openStopClassification" default="Automatically open stop classification dialog"></x-tr>
-                <input type="checkbox" id="openStopClassification" autocomplete="off"/>
-            </label>
-            <div class="subgroup openStopClassificationDetails">
-                <label for="stopClassificationReopenDelay"><x-tr key="options.stopClassificationReopenDelay" default="Reopen delay (seconds)"></x-tr>
-                    <input type="number" id="stopClassificationReopenDelay" value="0" step="1" min="0" max="3600" autocomplete="off"/>
-                </label>
-            </div>
-        </div>
-
-        <!-- Production gauge settings -->
-        <div class="labelsubgroup">
-            <label for="showproductiongauge"><x-tr key="options.showProductionGauge" default="Show production gauge"></x-tr>
-                <input type="checkbox" id="showproductiongauge" autocomplete="off"/>
-            </label>
-            <div class="subgroup radiogroup showproductiongaugedetails">
-                <div class='inlined-radio'>
-                    <input type="radio" id="productiongaugepercent" name="showproductiongauge" value="productiongaugepercent"/>
-                    <span for="productiongaugepercent"><x-tr key="content.percent" default="percent"></x-tr></span>
-                </div>  
-                <div class='inlined-radio'>
-                    <input type="radio" id="productiongaugeratio" name="showproductiongauge" value="productiongaugeratio"/>
-                    <span for="productiongaugeratio"><x-tr key="options.productionActualVsTarget" default="production actual/target"></x-tr></span>
-                </div>
-                <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
-                <label for="thresholdtargetproductiongauge"><x-tr key="options.target" default="Target"></x-tr>
-                    <input type="number" id="thresholdtargetproductiongauge" value="0" step="1" min="0" autocomplete="off"/>
-                </label>
-                <label for="thresholdredproductiongauge"><x-tr key="options.thresholdRed" default="Red"></x-tr>
-                    <input type="number" id="thresholdredproductiongauge" value="0" step="1" min="0" autocomplete="off"/>
-                </label>
-            </div>
-        </div>
+    <div class="labelsubgroup">
+      <label for="openStopClassification"><x-tr key="options.openStopClassification"
+          default="Automatically open stop classification dialog"></x-tr>
+        <input type="checkbox" id="openStopClassification" autocomplete="off" />
+      </label>
+      <div class="subgroup openStopClassificationDetails">
+        <label for="stopClassificationReopenDelay"><x-tr key="options.stopClassificationReopenDelay"
+            default="Reopen delay (seconds)"></x-tr>
+          <input type="number" id="stopClassificationReopenDelay" value="0" step="1" min="0" max="3600"
+            autocomplete="off" />
+        </label>
+      </div>
     </div>
+
+    <!-- switch between circular gauge and pie -->
+    <div class="labelsubgroup">
+      <label for="showproductiondisplay"><x-tr key="options.productionDisplay" default="Production display"></x-tr>
+        <input type="checkbox" id="showproductiondisplay" autocomplete="off" />
+      </label>
+      <div class="subgroup radiogroup showproductiondisplaydetails">
+        <div class='inlined-radio'>
+          <input type="radio" id="productiongauge" name="productiondisplay" value="productiongauge" />
+          <span for="productiongauge"><x-tr key="options.gauge" default="Gauge"></x-tr></span>
+        </div>
+        <div class='inlined-radio'>
+          <input type="radio" id="productionpie" name="productiondisplay" value="productionpie" />
+          <span for="productionpie"><x-tr key="options.pie" default="advancement pie"></x-tr></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- threshold and target settings -->
+    <div class="labelsubgroup">
+      <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
+      <div class="subgroup radiogroup">
+        <div class='inlined-radio'>
+          <label for="thresholdtargetproductionbar"><x-tr key="options.target" default="Target"></x-tr>
+            <input type="number" id="thresholdtargetproductionbar" value="0" step="1" min="0" autocomplete="off" />
+          </label>
+          <label for="thresholdredproductionbar"><x-tr key="options.thresholdRed" default="Red"></x-tr>
+            <input type="number" id="thresholdredproductionbar" value="0" step="1" min="0" autocomplete="off" />
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Production bar settings -->
+
+    <div class="labelsubgroup">
+      <label for="showproductionbar"><x-tr key="options.showProductionbar" default="Show production bar"></x-tr>
+        <input type="checkbox" id="showproductionbar" autocomplete="off" />
+      </label>
+      <div class="subgroup radiogroup showproductionbardetails">
+        <div class='inlined-radio'>
+          <input type="radio" id="productionbarpercent" name="showproductionbar" value="productionbarpercent" />
+          <span for="productionbarpercent"><x-tr key="content.percent" default="percent"></x-tr></span>
+        </div>
+        <div class='inlined-radio'>
+          <input type="radio" id="productionbarratio" name="showproductionbar" value="productionbarratio" />
+          <span for="productionbarratio"><x-tr key="options.productionActualVsTarget"
+              default="production actual/target"></x-tr></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
