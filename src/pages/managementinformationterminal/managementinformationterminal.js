@@ -120,26 +120,26 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
         { 'config': 'productionpercentinpie' });
     });
 
-    $('#thresholdorangeproduction').val(pulseConfig.getInt('thresholdorangeproduction'));
-    var changeOrange = function () {
+    $('#thresholdtargetproduction').val(pulseConfig.getInt('thresholdtargetproduction'));
+    var changetarget = function () {
       // Verify thresholds
-      if (self._verficationThresholds($('#thresholdorangeproduction').val(), $('#thresholdredproduction').val())) {
+      if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
         $(this).attr('overridden', true);
         // Store
-        if (pulseUtility.isInteger($('#thresholdorangeproduction').val())) {
+        if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
           // Display / Dispatch
           eventBus.EventBus.dispatchToAll('configChangeEvent',
-            { 'config': 'thresholdorangeproduction' });
+            { 'config': 'thresholdtargetproduction' });
         }
       }
     };
-    $('#thresholdorangeproduction').bind('input', changeOrange);
-    $('#thresholdorangeproduction').change(changeOrange);
+    $('#thresholdtargetproduction').bind('input', changetarget);
+    $('#thresholdtargetproduction').change(changetarget);
 
     $('#thresholdredproduction').val(pulseConfig.getInt('thresholdredproduction'));
     var changeRed = function () {
       // verify thresholds
-      if (self._verficationThresholds($('#thresholdorangeproduction').val(), $('#thresholdredproduction').val())) {
+      if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
         $(this).attr('overridden', true);
         // Store
         if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
@@ -181,7 +181,7 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
       return false;
     }
 
-    // In percentage mode: orange > red (normal logic)
+    // In percentage mode: target > red (normal logic)
     if (Number(targetValue) <= Number(redValue)) {
       errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdError', 'Target threshold must be greater than red threshold');
       errorMessage.style.display = 'block';
@@ -196,7 +196,7 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
     }
 
     // Store values
-    pulseConfig.set('thresholdorangeproduction', parseFloat(targetValue));
+    pulseConfig.set('thresholdtargetproduction', parseFloat(targetValue));
     pulseConfig.set('thresholdredproduction', parseFloat(redValue));
 
     errorMessage.style.display = 'none';
@@ -226,9 +226,9 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
       ('true' != productionpercentinpie && 'actualonly' != productionpercentinpie));
     $('#productionactualtargetinpie').change();
 
-    $('#thresholdorangeproduction').val(pulseConfig.getDefaultInt('thresholdorangeproduction'));
-    $('#thresholdorangeproduction').change();
-    $('#thresholdorangeproduction').removeAttr('overridden');
+    $('#thresholdtargetproduction').val(pulseConfig.getDefaultInt('thresholdtargetproduction'));
+    $('#thresholdtargetproduction').change();
+    $('#thresholdtargetproduction').removeAttr('overridden');
 
     $('#thresholdredproduction').val(pulseConfig.getDefaultInt('thresholdredproduction'));
     $('#thresholdredproduction').change();
@@ -259,8 +259,8 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
     }
 
 
-    if (pulseUtility.isInteger($('#thresholdorangeproduction').val())) {
-      optionsValues += '&thresholdorangeproduction=' + $('#thresholdorangeproduction').val();
+    if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
+      optionsValues += '&thresholdtargetproduction=' + $('#thresholdtargetproduction').val();
     }
     if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
       optionsValues += '&thresholdredproduction=' + $('#thresholdredproduction').val();
@@ -308,17 +308,17 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
       url = pulseUtility.removeURLParameter(url, 'toollabelname');
     }
 
-    if (-1 != url.search('thresholdorangeproduction=')) {
+    if (-1 != url.search('thresholdtargetproduction=')) {
       needReload = true;
-      pulseConfig.set('thresholdorangeproduction',
-        pulseUtility.getURLParameter(url, 'thresholdorangeproduction'));
-      url = pulseUtility.removeURLParameter(url, 'thresholdorangeproduction');
+      pulseConfig.set('thresholdtargetproduction',
+        pulseUtility.getURLParameter(url, 'thresholdtargetproduction'));
+      url = pulseUtility.removeURLParameter(url, 'thresholdtargetproduction');
     }
-    if (-1 != url.search('thresholdorangeproduction=')) {
+    if (-1 != url.search('thresholdtargetproduction=')) {
       needReload = true;
-      pulseConfig.set('thresholdorangeproduction',
-        pulseUtility.getURLParameter(url, 'thresholdorangeproduction'));
-      url = pulseUtility.removeURLParameter(url, 'thresholdorangeproduction');
+      pulseConfig.set('thresholdtargetproduction',
+        pulseUtility.getURLParameter(url, 'thresholdtargetproduction'));
+      url = pulseUtility.removeURLParameter(url, 'thresholdtargetproduction');
     }
 
     if (needReload) {

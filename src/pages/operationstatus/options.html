@@ -39,8 +39,25 @@ SPDX-License-Identifier: Apache-2.0
       <label for="showcurrentmachinestatusletter"><x-tr key="options.showcurrentmachinestatusletter" default="show status"></x-tr>
         <input type="checkbox" id="showcurrentmachinestatusletter" autocomplete="off" />
       </label>
-      
+
     </div>
+
+        <!-- threshold and target settings -->
+    <div class="labelsubgroup">
+      <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
+      <div class="subgroup radiogroup">
+        <div class='inlined-radio'>
+          <label for="thresholdtargetproduction"><x-tr key="options.target" default="Target"></x-tr>
+            <input type="number" id="thresholdtargetproduction" value="0" step="1" min="0" autocomplete="off" />
+          </label>
+          <label for="thresholdredproduction"><x-tr key="options.thresholdRed" default="Red"></x-tr>
+            <input type="number" id="thresholdredproduction" value="0" step="1" min="0" autocomplete="off" />
+          </label>
+        </div>
+      </div>
+    </div>
+
+   
 
     <!-- PMS settings -->
     <div class="labelsubgroup">
@@ -60,16 +77,6 @@ SPDX-License-Identifier: Apache-2.0
           <input type="radio" id="productionactualonly" name="showproduction" value="productionactualonly" />
           <span for="productionactualtarget"><x-tr key="content.actual" default="actual"></x-tr></span>
         </div>
-        <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
-        <div class="thresholdunitispart">
-          <label for="thresholdorangeproduction"><x-tr key="options.thresholdOrange" default="Orange"></x-tr>
-            <input type="number" id="thresholdorangeproduction" value="0" step="1" min="0" autocomplete="off" />
-          </label>
-          <label for="thresholdredproduction"><x-tr key="options.thresholdRed" default="Red"></x-tr>
-            <input type="number" id="thresholdredproduction" value="0" step="1" min="0" autocomplete="off" />
-          </label>
-        </div>
-
       </div>
     </div>
 

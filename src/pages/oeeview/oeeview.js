@@ -113,13 +113,13 @@ class OeeViewPage extends pulsePage.BasePage {
     this._productionGaugeDisplayMode();
 
     // Thresholds
-    const thresholdTarget = document.getElementById('thresholdtargetproductiongauge');
-    const thresholdRedInput = document.getElementById('thresholdredproductiongauge');
+    const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
+    const thresholdRedInput = document.getElementById('thresholdredproductionbar');
 
-    thresholdTarget.value = pulseConfig.getFloat('thresholdorangeproduction', 80);
+    thresholdTarget.value = pulseConfig.getFloat('thresholdtargetproduction', 80);
     thresholdRedInput.value = pulseConfig.getFloat('thresholdredproduction', 60);
 
-    if (pulseConfig.getDefaultFloat('thresholdorangeproduction') !== pulseConfig.getFloat('thresholdorangeproduction')) {
+    if (pulseConfig.getDefaultFloat('thresholdtargetproduction') !== pulseConfig.getFloat('thresholdtargetproduction')) {
       thresholdTarget.setAttribute('overridden', 'true');
     }
     if (pulseConfig.getDefaultFloat('thresholdredproduction') !== pulseConfig.getFloat('thresholdredproduction')) {
@@ -198,7 +198,7 @@ class OeeViewPage extends pulsePage.BasePage {
       return false;
     }
 
-    // In percentage mode: orange > red (normal logic)
+    // In percentage mode: target > red (normal logic)
     if (Number(targetValue) <= Number(redValue)) {
       errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdError', 'Target threshold must be greater than red threshold');
       errorMessage.style.display = 'block';
@@ -213,7 +213,7 @@ class OeeViewPage extends pulsePage.BasePage {
     }
 
     // store values
-    pulseConfig.set('thresholdorangeproduction', parseFloat(targetValue));
+    pulseConfig.set('thresholdtargetproduction', parseFloat(targetValue));
     pulseConfig.set('thresholdredproduction', parseFloat(redValue));
 
     errorMessage.style.display = 'none';
@@ -240,10 +240,10 @@ class OeeViewPage extends pulsePage.BasePage {
     showPercentRadio.removeAttribute('overridden');
     showRatioRadio.removeAttribute('overridden');
 
-    const thresholdTarget = document.getElementById('thresholdtargetproductiongauge');
-    const thresholdRedInput = document.getElementById('thresholdredproductiongauge');
+    const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
+    const thresholdRedInput = document.getElementById('thresholdredproductionbar');
 
-    thresholdTarget.value = pulseConfig.getDefaultFloat('thresholdorangeproduction', 80);
+    thresholdTarget.value = pulseConfig.getDefaultFloat('thresholdtargetproduction', 80);
     thresholdRedInput.value = pulseConfig.getDefaultFloat('thresholdredproduction', 60);
 
     thresholdTarget.dispatchEvent(new Event('change', { bubbles: true }));
@@ -263,8 +263,8 @@ class OeeViewPage extends pulsePage.BasePage {
       optionsValues += '&productiongauge.showpercent=false';
     }
 
-    const thresholdTarget = document.getElementById('thresholdtargetproductiongauge');
-    const thresholdRedInput = document.getElementById('thresholdredproductiongauge');
+    const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
+    const thresholdRedInput = document.getElementById('thresholdredproductionbar');
 
     optionsValues += '&productiongauge.target=' + thresholdTarget.value;
     optionsValues += '&productiongauge.red=' + thresholdRedInput.value;

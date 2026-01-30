@@ -25,24 +25,24 @@ class ProductionMachiningPage extends pulsePage.BasePage {
     var self = this;
     // Prepare custom inputs / Visibilities
 
-    $('#thresholdorangeproduction').val(pulseConfig.getInt('thresholdorangeproduction'));
-    var changeOrange = function () {
-      if (self._verficationThresholds($('#thresholdorangeproduction').val(), $('#thresholdredproduction').val())) {
+    $('#thresholdtargetproduction').val(pulseConfig.getInt('thresholdtargetproduction'));
+    var changetarget = function () {
+      if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
         $(this).attr('overridden', true);
         // Store
-        if (pulseUtility.isInteger($('#thresholdorangeproduction').val())) {
+        if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
           // Display / Dispatch
           eventBus.EventBus.dispatchToAll('configChangeEvent',
-            { 'config': 'thresholdorangeproduction' });
+            { 'config': 'thresholdtargetproduction' });
         }
       }
     };
-    $('#thresholdorangeproduction').bind('input', changeOrange);
-    $('#thresholdorangeproduction').change(changeOrange);
+    $('#thresholdtargetproduction').bind('input', changetarget);
+    $('#thresholdtargetproduction').change(changetarget);
 
     $('#thresholdredproduction').val(pulseConfig.getInt('thresholdredproduction'));
     var changeRed = function () {
-      if (self._verficationThresholds($('#thresholdorangeproduction').val(), $('#thresholdredproduction').val())) {
+      if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
         $(this).attr('overridden', true);
         // Store
         if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
@@ -84,7 +84,7 @@ class ProductionMachiningPage extends pulsePage.BasePage {
       return false;
     }
 
-    // In percentage mode: orange > red (normal logic)
+    // In percentage mode: target > red (normal logic)
     if (Number(targetValue) <= Number(redValue)) {
       errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdError', 'Target threshold must be greater than red threshold');
       errorMessage.style.display = 'block';
@@ -98,7 +98,7 @@ class ProductionMachiningPage extends pulsePage.BasePage {
       return false;
     }
 
-    pulseConfig.set('thresholdorangeproduction', parseFloat(targetValue));
+    pulseConfig.set('thresholdtargetproduction', parseFloat(targetValue));
     pulseConfig.set('thresholdredproduction', parseFloat(redValue));
 
     errorMessage.style.display = 'none';
@@ -113,9 +113,9 @@ class ProductionMachiningPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
-    $('#thresholdorangeproduction').val(pulseConfig.getDefaultInt('thresholdorangeproduction'));
-    $('#thresholdorangeproduction').change();
-    $('#thresholdorangeproduction').removeAttr('overridden');
+    $('#thresholdtargetproduction').val(pulseConfig.getDefaultInt('thresholdtargetproduction'));
+    $('#thresholdtargetproduction').change();
+    $('#thresholdtargetproduction').removeAttr('overridden');
 
     $('#thresholdredproduction').val(pulseConfig.getDefaultInt('thresholdredproduction'));
     $('#thresholdredproduction').change();
@@ -127,8 +127,8 @@ class ProductionMachiningPage extends pulsePage.BasePage {
     let optionsValues = '';
 
 
-    if (pulseUtility.isInteger($('#thresholdorangeproduction').val())) {
-      optionsValues += '&thresholdorangeproduction=' + $('#thresholdorangeproduction').val();
+    if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
+      optionsValues += '&thresholdtargetproduction=' + $('#thresholdtargetproduction').val();
     }
     if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
       optionsValues += '&thresholdredproduction=' + $('#thresholdredproduction').val();
