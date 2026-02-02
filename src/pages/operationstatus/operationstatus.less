@@ -58,6 +58,7 @@ a {
   height: 100%; // Take full available height
 }
 
+
 .machinedisplay-position {
   display: flex;
   flex-direction: row;
@@ -104,7 +105,7 @@ a {
   .lastmachinestatus-current-reason-only {
     display: flex;
     align-items: center;
-    
+
     .pulse-cellbar-main {
       display: flex !important;
       justify-content: center !important;
@@ -165,7 +166,8 @@ a {
 .tile-content {
   display: flex;
   flex-direction: column; // align children
-  overflow: hidden; // Clip overflowing content
+  overflow-y: auto; // Allow vertical scrolling if content overflows
+  overflow-x: hidden;
   border-radius: @border_radius;
   flex-grow: 1; // Grow to fill available space
   flex-shrink: 1; // Can shrink if needed
@@ -178,10 +180,11 @@ a {
   .operationstatus-top-div {
     // operationstatus-pms-div
     margin-top: 4px;
-    flex-shrink: 1; // Can shrink if needed
+    flex-shrink: 0; // Don't shrink - keep full size
+    flex-basis: auto; // Use natural size
 
     &.big-display {
-      flex-grow: 2; // Strech if middle is hidden only for big-display
+      flex-grow: 0; // Don't grow - keep size
     }
 
     //height: 60px; // uniform display -> done in children
@@ -190,7 +193,7 @@ a {
   .operationstatus-middle-div {
     // operationstatus-alarm-pie-stacklight
     flex-grow: 2; // Strech to available space
-    flex-shrink: 2;
+    flex-shrink: 1; // Can shrink if needed
     min-height: 0; // Allow flex to shrink below content size
 
     display: flex;
@@ -199,8 +202,8 @@ a {
     justify-content: space-between; // Keep pie in the middle
 
     .operationstatus-cycleprogress {
-      flex-shrink: 5; // Strech
-      flex-grow: 5;
+      flex-shrink: 3; // Can shrink but not as much
+      flex-grow: 2;
       flex-basis: 65%;
       //height: 100%; // Not compatible with align-items: stretch;
       box-sizing: border-box;
@@ -210,9 +213,10 @@ a {
     .operationstatus-light-div,
     .operationstatus-tool-and-alarm-div {
       display: inline-block;
-      //width: 
+      //width:
       flex-basis: 15%;
       flex-grow: 1; // To grow when NO PIE
+      flex-shrink: 0; // Don't shrink below basis
 
       // Vertical center :
       position: relative;
@@ -264,7 +268,7 @@ a {
     .operationstatus-alarm-left-div {
       box-sizing: border-box;
       height: 40%;
-      // Vertical align 
+      // Vertical align
       position: absolute;
       width: 100%;
       transform: translateY(-50%);
@@ -295,7 +299,9 @@ a {
     // Auto size and position
     padding-top: 5px;
     box-sizing: border-box;
-    flex-shrink: 1; // Can shrink if needed
+    flex-shrink: 0; // Don't shrink - keep full size
+    flex-basis: auto; // Use natural size
+    min-height: 0; // Allow overflow if needed
   }
 
   .operationstatus-isofile-div {

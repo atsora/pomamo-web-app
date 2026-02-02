@@ -24,6 +24,10 @@
 .tile {
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
 
 .tile-title{
@@ -31,6 +35,7 @@
   border-top-right-radius: @border_radius;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
 
   x-reasonbutton {
     margin: 0;
@@ -44,6 +49,13 @@
 
 .tile-content{
   border-radius: @border_radius;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
 }
 
 // GAUGE position
@@ -54,6 +66,8 @@
   width: 100%;
   box-sizing: border-box;
   padding-top: 12px;
+  flex: 1 1 auto;
+  overflow: hidden;
 }
 x-motionpercentage {
   position: absolute;
@@ -71,4 +85,11 @@ x-motionpercentage {
 
 .tick {
   stroke: @color_gray
+}
+
+// Override for mobile that sets height: auto
+@media (max-width: 685px) {
+  .single-cell {
+    height: 100% !important;
+  }
 }

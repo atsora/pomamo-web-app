@@ -54,7 +54,7 @@
 
   x-machinedisplay {
     text-align: center;
-    
+
     span {
       width: auto;
     }
@@ -64,7 +64,8 @@
 .tile-content {
   display: flex;
   flex-direction: column; // align children
-  overflow: hidden; // Hide bottom displays when too small
+  overflow-y: auto; // Allow vertical scrolling
+  overflow-x: hidden;
   border-radius: @border_radius;
   flex-grow: 1; // Grow to fill available space
   flex-shrink: 1; // Can shrink if needed
@@ -73,6 +74,8 @@
   .machinestatus-top-div {
     // currentworkinfo
     margin-top: 4px;
+    flex-shrink: 0; // Don't shrink
+    flex-basis: auto;
   }
 
   .machinestatus-info {
@@ -85,8 +88,8 @@
     .machinestatus-today-or-shift-or-week {
       flex-grow: 1; // Strech
       font-weight: bold;
-      font-size: 1.5em;
-      line-height: 1.5em;
+      font-size: clamp(12px, 2vh, 1.5em);
+      line-height: 1.2;
 
       x-freetext {
         span {
@@ -115,14 +118,14 @@
       x-motionpercentage {
         flex-grow: 1; // Strech
         text-align: right;
-        font-size: 3em;
+        font-size: clamp(20px, 4vh, 3em);
       }
 
       x-motiontime {
         display: none; // default
         flex-grow: 1; // Strech
         text-align: right;
-        font-size: 3em;
+        font-size: clamp(20px, 4vh, 3em);
       }
     }
 
@@ -136,7 +139,8 @@
         .performancetarget-span {
           display: block;
           text-align: center;
-          font-size: 2em;
+          font-size: clamp(16px, 3vh, 2em);
+          line-height: 1.1;
 
           &::before {
             //content: "target"; == default
@@ -151,6 +155,8 @@
 
   .machinestatus-alarm-pie-stacklight {
     flex-grow: 2; // To strech
+    flex-shrink: 1; // Can shrink but not too much
+    min-height: 0;
 
     display: flex;
     flex-direction: row; // align children
@@ -205,7 +211,7 @@
     .machinestatus-alarm-div {
       box-sizing: border-box;
       height: 40%;
-      // Vertical align 
+      // Vertical align
       position: absolute;
       width: 100%;
       transform: translateY(-50%);
@@ -232,7 +238,8 @@
 
     .machinestatus-reasonslotpie {
       flex-grow: 2; // To strech
-      flex-shrink: 2;
+      flex-shrink: 1; // Can shrink but less aggressively
+      min-height: 0; // Allow flex to shrink
 
       display: inline-block;
       position: relative; // For machinestatus-reasonbutton-position's position
@@ -267,9 +274,13 @@
     margin-top: 10px;
     padding-top: 5px;
     margin-bottom: 10px;
+    flex-shrink: 0; // Don't shrink
+    flex-basis: auto;
   }
 
   .machinestatus-weekly-bar-position {
+    flex-shrink: 0; // Don't shrink
+    flex-basis: auto;
     .pulse-bar-div {
       margin-left: @margin_graduation;
       margin-right: @margin_graduation;
