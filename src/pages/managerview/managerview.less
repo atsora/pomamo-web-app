@@ -49,19 +49,25 @@
   display: flex;
   flex-direction: column; // align children
   border-radius: @border_radius;
+  border: 1px solid @color_window_border;
 
   x-grouparray {
     .one_machine_cell {
-      border-radius: @border_radius;
-      border: 1px solid @color_window_border;
-      padding: 16px;
+      padding: 0px 16px;
       margin: 0 12px;
+
+      .div-machine {
+        padding: 6px 14px;
+        border: 1px solid @color_window_border;
+        border-radius: @border_radius_small;
+        box-sizing: border-box;
+      }
     }
 
     .group-main {
       display: flex;
-      flex-direction: column; 
-      row-gap: 24px;
+      flex-direction: column;
+      row-gap: 12px;
 
       li:first-of-type {
         margin-top: 18px;
@@ -79,23 +85,28 @@
 
     &.top_cell {
       align-items: center;
+      padding-left: 24px;
 
       .div-percent {
         width: 80px;
       }
     }
 
-    .div-status {
-      flex-shrink: 0; // Aucune réduction
-      height: 32px;
-      width: 32px;
-    }
-
     .div-machine {
+      display: flex;
       flex-shrink: 0; // Aucune réduction
-      width: 180px; // Fixe - not % else strange behavior for graduation
+      width: 15%; // Fixe - not % else strange behavior for graduation
       padding-left: 6px;
-      //.div-current
+
+      .div-machine-left {
+        flex-shrink: 0; // Aucune réduction
+        height: 32px;
+        width: 32px;
+      }
+
+      .div-machine-right {
+        padding-left: 4px;
+      }
     }
 
     .div-bar {
@@ -104,7 +115,8 @@
       overflow: hidden; // To avoid too big graduation
 
       .pulse-bar-div {
-        margin-right: 31px; 
+        margin-right: 21px;
+        margin-left: 31px;
         // local :
         font-size: 1em;
         line-height: 2em;

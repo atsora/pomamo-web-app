@@ -64,13 +64,18 @@
     .group-main {
       display: flex;
       flex-direction: column;
-      row-gap: 22px;
-      padding: 12px;
+      row-gap: 8px;
+      padding: 8px 12px;
 
       li {
-        border-radius: @border_radius_small;
-        border: 1px solid @color_window_border;
-        padding: 12px;
+        padding: 0px 12px;
+
+        .div-machine {
+          border: 1px solid #3f3f46;
+          border-radius: 6px;
+          padding: 0px 14px;
+          box-sizing: border-box;
+        }
       }
     }
   }
@@ -88,6 +93,11 @@
         border: 1px solid @color_window_border;
         margin-left: -8px;
         padding: 5.5px 4px !important;
+      }
+
+      .div-machine {
+        margin-left: 33px;
+        width: 18%;
       }
     }
 
@@ -136,13 +146,19 @@
     .div-bar {
       flex: 1;
       overflow: hidden; // For fast resize
-
+      display: flex;
       min-height: 2em;
+      align-items: center;
+      align-items: center;
+      justify-content: center;
 
       .pulse-bar-div {
         // align with graduation
-        margin-right: 19px;
+        margin-right: 27px;
         margin-left: @margin_graduation; //24px;
+        position: unset;
+        width: 100%;
+        height: fit-content;
       }
 
       .periodtoolbar {
