@@ -32,6 +32,8 @@
     .group-single{
       order: 999999; // default = bottom
       border-radius: @border_radius_small;
+      border: 1px solid @color_window_border;
+      padding: 12px;
     }
   }
   .one-machine-cell{ // == group-single // could be display:contents when available
@@ -53,11 +55,6 @@
     >.div-bar{
       width: 85%;
       box-sizing: border-box;
-    }
-
-    .pulse-bar-div {
-      background-color: @color_background;
-      border: 1px solid @color_window_border;
     }
   }
 }
