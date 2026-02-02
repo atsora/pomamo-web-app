@@ -217,7 +217,7 @@ var populateNavigationPanel = function () {
       } break;
       /*case 'OperationWebApp': { == see below
         pulseUtility.addToolTip(div, app); // translate ? I18N
-        
+
         targetUrl = pulseUtility.changePageName(targetUrl, 'index'); // or firstpage
         //changeApplication :
         targetUrl = targetUrl.replace('PulseWebApp', app);
@@ -352,28 +352,7 @@ var setNavigationLinks = function () {
     $(this).click(function () {
       let attribute = $(this).attr('data');
       if (attribute != null && attribute != '' && fullURL.indexOf('/' + attribute + '.html') == -1) {
-        // Build the url with the role and the machines kept in memory
-        let newfullURL = fullURL.substring(0, fullURL.lastIndexOf('/') + 1) + attribute + '.html'
-
-        // Keep AppContext
-        let tmpContexts = new Array();
-        tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
-        let nbParamInURL = tmpContexts.length;
-        if (nbParamInURL > 0) {
-          newfullURL = pulseUtility.changeURLParameter(newfullURL, 'AppContext', tmpContexts[0]);
-        }
-
-        // For local tests at LAT - keep PATH
-        //let tmpPaths = new Array();
-        let tmpPath = pulseUtility.getURLParameterValues(window.location.href, 'path');
-        if (tmpPath.length > 0) {
-          newfullURL = pulseUtility.changeURLParameter(newfullURL, 'path', tmpPath[0]);
-        }
-        let tmpMainPath = pulseUtility.getURLParameterValues(window.location.href, 'mainpath');
-        if (tmpMainPath.length > 0) {
-          newfullURL = pulseUtility.changeURLParameter(newfullURL, 'mainpath', tmpMainPath[0]);
-        }
-
+        let newfullURL = pulseUtility.changePageName(window.location.href, attribute);
         window.location.href = newfullURL;
       }
     });
@@ -427,7 +406,7 @@ var populateConfigPanel = function (currentPageMethods) {
 
   //// "PAGE" SECTION
 
-  // Prepare inputs 
+  // Prepare inputs
   // common changes : row, column, rotation, title, showlegend...
   var changeRow = function () {
     $(this).attr('overridden', true);
@@ -598,7 +577,7 @@ var populateConfigPanel = function (currentPageMethods) {
         showRow = false;
       }
 
-      // Rotation allowed 
+      // Rotation allowed
       $('#pagerotation').val(pulseConfig.getInt('rotation'));
       if (pulseConfig.getDefaultInt('rotation') != pulseConfig.getInt('rotation')) {
         $('#pagerotation').attr('overridden', 'true');
@@ -838,11 +817,12 @@ var themeManager = {
 
 var showLegend = function () {
   var manualClickOnToggleLegend = false; // To allow hide legend before manual click
+  var lastCalculatedHeight = 0; // Track last calculated height to detect changes
 
-  $('.legend-content').resize(function () {
+  var updatePaddingFromLegend = function () {
     // Heights of the legend and of the logo
     let legendHeight = $('.legend-content')[0].clientHeight;
-    let logoHeight = 35; // See style.less
+    let logoHeight = 20; // See style.less
 
     //let legendIsEmpty = ($('.legend-content')[0].childElementCount <= 1);
 
@@ -904,8 +884,33 @@ var showLegend = function () {
           'transform': 'translateY(0)'
         });
       }
+      else {
+        // Legend is visible and not overlapping - apply padding for legend height
+        let bottomPadding = legendHeight + $('.legend-toggle')[0].clientHeight;
+        if (bottomPadding < logoHeight)
+          bottomPadding = logoHeight;
+        $('.pulse-mainarea-inner').css('padding-bottom', bottomPadding + 'px');
+      }
     }
+    lastCalculatedHeight = legendHeight;
+  };
+
+  $('.legend-content').resize(function () {
+    updatePaddingFromLegend();
   });
+
+  // Monitor legend height changes continuously for dynamic content
+  let legendMonitorInterval = setInterval(function () {
+    if ($('.legend-wrapper').length === 0 || $('.legend-content').length === 0) {
+      clearInterval(legendMonitorInterval);
+      return;
+    }
+
+    let currentHeight = $('.legend-content')[0].clientHeight;
+    if (currentHeight !== lastCalculatedHeight) {
+      updatePaddingFromLegend();
+    }
+  }, 500); // Check every 500ms for changes
 
   if (pulseConfig.getString('showlegend') == 'dynamic') {
     $('.legend-toggle').click(function () {
@@ -919,14 +924,14 @@ var showLegend = function () {
   }
   else if (pulseConfig.getString('showlegend') == 'false') {
     $('.legend-wrapper').hide();
-    let logoHeight = 35; // See style.less
+    let logoHeight = 20; // See style.less
     $('.pulse-mainarea-inner').css('padding-bottom', logoHeight + 'px');
   }
   else if (pulseConfig.getString('showlegend') == 'true') {
     $('.legend-wrapper').show();
   }
 
-  $('.legend-content').resize(); // Call it now ! .. AFTER show/hide
+  updatePaddingFromLegend(); // Call it now ! .. AFTER show/hide
   // later do not work... why? -- tmp Hack : called inside each legend - DO NOT rename legend-content
 };
 
@@ -964,16 +969,16 @@ var isFullScreen = function () {
 
 /**
  * Prepare the main page with an object describing how to fill it
- * 
+ *
  * General configuration:
  *  - showMachineselection: boolean that can be set to false to hide the machine selection
  *  - canConfigureColumns: boolean that can be set to false to hide the column number spinbox
- * 
+ *
  * Page options:
  *  - getOptionValues: optional function that concats the page options in a string to be integrated in the url
  *  - initOptionValues: optional function that initializes the page options based on the current settings of the user
  *  - setDefaultOptionValues: optional function that reset the page options based on the default values
- * 
+ *
  * Workflow:
  *  - getMissingConfigs: optional function that check if the configuration is complete
  *      it returns an array of elements such has:

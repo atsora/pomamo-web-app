@@ -1,6 +1,6 @@
 var PULSE_DEFAULT_CONFIG = PULSE_DEFAULT_CONFIG || {};
 
-/* 
+/*
  * ** Please keep this comment ** *
  * Global configuration : each next line overload previous ones
  * PULSE_DEFAULT_CONFIG.general -> def in PWC
@@ -42,7 +42,7 @@ PULSE_DEFAULT_CONFIG.general.menuType = 'fullOrIcon';
 */
 PULSE_DEFAULT_CONFIG.general.customTitle = false;
 
-PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarmsat and currenticoncncalarm == default 
+PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarmsat and currenticoncncalarm == default
 
 // Default range for all pages :
 PULSE_DEFAULT_CONFIG.general.displayshiftrange = false;
@@ -224,7 +224,7 @@ PULSE_DEFAULT_CONFIG.pages = {
   },
   operatordashboard: {
     showChangedTools: true,
-    showproductiongauge: true,
+    showproductionbar: true,
     openStopClassification: true, // Enable automatic opening of stop classification dialog
     stopClassificationReopenDelay: 7, // Delay in seconds before reopening stop classification dialog after close
     enableGroups: true,
@@ -233,9 +233,11 @@ PULSE_DEFAULT_CONFIG.pages = {
     componentsToDisplay: [
       'x-lastmachinestatus',
     ],
-    productiongauge: {
-      showpercent: true,
-    },
+
+    showpercent: true,
+    showproductiondisplay: false, // Show/hide production display section
+    showproductiongauge: true, // true: show gauge, false: show pie
+
     showcoloredbar: {
       cncvalue: true,
       click: {
@@ -355,7 +357,7 @@ PULSE_DEFAULT_CONFIG.roles.live.displayedPages = [
   'managementinformationterminal',
   'managerview'
 ];
-PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [ // ALL 
+PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [ // ALL
   'running', 'productionmachining',
   'scheduledstatus',
   'toollife', 'machines', 'operatordashboard',
@@ -563,7 +565,7 @@ PULSE_DEFAULT_CONFIG.roles.support.showcoloredbar = {
 // CAN be overload in custom config
 /* ********** ********** ********** ********** */
 PULSE_DEFAULT_CONFIG.rolespages = {
-  // EVERYTHING CAN BE OVERLOADED here in CUSTOM file !  
+  // EVERYTHING CAN BE OVERLOADED here in CUSTOM file !
   live: {
     operationstatus: {
       canUseRowsToSetHeight: true

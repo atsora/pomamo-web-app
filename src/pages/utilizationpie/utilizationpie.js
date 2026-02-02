@@ -13,7 +13,6 @@ require('x-motionpercentage/x-motionpercentage');
 require('x-periodmanager/x-periodmanager');
 require('x-machinemodelegends/x-machinemodelegends');
 require('x-reasongroups/x-reasongroups');
-
 require('x-grouparray/x-grouparray');
 require('x-tr/x-tr');
 
