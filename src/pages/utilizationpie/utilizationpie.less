@@ -25,6 +25,10 @@
 .tile {
   border-radius: @border_radius;
   border: 1px solid @box_header_color;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
 
 .tile-title {
@@ -32,6 +36,7 @@
   justify-content: center;
   border-top-left-radius: @border_radius;
   border-top-right-radius: @border_radius;
+  flex-shrink: 0;
 
   x-reasonbutton {
     margin: 0;
@@ -46,35 +51,39 @@
 .tile-content {
   border-radius: @border_radius;
   display: flex;
-  flex-direction: column; // align children (only 1 here)
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  flex: 1 1 auto;
+  overflow: hidden;
 
   .utilizationpie-reasonslotpie-motionpercentage {
-    flex: 1; // Strech
-
-    padding-top: 12px;
-
+    flex: 1;
+    margin-top: 12px;
     display: flex;
-    flex-direction: row; // align children
-    overflow: hidden; // To limit total height
+    flex-direction: row;
+    overflow: hidden;
+    min-height: 0;
 
     .utilizationpie-today {
       justify-content: center;
       font-size: 2em;
-      //padding-left: 8px;
-
-      // for text vertical align
-      //position: absolute;
-      //top: 50%;
-      //transform: translateY(-50%); // tiré de la moitié de sa propre hauteur 
+      flex-shrink: 0;
     }
 
     .utilizationpie-reasonslotpie {
       flex: 1;
       min-height: 50px;
-      //margin-left: 70px;
-
       height: 100%;
       width: 100%;
+      overflow: hidden;
     }
+  }
+}
+
+// Override for mobile that sets height: auto
+@media (max-width: 685px) {
+  .single-cell {
+    height: 100% !important;
   }
 }

@@ -92,20 +92,36 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     width: 50%;
-    row-gap: 5px;
-    margin: 20px 0 10px 0;
+    gap: 3px;
+    margin: 0;
+    padding: 0;
+    min-width: 0; // Allow content to shrink
+    flex-shrink: 1;
+
+    x-production,
+    x-productionshiftgoal {
+      width: 100%;
+      min-height: 0;
+      min-width: 0;
+      flex: 0 0 auto; // Take only needed space
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     x-production {
       .production-2-on-3 {
         display: flex;
         flex-direction: column;
-        row-gap: 5px;
+        row-gap: 3px;
 
         .production-actual-value {
           display: flex;
           flex-direction: column;
           align-items: center;
+          min-width: 0;
 
           .production-actual-separator {
             display: none;
@@ -116,6 +132,7 @@
           display: flex;
           flex-direction: column;
           align-items: center;
+          min-width: 0;
 
           .production-target-separator {
             display: none;
@@ -129,11 +146,25 @@
     width: 50%;
     display: flex;
     justify-content: center;
-    margin: 20px 0;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    min-width: 0; // Allow content to shrink
+    flex-shrink: 1;
 
     x-productiongauge {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      min-width: 0;
+      flex-shrink: 1;
+
       .productiongauge-gauge {
         flex: unset;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
       }
     }
   }
@@ -162,24 +193,24 @@ x-grouparray {
   }
 }
 
-// Text 
+// Text
 
 .tile-content {
 
   span,
   div {
-    font-size: 20px;
     font-weight: bold;
   }
 
   .production-number-actual,
   .production-number-target,
   .productionshiftgoal-data {
-    font-size: 60px;
+    font-size: clamp(16px, 5vh, 60px);
+    line-height: 1.1;
   }
 
   .productiongauge-text {
-    font-size: 35px;
+    font-size: clamp(14px, 3.5vh, 35px);
   }
 
 }

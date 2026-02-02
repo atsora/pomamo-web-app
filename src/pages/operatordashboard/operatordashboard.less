@@ -24,15 +24,17 @@
 @import "x-motionpercentage/x-motionpercentage.less";
 @import "x-toollifemachine/x-toollifemachine.less";
 @import "x-productiontrackergraph/x-productiontrackergraph.less";
+@import "x-motionpercentage/x-motionpercentage.less";
 @import "x-datetimegraduation/x-datetimegraduation.less";
 @import "x-workinfo/x-workinfo.less";
-@import "x-performancegauge/x-performancegauge.less";
 @import "x-production/x-production.less";
 @import "x-productionshiftgoal/x-productionshiftgoal.less";
-@import "x-productiongauge/x-productiongauge.less";
+@import "x-defaultpie/x-defaultpie.less";
 @import "x-scrapstatus/x-scrapstatus.less";
 @import "x-periodmanager/x-periodmanager.less";
 @import "style.less";
+@import "x-productionbar/x-productionbar.less";
+@import "x-productiongauge/x-productiongauge.less";
 
 .main-content {
   display: flex;
@@ -97,6 +99,7 @@
     flex-grow: 1;
     background-color: @color_background;
     border-radius: @border_radius;
+    height: auto;
 
     @media (max-width: 1000px) {
       // mobile
@@ -262,11 +265,11 @@
 
     .stats-content {
       display: flex;
-      flex-direction: row;
       align-items: center;
       margin-left: 2em;
       margin-top: 1em;
-      height: 35em;
+      justify-content: space-between;
+      height: fit-content;
 
       @media (max-width: 1000px) {
         // mobile
@@ -281,9 +284,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        row-gap: 30px;
-        width: 25%;
-        height: 100%;
+        height: fit-content;
+        justify-content: center;
+
 
         @media (max-height: 842px) {
           row-gap: 15px;
@@ -300,7 +303,9 @@
           flex-direction: column;
           justify-content: space-between;
           align-items: center;
+          flex-wrap: nowrap;
           row-gap: 0.5em;
+
 
           x-production {
             .production-2-on-3 {
@@ -354,6 +359,7 @@
             }
           }
 
+
           .title-number-content {
             display: flex;
             flex-direction: row;
@@ -398,19 +404,7 @@
           }
         }
 
-        .performance-content {
-          .text {
-            font-size: 20px;
-          }
 
-          x-productiongauge .productiongauge-text {
-            font-size: 2.5em;
-
-            @media (max-width: 1000px) {
-              font-size: 1.8em;
-            }
-          }
-        }
 
         .scrap-content {
           margin-top: 25px;
@@ -423,8 +417,21 @@
         }
       }
 
-      .trackergraph-content {
-        width: 50%;
+      x-defaultpie {
+        display: block ;
+        height: 16em !important;
+        width: unset !important ;
+     }
+
+      x-productiontrackergraph {
+        flex: 0.8 1 auto;      /* grow: 1, shrink: 1, basis: 0 */
+        min-width: 0;
+        min-height: 0;
+        width: 0;
+        height: auto;
+        align-self: stretch;
+
+
 
         @media (max-width: 1000px) {
           // mobile
@@ -443,12 +450,40 @@
       }
     }
 
+    .perf-tool-container {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+
+      @media (max-width: 1000px) {
+        // mobile
+        flex-direction: column;
+        row-gap: 20px;
+      }
+    }
+    .title-number-content {
+        align-items: center;
+        display: flex;
+        margin-right: 10px;
+    }
+
+    x-productionbar {
+        width: 22em !important;
+        height: auto;
+
+        .productionbar-svg {
+          margin-top: 0.75em ;
+        }
+
+        .changedtools-content {
+          align-items: center;
+        }
+    }
+
     .changedtools-content {
-      margin-top: -60px;
       display: flex;
 
       @media (max-height: 842px) {
-        margin-top: -183px;
       }
 
       @media (max-width: 1000px) {
@@ -464,11 +499,7 @@
       }
 
 
-      .title-number-content {
-        align-items: center;
-        display: flex;
-        margin-right: 10px;
-      }
+
 
       .toollifemachine-content {
 
@@ -699,7 +730,7 @@
 
 .customeDialog-stopclassification {
   overflow: auto;
-  
+
   .customDialogHeader {
     height: unset;
 
