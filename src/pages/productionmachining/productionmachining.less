@@ -31,9 +31,7 @@
 
     .group-single{
       order: 999999; // default = bottom
-      border-radius: @border_radius_small;
-      border: 1px solid @color_window_border;
-      padding: 12px;
+      padding: 0px 12px;
     }
   }
   .one-machine-cell{ // == group-single // could be display:contents when available
@@ -48,13 +46,15 @@
     vertical-align: middle;
 
     >.div-machine {
-      width: 15%;
+      width: 10%;
+      min-width: 24ex;
       box-sizing: border-box;
       line-height : 2em; // == vertical align
     }
     >.div-bar{
       width: 85%;
       box-sizing: border-box;
+      flex: 1;
     }
   }
 }

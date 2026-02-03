@@ -31,9 +31,7 @@
 
     .group-single {
       order: 999999999; // default = bottom = more than 2 years in minutes
-      border: 1px solid @color_window_border;
-      border-radius: @border_radius_small;
-      padding: 12px;
+      padding: 0px 12px;
     }
   }
 
@@ -50,13 +48,15 @@
     vertical-align: middle;
 
     >.div-machine {
-      width: 15%;
+      width: 10%;
+      min-width: 24ex;
       box-sizing: border-box;
       line-height: 2em; // == vertical align
     }
 
     >.div-bar {
       width: 85%;
+      flex: 1;
       box-sizing: border-box;
     }
 
