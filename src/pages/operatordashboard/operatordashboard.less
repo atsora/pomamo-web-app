@@ -265,11 +265,11 @@
 
     .stats-content {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       margin-left: 2em;
       margin-top: 1em;
-      justify-content: space-between;
       height: fit-content;
+      gap: 1em;
 
       @media (max-width: 1000px) {
         // mobile
@@ -280,13 +280,51 @@
         height: auto;
       }
 
+      .stats-perf-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 1em;
+        align-items: stretch;
+
+        @media (max-width: 1000px) {
+          // mobile
+          flex-direction: column;
+        }
+      }
+
+      .performance-stats-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        flex: 0 0 auto;
+        max-width: fit-content;
+
+        @media (max-width: 1000px) {
+          // mobile
+          gap: 15px;
+        }
+      }
+
+      .performance-display-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 1em;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+
+        @media (max-width: 1000px) {
+          // mobile
+          flex-direction: column;
+        }
+      }
+
       .numbers-content {
         display: flex;
         flex-direction: column;
         align-items: center;
         height: fit-content;
         justify-content: center;
-
 
         @media (max-height: 842px) {
           row-gap: 15px;
@@ -304,7 +342,7 @@
           justify-content: space-between;
           align-items: center;
           flex-wrap: nowrap;
-          row-gap: 0.5em;
+          row-gap: 0.2em;
 
 
           x-production {
@@ -321,32 +359,32 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                font-size: 80px;
+                font-size: clamp(40px, 6vh, 60px);
                 font-weight: bold;
 
                 @media (max-height: 842px) {
-                  font-size: 50px;
+                  font-size: clamp(40px, 5vh, 50px);
                 }
               }
 
               .production-content-text-actual {
-                font-size: 20px;
+                font-size: clamp(14px, 1.8vh, 18px);
               }
 
               .production-target-value {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                font-size: 80px;
+                font-size: clamp(40px, 6vh, 60px);
                 font-weight: bold;
 
                 @media (max-height: 842px) {
-                  font-size: 50px;
+                  font-size: clamp(40px, 5vh, 50px);
                 }
               }
 
               .production-content-text-target {
-                font-size: 20px;
+                font-size: clamp(14px, 1.8vh, 18px);
               }
 
               .production-actual-separator {
@@ -373,7 +411,7 @@
 
               .clock-text {
                 vertical-align: unset;
-                font-size: 20px;
+                font-size: clamp(14px, 1.8vh, 18px);
                 font-weight: bold;
               }
             }
@@ -381,10 +419,10 @@
 
           .number-content {
             font-weight: bold;
-            font-size: 80px;
+            font-size: clamp(40px, 6vh, 60px);
 
             @media (max-height: 842px) {
-              font-size: 50px;
+              font-size: clamp(40px, 5vh, 50px);
             }
           }
 
@@ -397,7 +435,7 @@
               justify-content: center;
 
               span {
-                font-size: 2em;
+                font-size: clamp(1.2em, 1.8vh, 2em);
                 font-weight: bold;
               }
             }
@@ -418,20 +456,25 @@
       }
 
       x-defaultpie {
-        display: block ;
+        display: block;
         height: 16em !important;
-        width: unset !important ;
-     }
+        width: unset !important;
+      }
+
+      x-productiongauge {
+        display: block;
+        height: 16em !important;
+        width: unset !important;
+      }
 
       x-productiontrackergraph {
-        flex: 0.8 1 auto;      /* grow: 1, shrink: 1, basis: 0 */
+        flex: 0.8 1 auto;
+        /* grow: 1, shrink: 1, basis: 0 */
         min-width: 0;
         min-height: 0;
         width: 0;
         height: auto;
         align-self: stretch;
-
-
 
         @media (max-width: 1000px) {
           // mobile
@@ -452,8 +495,9 @@
 
     .perf-tool-container {
       display: flex;
+      flex-direction: row;
       align-items: center;
-      gap: 1em;
+      width: fit-content;
 
       @media (max-width: 1000px) {
         // mobile
@@ -464,7 +508,6 @@
     .title-number-content {
         align-items: center;
         display: flex;
-        margin-right: 10px;
     }
 
     x-productionbar {
@@ -781,7 +824,7 @@
 
 .text {
   font-weight: bolder;
-  font-size: 20px;
+  font-size: clamp(14px, 1.8vh, 18px);
 }
 
 .text-box {

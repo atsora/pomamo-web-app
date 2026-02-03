@@ -31,39 +31,44 @@ SPDX-License-Identifier: Apache-2.0
         </div>
 
         <div class="stats-content">
-            <div class="numbers-content">
-                <div class="specificnumber-content production-content">
-                    <x-production machine-context="PulseWebApp"></x-production>
-                </div>
-                <div class="specificnumber-content goal-content">
-                    <x-productionshiftgoal machine-context="PulseWebApp"
-                    class="title-number-content text"></x-productionshiftgoal>
-                </div>
-            </div>
+            <div class="stats-perf-wrapper">
+                <div class="performance-stats-container">
+                    <div class="performance-display-wrapper">
+                        <div class="numbers-content">
+                            <div class="specificnumber-content production-content">
+                                <x-production machine-context="PulseWebApp"></x-production>
+                            </div>
+                            <div class="specificnumber-content goal-content">
+                                <x-productionshiftgoal machine-context="PulseWebApp"
+                                class="title-number-content text"></x-productionshiftgoal>
+                            </div>
+                        </div>
 
-            <x-defaultpie machine-context="PulseWebApp"></x-defaultpie>
-            <x-productiongauge machine-context="PulseWebApp" motion-context='PulseWebApp'></x-productiongauge>
+                        <x-defaultpie machine-context="PulseWebApp"></x-defaultpie>
+                        <x-productiongauge machine-context="PulseWebApp" motion-context='PulseWebApp'></x-productiongauge>
+                    </div>
 
-            <x-productiontrackergraph period-context="operatordashboard" machine-context="PulseWebApp"></x-productiontrackergraph>
+                    <div class="perf-tool-container">
+                        <div class="title-number-content" id="performance-container">
+                            <!-- <x-tr class="text" key="content.performance" default="Performance"></x-tr>  possibilité d'afficher le title performance-->
+                            <div class="performancebar-bar-border">
+                                <x-productionbar machine-context='PulseWebApp' motion-context='PulseWebApp'></x-productionbar>
+                            </div>
+                        </div>
 
-        </div>
-
-        <div class="perf-tool-container">
-            <div class="title-number-content" id="performance-container">
-                <!-- <x-tr class="text" key="content.performance" default="Performance"></x-tr>  possibilité d'afficher le title performance-->
-                <div class="performancebar-bar-border">
-                    <x-productionbar machine-context='PulseWebApp' motion-context='PulseWebApp'></x-productionbar>
+                        <div class="changedtools-content">
+                            <div class="title-number-content">
+                                <x-tr class="text" key="content.changedtools" default="Change of tools"></x-tr>
+                            </div>
+                            <div class="toollifemachine-content">
+                                <x-toollifemachine machine-context="PulseWebApp" status-context="PulseWebApp"
+                                    period-context="operatordashboard"></x-toollifemachine>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="changedtools-content">
-                <div class="title-number-content">
-                    <x-tr class="text" key="content.changedtools" default="Change of tools"></x-tr>
-                </div>
-                <div class="toollifemachine-content">
-                    <x-toollifemachine machine-context="PulseWebApp" status-context="PulseWebApp"
-                        period-context="operatordashboard"></x-toollifemachine>
-                </div>
+                <x-productiontrackergraph period-context="operatordashboard" machine-context="PulseWebApp"></x-productiontrackergraph>
             </div>
         </div>
 
