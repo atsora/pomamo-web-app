@@ -14,12 +14,15 @@ SPDX-License-Identifier: Apache-2.0
       <x-lastmachinestatus></x-lastmachinestatus>
     </div>
     <div class="tile-content">
-      <div class="oee-number">
-        <x-production period-context="oeeview"></x-production>
-        <x-productionshiftgoal ></x-productionshiftgoal>
-      </div>
-      <div class="oee-gauge">
-        <x-productiongauge period-context="oeeview"></x-productiongauge>
+      <x-workinfo></x-workinfo>
+      <div class="oee-bottom">
+        <div class="oee-number">
+          <x-production period-context="oeeview"></x-production>
+          <x-productionshiftgoal></x-productionshiftgoal>
+        </div>
+        <div class="oee-gauge">
+          <x-productiongauge period-context="oeeview"></x-productiongauge>
+        </div>
       </div>
     </div>
   </div>
