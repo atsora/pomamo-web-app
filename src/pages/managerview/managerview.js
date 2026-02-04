@@ -197,9 +197,8 @@ class ManagerViewPage extends pulsePage.BasePage {
     if (needReload) {
       window.open(url.toString(), '_self');
     }
-    // End remove config
 
-    //pulseConfig.set('column', 1); // Always ! -> Not here, in x-grouparray
+    // allows the native page configuration (not in options) of the bars : show reason bar == always -> idem for SHOW x-reasongroups
 
     let displayJob = pulseConfig.getBool('currentdisplay.displayjob', false);
     if (displayJob)  // == LastWorkinformation
@@ -207,8 +206,6 @@ class ManagerViewPage extends pulsePage.BasePage {
     else
       $('x-lastworkinformation').hide();
 
-
-    // show Bars
     let showBar = pulseConfig.getBool('showcoloredbar.shift', false);
     if (showBar)
       $('x-shiftslotbar').show();
