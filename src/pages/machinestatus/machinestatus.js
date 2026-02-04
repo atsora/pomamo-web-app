@@ -387,87 +387,37 @@ class MachineStatusPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
-    let optionsValues = '';
+    const options = [
+      { id: 'showworkinfo', type: 'checkbox' },
+      { id: 'displayshiftrange', type: 'checkbox' },
+      { id: 'displaymotiontime', type: 'checkbox' },
+      { id: 'showtarget', type: 'checkbox' },
+      { id: 'showalarm', type: 'checkbox' },
+      { id: 'showstacklight', type: 'checkbox' },
+      { id: 'showweeklybar', type: 'checkbox' }
+    ];
 
-    // showworkinfo
-    if ($('#showworkinfo').is(':checked')) {
-      optionsValues += '&showworkinfo=true';
-    }
-    else {
-      optionsValues += '&showworkinfo=false';
-    }
+    let result = options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
+      const paramName = opt.param || opt.id;
+      return `&${paramName}=${el.checked}`;
+    }).join('');
 
-    //
-    if ($('#displayshiftrange').is(':checked')) {
-      optionsValues += '&displayshiftrange=true';
-    }
-    else {
-      optionsValues += '&displayshiftrange=false';
-    }
-
-    if ($('#displaymotiontime').is(':checked')) {
-      optionsValues += '&displaymotiontime=true';
-    }
-    else {
-      optionsValues += '&displaymotiontime=false';
-    }
-
-    if ($('#showtarget').is(':checked')) {
-      optionsValues += '&showtarget=true';
-    }
-    else {
-      optionsValues += '&showtarget=false';
+    // Handle showcurrent condition
+    if (document.getElementById('showcurrent')?.checked) {
+      result += `&showcurrenttool=${document.getElementById('showcurrenttool')?.checked}`;
+      result += `&showcurrentsequence=${document.getElementById('showcurrentsequence')?.checked}`;
+    } else {
+      result += '&showcurrenttool=false&showcurrentsequence=false';
     }
 
-    if (!$('#showcurrent').is(':checked')) {
-      optionsValues += '&showcurrenttool=false';
-      optionsValues += '&showcurrentsequence=false';
-    }
-    else {
-      //pulseConfig.set('showcurrenttool', $('#showcurrenttool').is(':checked'));
-      if ($('#showcurrenttool').is(':checked')) {
-        optionsValues += '&showcurrenttool=true';
-      }
-      else {
-        optionsValues += '&showcurrenttool=false';
-      }
-      if ($('#showcurrentsequence').is(':checked')) {
-        optionsValues += '&showcurrentsequence=true';
-      }
-      else {
-        optionsValues += '&showcurrentsequence=false';
-      }
+    // Handle weekly bar condition
+    if (document.getElementById('showweeklybar')?.checked) {
+      result += `&weeklyshowcurrentweek=${document.getElementById('showcurrentweek')?.checked}`;
     }
 
-    if ($('#showalarm').is(':checked')) {
-      optionsValues += '&showalarm=true';
-    }
-    else {
-      optionsValues += '&showalarm=false';
-    }
-
-    if ($('#showstacklight').is(':checked')) {
-      optionsValues += '&showstacklight=true';
-    }
-    else {
-      optionsValues += '&showstacklight=false';
-    }
-
-    if ($('#showweeklybar').is(':checked')) {
-      optionsValues += '&showweeklybar=true';
-      // details
-      if ($('#showcurrentweek').is(':checked')) {
-        optionsValues += '&weeklyshowcurrentweek=true';
-      }
-      else {
-        optionsValues += '&weeklyshowcurrentweek=false';
-      }
-    }
-    else {
-      optionsValues += '&showweeklybar=false';
-    }
-
-    return optionsValues;
+    return result;
   }
 
   getMissingConfigs() {
@@ -487,7 +437,7 @@ class MachineStatusPage extends pulsePage.BasePage {
   }
 
   buildContent() {
-    // Show/hide according to config
+    // allows the native page configuration (not in options) of the bars : show reason bar == always -> idem for SHOW x-reasongroups
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     if (showworkinfo) {
       $('x-currentworkinfo').show();

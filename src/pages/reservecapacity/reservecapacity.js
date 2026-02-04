@@ -156,31 +156,33 @@ class ReserveCapacityPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues () {
-    let optionsValues = '';
+    let result = '';
 
-    // Min
-    if ($('#minchartcheck').is(':checked')) {
-      optionsValues += '&minchartvalue=';
-      if (pulseUtility.isInteger($('#minchartvalue').val())) {
-        optionsValues += $('#minchartvalue').val();
+    // Min chart
+    if (document.getElementById('minchartcheck')?.checked) {
+      const minVal = document.getElementById('minchartvalue')?.value;
+      if (minVal && pulseUtility.isInteger(minVal)) {
+        result += `&minchartvalue=${minVal}`;
+      } else {
+        result += '&minchartvalue=';
       }
-    }
-    else {
-      optionsValues += '&minchartvalue=';
+    } else {
+      result += '&minchartvalue=';
     }
 
-    // Max
-    if ($('#maxchartcheck').is(':checked')) {
-      optionsValues += '&maxchartvalue=';
-      if (pulseUtility.isInteger($('#maxchartvalue').val())) {
-        optionsValues += $('#maxchartvalue').val();
+    // Max chart
+    if (document.getElementById('maxchartcheck')?.checked) {
+      const maxVal = document.getElementById('maxchartvalue')?.value;
+      if (maxVal && pulseUtility.isInteger(maxVal)) {
+        result += `&maxchartvalue=${maxVal}`;
+      } else {
+        result += '&maxchartvalue=';
       }
-    }
-    else {
-      optionsValues += '&maxchartvalue=';
+    } else {
+      result += '&maxchartvalue=';
     }
 
-    return optionsValues;
+    return result;
   }
 
   getMissingConfigs () {

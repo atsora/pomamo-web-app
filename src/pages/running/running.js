@@ -113,17 +113,15 @@ class RunningPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues () {
-    let optionsValues = '';
+    const options = [
+      { id: 'showproductionbar', type: 'checkbox' }
+    ];
 
-    // BAR (shift / alarm)
-    if ($('#showproductionbar').is(':checked')) {
-      optionsValues += '&showproductionbar=true';
-    }
-    else {
-      optionsValues += '&showproductionbar=false';
-    }
-
-    return optionsValues;
+    return options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
+      return `&${opt.id}=${el.checked}`;
+    }).join('');
   }
 
   getMissingConfigs () {
