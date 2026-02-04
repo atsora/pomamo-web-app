@@ -191,6 +191,8 @@ PULSE_DEFAULT_CONFIG.pages = {
   },
   oeeview: {
     enableGroups: true,
+    showpercent: true,
+    showworkinfo: true,
   },
   operationstatus: {
     enableGroups: true,

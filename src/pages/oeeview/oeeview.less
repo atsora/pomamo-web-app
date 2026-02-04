@@ -18,6 +18,7 @@
 @import "x-productionshiftgoal/x-productionshiftgoal.less";
 @import "x-productiongauge/x-productiongauge.less";
 @import "x-periodtoolbar/x-periodtoolbar.less";
+@import "x-workinfo/x-workinfo.less";
 
 // Positioning
 
@@ -55,7 +56,7 @@
     .pulse-cellbar-main {
       justify-content: center;
 
-      .pulse-cellbar-current-data  {
+      .pulse-cellbar-current-data {
         border-radius: @border_radius_small;
       }
 
@@ -85,12 +86,23 @@
 
 .tile-content {
   display: flex;
-  flex-direction: row;
-  overflow: hidden;
-  border-radius: @border_radius;
-  flex-grow: 1; // Grow to fill available space
-  flex-shrink: 1; // Can shrink if needed
-  min-height: 0; // Allow flex children to shrink below content size
+  flex-direction: column;
+  flex: 1;
+
+  x-workinfo {
+    align-self: center;
+    margin-bottom: 12px;
+  }
+
+  .oee-bottom {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    border-radius: @border_radius;
+    flex-grow: 1; // Grow to fill available space
+    flex-shrink: 1; // Can shrink if needed
+    min-height: 0; // Allow flex children to shrink below content size
+  }
 
   .oee-number {
     display: flex;
@@ -166,7 +178,6 @@
       .productiongauge-gauge {
         flex: unset;
         width: 100%;
-        height: 100%;
         min-width: 0;
         min-height: 0;
       }
@@ -218,3 +229,4 @@ x-grouparray {
   }
 
 }
+
