@@ -23,7 +23,7 @@ class ToolLifePage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Init
-  initOptionValues () {
+  initOptionValues() {
     // TOOLS detail
     let toollabelname = pulseConfig.getString('toollifemachine.toollabelname');
     $('#showtoolselector').empty();
@@ -38,7 +38,7 @@ class ToolLifePage extends pulsePage.BasePage {
     $('#showtoolselector').change(function () {
       let toollabelname = $('#showtoolselector').val();
       // Store
-      pulseConfig.set('toollabelname', String(toollabelname));
+      pulseConfig.set('toollifemachine.toollabelname', String(toollabelname));
       // Display = dispatch message
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'toollabelname' });
@@ -53,7 +53,7 @@ class ToolLifePage extends pulsePage.BasePage {
     $('#showtoolremaining').change(function () {
       let showtoolremaining = $('#showtoolremaining').is(':checked');
       // Store
-      pulseConfig.set('displayremainingcyclesbelowtool', showtoolremaining);
+      pulseConfig.set('toollifemachine.displayremainingcyclesbelowtool', showtoolremaining);
       // Display / Dispatch
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'displayremainingcyclesbelowtool' });
@@ -61,9 +61,9 @@ class ToolLifePage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Function to read custom inputs
-  getOptionValues () {
+  getOptionValues() {
     const options = [
-      { id: 'showtoolselector', type: 'value', param: 'toollabelname' },
+      { id: 'showtoolselector', type: 'value', param: 'toollifemachine.toollabelname' },
       { id: 'showtoolremaining', type: 'checkbox', param: 'toollifemachine.displayremainingcyclesbelowtool' }
     ];
 
@@ -76,7 +76,7 @@ class ToolLifePage extends pulsePage.BasePage {
     }).join('');
   }
 
-  getMissingConfigs () {
+  getMissingConfigs() {
     let missingConfigs = [];
 
     let groups = pulseConfig.getArray('group');
@@ -92,7 +92,23 @@ class ToolLifePage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  buildContent () {
+  // CONFIG PANEL - Default values
+  setDefaultOptionValues() {
+
+    // expiring tools
+    const showtoolselectorSelector = document.getElementById('showtoolselector');
+    showtoolselectorSelector.value = pulseConfig.getDefaultString('toollifemachine.toollabelname');
+    showtoolselectorSelector.dispatchEvent(new Event('change', { bubbles: true }));
+    showtoolselectorSelector.removeAttribute('overridden');
+
+    // remaining cycles
+    const showtoolremainingCheckbox = document.getElementById('showtoolremaining');
+    showtoolremainingCheckbox.checked = pulseConfig.getDefaultBool('toollifemachine.displayremainingcyclesbelowtool');
+    showtoolremainingCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+    showtoolremainingCheckbox.removeAttribute('overridden');
+  }
+
+  buildContent() {
   }
 }
 
