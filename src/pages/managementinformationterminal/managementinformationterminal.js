@@ -239,31 +239,37 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
   getOptionValues() {
     let optionsValues = '';
 
+    const options = [
+      { id: 'showworkinfo', type: 'checkbox' },
+      { id: 'thresholdtargetproduction', type: 'value' },
+      { id: 'thresholdredproduction', type: 'value' }
+    ];
+
     // showworkinfo
-    if ($('#showworkinfo').is(':checked')) {
-      optionsValues += '&showworkinfo=true';
-    }
-    else {
-      optionsValues += '&showworkinfo=false';
+    const showworkinfo = document.getElementById('showworkinfo');
+    if (showworkinfo) {
+      optionsValues += '&showworkinfo=' + showworkinfo.checked;
     }
 
-    // Prod in pie
-    if ($('#productionpercentinpie').is(':checked')) {
+    // Prod in pie - custom logic with radio buttons
+    const productionpercentinpie = document.getElementById('productionpercentinpie');
+    const productionactualonlyinpie = document.getElementById('productionactualonlyinpie');
+    if (productionpercentinpie && productionpercentinpie.checked) {
       optionsValues += '&productionpercentinpie=true';
-    }
-    else if ($('#productionactualonlyinpie').is(':checked')) {
+    } else if (productionactualonlyinpie && productionactualonlyinpie.checked) {
       optionsValues += '&productionpercentinpie=actualonly';
-    }
-    else {
+    } else {
       optionsValues += '&productionpercentinpie=actualtarget';
     }
 
-
-    if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
-      optionsValues += '&thresholdtargetproduction=' + $('#thresholdtargetproduction').val();
+    // Thresholds
+    const thresholdTarget = document.getElementById('thresholdtargetproduction');
+    const thresholdRed = document.getElementById('thresholdredproduction');
+    if (thresholdTarget && pulseUtility.isInteger(thresholdTarget.value)) {
+      optionsValues += '&thresholdtargetproduction=' + thresholdTarget.value;
     }
-    if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
-      optionsValues += '&thresholdredproduction=' + $('#thresholdredproduction').val();
+    if (thresholdRed && pulseUtility.isInteger(thresholdRed.value)) {
+      optionsValues += '&thresholdredproduction=' + thresholdRed.value;
     }
 
     return optionsValues;
