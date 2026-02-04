@@ -139,23 +139,6 @@ class CombinedViewPage extends pulsePage.BasePage {
   }
 
   buildContent() {
-    // Remove config from displayed URL and store them
-    // Remove config from displayed URL and store them
-    let needReload = false;
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-
-    params.forEach((value, key) => {
-      needReload = true;
-      pulseConfig.set(key, value);
-      url.searchParams.delete(key);
-    });
-
-    if (needReload) {
-      window.open(url.toString(), '_self');
-    }
-
-
     let showtarget = pulseConfig.getBool('showtarget');
     if (showtarget) {
       $('x-performancetarget').show();

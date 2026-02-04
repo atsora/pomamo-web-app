@@ -953,9 +953,15 @@ exports.preparePage = function (currentPageMethods) {
   const params = new URLSearchParams(url.search);
 
   params.forEach((value, key) => {
-    needReload = true;
-    pulseConfig.set(key, value);
-    url.searchParams.delete(key);
+    if (key != 'AppContext') {
+      needReload = true;
+      if (key === 'machine' || key === 'group') {
+        // Get all values for this key BEFORE deleting from URL
+        pulseConfig.set(key, params.getAll(key).join(','), true);
+      }
+      else pulseConfig.set(key, value);
+      url.searchParams.delete(key);
+    }
   });
 
   if (needReload) {

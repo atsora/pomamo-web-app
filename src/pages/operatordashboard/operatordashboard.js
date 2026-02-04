@@ -498,23 +498,6 @@ class OperatorDashboardPage extends pulsePage.BasePage {
   }
 
   buildContent() {
-    // URL parameters
-    // Remove config from displayed URL and store them
-    let needReload = false;
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-
-    params.forEach((value, key) => {
-      needReload = true;
-      pulseConfig.set(key, value);
-      url.searchParams.delete(key);
-    });
-
-    if (needReload) {
-      window.open(url.toString(), '_self');
-    }
-
-
     // show Bars
     let showBar = pulseConfig.getBool('showcoloredbar.cycle', false);
     if (showBar) {

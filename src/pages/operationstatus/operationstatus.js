@@ -774,7 +774,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       errorMessage.style.color = 'red';
       errorMessage.style.fontSize = '0.9em';
       errorMessage.style.marginTop = '5px';
-      document.querySelector('.thresholdunitispart').appendChild(errorMessage);
+      if (document.querySelector('.thresholdunitispart')) document.querySelector('.thresholdunitispart').appendChild(errorMessage); // to fix
     }
 
     // Check if values are valid numbers
@@ -1181,22 +1181,6 @@ class OperationStatusPage extends pulsePage.BasePage {
   }
 
   buildContent() {
-    // Remove config from displayed URL and store them
-    let needReload = false;
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-
-    params.forEach((value, key) => {
-      needReload = true;
-      pulseConfig.set(key, value);
-      url.searchParams.delete(key);
-    });
-
-    if (needReload) {
-      window.open(url.toString(), '_self');
-    }
-    // End remove config
-
     //showworkinfo
     let showworkinfo = pulseConfig.getBool('showworkinfo');
 

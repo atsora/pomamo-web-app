@@ -47,7 +47,7 @@ class ToolLifePage extends pulsePage.BasePage {
     // TOOLS remaining
     $('#showtoolremaining').prop('checked',
       pulseConfig.getBool('toollifemachine.displayremainingcyclesbelowtool'));
-    if (pulseConfig.getDefaultBool('showbar')
+    if (pulseConfig.getDefaultBool('toollifemachine.displayremainingcyclesbelowtool')
       != pulseConfig.getBool('toollifemachine.displayremainingcyclesbelowtool'))
       $('#showtoolremaining').attr('overridden', 'true');
     $('#showtoolremaining').change(function () {
@@ -91,23 +91,6 @@ class ToolLifePage extends pulsePage.BasePage {
   }
 
   buildContent () {
-    // Remove config from displayed URL and store them
-    // Remove config from displayed URL and store them
-    let needReload = false;
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-
-    params.forEach((value, key) => {
-      needReload = true;
-      pulseConfig.set(key, value);
-      url.searchParams.delete(key);
-    });
-
-    if (needReload) {
-      window.open(url.toString(), '_self');
-    }
-    // End remove config
-
   }
 }
 
