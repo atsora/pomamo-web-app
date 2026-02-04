@@ -8,18 +8,24 @@ SPDX-License-Identifier: Apache-2.0
 <div class="param-group group-options">
   <div class="param-group-header group-options">
     <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
-    <!--button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" defualt="reset"></x-tr></button-->
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" defualt="reset"></x-tr></button>
   </div>
 
   <div class="param-group-content group-options">
     <!-- Tools settings -->
-    <label><x-tr key="options.toolsExpiring" default="Expiring tools"></x-tr></label>
-    <label for="showtoollabels">
-      <select name="showtoollabels" id="showtoolselector">
-      </select>
-    </label>
-    <label for="showtoolremaining"><x-tr key="options.showRemainingCycles" default="Show remaining cycles"></x-tr>
-      <input type="checkbox" id="showtoolremaining" />
-    </label>
+    <div class="labelsubgroup">
+      <label><x-tr key="options.toolsExpiring" default="Expiring tools"></x-tr></label>
+      <div class="subgroup">
+        <label for="showtoollabels">
+          <select name="showtoollabels" id="showtoolselector">
+          </select>
+        </label>
+      </div>
+      <div class="labelsubgroup">
+        <label for="showtoolremaining"><x-tr key="options.showRemainingCycles" default="Show remaining cycles"></x-tr>
+          <input type="checkbox" id="showtoolremaining" />
+        </label>
+      </div>
+    </div>
   </div>
 </div>
