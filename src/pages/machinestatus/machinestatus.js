@@ -501,9 +501,8 @@ class MachineStatusPage extends pulsePage.BasePage {
     if (needReload) {
       window.open(url.toString(), '_self');
     }
-    // End remove config
 
-    // Show/hide according to config
+  // allows the native page configuration (not in options) of the bars : show reason bar == always -> idem for SHOW x-reasongroups
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     if (showworkinfo) {
       $('x-currentworkinfo').show();

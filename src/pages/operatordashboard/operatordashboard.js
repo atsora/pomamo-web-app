@@ -6,7 +6,6 @@
 var pulseConfig = require('pulseConfig');
 var pulsePage = require('pulsePage');
 var eventBus = require('eventBus');
-var pulseUtility = require('pulseUtility');
 
 require('x-grouparray/x-grouparray');
 require('x-machinetab/x-machinetab');
@@ -515,7 +514,7 @@ class OperatorDashboardPage extends pulsePage.BasePage {
     }
 
 
-    // show Bars
+    // allows the native page configuration (not in options) of the bars : show reason bar == always -> idem for SHOW x-reasongroups
     let showBar = pulseConfig.getBool('showcoloredbar.cycle', false);
     if (showBar) {
       $('x-operationcyclebar').show();
@@ -545,7 +544,6 @@ class OperatorDashboardPage extends pulsePage.BasePage {
       $('x-redstacklightbar').hide();
     }
 
-    // show reason bar == always -> idem for SHOW x-reasongroups
     showBar = pulseConfig.getBool('showcoloredbar.cncvalue', false);
     if (showBar) {
       $('x-cncvaluebar').show();
@@ -555,19 +553,6 @@ class OperatorDashboardPage extends pulsePage.BasePage {
       $('x-cncvaluebar').hide();
       $('x-fieldlegends').hide();
     }
-
-    document.querySelectorAll('.periodtoolbar-toolbar').forEach(el => {
-      el.classList.add('border');
-    });
-
-    document.querySelectorAll('.pulse-cellbar-past-data').forEach(el => {
-      el.classList.add('border');
-    });
-
-    document.querySelectorAll('.productionshiftgoal-data').forEach(el => {
-      el.classList.add('number-content');
-    });
-
   }
 
 }
