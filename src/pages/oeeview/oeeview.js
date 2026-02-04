@@ -281,26 +281,24 @@ class OeeViewPage extends pulsePage.BasePage {
   }
 
   getOptionValues() {
-    let optionsValues = '';
+    const options = [
+      { id: 'productiongaugepercent', type: 'radio', param: 'showpercent' },
+      { id: 'thresholdtargetproductionbar', type: 'value', param: 'productiongauge.target' },
+      { id: 'thresholdredproductionbar', type: 'value', param: 'productiongauge.red' },
+      { id: 'showworkinfo', type: 'checkbox' }
+    ];
 
-    const showPercentRadio = document.getElementById('productiongaugepercent');
-    if (showPercentRadio.checked) {
-      optionsValues += '&showpercent=true';
-    } else {
-      optionsValues += '&showpercent=false';
-    }
+    return options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
 
-    const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
-    const thresholdRedInput = document.getElementById('thresholdredproductionbar');
-
-    optionsValues += '&productiongauge.target=' + thresholdTarget.value;
-    optionsValues += '&productiongauge.red=' + thresholdRedInput.value;
-
-    // showworkinfo = Show Operation
-    const showworkinfo = document.getElementById('showworkinfo').checked;
-    optionsValues += '&showworkinfo=' + showworkinfo;
-
-    return optionsValues;
+      const paramName = opt.param || opt.id;
+      if (opt.type === 'checkbox' || opt.type === 'radio') {
+        return `&${paramName}=${el.checked}`;
+      } else {
+        return `&${paramName}=${el.value}`;
+      }
+    }).join('');
   }
 
 }

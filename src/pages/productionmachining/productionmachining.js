@@ -124,17 +124,17 @@ class ProductionMachiningPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
-    let optionsValues = '';
+    const options = [
+      { id: 'thresholdtargetproduction', type: 'value', conditional: () => pulseUtility.isInteger(document.getElementById('thresholdtargetproduction')?.value) },
+      { id: 'thresholdredproduction', type: 'value', conditional: () => pulseUtility.isInteger(document.getElementById('thresholdredproduction')?.value) }
+    ];
 
-
-    if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
-      optionsValues += '&thresholdtargetproduction=' + $('#thresholdtargetproduction').val();
-    }
-    if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
-      optionsValues += '&thresholdredproduction=' + $('#thresholdredproduction').val();
-    }
-
-    return optionsValues;
+    return options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
+      if (opt.conditional && !opt.conditional()) return '';
+      return `&${opt.id}=${el.value}`;
+    }).join('');
   }
 
   getMissingConfigs() {

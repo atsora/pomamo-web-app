@@ -435,65 +435,29 @@ class OperatorDashboardPage extends pulsePage.BasePage {
   }
 
   getOptionValues() {
-    let optionsValues = '';
+    const options = [
+      { id: 'showChangedTools', type: 'checkbox' },
+      { id: 'openStopClassification', type: 'checkbox' },
+      { id: 'stopClassificationReopenDelay', type: 'value' },
+      { id: 'showproductionbar', type: 'checkbox' },
+      { id: 'productionbarpercent', type: 'radio', param: 'showpercent' },
+      { id: 'showproductiondisplay', type: 'checkbox' },
+      { id: 'productiongauge', type: 'radio', param: 'showproductiongauge' },
+      { id: 'thresholdtargetproductionbar', type: 'value', param: 'target' },
+      { id: 'thresholdredproductionbar', type: 'value', param: 'red' }
+    ];
 
-    // showChangedTools
-    const showChangedToolsCheckbox = document.getElementById('showChangedTools');
-    if (showChangedToolsCheckbox.checked) {
-      optionsValues += '&showChangedTools=true';
-    } else {
-      optionsValues += '&showChangedTools=false';
-    }
+    return options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
 
-    // Open stop classification
-    const openStopClassificationCheckbox = document.getElementById('openStopClassification');
-    if (openStopClassificationCheckbox.checked) {
-      optionsValues += '&openStopClassification=true';
-    } else {
-      optionsValues += '&openStopClassification=false';
-    }
-
-    // Stop classification reopen delay
-    const stopClassificationReopenDelayInput = document.getElementById('stopClassificationReopenDelay');
-    optionsValues += '&stopClassificationReopenDelay=' + stopClassificationReopenDelayInput.value;
-
-    // Production bar
-    const showProductionBarCheckbox = document.getElementById('showproductionbar');
-    if (showProductionBarCheckbox.checked) {
-      optionsValues += '&showproductionbar=true';
-    } else {
-      optionsValues += '&showproductionbar=false';
-    }
-
-    const showPercentRadio = document.getElementById('productionbarpercent');
-    if (showPercentRadio.checked) {
-      optionsValues += '&showpercent=true';
-    } else {
-      optionsValues += '&showpercent=false';
-    }
-
-    // Show production display
-    const showProductionDisplayCheckbox = document.getElementById('showproductiondisplay');
-    if (showProductionDisplayCheckbox.checked) {
-      optionsValues += '&showproductiondisplay=true';
-    } else {
-      optionsValues += '&showproductiondisplay=false';
-    }
-
-    // Production display type
-    const showGaugeRadio = document.getElementById('productiongauge');
-    if (showGaugeRadio.checked) {
-      optionsValues += '&showproductiongauge=true';
-    } else {
-      optionsValues += '&showproductiongauge=false';
-    }
-
-    const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
-    const thresholdRedInput = document.getElementById('thresholdredproductionbar');
-
-    optionsValues += '&target=' + thresholdTarget.value;
-    optionsValues += '&red=' + thresholdRedInput.value;
-    return optionsValues;
+      const paramName = opt.param || opt.id;
+      if (opt.type === 'checkbox' || opt.type === 'radio') {
+        return `&${paramName}=${el.checked}`;
+      } else {
+        return `&${paramName}=${el.value}`;
+      }
+    }).join('');
   }
 
   buildContent() {

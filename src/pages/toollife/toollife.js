@@ -62,16 +62,18 @@ class ToolLifePage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues () {
-    let optionsValues = '';
+    const options = [
+      { id: 'showtoolselector', type: 'value', param: 'toollabelname' },
+      { id: 'showtoolremaining', type: 'checkbox', param: 'toollifemachine.displayremainingcyclesbelowtool' }
+    ];
 
-    // TOOLS DETAILS
-    let tmpVal = $('#showtoolselector').val();
-    optionsValues += '&toollabelname=' + tmpVal;
-
-    let showtoolremaining = $('#showtoolremaining').is(':checked');
-    optionsValues += '&toollifemachine.displayremainingcyclesbelowtool=' + showtoolremaining;
-
-    return optionsValues;
+    return options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
+      const paramName = opt.param || opt.id;
+      const value = opt.type === 'checkbox' ? el.checked : el.value;
+      return `&${paramName}=${value}`;
+    }).join('');
   }
 
   getMissingConfigs () {

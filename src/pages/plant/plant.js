@@ -28,8 +28,7 @@ class PlantPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues () {
-    let optionsValues = '';
-    return optionsValues;
+    return '';
   }
 
   getMissingConfigs () {

@@ -144,26 +144,20 @@ class ManagerViewPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
-    let optionsValues = '';
+    const options = [
+      { id: 'displayshiftrangemanagerview', type: 'checkbox', param: 'displayshiftrange' },
+      { id: 'displaydaysrange', type: 'value', conditional: () => !document.getElementById('displayshiftrangemanagerview')?.checked && document.getElementById('displaydaysrange')?.hasAttribute('overridden') && pulseUtility.isInteger(document.getElementById('displaydaysrange')?.value) },
+      { id: 'displayhoursrange', type: 'value', conditional: () => !document.getElementById('displayshiftrangemanagerview')?.checked && document.getElementById('displayhoursrange')?.hasAttribute('overridden') && pulseUtility.isInteger(document.getElementById('displayhoursrange')?.value) }
+    ];
 
-    if ($('#displayshiftrangemanagerview').is(':checked')) {
-      optionsValues += '&displayshiftrange=true';
-    }
-    else {
-      optionsValues += '&displayshiftrange=false';
-      if (pulseUtility.isInteger($('#displaydaysrange').val())) {
-        if ($('#displaydaysrange').is('[overridden]')) {
-          optionsValues += '&displaydaysrange=' + $('#displaydaysrange').val();
-        }
-      }
-      if (pulseUtility.isInteger($('#displayhoursrange').val())) {
-        if ($('#displayhoursrange').is('[overridden]')) {
-          optionsValues += '&displayhoursrange=' + $('#displayhoursrange').val();
-        }
-      }
-    }
-
-    return optionsValues;
+    return options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
+      if (opt.conditional && !opt.conditional()) return '';
+      const paramName = opt.param || opt.id;
+      const value = opt.type === 'checkbox' ? el.checked : el.value;
+      return `&${paramName}=${value}`;
+    }).join('');
   }
 
   getMissingConfigs() {
