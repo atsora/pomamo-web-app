@@ -6,6 +6,7 @@
 var pulseConfig = require('pulseConfig');
 var pulsePage = require('pulsePage');
 var eventBus = require('eventBus');
+var pulseUtility = require('pulseUtility');
 
 require('x-grouparray/x-grouparray');
 require('x-machinetab/x-machinetab');
@@ -498,64 +499,19 @@ class OperatorDashboardPage extends pulsePage.BasePage {
 
   buildContent() {
     // URL parameters
+    // Remove config from displayed URL and store them
     let needReload = false;
-    let url = window.location.href;
-    if (-1 != url.search('showChangedTools=')) {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    params.forEach((value, key) => {
       needReload = true;
-      pulseConfig.set('showChangedTools',
-        pulseUtility.getURLParameter(url, 'showChangedTools'));
-      url = pulseUtility.removeURLParameter(url, 'showChangedTools');
-    }
-    if (-1 != url.search('openStopClassification=')) {
-      needReload = true;
-      pulseConfig.set('openStopClassification',
-        pulseUtility.getURLParameter(url, 'openStopClassification', ''));
-      url = pulseUtility.removeURLParameter(url, 'openStopClassification');
-    }
-    if (-1 != url.search('stopClassificationReopenDelay=')) {
-      needReload = true;
-      pulseConfig.set('stopClassificationReopenDelay',
-        pulseUtility.getURLParameter(url, 'stopClassificationReopenDelay', ''));
-      url = pulseUtility.removeURLParameter(url, 'stopClassificationReopenDelay');
-    }
-    if (-1 != url.search('showproductionbar=')) {
-      needReload = true;
-      pulseConfig.set('showproductionbar',
-        pulseUtility.getURLParameter(url, 'showproductionbar', ''));
-      url = pulseUtility.removeURLParameter(url, 'showproductionbar');
-    }
-    if (-1 != url.search('showpercent=')) {
-      needReload = true;
-      pulseConfig.set('showpercent',
-        pulseUtility.getURLParameter(url, 'showpercent', ''));
-      url = pulseUtility.removeURLParameter(url, 'showpercent');
-    }
-    if (-1 != url.search('showproductiondisplay=')) {
-      needReload = true;
-      pulseConfig.set('showproductiondisplay',
-        pulseUtility.getURLParameter(url, 'showproductiondisplay', ''));
-      url = pulseUtility.removeURLParameter(url, 'showproductiondisplay');
-    }
-    if (-1 != url.search('showproductiongauge=')) {
-      needReload = true;
-      pulseConfig.set('showproductiongauge',
-        pulseUtility.getURLParameter(url, 'showproductiongauge', ''));
-      url = pulseUtility.removeURLParameter(url, 'showproductiongauge');
-    }
-    if (-1 != url.search('target=')) {
-      needReload = true;
-      pulseConfig.set('target',
-        pulseUtility.getURLParameter(url, 'target', ''));
-      url = pulseUtility.removeURLParameter(url, 'target');
-    }
-    if (-1 != url.search('red=')) {
-      needReload = true;
-      pulseConfig.set('red',
-        pulseUtility.getURLParameter(url, 'red', ''));
-      url = pulseUtility.removeURLParameter(url, 'red');
-    }
+      pulseConfig.set(key, value);
+      url.searchParams.delete(key);
+    });
+
     if (needReload) {
-      window.open(url, '_self');
+      window.open(url.toString(), '_self');
     }
 
 

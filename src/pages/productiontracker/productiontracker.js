@@ -188,30 +188,20 @@ class ProductionTrackerPage extends pulsePage.BasePage {
 
   buildContent() {
     // Remove config from displayed URL and store them
-    let needReload = false;
-    let url = window.location.href;
-    if (-1 != url.search('thresholdtargetproduction=')) {
-      needReload = true;
-      pulseConfig.set('thresholdtargetproduction',
-        pulseUtility.getURLParameter(url, 'thresholdtargetproduction'));
-      url = pulseUtility.removeURLParameter(url, 'thresholdtargetproduction');
-    }
-    if (-1 != url.search('thresholdtargetproduction=')) {
-      needReload = true;
-      pulseConfig.set('thresholdtargetproduction',
-        pulseUtility.getURLParameter(url, 'thresholdtargetproduction'));
-      url = pulseUtility.removeURLParameter(url, 'thresholdtargetproduction');
-    }
-    if (-1 != url.search('showreservecapacity=')) {
-      needReload = true;
-      pulseConfig.set('showreservecapacity',
-        pulseUtility.getURLParameter(url, 'showreservecapacity'));
-      url = pulseUtility.removeURLParameter(url, 'showreservecapacity');
-    }
+        // Remove config from displayed URL and store them
+        let needReload = false;
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
 
-    if (needReload) {
-      window.open(url, '_self');
-    }
+        params.forEach((value, key) => {
+          needReload = true;
+          pulseConfig.set(key, value);
+          url.searchParams.delete(key);
+        });
+
+        if (needReload) {
+          window.open(url.toString(), '_self');
+        }
     // End remove config
   }
 

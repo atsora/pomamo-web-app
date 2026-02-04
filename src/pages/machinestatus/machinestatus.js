@@ -4,7 +4,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 var pulseConfig = require('pulseConfig');
-var pulseUtility = require('pulseUtility');
 var pulsePage = require('pulsePage');
 var eventBus = require('eventBus');
 
@@ -36,7 +35,7 @@ class MachineStatusPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Init
-  initOptionValues () {
+  initOptionValues() {
     // showworkinfo = Show Operation
     $('#showworkinfo').prop('checked', pulseConfig.getBool('showworkinfo'));
     if (pulseConfig.getDefaultBool('showworkinfo') != pulseConfig.getBool('showworkinfo')) {
@@ -317,7 +316,7 @@ class MachineStatusPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Default values
-  setDefaultOptionValues () {
+  setDefaultOptionValues() {
     // showworkinfo
     $('#showworkinfo').prop('checked', pulseConfig.getDefaultBool('showworkinfo'));
     $('#showworkinfo').change();
@@ -387,7 +386,7 @@ class MachineStatusPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Function to read custom inputs
-  getOptionValues () {
+  getOptionValues() {
     let optionsValues = '';
 
     // showworkinfo
@@ -471,7 +470,7 @@ class MachineStatusPage extends pulsePage.BasePage {
     return optionsValues;
   }
 
-  getMissingConfigs () {
+  getMissingConfigs() {
     let missingConfigs = [];
 
     let groups = pulseConfig.getArray('group');
@@ -487,72 +486,20 @@ class MachineStatusPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  buildContent () {
+  buildContent() {
     // Remove config from displayed URL and store them
     let needReload = false;
-    let url = window.location.href;
-    if (-1 != url.search('showworkinfo=')) {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    params.forEach((value, key) => {
       needReload = true;
-      pulseConfig.set('showworkinfo',
-        pulseUtility.getURLParameter(url, 'showworkinfo'));
-      url = pulseUtility.removeURLParameter(url, 'showworkinfo');
-    }
-    if (-1 != url.search('displayshiftrange=')) {
-      needReload = true;
-      pulseConfig.set('displayshiftrange',
-        pulseUtility.getURLParameter(url, 'displayshiftrange', ''));
-      url = pulseUtility.removeURLParameter(url, 'displayshiftrange');
-    }
-    if (-1 != url.search('displaymotiontime=')) {
-      needReload = true;
-      pulseConfig.set('displaymotiontime',
-        pulseUtility.getURLParameter(url, 'displaymotiontime', ''));
-      url = pulseUtility.removeURLParameter(url, 'displaymotiontime');
-    }
-    if (-1 != url.search('showtarget=')) {
-      needReload = true;
-      pulseConfig.set('showtarget',
-        pulseUtility.getURLParameter(url, 'showtarget', ''));
-      url = pulseUtility.removeURLParameter(url, 'showtarget');
-    }
-    if (-1 != url.search('showcurrenttool=')) {
-      needReload = true;
-      pulseConfig.set('showcurrenttool',
-        pulseUtility.getURLParameter(url, 'showcurrenttool', ''));
-      url = pulseUtility.removeURLParameter(url, 'showcurrenttool');
-    }
-    if (-1 != url.search('showcurrentsequence=')) {
-      needReload = true;
-      pulseConfig.set('showcurrentsequence',
-        pulseUtility.getURLParameter(url, 'showcurrentsequence', ''));
-      url = pulseUtility.removeURLParameter(url, 'showcurrentsequence');
-    }
-    if (-1 != url.search('showalarm=')) {
-      needReload = true;
-      pulseConfig.set('showalarm',
-        pulseUtility.getURLParameter(url, 'showalarm', ''));
-      url = pulseUtility.removeURLParameter(url, 'showalarm');
-    }
-    if (-1 != url.search('showstacklight=')) {
-      needReload = true;
-      pulseConfig.set('showstacklight',
-        pulseUtility.getURLParameter(url, 'showstacklight', ''));
-      url = pulseUtility.removeURLParameter(url, 'showstacklight');
-    }
-    if (-1 != url.search('showweeklybar=')) {
-      needReload = true;
-      pulseConfig.set('showweeklybar',
-        pulseUtility.getURLParameter(url, 'showweeklybar', ''));
-      url = pulseUtility.removeURLParameter(url, 'showweeklybar');
-    }
-    if (-1 != url.search('weeklyshowcurrentweek=')) {
-      needReload = true;
-      pulseConfig.set('weeklyshowcurrentweek',
-        pulseUtility.getURLParameter(url, 'weeklyshowcurrentweek', 'false'));
-      url = pulseUtility.removeURLParameter(url, 'weeklyshowcurrentweek');
-    }
+      pulseConfig.set(key, value);
+      url.searchParams.delete(key);
+    });
+
     if (needReload) {
-      window.open(url, '_self');
+      window.open(url.toString(), '_self');
     }
     // End remove config
 

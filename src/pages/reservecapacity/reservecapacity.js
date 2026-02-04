@@ -201,24 +201,19 @@ class ReserveCapacityPage extends pulsePage.BasePage {
 
   buildContent () {
     // Remove config from displayed URL and store them
+    // Remove config from displayed URL and store them
     let needReload = false;
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
 
-    let url = window.location.href;
-    if (-1 != url.search('minchartvalue=')) {
+    params.forEach((value, key) => {
       needReload = true;
-      pulseConfig.set('minchartvalue',
-        pulseUtility.getURLParameter(url, 'minchartvalue'));
-      url = pulseUtility.removeURLParameter(url, 'minchartvalue');
-    }
-    if (-1 != url.search('maxchartvalue=')) {
-      needReload = true;
-      pulseConfig.set('maxchartvalue',
-        pulseUtility.getURLParameter(url, 'maxchartvalue'));
-      url = pulseUtility.removeURLParameter(url, 'maxchartvalue');
-    }
+      pulseConfig.set(key, value);
+      url.searchParams.delete(key);
+    });
 
     if (needReload) {
-      window.open(url, '_self');
+      window.open(url.toString(), '_self');
     }
     // End remove config
   }

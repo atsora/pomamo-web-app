@@ -3,12 +3,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-//var pulseUtility = require('pulseUtility');
 var pulseConfig = require('pulseConfig');
 var pulsePage = require('pulsePage');
-//var pulseSvg = require('pulseSvg');
 
-//require('libraries/pulse.exports.light.js'); // Global import
 require('x-checkconfigupdate/x-checkconfigupdate');
 require('x-checklogin/x-checklogin');
 require('x-checkcurrenttime/x-checkcurrenttime');

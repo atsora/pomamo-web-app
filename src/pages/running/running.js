@@ -144,18 +144,19 @@ class RunningPage extends pulsePage.BasePage {
 
   buildContent () {
     // Remove config from displayed URL and store them
+    // Remove config from displayed URL and store them
     let needReload = false;
-    let url = window.location.href;
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
 
-    if (-1 != url.search('showproductionbar=')) {
+    params.forEach((value, key) => {
       needReload = true;
-      pulseConfig.set('showproductionbar',
-        pulseUtility.getURLParameter(url, 'showproductionbar'));
-      url = pulseUtility.removeURLParameter(url, 'showproductionbar');
-    }
+      pulseConfig.set(key, value);
+      url.searchParams.delete(key);
+    });
 
     if (needReload) {
-      window.open(url, '_self');
+      window.open(url.toString(), '_self');
     }
     // End remove config
 

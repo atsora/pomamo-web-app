@@ -92,16 +92,19 @@ class ToolLifePage extends pulsePage.BasePage {
 
   buildContent () {
     // Remove config from displayed URL and store them
+    // Remove config from displayed URL and store them
     let needReload = false;
-    let url = window.location.href;
-    if (-1 != url.search('toollabelname=')) {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    params.forEach((value, key) => {
       needReload = true;
-      pulseConfig.set('toollabelname',
-        pulseUtility.getURLParameter(url, 'toollabelname', ''));
-      url = pulseUtility.removeURLParameter(url, 'toollabelname');
-    }
+      pulseConfig.set(key, value);
+      url.searchParams.delete(key);
+    });
+
     if (needReload) {
-      window.open(url, '_self');
+      window.open(url.toString(), '_self');
     }
     // End remove config
 

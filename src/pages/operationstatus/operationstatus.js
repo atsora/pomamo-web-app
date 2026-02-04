@@ -1183,131 +1183,17 @@ class OperationStatusPage extends pulsePage.BasePage {
   buildContent() {
     // Remove config from displayed URL and store them
     let needReload = false;
-    let url = window.location.href;
-    if (-1 != url.search('showworkinfo=')) {
-      needReload = true;
-      pulseConfig.set('showworkinfo',
-        pulseUtility.getURLParameter(url, 'showworkinfo'));
-      url = pulseUtility.removeURLParameter(url, 'showworkinfo');
-    }
-    if (-1 != url.search('showworkinfobig=')) {
-      needReload = true;
-      pulseConfig.set('showworkinfobig',
-        pulseUtility.getURLParameter(url, 'showworkinfobig'));
-      url = pulseUtility.removeURLParameter(url, 'showworkinfobig');
-    }
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
 
-    if (-1 != url.search('showproduction=')) {
+    params.forEach((value, key) => {
       needReload = true;
-      pulseConfig.set('showproduction',
-        pulseUtility.getURLParameter(url, 'showproduction'));
-      url = pulseUtility.removeURLParameter(url, 'showproduction');
-    }
-    if (-1 != url.search('productionpercent=')) {
-      needReload = true;
-      pulseConfig.set('productionpercent',
-        pulseUtility.getURLParameter(url, 'productionpercent'));
-      url = pulseUtility.removeURLParameter(url, 'productionpercent');
-    }
-    if (-1 != url.search('thresholdtargetproduction=')) {
-      needReload = true;
-      pulseConfig.set('thresholdtargetproduction',
-        pulseUtility.getURLParameter(url, 'thresholdtargetproduction'));
-      url = pulseUtility.removeURLParameter(url, 'thresholdtargetproduction');
-    }
-    if (-1 != url.search('showcurrenttool=')) {
-      needReload = true;
-      pulseConfig.set('showcurrenttool',
-        pulseUtility.getURLParameter(url, 'showcurrenttool'));
-      url = pulseUtility.removeURLParameter(url, 'showcurrenttool');
-    }
-    if (-1 != url.search('showcurrentsequence=')) {
-      needReload = true;
-      pulseConfig.set('showcurrentsequence',
-        pulseUtility.getURLParameter(url, 'showcurrentsequence'));
-      url = pulseUtility.removeURLParameter(url, 'showcurrentsequence');
-    }
-    if (-1 != url.search('showcurrentoverride=')) {
-      needReload = true;
-      pulseConfig.set('showcurrentoverride',
-        pulseUtility.getURLParameter(url, 'showcurrentoverride'));
-      url = pulseUtility.removeURLParameter(url, 'showcurrentoverride');
-    }
-    if (-1 != url.search('showalarm=')) {
-      needReload = true;
-      pulseConfig.set('showalarm',
-        pulseUtility.getURLParameter(url, 'showalarm'));
-      url = pulseUtility.removeURLParameter(url, 'showalarm');
-    }
-    if (-1 != url.search('showAlarmBelowIcon=')) {
-      needReload = true;
-      pulseConfig.set('showAlarmBelowIcon',
-        pulseUtility.getURLParameter(url, 'showAlarmBelowIcon', ''));
-      url = pulseUtility.removeURLParameter(url, 'showAlarmBelowIcon');
-    }
-    if (-1 != url.search('showUnknownAlarm=')) {
-      needReload = true;
-      pulseConfig.set('showUnknownAlarm',
-        pulseUtility.getURLParameter(url, 'showUnknownAlarm', ''));
-      url = pulseUtility.removeURLParameter(url, 'showUnknownAlarm');
-    }
-    if (-1 != url.search('showpie=')) {
-      needReload = true;
-      pulseConfig.set('showpie',
-        pulseUtility.getURLParameter(url, 'showpie', ''));
-      url = pulseUtility.removeURLParameter(url, 'showpie');
-    }
-    if (-1 != url.search('productionpercentinpie=')) {
-      needReload = true;
-      pulseConfig.set('productionpercentinpie',
-        pulseUtility.getURLParameter(url, 'productionpercentinpie', ''));
-      url = pulseUtility.removeURLParameter(url, 'productionpercentinpie');
-    }
-    if (-1 != url.search('showstacklight=')) {
-      needReload = true;
-      pulseConfig.set('showstacklight',
-        pulseUtility.getURLParameter(url, 'showstacklight', ''));
-      url = pulseUtility.removeURLParameter(url, 'showstacklight');
-    }
-    if (-1 != url.search('showtool=')) {
-      needReload = true;
-      pulseConfig.set('showtool',
-        pulseUtility.getURLParameter(url, 'showtool', ''));
-      url = pulseUtility.removeURLParameter(url, 'showtool');
-    }
-    if (-1 != url.search('toollabelname=')) {
-      needReload = true;
-      pulseConfig.set('toollabelname',
-        pulseUtility.getURLParameter(url, 'toollabelname', ''));
-      url = pulseUtility.removeURLParameter(url, 'toollabelname');
-    }
-    if (-1 != url.search('showbar=')) {
-      needReload = true;
-      pulseConfig.set('showbar',
-        pulseUtility.getURLParameter(url, 'showbar', ''));
-      url = pulseUtility.removeURLParameter(url, 'showbar');
-    }
-    if (-1 != url.search('displayshiftrange=')) {
-      needReload = true;
-      pulseConfig.set('displayshiftrange',
-        pulseUtility.getURLParameter(url, 'displayshiftrange', ''));
-      url = pulseUtility.removeURLParameter(url, 'displayshiftrange');
-    }
-    if (-1 != url.search('barshowalarms=')) {
-      needReload = true;
-      pulseConfig.set('barshowalarms',
-        pulseUtility.getURLParameter(url, 'barshowalarms', ''));
-      url = pulseUtility.removeURLParameter(url, 'barshowalarms');
-    }
-    if (-1 != url.search('barshowpercent=')) {
-      needReload = true;
-      pulseConfig.set('barshowpercent',
-        pulseUtility.getURLParameter(url, 'barshowpercent', ''));
-      url = pulseUtility.removeURLParameter(url, 'barshowpercent');
-    }
+      pulseConfig.set(key, value);
+      url.searchParams.delete(key);
+    });
 
     if (needReload) {
-      window.open(url, '_self');
+      window.open(url.toString(), '_self');
     }
     // End remove config
 

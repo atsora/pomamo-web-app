@@ -101,24 +101,6 @@ var populateNavigationPanel = function () {
     return; // Nothing to display
   }
 
-  /*    // Browse all roles
-    for (let iRole = 0; iRole < roles.length; iRole++) {
-      let role = roles[iRole];
-      if (role.display != null) {
-        let role = roles[iRole];
-        let container = $('<div></div>').addClass('select-role-div').attr('role', role.role);
-        let img = $('<div></div>').addClass('select-role-image');
-        let imgUrl = 'images/role-' + role.role + '.svg';
-        imageExists(imgUrl, function (exists) {
-          if (exists) {
-            img.css('backgroundImage', 'url(' + imgUrl + ')');
-          }
-          else {
-            img.css('backgroundImage', 'url(images/role-default.svg)');
-          }
-          pulseSvg.inlineBackgroundSvg(img);
-        });
-   */
   let currentAppIsAllowed = false;
   // Display apps icon to allow switch
   let firstTarget = null;
@@ -148,13 +130,9 @@ var populateNavigationPanel = function () {
     if (displayedApps.length > 1) { // Nothing displayed if only ONE is allowed
       // Set image, if imageExists
       let imgUrl = 'images/app-' + app + '.svg';
-      /*let img = new Image();
-      img.onload = function () {*/
+
       appImg.css('backgroundImage', 'url(' + imgUrl + ')');
-      /*};
-      img.onerror = function () {
-        appImg.css('backgroundImage', 'url(images/app-default.svg)');
-      };*/
+
       appImg.src = imgUrl;
 
 
@@ -177,15 +155,6 @@ var populateNavigationPanel = function () {
         targetUrl = pulseUtility.removeURLParameter(targetUrl, 'AppContext');
         targetUrl = pulseUtility.changePageName(targetUrl, 'home'); // or firstpage
 
-        // Add 'path' if exists in url :
-        /*let tmpPath = pulseUtility.getURLParameterValues(window.location.href, 'path');
-        if (tmpPath.length > 0) {
-          targetUrl = pulseUtility.changeURLParameter(targetUrl, 'path', tmpPath[0]);
-        }
-        let tmpMainPath = pulseUtility.getURLParameterValues(window.location.href, 'mainpath');
-        if (tmpMainPath.length > 0) {
-          targetUrl = pulseUtility.changeURLParameter(targetUrl, 'mainpath', tmpMainPath[0]);
-        }*/
       } break;
       case 'Live': {   // AppContext= live in URL
         if ('live' == pulseUtility.getURLParameter(window.location.href, 'AppContext')) {
@@ -197,16 +166,6 @@ var populateNavigationPanel = function () {
         targetUrl = pulseUtility.changePageName(targetUrl, 'home'); // or firstpage
         targetUrl = pulseUtility.changeURLParameter(targetUrl, 'AppContext', 'live');
 
-        // Add 'path' if exists in url :
-        /*let tmpPath = pulseUtility.getURLParameterValues(window.location.href, 'path');
-        if (tmpPath.length > 0) {
-          targetUrl = pulseUtility.changeURLParameter(targetUrl, 'path', tmpPath[0]);
-        }
-        let tmpMainPath = pulseUtility.getURLParameterValues(window.location.href, 'mainpath');
-        if (tmpMainPath.length > 0) {
-          targetUrl = pulseUtility.changeURLParameter(targetUrl, 'mainpath', tmpMainPath[0]);
-        }*/
-
       } break;
       case 'Reports': {// use reportpath = 'http://serveraddress:8080/pulsereporting/
         pulseUtility.addToolTip(link, pulseConfig.pulseTranslate('content.reports', 'Reports'));
@@ -215,13 +174,7 @@ var populateNavigationPanel = function () {
 
         link.attr('target', '_blank'); // To open in a new tab
       } break;
-      /*case 'OperationWebApp': { == see below
-        pulseUtility.addToolTip(div, app); // translate ? I18N
 
-        targetUrl = pulseUtility.changePageName(targetUrl, 'index'); // or firstpage
-        //changeApplication :
-        targetUrl = targetUrl.replace('PulseWebApp', app);
-      } break;*/
       default: {
         pulseUtility.addToolTip(link, app); // translate ? I18N -> common
 
@@ -991,59 +944,22 @@ var isFullScreen = function () {
  *  - buildContent: optional function that build the content, if getMissingConfigs returns empty
  */
 exports.preparePage = function (currentPageMethods) {
-  // Build COMMON content = Before Build AND Before currentRoleOrAppContextIsDefined...
-  let needReload = false;
-  let url = window.location.href;
-  /*if (-1 != url.search('role=')) { // Not here
-  }*/
-  // Clean done in 2020-11 - To keep at least 1 year until all installations are upgraded
+
   pulseConfig.setGlobal('machine', '');  // Remove
   pulseConfig.setGlobal('group', '');   // Remove
-  //
-  if (-1 != url.search('machine=')) {
+  // Remove config from displayed URL and store them
+  let needReload = false;
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+
+  params.forEach((value, key) => {
     needReload = true;
-    pulseConfig.set('machine',
-      pulseUtility.getURLParameterValues(url, 'machine').join(), true);
-    url = pulseUtility.removeURLParameter(url, 'machine');
-  }
-  if (-1 != url.search('group=')) {
-    needReload = true;
-    pulseConfig.set('group',
-      pulseUtility.getURLParameterValues(url, 'group').join(), true);
-    url = pulseUtility.removeURLParameter(url, 'group');
-  }
-  if (-1 != url.search('row=')) {
-    needReload = true;
-    pulseConfig.set('row',
-      pulseUtility.getURLParameter(url, 'row'));
-    url = pulseUtility.removeURLParameter(url, 'row');
-  }
-  if (-1 != url.search('column=')) {
-    needReload = true;
-    pulseConfig.set('column',
-      pulseUtility.getURLParameter(url, 'column'));
-    url = pulseUtility.removeURLParameter(url, 'column');
-  }
-  if (-1 != url.search('rotation=')) {
-    needReload = true;
-    pulseConfig.set('rotation',
-      pulseUtility.getURLParameter(url, 'rotation'));
-    url = pulseUtility.removeURLParameter(url, 'rotation');
-  }
-  if (-1 != url.search('title=')) {
-    needReload = true;
-    pulseConfig.set('title',
-      pulseUtility.getURLParameter(url, 'title'));
-    url = pulseUtility.removeURLParameter(url, 'title');
-  }
-  if (-1 != url.search('showlegend=')) {
-    needReload = true;
-    pulseConfig.set('showlegend',
-      pulseUtility.getURLParameter(url, 'showlegend'));
-    url = pulseUtility.removeURLParameter(url, 'showlegend');
-  }
+    pulseConfig.set(key, value);
+    url.searchParams.delete(key);
+  });
+
   if (needReload) {
-    window.open(url, '_self');
+    window.open(url.toString(), '_self');
   }
 
   $.ajaxSetup({
