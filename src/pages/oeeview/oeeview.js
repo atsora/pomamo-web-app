@@ -26,28 +26,19 @@ class OeeViewPage extends pulsePage.BasePage {
 
   buildContent() {
     // URL parameters
+    // Remove config from displayed URL and store them
     let needReload = false;
-    let url = window.location.href;
-    if (-1 != url.search('productiongauge.showpercent=')) {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    params.forEach((value, key) => {
       needReload = true;
-      pulseConfig.set('productiongauge.showpercent',
-        pulseUtility.getURLParameter(url, 'productiongauge.showpercent'));
-      url = pulseUtility.removeURLParameter(url, 'productiongauge.showpercent');
-    }
-    if (-1 != url.search('productiongauge.target=')) {
-      needReload = true;
-      pulseConfig.set('productiongauge.target',
-        pulseUtility.getURLParameter(url, 'productiongauge.target', ''));
-      url = pulseUtility.removeURLParameter(url, 'productiongauge.target');
-    }
-    if (-1 != url.search('productiongauge.red=')) {
-      needReload = true;
-      pulseConfig.set('productiongauge.red',
-        pulseUtility.getURLParameter(url, 'productiongauge.red', ''));
-      url = pulseUtility.removeURLParameter(url, 'productiongauge.red');
-    }
+      pulseConfig.set(key, value);
+      url.searchParams.delete(key);
+    });
+
     if (needReload) {
-      window.open(url, '_self');
+      window.open(url.toString(), '_self');
     }
 
     this._updateComponents(true);

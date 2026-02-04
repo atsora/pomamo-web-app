@@ -28,7 +28,7 @@ class UtilizationBarPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Init
-  initOptionValues () {
+  initOptionValues() {
     // Prepare custom inputs
 
     // show clock
@@ -81,7 +81,7 @@ class UtilizationBarPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Default values
-  setDefaultOptionValues () {
+  setDefaultOptionValues() {
     $('#showclockutilization').prop('checked', pulseConfig.getDefaultBool('showclock'));
     $('#showclockutilization').change();
     $('#showclockutilization').removeAttr('overridden');
@@ -93,7 +93,7 @@ class UtilizationBarPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Function to read custom inputs
-  getOptionValues () {
+  getOptionValues() {
     let optionsValues = '';
 
     if ($('#showclockutilization').is(':checked')) {
@@ -116,7 +116,7 @@ class UtilizationBarPage extends pulsePage.BasePage {
     return optionsValues;
   }
 
-  getMissingConfigs () {
+  getMissingConfigs() {
     let missingConfigs = [];
 
     let groups = pulseConfig.getArray('group');
@@ -125,43 +125,34 @@ class UtilizationBarPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: pulseConfig.pulseTranslate ('error.machineRequired', 'Please select at least one machine')
+        message: pulseConfig.pulseTranslate('error.machineRequired', 'Please select at least one machine')
       });
     }
 
     if (pulseConfig.getInt('displaydayshours') == 0) {
       missingConfigs.push({
         selector: 'label[for="displaydayshours"], label[for="displaydayshours"], .group-options',
-        message: pulseConfig.pulseTranslate ('error.min1hour', 'Please select at least 1 hour')
+        message: pulseConfig.pulseTranslate('error.min1hour', 'Please select at least 1 hour')
       });
     }
 
     return missingConfigs;
   }
 
-  buildContent () {
+  buildContent() {
+    // Remove config from displayed URL and store them
     let needReload = false;
-    let url = window.location.href;
-    if (-1 != url.search('showclock=')) {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    params.forEach((value, key) => {
       needReload = true;
-      pulseConfig.set('showclock',
-        pulseUtility.getURLParameter(url, 'showclock'));
-      url = pulseUtility.removeURLParameter(url, 'showclock');
-    }
-    if (-1 != url.search('displaydaysrange=')) {
-      needReload = true;
-      pulseConfig.set('displaydaysrange',
-        pulseUtility.getURLParameter(url, 'displaydaysrange', ''));
-      url = pulseUtility.removeURLParameter(url, 'displaydaysrange');
-    }
-    if (-1 != url.search('displayhoursrange=')) {
-      needReload = true;
-      pulseConfig.set('displayhoursrange',
-        pulseUtility.getURLParameter(url, 'displayhoursrange', ''));
-      url = pulseUtility.removeURLParameter(url, 'displayhoursrange');
-    }
+      pulseConfig.set(key, value);
+      url.searchParams.delete(key);
+    });
+
     if (needReload) {
-      window.open(url, '_self');
+      window.open(url.toString(), '_self');
     }
     // End remove config
 

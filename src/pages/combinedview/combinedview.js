@@ -4,7 +4,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 var pulseConfig = require('pulseConfig');
-var pulseUtility = require('pulseUtility');
 var pulsePage = require('pulsePage');
 
 require('x-runningbutton/x-runningbutton');
@@ -28,7 +27,7 @@ class CombinedViewPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Init
-  initOptionValues () {
+  initOptionValues() {
     $('#showtarget').prop('checked', pulseConfig.getBool('showtarget'));
     if (pulseConfig.getDefaultBool('showtarget') != pulseConfig.getBool('showtarget')) {
       $('#showtarget').attr('overridden', 'true');
@@ -82,7 +81,7 @@ class CombinedViewPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Default values
-  setDefaultOptionValues () {
+  setDefaultOptionValues() {
     $('#showtarget').prop('checked', pulseConfig.getDefaultBool('showtarget'));
     $('#showtarget').change();
     $('#showtarget').removeAttr('overridden');
@@ -97,7 +96,7 @@ class CombinedViewPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Function to read custom inputs
-  getOptionValues () {
+  getOptionValues() {
     let optionsValues = '';
     if ($('#showtarget').is(':checked')) {
       optionsValues += '&showtarget=true';
@@ -123,7 +122,7 @@ class CombinedViewPage extends pulsePage.BasePage {
     return optionsValues;
   }
 
-  getMissingConfigs () {
+  getMissingConfigs() {
     let missingConfigs = [];
 
     let groups = pulseConfig.getArray('group');
@@ -139,32 +138,22 @@ class CombinedViewPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  buildContent () {
+  buildContent() {
+    // Remove config from displayed URL and store them
     // Remove config from displayed URL and store them
     let needReload = false;
-    let url = window.location.href;
-    if (-1 != url.search('showtarget=')) {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    params.forEach((value, key) => {
       needReload = true;
-      pulseConfig.set('showtarget',
-        pulseUtility.getURLParameter(url, 'showtarget', ''));
-      url = pulseUtility.removeURLParameter(url, 'showtarget');
-    }
-    if (-1 != url.search('showalarm=')) {
-      needReload = true;
-      pulseConfig.set('showalarm',
-        pulseUtility.getURLParameter(url, 'showalarm', ''));
-      url = pulseUtility.removeURLParameter(url, 'showalarm');
-    }
-    if (-1 != url.search('showstacklight=')) {
-      needReload = true;
-      pulseConfig.set('showstacklight',
-        pulseUtility.getURLParameter(url, 'showstacklight', ''));
-      url = pulseUtility.removeURLParameter(url, 'showstacklight');
-    }
+      pulseConfig.set(key, value);
+      url.searchParams.delete(key);
+    });
+
     if (needReload) {
-      window.open(url, '_self');
+      window.open(url.toString(), '_self');
     }
-    // End remove config
 
 
     let showtarget = pulseConfig.getBool('showtarget');

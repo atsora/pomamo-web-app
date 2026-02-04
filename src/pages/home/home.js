@@ -19,20 +19,6 @@ class HomePage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  // This method is run only if missing config (cf getMissingConfigs)
-  /*buildContent () {
-    let needReload = false;
-    let url = window.location.href;
-    if (-1 != url.search('role=')) {
-      needReload = true;
-      //pulseConfig.set'role',        pulseUtility.getURLParameter(url, 'role'));
-      url = pulseUtility.removeURLParameter(url, 'role');
-    }
-    if (needReload) {
-      window.open(url, '_self');
-    }
-  }*/
-
 }
 
 $(document).ready(function () {
