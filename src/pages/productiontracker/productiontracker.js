@@ -149,25 +149,19 @@ class ProductionTrackerPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
-    let optionsValues = '';
+    const options = [
+      { id: 'thresholdtargetproduction', type: 'value' },
+      { id: 'thresholdredproduction', type: 'value' },
+      { id: 'showreservecapacity', type: 'checkbox' }
+    ];
 
-
-    if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
-      optionsValues += '&thresholdtargetproduction=' + $('#thresholdtargetproduction').val();
-    }
-    if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
-      optionsValues += '&thresholdredproduction=' + $('#thresholdredproduction').val();
-    }
-
-    // showreservecapacity
-    if ($('#showreservecapacity').is(':checked')) {
-      optionsValues += '&showreservecapacity=true';
-    }
-    else {
-      optionsValues += '&showreservecapacity=false';
-    }
-
-    return optionsValues;
+    return options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
+      if (opt.type === 'value' && !pulseUtility.isInteger(el.value)) return '';
+      const value = opt.type === 'checkbox' ? el.checked : el.value;
+      return `&${opt.id}=${value}`;
+    }).join('');
   }
 
   getMissingConfigs() {

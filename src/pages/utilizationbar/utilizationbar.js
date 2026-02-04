@@ -94,22 +94,24 @@ class UtilizationBarPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
-    let optionsValues = '';
+    const options = [
+      { id: 'showclockutilization', type: 'checkbox', param: 'showclock' }
+    ];
 
-    if ($('#showclockutilization').is(':checked')) {
-      optionsValues += '&showclock=true';
-    }
-    else {
-      optionsValues += '&showclock=false';
-    }
+    let optionsValues = options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
+      const paramName = opt.param || opt.id;
+      return `&${paramName}=${el.checked}`;
+    }).join('');
 
-    if (pulseUtility.isInteger($('#displaydayshours').val())) {
-      if ($('#displayisdays').is(':checked')) {
-        optionsValues += '&displaydaysrange=' + $('#displaydayshours').val();
-      }
-      else {
-        optionsValues += '&displaydaysrange=' + 0;
-        optionsValues += '&displayhoursrange=' + $('#displaydayshours').val();
+    // Handle days/hours logic
+    const displayDaysHours = document.getElementById('displaydayshours');
+    if (displayDaysHours && pulseUtility.isInteger(displayDaysHours.value)) {
+      if (document.getElementById('displayisdays')?.checked) {
+        optionsValues += `&displaydaysrange=${displayDaysHours.value}`;
+      } else {
+        optionsValues += `&displaydaysrange=0&displayhoursrange=${displayDaysHours.value}`;
       }
     }
 

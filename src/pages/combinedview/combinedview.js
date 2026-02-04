@@ -97,29 +97,18 @@ class CombinedViewPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
-    let optionsValues = '';
-    if ($('#showtarget').is(':checked')) {
-      optionsValues += '&showtarget=true';
-    }
-    else {
-      optionsValues += '&showtarget=false';
-    }
+    const options = [
+      { id: 'showtarget', type: 'checkbox' },
+      { id: 'showalarm', type: 'checkbox' },
+      { id: 'showstacklight', type: 'checkbox' }
+    ];
 
-    if ($('#showalarm').is(':checked')) {
-      optionsValues += '&showalarm=true';
-    }
-    else {
-      optionsValues += '&showalarm=false';
-    }
-
-    if ($('#showstacklight').is(':checked')) {
-      optionsValues += '&showstacklight=true';
-    }
-    else {
-      optionsValues += '&showstacklight=false';
-    }
-
-    return optionsValues;
+    return options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
+      const paramName = opt.param || opt.id;
+      return `&${paramName}=${el.checked}`;
+    }).join('');
   }
 
   getMissingConfigs() {

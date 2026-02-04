@@ -971,197 +971,96 @@ class OperationStatusPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
-    let optionsValues = '';
+    const options = [
+      { id: 'showworkinfo', type: 'checkbox' },
+      { id: 'showworkinfobig', type: 'checkbox' },
+      { id: 'showcurrentmachinestatuslogo', type: 'checkbox' },
+      { id: 'showcurrentmachinestatusletter', type: 'checkbox' },
+      { id: 'showproductionoperation', type: 'checkbox', param: 'showproduction' }
+    ];
 
-    // showworkinfo
-    if ($('#showworkinfo').is(':checked')) {
-      optionsValues += '&showworkinfo=true';
-    }
-    else {
-      optionsValues += '&showworkinfo=false';
-    }
-    // showworkinfo
-    if ($('#showworkinfobig').is(':checked')) {
-      optionsValues += '&showworkinfobig=true';
-    }
-    else {
-      optionsValues += '&showworkinfobig=false';
-    }
+    let result = options.map(opt => {
+      const el = document.getElementById(opt.id);
+      if (!el) return '';
+      const paramName = opt.param || opt.id;
+      return `&${paramName}=${el.checked}`;
+    }).join('');
 
-    // Machine status logo
-    if ($('#showcurrentmachinestatuslogo').is(':checked')) {
-      optionsValues += '&showcurrentmachinestatuslogo=true';
-    }
-    else {
-      optionsValues += '&showcurrentmachinestatuslogo=false';
-    }
-
-    // Machine status letter
-    if ($('#showcurrentmachinestatusletter').is(':checked')) {
-      optionsValues += '&showcurrentmachinestatusletter=true';
-    }
-    else {
-      optionsValues += '&showcurrentmachinestatusletter=false';
-    }
-
-    // Prod
-    if ($('#showproductionoperation').is(':checked')) {
-      optionsValues += '&showproduction=true';
-      let productionpercent = $('#productionpercent').is(':checked');
-      if (productionpercent) {
-        optionsValues += '&productionpercent=true';
+    // Production percent - add fallback if showproductionoperation is false
+    if (document.getElementById('showproductionoperation')?.checked) {
+      if (document.getElementById('productionpercent')?.checked) {
+        result += '&productionpercent=true';
+      } else if (document.getElementById('productionactualonly')?.checked) {
+        result += '&productionpercent=actualonly';
+      } else {
+        result += '&productionpercent=actualtarget';
       }
-      else {
-        let productionactualonly = $('#productionactualonly').is(':checked');
-        if (productionactualonly) {
-          optionsValues += '&productionpercent=actualonly';
-        }
-        else {
-          optionsValues += '&productionpercent=actualtarget';
-        }
+      // Add thresholds if they have valid values
+      if (pulseUtility.isInteger(document.getElementById('thresholdtargetproduction')?.value)) {
+        result += `&thresholdtargetproduction=${document.getElementById('thresholdtargetproduction')?.value}`;
       }
-
-
-
-      if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
-        optionsValues += '&thresholdtargetproduction=' + $('#thresholdtargetproduction').val();
+      if (pulseUtility.isInteger(document.getElementById('thresholdredproduction')?.value)) {
+        result += `&thresholdredproduction=${document.getElementById('thresholdredproduction')?.value}`;
       }
-      if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
-        optionsValues += '&thresholdredproduction=' + $('#thresholdredproduction').val();
-      }
-    }
-    else {
-      optionsValues += '&showproduction=false';
-      optionsValues += '&productionpercent=false'; // To restore small display in pie
+    } else {
+      result += '&productionpercent=false';
     }
 
-
-    // Tools / Sequence
-    if (!$('#showcurrent').is(':checked')) {
-      optionsValues += '&showcurrenttool=false';
-      optionsValues += '&showcurrentsequence=false';
-      optionsValues += '&showcurrentoverride=false';
-    }
-    else {
-      if ($('#showcurrenttool').is(':checked')) {
-        optionsValues += '&showcurrenttool=true';
-      }
-      else {
-        optionsValues += '&showcurrenttool=false';
-      }
-      if ($('#showcurrentsequence').is(':checked')) {
-        optionsValues += '&showcurrentsequence=true';
-      }
-      else {
-        optionsValues += '&showcurrentsequence=false';
-      }
-      if ($('#showcurrentoverride').is(':checked')) {
-        optionsValues += '&showcurrentoverride=true';
-      }
-      else {
-        optionsValues += '&showcurrentoverride=false';
-      }
+    // Tools/Sequence - add fallback if showcurrent is false
+    if (document.getElementById('showcurrent')?.checked) {
+      result += `&showcurrenttool=${document.getElementById('showcurrenttool')?.checked}`;
+      result += `&showcurrentsequence=${document.getElementById('showcurrentsequence')?.checked}`;
+      result += `&showcurrentoverride=${document.getElementById('showcurrentoverride')?.checked}`;
+    } else {
+      result += '&showcurrenttool=false&showcurrentsequence=false&showcurrentoverride=false';
     }
 
     // Alarm
-    if ($('#showalarmoperation').is(':checked')) {
-      optionsValues += '&showalarm=true';
-
-      if ($('#showAlarmBelowIcon').is(':checked')) {
-        optionsValues += '&showAlarmBelowIcon=true';
-      }
-      else {
-        optionsValues += '&showAlarmBelowIcon=false';
-      }
-      if ($('#showUnknownAlarm').is(':checked')) {
-        optionsValues += '&showUnknownAlarm=true';
-      }
-      else {
-        optionsValues += '&showUnknownAlarm=false';
-      }
-    }
-    else {
-      optionsValues += '&showalarm=false';
+    const showalarmEl = document.getElementById('showalarmoperation');
+    result += `&showalarm=${showalarmEl?.checked}`;
+    if (showalarmEl?.checked) {
+      result += `&showAlarmBelowIcon=${document.getElementById('showAlarmBelowIcon')?.checked}`;
+      result += `&showUnknownAlarm=${document.getElementById('showUnknownAlarm')?.checked}`;
     }
 
     // Pie
-    if ($('#showpie').is(':checked')) {
-      optionsValues += '&showpie=true';
-      if ($('#productionpercentinpie').is(':checked')) {
-        optionsValues += '&productionpercentinpie=true';
+    const showpieEl = document.getElementById('showpie');
+    result += `&showpie=${showpieEl?.checked}`;
+    if (showpieEl?.checked) {
+      if (document.getElementById('productionpercentinpie')?.checked) {
+        result += '&productionpercentinpie=true';
+      } else if (document.getElementById('productionactualonlyinpie')?.checked) {
+        result += '&productionpercentinpie=actualonly';
+      } else {
+        result += '&productionpercentinpie=actualtarget';
       }
-      else if ($('#productionactualonlyinpie').is(':checked')) {
-        optionsValues += '&productionpercentinpie=actualonly';
-      }
-      else {
-        optionsValues += '&productionpercentinpie=actualtarget';
-      }
-    }
-    else {
-      optionsValues += '&showpie=false';
     }
 
-    // Stacklight
-    if ($('#showstacklight').is(':checked')) {
-      optionsValues += '&showstacklight=true';
-    }
-    else {
-      optionsValues += '&showstacklight=false';
-    }
-
-    // Isofile
-    if ($('#showisofile').is(':checked')) {
-      optionsValues += '&showisofile=true';
-    }
-    else {
-      optionsValues += '&showisofile=false';
-    }
+    // Other displays
+    result += `&showstacklight=${document.getElementById('showstacklight')?.checked}`;
+    result += `&showisofile=${document.getElementById('showisofile')?.checked}`;
 
     // Tools
-    //TODO : STORE TOOLS ?
-    if ($('#showtooloperation').is(':checked')) {
-      optionsValues += '&showtool=true';
-
-      let tmpVal = $('#showtoolselector').val();
-      optionsValues += '&toollabelname=' + tmpVal;
-
-      let showtoolremaining = $('#showtoolremaining').is(':checked');
-      optionsValues += '&displayremainingcyclesbelowtool=' + showtoolremaining;
-    }
-    else {
-      optionsValues += '&showtool=false';
+    const showtoolEl = document.getElementById('showtooloperation');
+    result += `&showtool=${showtoolEl?.checked}`;
+    if (showtoolEl?.checked) {
+      const toolSelector = document.getElementById('showtoolselector');
+      if (toolSelector?.value) {
+        result += `&toollabelname=${toolSelector.value}`;
+      }
+      result += `&displayremainingcyclesbelowtool=${document.getElementById('showtoolremaining')?.checked}`;
     }
 
-    // BAR (shift / alarm)
-    if ($('#showbaroperation').is(':checked')) {
-      optionsValues += '&showbar=true';
-
-      if ($('#displayshiftrange').is(':checked')) {
-        optionsValues += '&displayshiftrange=true';
-      }
-      else {
-        optionsValues += '&displayshiftrange=false';
-      }
-
-      if ($('#showbar-alarms').is(':checked')) {
-        optionsValues += '&barshowalarms=true';
-      }
-      else {
-        optionsValues += '&barshowalarms=false';
-      }
-
-      if ($('#showbar-percent').is(':checked')) {
-        optionsValues += '&barshowpercent=true';
-      }
-      else {
-        optionsValues += '&barshowpercent=false';
-      }
-    }
-    else {
-      optionsValues += '&showbar=false';
+    // Bar
+    const showbarEl = document.getElementById('showbaroperation');
+    result += `&showbar=${showbarEl?.checked}`;
+    if (showbarEl?.checked) {
+      result += `&displayshiftrange=${document.getElementById('displayshiftrange')?.checked}`;
+      result += `&barshowalarms=${document.getElementById('showbar-alarms')?.checked}`;
+      result += `&barshowpercent=${document.getElementById('showbar-percent')?.checked}`;
     }
 
-    return optionsValues;
+    return result;
   }
 
   getMissingConfigs() {
