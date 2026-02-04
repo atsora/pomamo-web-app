@@ -4,6 +4,7 @@
 
 var pulsePage = require('pulsePage');
 var pulseConfig = require('pulseConfig');
+var pulseUtility = require('pulseUtility');
 var eventBus = require('eventBus');
 
 require('x-tr/x-tr');
@@ -16,6 +17,7 @@ require('x-production/x-production');
 require('x-productionshiftgoal/x-productionshiftgoal');
 require('x-productiongauge/x-productiongauge');
 require('x-periodtoolbar/x-periodtoolbar');
+require('x-workinfo/x-workinfo');
 
 
 
@@ -124,6 +126,28 @@ class OeeViewPage extends pulsePage.BasePage {
     thresholdRedInput.addEventListener('change', function () {
       this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true)
     }.bind(this));
+
+    // showworkinfo = Show Operation
+    document.getElementById('showworkinfo').checked = pulseConfig.getBool('showworkinfo');
+    if (pulseConfig.getDefaultBool('showworkinfo') != pulseConfig.getBool('showworkinfo')) {
+      document.getElementById('showworkinfo').setAttribute('overridden', 'true');
+    }
+    document.getElementById('showworkinfo').addEventListener('change', function () {
+      pulseConfig.set('showworkinfo', document.getElementById('showworkinfo').checked);
+
+      let showworkinfo = pulseConfig.getBool('showworkinfo');
+
+      if (showworkinfo) {
+        document.querySelectorAll('x-workinfo').forEach(el => {
+          el.style.display = '';
+        });
+      } else {
+        document.querySelectorAll('x-workinfo').forEach(el => {
+          el.style.display = 'none';
+        });
+      }
+    });
+    document.getElementById('showworkinfo').dispatchEvent(new Event('change'));
   }
 
   // Initialize the production gauge display mode radios
@@ -131,20 +155,20 @@ class OeeViewPage extends pulsePage.BasePage {
     const showPercentRadio = document.getElementById('productiongaugepercent');
     const showRatioRadio = document.getElementById('productiongaugeratio');
 
-    if (pulseConfig.getBool('productiongauge.showpercent')) {
+    if (pulseConfig.getBool('showpercent')) {
       showPercentRadio.checked = true;
     } else {
       showRatioRadio.checked = true;
     }
 
-    if (pulseConfig.getDefaultBool('productiongauge.showpercent') !== pulseConfig.getBool('productiongauge.showpercent')) {
+    if (pulseConfig.getDefaultBool('showpercent') !== pulseConfig.getBool('showpercent')) {
       showPercentRadio.setAttribute('overridden', 'true');
       showRatioRadio.setAttribute('overridden', 'true');
     }
 
     showPercentRadio.addEventListener('change', function () {
       if (showPercentRadio.checked) {
-        pulseConfig.set('productiongauge.showpercent', true);
+        pulseConfig.set('showpercent', true);
         document.querySelectorAll('x-productiongauge').forEach(el => {
           el.setAttribute('display-mode', 'percent');
         });
@@ -153,7 +177,7 @@ class OeeViewPage extends pulsePage.BasePage {
 
     showRatioRadio.addEventListener('change', function () {
       if (showRatioRadio.checked) {
-        pulseConfig.set('productiongauge.showpercent', false);
+        pulseConfig.set('showpercent', false);
         document.querySelectorAll('x-productiongauge').forEach(el => {
           el.setAttribute('display-mode', 'ratio');
         });
@@ -221,10 +245,12 @@ class OeeViewPage extends pulsePage.BasePage {
   setDefaultOptionValues() {
     const showPercentRadio = document.getElementById('productiongaugepercent');
     const showRatioRadio = document.getElementById('productiongaugeratio');
-    if (pulseConfig.getDefaultBool('productiongauge.showpercent')) {
+    if (pulseConfig.getDefaultBool('showpercent')) {
       showPercentRadio.checked = true;
+      showRatioRadio.checked = false;
       showPercentRadio.dispatchEvent(new Event('change', { bubbles: true }));
     } else {
+      showPercentRadio.checked = false;
       showRatioRadio.checked = true;
       showRatioRadio.dispatchEvent(new Event('change', { bubbles: true }));
     }
@@ -242,6 +268,16 @@ class OeeViewPage extends pulsePage.BasePage {
 
     thresholdTarget.removeAttribute('overridden');
     thresholdRedInput.removeAttribute('overridden');
+
+    // showworkinfo = Show Operation
+    const showworkinfoCheckbox = document.getElementById('showworkinfo');
+    if (pulseConfig.getDefaultBool('showworkinfo')) {
+      showworkinfoCheckbox.checked = true;
+    } else {
+      showworkinfoCheckbox.checked = false;
+    }
+    showworkinfoCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+    showworkinfoCheckbox.removeAttribute('overridden');
   }
 
   getOptionValues() {
@@ -249,9 +285,9 @@ class OeeViewPage extends pulsePage.BasePage {
 
     const showPercentRadio = document.getElementById('productiongaugepercent');
     if (showPercentRadio.checked) {
-      optionsValues += '&productiongauge.showpercent=true';
+      optionsValues += '&showpercent=true';
     } else {
-      optionsValues += '&productiongauge.showpercent=false';
+      optionsValues += '&showpercent=false';
     }
 
     const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
@@ -259,6 +295,10 @@ class OeeViewPage extends pulsePage.BasePage {
 
     optionsValues += '&productiongauge.target=' + thresholdTarget.value;
     optionsValues += '&productiongauge.red=' + thresholdRedInput.value;
+
+    // showworkinfo = Show Operation
+    const showworkinfo = document.getElementById('showworkinfo').checked;
+    optionsValues += '&showworkinfo=' + showworkinfo;
 
     return optionsValues;
   }

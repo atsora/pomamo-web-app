@@ -29,7 +29,7 @@ SPDX-License-Identifier: Apache-2.0
     </div>
 
     <!-- Production gauge settings -->
-    <label for="showproductiongauge"><x-tr key="options.productionGauge" default="Production gauge"></x-tr></label>
+    <label><x-tr key="options.productionGauge" default="Production gauge"></x-tr></label>
     <div class="labelsubgroup">
       <div class="subgroup radiogroup showproductiongaugedetails">
         <div class='inlined-radio'>
@@ -43,6 +43,12 @@ SPDX-License-Identifier: Apache-2.0
         </div>
       </div>
     </div>
+
+    <!-- Work info settings -->
+    <div class="labelsubgroup">
+      <label for="showworkinfo"><x-tr key="options.showOperation" default="Show operation"></x-tr>
+        <input type="checkbox" id="showworkinfo" autocomplete="off" />
+      </label>
+    </div>
   </div>
 </div>
-
