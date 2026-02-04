@@ -487,22 +487,6 @@ class MachineStatusPage extends pulsePage.BasePage {
   }
 
   buildContent() {
-    // Remove config from displayed URL and store them
-    let needReload = false;
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-
-    params.forEach((value, key) => {
-      needReload = true;
-      pulseConfig.set(key, value);
-      url.searchParams.delete(key);
-    });
-
-    if (needReload) {
-      window.open(url.toString(), '_self');
-    }
-    // End remove config
-
     // Show/hide according to config
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     if (showworkinfo) {
