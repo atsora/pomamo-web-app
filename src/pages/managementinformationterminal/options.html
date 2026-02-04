@@ -38,15 +38,18 @@ SPDX-License-Identifier: Apache-2.0
     </div>
 
     <div class="labelsubgroup">
-      <div class="subgroup thresholdunitispart">
-        <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
-        <label for="thresholdtargetproduction"><x-tr key="options.thresholdtarget" default="target"></x-tr>
-          <input type="number" id="thresholdtargetproduction" value="0" step="1" min="0" autocomplete="off" />
-        </label>
-        <label for="thresholdredproduction"><x-tr key="options.thresholdRed" default="Red"></x-tr>
-          <input type="number" id="thresholdredproduction" value="0" step="1" min="0" autocomplete="off" />
-        </label>
+      <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
+      <div class="subgroup radiogroup">
+        <div class='inlined-radio'>
+          <label for="thresholdtargetproduction"><x-tr key="options.thresholdtarget" default="target"></x-tr>
+            <input type="number" id="thresholdtargetproduction" value="0" step="1" min="0" autocomplete="off" />
+          </label>
+          <label for="thresholdredproduction"><x-tr key="options.thresholdRed" default="Red"></x-tr>
+            <input type="number" id="thresholdredproduction" value="0" step="1" min="0" autocomplete="off" />
+          </label>
+        </div>
       </div>
+      <div class="thresholdunitispart"></div>
     </div>
   </div>
 </div>

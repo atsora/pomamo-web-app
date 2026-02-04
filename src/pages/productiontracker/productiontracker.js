@@ -148,6 +148,9 @@ class ProductionTrackerPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Function to read custom inputs
+  // getOptionValues uses the unified options-list pattern:
+  // { id, type, param?, conditional? } -> "&param=value" fragments.
+  // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues() {
     const options = [
       { id: 'thresholdtargetproduction', type: 'value' },
@@ -181,22 +184,7 @@ class ProductionTrackerPage extends pulsePage.BasePage {
   }
 
   buildContent() {
-    // Remove config from displayed URL and store them
-        // Remove config from displayed URL and store them
-        let needReload = false;
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams(url.search);
 
-        params.forEach((value, key) => {
-          needReload = true;
-          pulseConfig.set(key, value);
-          url.searchParams.delete(key);
-        });
-
-        if (needReload) {
-          window.open(url.toString(), '_self');
-        }
-    // End remove config
   }
 
 }

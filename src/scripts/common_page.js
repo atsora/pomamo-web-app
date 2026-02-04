@@ -579,10 +579,8 @@ var populateConfigPanel = function (currentPageMethods) {
 
   // Get FULL URL of the page
   var getPageFullURL = function () {
-    let url = window.location.href; // Do not split after '?' to keep ancestors etc
+    let url = window.location.href.split('?')[0]; // Start from base URL to avoid duplicates
     let nextSeparator = '?';
-    if (url.includes('?'))
-      nextSeparator = '&';
 
     // Prepare the url with the role (for a complete url that can be stored as favorite)
     //url += 'role=' + pulseLogin.getRole();
@@ -947,22 +945,57 @@ exports.preparePage = function (currentPageMethods) {
 
   pulseConfig.setGlobal('machine', '');  // Remove
   pulseConfig.setGlobal('group', '');   // Remove
+  pulseConfig.set('machine', '');       // Remove page-specific value
+  pulseConfig.set('group', '');        // Remove page-specific value
   // Remove config from displayed URL and store them
   let needReload = false;
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
+  const pageName = pulseConfig.getPageName();
+  const preserveAncestorParams = (pageName === 'productiontracker');
+  const groupValues = params.getAll('group');
+  const machineValues = params.getAll('machine');
 
   params.forEach((value, key) => {
-    if (key != 'AppContext') {
-      needReload = true;
-      if (key === 'machine' || key === 'group') {
-        // Get all values for this key BEFORE deleting from URL
-        pulseConfig.set(key, params.getAll(key).join(','), true);
-      }
-      else pulseConfig.set(key, value);
-      url.searchParams.delete(key);
+    if (key === 'AppContext') {
+      return;
     }
+
+    if (key === 'group' || key === 'machine') {
+      url.searchParams.delete(key);
+      needReload = true;
+      return;
+    }
+
+    if (key.startsWith('ancestor')) {
+      pulseConfig.set(key, value);
+      if (!preserveAncestorParams) {
+        url.searchParams.delete(key);
+        needReload = true;
+      }
+      return;
+    }
+
+    pulseConfig.set(key, value);
+    url.searchParams.delete(key);
+    needReload = true;
   });
+
+  if (groupValues.length > 0) {
+    pulseConfig.set('group', groupValues.join(','), true);
+  } else {
+    // No group selection -> clear ancestor system
+    for (const key of Array.from(params.keys())) {
+      if (key.startsWith('ancestor')) {
+        url.searchParams.delete(key);
+        pulseConfig.set(key, '');
+        needReload = true;
+      }
+    }
+  }
+  if (machineValues.length > 0) {
+    pulseConfig.set('machine', machineValues.join(','), true);
+  }
 
   if (needReload) {
     window.open(url.toString(), '_self');
@@ -988,32 +1021,6 @@ exports.preparePage = function (currentPageMethods) {
   // Open / close panels when click on them
   animatePanels();
 
-  // Help button = '?'
-  /*
-  $('#help-div').click(function (e) {
-    let pathname = window.location.pathname;
-    let pageName = pulseConfig.getPageName();
-    let pdfPath = pathname.substring(0, pathname.lastIndexOf('/') + 1) + 'help/' + pageName + '.pdf';
-    // Open help file (if exist)
-
-    function _fileExists (url) {
-      if (url) {
-        var req = new XMLHttpRequest();
-        req.open('HEAD', url, false); // head is faster than GET
-        req.send();
-        return req.status == 200;
-      } else {
-        return false;
-      }
-    }
-    if (_fileExists(pdfPath)) {
-      window.open(pdfPath, 'resizable,scrollbars');
-    }
-    else {
-      pulseCustomDialog.openInfo('File not found !');
-    }
-  });
-  */
 
   // Handle fullscreen button click, toggle fullscreen mode
   $('#fullscreenbtn').click(function (e) {
@@ -1026,7 +1033,7 @@ exports.preparePage = function (currentPageMethods) {
 
 
   // Display elements
-  let pageName = window.location.href.replace(/(.*\/)([^\\]*)(\.html.*)/, '$2');
+  let pageNameFromUrl = window.location.href.replace(/(.*\/)([^\\]*)(\.html.*)/, '$2');
 
   // Theme switcher (to be adapted if more than 2 themes are available) and initialization
   $('#darkthemebtn').prop('checked', themeManager.current() == 'dark');
@@ -1036,17 +1043,9 @@ exports.preparePage = function (currentPageMethods) {
 
   // == _setPageTitle
   let title1 = pulseConfig.pulseTranslate('general.title', 'Atsora Tracking');
-  let title2 = pulseConfig.pulseTranslate('pages.' + pageName + '.title', '');
-  /*if (pageName == 'index') {
-    // Replace by the name of the role, if specified
-    let roleDisplay = getCurrentUserDisplay();
-    if (roleDisplay != '')
-      title2 = 'Home';
-    else
-      title2 = '';
-  }
-  else {*/
-  if (pageName != 'login') {
+  let title2 = pulseConfig.pulseTranslate('pages.' + pageNameFromUrl + '.title', '');
+
+  if (pageNameFromUrl != 'login') {
     let override = pulseConfig.getString('title');
     if (override != null && override != '')
       title2 = decodeURIComponent(override);
@@ -1060,11 +1059,7 @@ exports.preparePage = function (currentPageMethods) {
     let missingConfigs = currentPageMethods.getMissingConfigs();
     configOk = (missingConfigs.length == 0);
 
-    // Possibly highlight the missing configurations -> TO DO for each config
-    /*$('.missing-config').removeClass('missing-config');
-    for (let i = 0; i < missingConfigs.length; i++) {
-      $(missingConfigs[i].selector).addClass('missing-config');
-    }*/
+
   }
   if (configOk) {
     closeParameterPanel(true);
@@ -1072,7 +1067,7 @@ exports.preparePage = function (currentPageMethods) {
   else {
     openParameterPanel(true);
   }
-  if ('home' == pageName) {
+  if ('home' == pageNameFromUrl) {
     openNavigationPanel(true);
   }
   else {

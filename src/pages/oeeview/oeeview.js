@@ -179,7 +179,11 @@ class OeeViewPage extends pulsePage.BasePage {
       errorMessage.style.color = 'red';
       errorMessage.style.fontSize = '0.9em';
       errorMessage.style.marginTop = '5px';
-      document.querySelector('.showproductiongaugedetails').appendChild(errorMessage);
+      const errorContainer = document.querySelector('.thresholdunitispart')
+        || document.querySelector('.showproductiongaugedetails');
+      if (errorContainer) {
+        errorContainer.appendChild(errorMessage);
+      }
     }
 
     // Check if values are valid numbers
@@ -264,6 +268,9 @@ class OeeViewPage extends pulsePage.BasePage {
     showworkinfoCheckbox.removeAttribute('overridden');
   }
 
+  // getOptionValues uses the unified options-list pattern:
+  // { id, type, param?, conditional? } -> "&param=value" fragments.
+  // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues() {
     const options = [
       { id: 'productiongaugepercent', type: 'radio', param: 'showpercent' },

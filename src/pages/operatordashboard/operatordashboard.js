@@ -320,7 +320,11 @@ class OperatorDashboardPage extends pulsePage.BasePage {
       errorMessage.style.color = 'red';
       errorMessage.style.fontSize = '0.9em';
       errorMessage.style.marginTop = '5px';
-      document.querySelector('.showproductionbardetails').appendChild(errorMessage);
+      const errorContainer = document.querySelector('.thresholdunitispart')
+        || document.querySelector('.showproductionbardetails');
+      if (errorContainer) {
+        errorContainer.appendChild(errorMessage);
+      }
     }
 
     // Check if values are valid numbers
@@ -434,6 +438,9 @@ class OperatorDashboardPage extends pulsePage.BasePage {
 
   }
 
+  // getOptionValues uses the unified options-list pattern:
+  // { id, type, param?, conditional? } -> "&param=value" fragments.
+  // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues() {
     const options = [
       { id: 'showChangedTools', type: 'checkbox' },

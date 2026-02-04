@@ -155,6 +155,9 @@ class ReserveCapacityPage extends pulsePage.BasePage {
   }
 
   // CONFIG PANEL - Function to read custom inputs
+  // getOptionValues uses the unified options-list pattern:
+  // { id, type, param?, conditional? } -> "&param=value" fragments.
+  // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues () {
     let result = '';
 
