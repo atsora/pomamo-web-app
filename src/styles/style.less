@@ -232,19 +232,7 @@ body {
   border-left: 1px solid @color_window_border;
 }
 
-.pulse-mainarea {
-  flex-basis: 100%;
-  flex-grow: 1;
-  flex-shrink: 1;
-  box-sizing: border-box;
-  min-width: 400px;
-  overflow-x: hidden;
-  overflow-y: hidden; // NO scroll here -> already managed
-  color: @color_text_alternate;
-  border: 1px solid @color_window_border;
-  border-radius: @border_radius;
-  margin: 0 7px 7px 0;
-}
+
 
 .pulse-mainarea-full {
   //position: absolute;
@@ -260,8 +248,9 @@ body {
   padding: 21px;
   box-sizing: border-box;
   transition: padding-bottom 0.2s ease-out;
- // padding-bottom: 35px; // Default == logoHeight else search logoHeight in code
   overflow: auto;
+  height: 100%;
+
 
   &.gridFullHeight {
     height: 100%;
@@ -407,8 +396,17 @@ body {
 
 .pulse-mainarea {
   color: @color_text_alternate;
-  //text-align: center; NOT HERE !!!! Because it breaks all displays inside  --RV
-  //margin-top: 50px;
+  flex-basis: 100%;
+  width: 100%;
+  flex-shrink: 1;
+  box-sizing: border-box;
+  min-width: 400px;
+  overflow-x: hidden;
+  overflow-y: hidden; // NO scroll here -> already managed
+  color: @color_text_alternate;
+  border: 1px solid @color_window_border;
+  border-radius: @border_radius;
+  margin: 0 7px 7px 0;
 
   &>img {
     border: 1px solid @color_window_alternate_border;
@@ -419,7 +417,6 @@ body {
   &>span {
     display: block;
     width: 100%;
-    //text-align: center; // Idem -> TOO global ! --RV
     margin-top: 10px;
   }
 }
@@ -804,13 +801,12 @@ body {
   }
 }
 
-// PARAMETER PANEL
+// PARAMETER PANEL options
 
 #pulse-panel-parameter-content {
   overflow: auto;
   position: absolute;
   top: 0;
-  bottom: 30px; // 30 theme
   left: 0;
   right: 0;
   border-bottom: 1px solid @color_window_border;
@@ -1048,18 +1044,12 @@ body {
   }
 }
 
-#showurl {
+.btn-default {
   margin: 10px;
   padding: 5px 15px;
-}
-
-#copyurl {
-  margin: 10px;
-  padding: 5px 15px;
-
-  // background color transition for urlcopied  / urlcopyfailed {
   transition: 0.4s;
 }
+
 
 .urlcopied {
   background-color: @color_green !important;
@@ -1073,12 +1063,6 @@ body {
 
 .param-group-button {
   padding: 2px 10px;
-}
-
-.param-group-button,
-#showurl,
-#copyurl {
-  .button-rounded-shadow;
 }
 
 .pulse-panel-parameter-collapsed #pulse-panel-parameter {
@@ -1473,6 +1457,8 @@ x-motiontime {
   .pulse-mainarea {
     //left: 0 !important;
     margin: 0 !important;
+    min-width: 0;
+
   }
 
   #pulse-inner.pulse-panel-navigation-collapsed #pulse-panel-navigation {
@@ -1501,10 +1487,7 @@ x-motiontime {
     height: auto !important;
   }
 
-  // What is scrolled is now the entire mainarea, with the legend at the end
-  .pulse-mainarea {
-    min-width: 0;
-  }
+
 
   #pulse-navigation-and-main {
     min-width: 0;
