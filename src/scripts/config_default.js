@@ -237,7 +237,7 @@ PULSE_DEFAULT_CONFIG.pages = {
     ],
 
     showpercent: true,
-    showproductiondisplay: false, // Show/hide production display section
+    showproductiondisplay: true, // Show/hide production display section
     showproductiongauge: true, // true: show gauge, false: show pie
 
     showcoloredbar: {
