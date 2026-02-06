@@ -64,7 +64,6 @@
   flex-grow: 10;
 }
 
-
 .group-main {
   list-style-type: none;
   width: 100%;
@@ -180,6 +179,8 @@ x-machinetab {
 
           .pulse-cellbar-past-data {
             display: none;
+
+
           }
 
           .pulse-cellbar-current-data {
@@ -488,7 +489,7 @@ x-machinetab {
     }
 
     x-productiontrackergraph {
-      flex: 0.8 1 auto;
+      flex: 1 1 auto;
       /* grow: 1, shrink: 1, basis: 0 */
       min-width: 0;
       min-height: 0;
@@ -616,8 +617,8 @@ x-machinetab {
             flex-direction: row;
 
             .div-bar {
-              flex-shrink: 99999;
-              flex-grow: 99999;
+              flex-shrink: 1;
+              flex-grow: 1;
               overflow: hidden;
               margin-bottom: 10px;
               margin-top: 10px;
@@ -636,8 +637,7 @@ x-machinetab {
   .dashboard-footer {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
-    justify-content: space-between;
+    justify-content: space-evenly;
     height: max-content;
 
     @media (max-width: 1000px) {
@@ -647,7 +647,6 @@ x-machinetab {
     }
 
     .stops-content {
-      width: 30%;
       display: flex;
       align-items: center;
       align-self: stretch;
@@ -677,7 +676,7 @@ x-machinetab {
         }
 
         .pulse-cellbar-past-data {
-          width: 100%;
+          padding: 0px 12px;
           height: 100%;
           display: flex;
           align-items: center;
@@ -723,14 +722,12 @@ x-machinetab {
       .periodtoolbar-toolbar {
         margin: unset;
         display: flex;
-        gap: 10px;
         border: 1px solid @color_window_border;
         padding: 8px 12px;
         border-radius: @border_radius_small;
 
         .content-period-buttons {
           display: flex;
-          gap: 10px;
 
           li {
             display: none;
