@@ -890,6 +890,8 @@ body {
           justify-content: flex-start;
           align-items: flex-start; // baseline KO
           padding-right: 4px;
+          gap: 3px;
+          margin: 3px 0;
         }
       }
 
@@ -905,6 +907,9 @@ body {
           color: @color_highlight;
           font-style: italic;
         }
+      }
+      input[type="radio"] {
+        margin: 0;
       }
 
       input[type="text"],
@@ -977,6 +982,10 @@ body {
           margin-top: 0 !important;
         }
       }
+      label[for] {
+        cursor: pointer;
+      }
+
 
       label {
         display: inline-block; // Warning, not compatible with : flex-item -> use span with radio button

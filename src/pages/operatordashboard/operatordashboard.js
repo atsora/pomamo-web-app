@@ -111,12 +111,10 @@ class OperatorDashboardPage extends pulsePage.BasePage {
       function () {
         const barElements = document.querySelectorAll('#performance-container');
         barElements.forEach(el => el.style.display = 'flex');
-        document.querySelector('.showproductionbardetails').style.display = 'block';
       },
       function () {
         const barElements = document.querySelectorAll('#performance-container');
         barElements.forEach(el => el.style.display = 'none');
-        document.querySelector('.showproductionbardetails').style.display = 'none';
       });
 
     // Display mode: percent or ratio

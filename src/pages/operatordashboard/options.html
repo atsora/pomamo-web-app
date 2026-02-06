@@ -73,16 +73,18 @@ SPDX-License-Identifier: Apache-2.0
       <label for="showproductionbar"><x-tr key="options.showProductionbar" default="Show production bar"></x-tr>
         <input type="checkbox" id="showproductionbar" autocomplete="off" />
       </label>
-      <div class="subgroup radiogroup showproductionbardetails">
-        <div class='inlined-radio'>
-          <input type="radio" id="productionbarpercent" name="showproductionbar" value="productionbarpercent" />
-          <span for="productionbarpercent"><x-tr key="content.percent" default="percent"></x-tr></span>
-        </div>
-        <div class='inlined-radio'>
-          <input type="radio" id="productionbarratio" name="showproductionbar" value="productionbarratio" />
-          <span for="productionbarratio"><x-tr key="options.productionActualVsTarget"
-              default="production actual/target"></x-tr></span>
-        </div>
+    </div>
+    <div class="labelsubgroup">
+      <div class='inlined-radio'>
+        <input type="radio" id="productionbarpercent" name="showproductionbar" value="productionbarpercent" />
+        <span for="productionbarpercent"><x-tr key="content.percent" default="percent"></x-tr></span>
+      </div>
+    </div>
+    <div class="labelsubgroup">
+      <div class='inlined-radio'>
+        <input type="radio" id="productionbarratio" name="showproductionbar" value="productionbarratio" />
+        <span for="productionbarratio"><x-tr key="options.productionActualVsTarget"
+            default="production actual/target"></x-tr></span>
       </div>
     </div>
   </div>
