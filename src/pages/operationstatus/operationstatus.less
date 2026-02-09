@@ -366,13 +366,22 @@ x-production {
   font-size: 1.5em;
   font-weight: bold;
   min-height: 30px; // uniform display
-  display: inline-flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &.big-display {
     font-size: 3.5em !important; // bigger than everything else
     line-height: 1em; // uniform height
     height: 2em; // uniform height
   }
+
+  .production-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
 
 
 
