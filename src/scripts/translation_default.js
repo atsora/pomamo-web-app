@@ -446,4 +446,7 @@ function setAtsoraLocale (locale) {
   moment.locale(locale);
   ATSORA_CATALOG = ATSORA_LOCALE_CATALOG[locale];
   ATSORA_COMPONENT_CATALOG = ATSORA_LOCALE_COMPONENT_CATALOG[locale];
+    if (typeof document !== 'undefined' && document.documentElement) {
+    document.documentElement.setAttribute('lang', locale);
+  }
 }
