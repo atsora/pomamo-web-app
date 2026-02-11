@@ -197,11 +197,13 @@ PULSE_DEFAULT_CONFIG.pages = {
   operationstatus: {
     enableGroups: true,
     showworkinfo: true,
-    showworkinfobig: false,
+    showworkinfosmall: true,
+    showcurrent: false,
+    showcurrentdisplay: 'tool',
     showcurrentmachinestatuslogo: true,
     showcurrentmachinestatusletter: false,
     showproduction: true,
-    productionpercent: 'actualtarget', // 'true' or 'actualonly' or 'actualtarget'
+    productionpercent: 'actualtarget',
     productionpercentinpie: 'true',    // 'true' or 'actualonly' or 'actualtarget'
     showpie: true,
     showstacklight: true,
@@ -212,6 +214,7 @@ PULSE_DEFAULT_CONFIG.pages = {
     showalarm: false,
     showtool: true,
     showbar: true,
+    barshowalarms: false,
     barshowpercent: false,
     displayshiftrange: true,
     //showOverwriteRequired: false, // == defined IN tagConfig OR LIVE
@@ -259,10 +262,14 @@ PULSE_DEFAULT_CONFIG.pages = {
     showreservecapacity: false
   },
   performancebar: {
-    enableGroups: true
+    enableGroups: true,
+    showmotionpercentage: true,
+    showmotiondisplay: 'percent'
   },
   performancegauge: {
-    enableGroups: true
+    enableGroups: true,
+    showmotionpercentage: true,
+    showmotiondisplay: 'percent'
   },
   reservecapacity: {
     enableGroups: true,

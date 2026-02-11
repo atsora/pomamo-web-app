@@ -4,3 +4,28 @@ Copyright (C) 2025 Atsora Solutions
 
 SPDX-License-Identifier: Apache-2.0
 -->
+
+<div class="param-group group-options">
+	<div class="param-group-header group-options">
+		<div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
+		<button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+	</div>
+
+	<div class="param-group-content group-options">
+		<div class="labelsubgroup">
+			<label for="showmotionpercentage"><x-tr key="options.showPercent" default="Show percent"></x-tr>
+				<input type="checkbox" id="showmotionpercentage" autocomplete="off" />
+			</label>
+			<div class="subgroup radiogroup showmotionpercentagedetails">
+				<div class='inlined-radio'>
+					<input type="radio" id="motiondisplaypercent" name="motiondisplay" value="motiondisplaypercent" />
+					<span for="motiondisplaypercent"><x-tr key="content.percent" default="percent"></x-tr></span>
+				</div>
+				<div class='inlined-radio'>
+					<input type="radio" id="motiondisplaytime" name="motiondisplay" value="motiondisplaytime" />
+					<span for="motiondisplaytime"><x-tr key="content.time" default="time"></x-tr></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

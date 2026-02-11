@@ -49,29 +49,47 @@ class OperationStatusPage extends pulsePage.BasePage {
     super();
   }
 
-  _setResetBigDisplay() {
-    let showpie = pulseConfig.getBool('showpie');
-    let showstacklight = pulseConfig.getBool('showstacklight');
-    let showcurrenttool = pulseConfig.getBool('showcurrenttool');
-    let showcurrentsequence = pulseConfig.getBool('showcurrentsequence');
-    let showcurrentoverride = pulseConfig.getBool('showcurrentoverride');
-    let showalarm = pulseConfig.getBool('showalarm');
+  _isWorkInfoBig() {
+    const smallElement = document.getElementById('showworkinfosmall');
+    if (smallElement) {
+      return !smallElement.checked;
+    }
+    return pulseConfig.getBool('showworkinfobig');
+  }
 
-    if (!showcurrenttool && !showcurrentsequence && !showcurrentoverride
-      && !showalarm && !showpie && !showstacklight) {
-      // Bigger FONT
-      $('x-production').addClass('big-display');
-      $('.operationstatus-top-div').addClass('big-display');
-    }
-    else {
-      $('x-production').removeClass('big-display');
-      $('.operationstatus-top-div').removeClass('big-display');
-    }
+  _applyTopDisplaySizing() {
+    const isBig = this._isWorkInfoBig();
+    const workInfoSize = isBig ? '1.6em' : '1.2em';
+
+    document.querySelectorAll('x-currentworkinfo, x-workinfo').forEach((element) => {
+      element.style.fontSize = workInfoSize;
+    });
+
+    document.querySelectorAll('x-production').forEach((element) => {
+      element.style.fontSize = isBig ? '2em' : '';
+    });
   }
 
   // CONFIG PANEL - Init
   initOptionValues() {
-    var self = this; // To call _setResetBigDisplay inside onchange
+    var self = this; // To call _applyTopDisplaySizing inside onchange
+
+    const syncRadioGroup = (value, valueToIdMap, fallbackValue) => {
+      const targetId = valueToIdMap[value] || valueToIdMap[fallbackValue];
+      if (targetId) {
+        $('#' + targetId).prop('checked', true);
+      }
+    };
+
+    const bindRadioGroup = (valueToIdMap, onSelect) => {
+      Object.entries(valueToIdMap).forEach(([value, id]) => {
+        $('#' + id).change(function () {
+          if ($(this).is(':checked')) {
+            onSelect(value);
+          }
+        });
+      });
+    };
 
     // showworkinfo = Show Operation
     $('#showworkinfo').prop('checked', pulseConfig.getBool('showworkinfo'));
@@ -117,21 +135,14 @@ class OperationStatusPage extends pulsePage.BasePage {
     $('#showworkinfo').trigger('change'); // To open/close subgroup
 
     // operation size
-    $('#showworkinfosmall').prop('checked', 'true' != pulseConfig.getString('showworkinfobig'));
-    $('#showworkinfobig').prop('checked', 'true' == pulseConfig.getString('showworkinfobig'));
-
-    $('#showworkinfosmall').change(function () {
-      if ($('#showworkinfosmall').is(':checked')) {
-        pulseConfig.set('showworkinfobig', 'false');
-        $('.operationstatus-top-div').removeClass('big-operation');
-      }
+    const workInfoSizeMap = { small: 'showworkinfosmall', big: 'showworkinfobig' };
+    const workInfoSize = pulseConfig.getBool('showworkinfobig') ? 'big' : 'small';
+    syncRadioGroup(workInfoSize, workInfoSizeMap, 'small');
+    bindRadioGroup(workInfoSizeMap, (value) => {
+      pulseConfig.set('showworkinfobig', value === 'big' ? 'true' : 'false');
+      self._applyTopDisplaySizing();
     });
-    $('#showworkinfobig').change(function () {
-      if ($('#showworkinfobig').is(':checked')) {
-        pulseConfig.set('showworkinfobig', 'true');
-        $('.operationstatus-top-div').addClass('big-operation');
-      }
-    });
+    self._applyTopDisplaySizing();
 
     //showcurrentmachinestatuslogo
     $('#showcurrentmachinestatuslogo').prop('checked', pulseConfig.getBool('showcurrentmachinestatuslogo'));
@@ -216,48 +227,15 @@ class OperationStatusPage extends pulsePage.BasePage {
     // % or 1/2 or actual only
     //if (pulseConfig.getDefaultString('productionpercent') != pulseConfig.getString('productionpercent'))
     //  $('#productionpercent').attr('overridden', 'true');
-    let productionpercent = pulseConfig.getString('productionpercent')
-    $('#productionpercent').prop('checked', (productionpercent == 'true'));
-    $('#productionactualonly').prop('checked', (productionpercent == 'actualonly'));
-    $('#productionactualtarget').prop('checked',
-      (productionpercent != 'true') && (productionpercent != 'actualonly'));
-
-    $('#productionpercent').change(function () {
-      if ($('#productionpercent').is(':checked')) {
-        pulseConfig.set('productionpercent', 'true');
-      }
-      if ($('#productionactualonly').is(':checked')) {
-        pulseConfig.set('productionpercent', 'actualonly');
-      }
-      if ($('#productionactualtarget').is(':checked')) {
-        pulseConfig.set('productionpercent', 'actualtarget');
-      }
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'productionpercent' });
-    });
-    $('#productionactualonly').change(function () {
-      if ($('#productionpercent').is(':checked')) {
-        pulseConfig.set('productionpercent', 'true');
-      }
-      if ($('#productionactualonly').is(':checked')) {
-        pulseConfig.set('productionpercent', 'actualonly');
-      }
-      if ($('#productionactualtarget').is(':checked')) {
-        pulseConfig.set('productionpercent', 'actualtarget');
-      }
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'productionpercent' });
-    });
-    $('#productionactualtarget').change(function () {
-      if ($('#productionpercent').is(':checked')) {
-        pulseConfig.set('productionpercent', 'true');
-      }
-      if ($('#productionactualonly').is(':checked')) {
-        pulseConfig.set('productionpercent', 'actualonly');
-      }
-      if ($('#productionactualtarget').is(':checked')) {
-        pulseConfig.set('productionpercent', 'actualtarget');
-      }
+    let productionpercent = pulseConfig.getString('productionpercent');
+    const productionPercentMap = {
+      true: 'productionpercent',
+      actualonly: 'productionactualonly',
+      actualtarget: 'productionactualtarget'
+    };
+    syncRadioGroup(productionpercent, productionPercentMap, 'actualtarget');
+    bindRadioGroup(productionPercentMap, (value) => {
+      pulseConfig.set('productionpercent', value);
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'productionpercent' });
     });
@@ -283,148 +261,74 @@ class OperationStatusPage extends pulsePage.BasePage {
     $('#thresholdredproduction').bind('input', changeRed);
     $('#thresholdredproduction').change(changeRed);
 
+    const updateCurrentDisplays = () => {
+      const showcurrent = $('#showcurrent').is(':checked');
+      const showcurrenttool = $('#showcurrenttool').is(':checked');
+      const showcurrentsequence = $('#showcurrentsequence').is(':checked');
+      const showcurrentoverride = $('#showcurrentoverride').is(':checked');
+
+      if (showcurrent && showcurrenttool) {
+        $('.operationstatus-current-tool-div').show();
+      }
+      else {
+        $('.operationstatus-current-tool-div').hide();
+      }
+
+      if (showcurrent && showcurrentsequence) {
+        $('.operationstatus-current-sequence-div').show();
+      }
+      else {
+        $('.operationstatus-current-sequence-div').hide();
+      }
+
+      if (showcurrent && showcurrentoverride) {
+        $('.operationstatus-current-override-div').show();
+      }
+      else {
+        $('.operationstatus-current-override-div').hide();
+      }
+
+      self._applyTopDisplaySizing();
+    };
+
+    const syncCurrentSelection = (value) => {
+      pulseConfig.set('showcurrentdisplay', value);
+      pulseConfig.set('showcurrenttool', value === 'tool');
+      pulseConfig.set('showcurrentsequence', value === 'sequence');
+      pulseConfig.set('showcurrentoverride', value === 'override');
+      updateCurrentDisplays();
+    };
+
     // Current tool / sequence / override
-    $('#showcurrenttool').prop('checked', pulseConfig.getBool('showcurrenttool'));
-    if (pulseConfig.getDefaultBool('showcurrenttool') != pulseConfig.getBool('showcurrenttool'))
-      $('#showcurrenttool').attr('overridden', 'true');
-    $('#showcurrenttool').change(function () {
-      let showcurrenttool = $('#showcurrenttool').is(':checked');
-      let showcurrentsequence = $('#showcurrentsequence').is(':checked');
-      let showcurrentoverride = $('#showcurrentoverride').is(':checked');
-      // Store
-      pulseConfig.set('showcurrenttool', showcurrenttool);
-      pulseConfig.set('showcurrentsequence', showcurrentsequence);
-      pulseConfig.set('showcurrentoverride', showcurrentoverride);
-      // Show / Hide
-      if (showcurrenttool) {
-        $('.operationstatus-current-tool-div').show();
-      }
-      else {
-        $('.operationstatus-current-tool-div').hide();
-      }
-      if (showcurrentsequence) {
-        $('.operationstatus-current-sequence-div').show();
-      }
-      else {
-        $('.operationstatus-current-sequence-div').hide();
-      }
-      if (showcurrentoverride) {
-        $('.operationstatus-current-override-div').show();
-      }
-      else {
-        $('.operationstatus-current-override-div').hide();
-      }
-      // Other displays
-      self._setResetBigDisplay();
+    const currentSelectionMap = {
+      tool: 'showcurrenttool',
+      sequence: 'showcurrentsequence',
+      override: 'showcurrentoverride'
+    };
+    syncRadioGroup(pulseConfig.getString('showcurrentdisplay'), currentSelectionMap, 'tool');
+    bindRadioGroup(currentSelectionMap, (value) => {
+      syncCurrentSelection(value);
     });
 
-    $('#showcurrentsequence').prop('checked', pulseConfig.getBool('showcurrentsequence'));
-    if (pulseConfig.getDefaultBool('showcurrentsequence') != pulseConfig.getBool('showcurrentsequence'))
-      $('#showcurrentsequence').attr('overridden', 'true');
-    $('#showcurrentsequence').change(function () {
-      let showcurrenttool = $('#showcurrenttool').is(':checked');
-      let showcurrentsequence = $('#showcurrentsequence').is(':checked');
-      let showcurrentoverride = $('#showcurrentoverride').is(':checked');
-      // Store
-      pulseConfig.set('showcurrenttool', showcurrenttool);
-      pulseConfig.set('showcurrentsequence', showcurrentsequence);
-      pulseConfig.set('showcurrentoverride', showcurrentoverride);
-      // Show / Hide
-      if (showcurrenttool) {
-        $('.operationstatus-current-tool-div').show();
-      }
-      else {
-        $('.operationstatus-current-tool-div').hide();
-      }
-      if (showcurrentsequence) {
-        $('.operationstatus-current-sequence-div').show();
-      }
-      else {
-        $('.operationstatus-current-sequence-div').hide();
-      }
-      if (showcurrentoverride) {
-        $('.operationstatus-current-override-div').show();
-      }
-      else {
-        $('.operationstatus-current-override-div').hide();
-      }
-      // Other displays
-      self._setResetBigDisplay();
-    });
-
-    $('#showcurrentoverride').prop('checked', pulseConfig.getBool('showcurrentoverride'));
-    if (pulseConfig.getDefaultBool('showcurrentoverride') != pulseConfig.getBool('showcurrentoverride'))
-      $('#showcurrentoverride').attr('overridden', 'true');
-    $('#showcurrentoverride').change(function () {
-      let showcurrenttool = $('#showcurrenttool').is(':checked');
-      let showcurrentsequence = $('#showcurrentsequence').is(':checked');
-      let showcurrentoverride = $('#showcurrentoverride').is(':checked');
-      // Store
-      pulseConfig.set('showcurrenttool', showcurrenttool);
-      pulseConfig.set('showcurrentsequence', showcurrentsequence);
-      pulseConfig.set('showcurrentoverride', showcurrentoverride);
-      // Show / Hide
-      if (showcurrenttool) {
-        $('.operationstatus-current-tool-div').show();
-      }
-      else {
-        $('.operationstatus-current-tool-div').hide();
-      }
-      if (showcurrentsequence) {
-        $('.operationstatus-current-sequence-div').show();
-      }
-      else {
-        $('.operationstatus-current-sequence-div').hide();
-      }
-      if (showcurrentoverride) {
-        $('.operationstatus-current-override-div').show();
-      }
-      else {
-        $('.operationstatus-current-override-div').hide();
-      }
-      // Other displays
-      self._setResetBigDisplay();
-    });
-
-
-    $('#showcurrent').prop('checked',
-      (pulseConfig.getBool('showcurrenttool') || pulseConfig.getBool('showcurrentsequence')
-        || pulseConfig.getBool('showcurrentoverride')));
+    const showcurrentRaw = pulseConfig.getString('showcurrent');
+    const hasExplicitShowCurrent = showcurrentRaw === 'true' || showcurrentRaw === 'false';
+    const showcurrentValue = hasExplicitShowCurrent
+      ? showcurrentRaw === 'true'
+      : (pulseConfig.getString('showcurrentdisplay') === 'tool'
+        || pulseConfig.getString('showcurrentdisplay') === 'sequence'
+        || pulseConfig.getString('showcurrentdisplay') === 'override');
+    $('#showcurrent').prop('checked', showcurrentValue);
+    if (hasExplicitShowCurrent
+      && pulseConfig.getDefaultBool('showcurrent') != showcurrentValue) {
+      $('#showcurrent').attr('overridden', 'true');
+    }
     $('#showcurrent').change(function () {
-      if ($('#showcurrent').is(':checked')) {
-        let showcurrenttool = $('#showcurrenttool').is(':checked');
-        let showcurrentsequence = $('#showcurrentsequence').is(':checked');
-        let showcurrentoverride = $('#showcurrentoverride').is(':checked');
-        // Store
-        pulseConfig.set('showcurrenttool', showcurrenttool);
-        pulseConfig.set('showcurrentsequence', showcurrentsequence);
-        pulseConfig.set('showcurrentoverride', showcurrentoverride);
-        // Display
-        if (showcurrenttool) {
-          $('.operationstatus-current-tool-div').show();
-        }
-        if (showcurrentsequence) {
-          $('.operationstatus-current-sequence-div').show();
-        }
-        if (showcurrentoverride) {
-          $('.operationstatus-current-override-div').show();
-        }
-      }
-      else {
-        // Store
-        pulseConfig.set('showcurrenttool', false);
-        pulseConfig.set('showcurrentsequence', false);
-        pulseConfig.set('showcurrentoverride', false);
-        // Display = Hide all
-        $('.operationstatus-current-tool-div').hide();
-        $('.operationstatus-current-sequence-div').hide();
-        $('.operationstatus-current-override-div').hide();
-      }
-      // Other displays
-      self._setResetBigDisplay();
+      const showcurrent = $('#showcurrent').is(':checked');
+      pulseConfig.set('showcurrent', showcurrent);
+      updateCurrentDisplays();
 
       // Visibility of subgroups
-      if ($(this).is(':checked')) {
+      if (showcurrent) {
         $('.showcurrentdetails').show();
       }
       else {
@@ -459,7 +363,7 @@ class OperationStatusPage extends pulsePage.BasePage {
         $('.operationstatus-alarm-bottom-div').hide();
       }
       // Other displays
-      self._setResetBigDisplay();
+      self._applyTopDisplaySizing();
       // Visibility of subgroups
       if ($(this).is(':checked')) {
         $('.showalarmdetails').show();
@@ -520,6 +424,8 @@ class OperationStatusPage extends pulsePage.BasePage {
       else {
         $('.operationstatus-cycleprogress').hide();
       }
+      // Other displays
+      self._applyTopDisplaySizing();
       // Visibility of subgroups
       if ($(this).is(':checked')) {
         $('.showpiedetails').show();
@@ -531,52 +437,14 @@ class OperationStatusPage extends pulsePage.BasePage {
     $('#showpie').trigger('change'); // To open/close subgroup
 
     // Inside pie
-    $('#productionpercentinpie').prop('checked', 'true' == pulseConfig.getString('productionpercentinpie'));
-    //if (pulseConfig.getDefaultString('productionpercentinpie') != pulseConfig.getString('productionpercentinpie'))
-    //$('#productionpercentinpie').attr('overridden', 'true');
-    $('#productionactualonlyinpie').prop('checked', 'actualonly' == pulseConfig.getString('productionpercentinpie'));
-    $('#productionactualtargetinpie').prop('checked',
-      ('true' != pulseConfig.getString('productionpercentinpie')
-        && ('actualonly' != pulseConfig.getString('productionpercentinpie'))));
-
-    $('#productionpercentinpie').change(function () {
-      if ($('#productionpercentinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'true');
-      }
-      if ($('#productionactualonlyinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'actualonly');
-      }
-      if ($('#productionactualtargetinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'actualtarget');
-      }
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'productionpercentinpie' });
-    });
-
-    $('#productionactualtargetinpie').change(function () {
-      if ($('#productionpercentinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'true');
-      }
-      if ($('#productionactualonlyinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'actualonly');
-      }
-      if ($('#productionactualtargetinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'actualtarget');
-      }
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'productionpercentinpie' });
-    });
-
-    $('#productionactualonlyinpie').change(function () {
-      if ($('#productionpercentinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'true');
-      }
-      if ($('#productionactualonlyinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'actualonly');
-      }
-      if ($('#productionactualtargetinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'actualtarget');
-      }
+    const productionPercentInPieMap = {
+      true: 'productionpercentinpie',
+      actualonly: 'productionactualonlyinpie',
+      actualtarget: 'productionactualtargetinpie'
+    };
+    syncRadioGroup(pulseConfig.getString('productionpercentinpie'), productionPercentInPieMap, 'actualtarget');
+    bindRadioGroup(productionPercentInPieMap, (value) => {
+      pulseConfig.set('productionpercentinpie', value);
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'productionpercentinpie' });
     });
@@ -596,6 +464,8 @@ class OperationStatusPage extends pulsePage.BasePage {
       else {
         $('x-stacklight').hide();
       }
+      // Other displays
+      self._applyTopDisplaySizing();
     });
 
     // Isofile
@@ -703,22 +573,11 @@ class OperationStatusPage extends pulsePage.BasePage {
     $('#showbaroperation').trigger('change'); // To open/close subgroup
 
     // BAR : day / shift
-    $('#displayshiftrange').prop('checked',
-      pulseConfig.getBool('displayshiftrange'));
-    $('#displayshiftrange').change(function () {
-      let displayshiftrange = $('#displayshiftrange').is(':checked');
-      // Store
-      pulseConfig.set('displayshiftrange', displayshiftrange);
-      // Display / Dispatch
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'displayshiftrange' });
-    });
-    $('#barrangeisday').prop('checked', !pulseConfig.getBool('displayshiftrange'));
-    $('#barrangeisday').change(function () {
-      let displayshiftrange = !$('#barrangeisday').is(':checked');
-      // Store
-      pulseConfig.set('displayshiftrange', displayshiftrange);
-      // Display / Dispatch
+    const barPeriodMap = { day: 'barrangeisday', shift: 'displayshiftrange' };
+    const barPeriod = pulseConfig.getBool('displayshiftrange') ? 'shift' : 'day';
+    syncRadioGroup(barPeriod, barPeriodMap, 'day');
+    bindRadioGroup(barPeriodMap, (value) => {
+      pulseConfig.set('displayshiftrange', value === 'shift');
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'displayshiftrange' });
     });
@@ -765,7 +624,7 @@ class OperationStatusPage extends pulsePage.BasePage {
   }
 
   // Verify threshold values
-  _verficationThresholds(targetValue, redValue) {
+  _verficationThresholds(targetValue, redValue) { //peut peut etre etre globalisé (utilisé plein de fois partout)
     // Find or create error message element
     let errorMessage = document.getElementById('thresholdErrorMessage');
     if (!errorMessage) {
@@ -823,150 +682,117 @@ class OperationStatusPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
+    //===============================================================================
+    //fonction d'automatisation des checked et des values pour les options en dessous
+    //===============================================================================
+    //automatisation des checkbox
+    const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', pulseConfig.getDefaultBool(configKey));
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
+    //automatisation des box à values
+    const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.val(value);
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
+    //automatisation des groupes de boutons radio (questionnaire)
+    const setDefaultRadioGroup = (value, valueToIdMap, { trigger = true } = {}) => {
+      Object.values(valueToIdMap).forEach((id) => {
+        $('#' + id).removeAttr('overridden');
+      });
+      const targetId = valueToIdMap[value];
+      if (targetId) {
+        const element = $('#' + targetId);
+        element.prop('checked', true);
+        if (trigger) element.change();
+      }
+    };
+
+    //=====================================================
+    // dénfinition des options checked ou values par défaut
+    //=====================================================
 
     // showworkinfo
-    $('#showworkinfo').prop('checked', pulseConfig.getDefaultBool('showworkinfo'));
-    $('#showworkinfo').change();
-    $('#showworkinfo').removeAttr('overridden');
+    setDefaultChecked('showworkinfo');
+    setDefaultRadioGroup(pulseConfig.getDefaultBool('showworkinfosmall') ? 'small' : 'big', {
+      small: 'showworkinfosmall',
+      big: 'showworkinfobig'
+    });
 
-        // showmachinestatuslogo
-    $('#showcurrentmachinestatuslogo').prop('checked', pulseConfig.getDefaultBool('showcurrentmachinestatuslogo'));
-    $('#showcurrentmachinestatuslogo').change();
-    $('#showcurrentmachinestatuslogo').removeAttr('overridden');
+    // showmachinestatuslogo
+    setDefaultChecked('showcurrentmachinestatuslogo');
 
-        // showmachinestatusletter
-    $('#showcurrentmachinestatusletter').prop('checked', pulseConfig.getDefaultBool('showcurrentmachinestatusletter'));
-    $('#showcurrentmachinestatusletter').change();
-    $('#showcurrentmachinestatusletter').removeAttr('overridden');
+    // showmachinestatusletter
+    setDefaultChecked('showcurrentmachinestatusletter');
 
-    // operation size
-    //$('#showworkinfosmall').prop('checked', 'true' != pulseConfig.getString('showworkinfobig'));
-    $('#showworkinfobig').prop('checked', 'true' == pulseConfig.getString('showworkinfobig'));
-    $('#showworkinfosmall').change();
+    //thresholds
+    setDefaultValue('thresholdtargetproduction', pulseConfig.getDefaultInt('thresholdtargetproduction'));
+    setDefaultValue('thresholdredproduction', pulseConfig.getDefaultInt('thresholdredproduction'));
 
     // Production
-    $('#showproductionoperation').prop('checked', pulseConfig.getDefaultBool('showproduction'));
-    // Call change to open/close subgroups
-    $('#showproductionoperation').change(); // Done below by productionactualonly
-    //$('#showproductionoperation').removeAttr('overridden');
+    setDefaultChecked('showproductionoperation', 'showproduction');
 
-    $('#productionpercent').prop('checked',
-      'true' == pulseConfig.getDefaultString('productionpercent'));
-    //$('#productionpercent').change(); // Done below by productionactualonly
+    setDefaultRadioGroup(pulseConfig.getDefaultString('productionpercent'), {
+      true: 'productionpercent',
+      actualonly: 'productionactualonly',
+      actualtarget: 'productionactualtarget'
+    });
 
-    $('#productionactualonly').prop('checked',
-      'actualonly' == pulseConfig.getDefaultString('productionpercent'));
-    $('#productionactualonly').change();
 
-    $('#productionactualtarget').prop('checked',
-      'actualtarget' == pulseConfig.getDefaultString('productionpercent'));
-    $('#productionactualtarget').change();
-
-    $('#thresholdtargetproduction').val(pulseConfig.getDefaultInt('thresholdtargetproduction'));
-    $('#thresholdtargetproduction').change();
-    $('#thresholdtargetproduction').removeAttr('overridden');
-
-    $('#thresholdredproduction').val(pulseConfig.getDefaultInt('thresholdredproduction'));
-    $('#thresholdredproduction').change();
-    $('#thresholdredproduction').removeAttr('overridden');
-
-    // Tools / Sequence
-    $('#showcurrent').prop('checked',
-      (pulseConfig.getDefaultBool('showcurrenttool') ||
-        pulseConfig.getDefaultBool('showcurrentsequence') ||
-        pulseConfig.getDefaultBool('showcurrentoverride')
-      ));
-    // Call change to open/close subgroups
-    $('#showcurrent').change();
-
-    $('#showcurrenttool').prop('checked',
-      pulseConfig.getDefaultBool('showcurrenttool'));
-    $('#showcurrenttool').change();
-    $('#showcurrenttool').removeAttr('overridden');
-
-    $('#showcurrentsequence').prop('checked',
-      pulseConfig.getDefaultBool('showcurrentsequence'));
-    $('#showcurrentsequence').removeAttr('overridden');
-    $('#showcurrentsequence').change();
-
-    $('#showcurrentoverride').prop('checked',
-      pulseConfig.getDefaultBool('showcurrentoverride'));
-    $('#showcurrentoverride').removeAttr('overridden');
-    $('#showcurrentoverride').change();
+    // current tool / sequence / override
+    setDefaultChecked('showcurrent');
+    setDefaultRadioGroup(pulseConfig.getDefaultString('showcurrentdisplay'), {
+      tool: 'showcurrenttool',
+      sequence: 'showcurrentsequence',
+      override: 'showcurrentoverride'
+    });
 
     // Alarm
-    $('#showalarmoperation').prop('checked', pulseConfig.getDefaultBool('showalarm'));
-    $('#showalarmoperation').change();
-    $('#showalarmoperation').removeAttr('overridden');
-
-    $('#showAlarmBelowIcon').prop('checked', pulseConfig.getDefaultBool('currenticoncncalarm.showAlarmBelowIcon'));
-    $('#showAlarmBelowIcon').change();
-    $('#showAlarmBelowIcon').removeAttr('overridden');
-
-    $('#showUnknownAlarm').prop('checked', pulseConfig.getDefaultBool('showUnknownAlarm'));
-    $('#showUnknownAlarm').change();
-    $('#showUnknownAlarm').removeAttr('overridden');
+    setDefaultChecked('showalarmoperation', 'showalarm');
+    setDefaultChecked('showAlarmBelowIcon', 'currenticoncncalarm.showAlarmBelowIcon');
+    setDefaultChecked('showUnknownAlarm');
 
     // Pie
-    $('#showpie').prop('checked', pulseConfig.getDefaultBool('showpie'));
-    $('#showpie').change();
-    $('#showpie').removeAttr('overridden');
+    setDefaultChecked('showpie');
 
-    let productionpercentinpie = pulseConfig.getDefaultString('productionpercentinpie');
-    $('#productionpercentinpie').prop('checked', 'true' == productionpercentinpie);
-    $('#productionactualonlyinpie').prop('checked', 'actualonly' == productionpercentinpie);
-    $('#productionactualtargetinpie').prop('checked',
-      ('true' != productionpercentinpie && 'actualonly' != productionpercentinpie));
-    $('#productionactualtargetinpie').change();
+    setDefaultRadioGroup(pulseConfig.getDefaultString('productionpercentinpie'), {
+      true: 'productionpercentinpie',
+      actualonly: 'productionactualonlyinpie',
+      actualtarget: 'productionactualtargetinpie'
+    });
 
     // Stacklight
-    $('#showstacklight').prop('checked', pulseConfig.getDefaultBool('showstacklight'));
-    $('#showstacklight').change();
-    $('#showstacklight').removeAttr('overridden');
+    setDefaultChecked('showstacklight');
 
     // Isofile
-    $('#showisofile').prop('checked', pulseConfig.getDefaultBool('showisofile'));
-    $('#showisofile').change();
-    $('#showisofile').removeAttr('overridden');
+    setDefaultChecked('showisofile');
 
     // TOOLS
-    $('#showtooloperation').prop('checked', pulseConfig.getDefaultBool('showtool'));
-    // Call change to open/close subgroups
-    $('#showtooloperation').change();
-    $('#showtooloperation').removeAttr('overridden');
+    setDefaultChecked('showtooloperation', 'showtool');
 
     // Tool - period
     $('#showtoolselector').val(pulseConfig.getString('toollabelname'));
     $('#showtoolselector').removeAttr('overridden');
 
     // Tool - remaining
-    $('#showtoolremaining').prop('checked',
-      pulseConfig.getDefaultBool('toollifemachine.displayremainingcyclesbelowtool'));
-    $('#showtoolremaining').removeAttr('overridden');
-
+    setDefaultChecked('showtoolremaining', 'toollifemachine.displayremainingcyclesbelowtool');
 
     // BAR (shift / alarm)
-    $('#showbaroperation').prop('checked', pulseConfig.getDefaultBool('showbar'));
-    // Call change to open/close subgroups
-    $('#showbaroperation').change();
-    $('#showbaroperation').removeAttr('overridden');
+    setDefaultChecked('showbaroperation', 'showbar');
 
-    $('#displayshiftrange').prop('checked',
-      pulseConfig.getDefaultBool('displayshiftrange'));
-    $('#displayshiftrange').change();
-    $('#displayshiftrange').removeAttr('overridden');
+    setDefaultRadioGroup(pulseConfig.getDefaultBool('displayshiftrange') ? 'shift' : 'day', {
+      day: 'barrangeisday',
+      shift: 'displayshiftrange'
+    });
 
-    $('#barrangeisday').prop('checked', !pulseConfig.getDefaultBool('displayshiftrange'));
-    $('#barrangeisday').change();
-    $('#barrangeisday').removeAttr('overridden');
-
-    $('#showbar-alarms').prop('checked', pulseConfig.getDefaultBool('barshowalarms'));
-    $('#showbar-alarms').change();
-    $('#showbar-alarms').removeAttr('overridden');
-
-    $('#showbar-percent').prop('checked', pulseConfig.getDefaultBool('barshowpercent'));
-    $('#showbar-percent').change();
-    $('#showbar-percent').removeAttr('overridden');
+    setDefaultChecked('showbar-alarms', 'barshowalarms');
+    setDefaultChecked('showbar-percent', 'barshowpercent');
   }
 
   // CONFIG PANEL - Function to read custom inputs
@@ -976,9 +802,10 @@ class OperationStatusPage extends pulsePage.BasePage {
   getOptionValues() {
     const options = [
       { id: 'showworkinfo', type: 'checkbox' },
-      { id: 'showworkinfobig', type: 'checkbox' },
+      { id: 'showworkinfosmall', type: 'checkbox' },
       { id: 'showcurrentmachinestatuslogo', type: 'checkbox' },
       { id: 'showcurrentmachinestatusletter', type: 'checkbox' },
+      { id: 'showcurrent', type: 'checkbox' },
       { id: 'showproductionoperation', type: 'checkbox', param: 'showproduction' }
     ];
 
@@ -1009,13 +836,13 @@ class OperationStatusPage extends pulsePage.BasePage {
       result += '&productionpercent=false';
     }
 
-    // Tools/Sequence - add fallback if showcurrent is false
-    if (document.getElementById('showcurrent')?.checked) {
-      result += `&showcurrenttool=${document.getElementById('showcurrenttool')?.checked}`;
-      result += `&showcurrentsequence=${document.getElementById('showcurrentsequence')?.checked}`;
-      result += `&showcurrentoverride=${document.getElementById('showcurrentoverride')?.checked}`;
-    } else {
-      result += '&showcurrenttool=false&showcurrentsequence=false&showcurrentoverride=false';
+    // Tools/Sequence - keep selection even if showcurrent is false
+    if (document.getElementById('showcurrenttool')?.checked) {
+      result += '&showcurrentdisplay=tool';
+    } else if (document.getElementById('showcurrentsequence')?.checked) {
+      result += '&showcurrentdisplay=sequence';
+    } else if (document.getElementById('showcurrentoverride')?.checked) {
+      result += '&showcurrentdisplay=override';
     }
 
     // Alarm
@@ -1109,13 +936,6 @@ class OperationStatusPage extends pulsePage.BasePage {
         $('x-currentworkinfo').hide();
       }
     }
-    let showworkinfobig = pulseConfig.getBool('showworkinfobig');
-    if (showworkinfobig) {
-      $('.operationstatus-top-div').addClass('big-operation');
-    }
-    else {
-      $('.operationstatus-top-div').removeClass('big-operation');
-    }
 
     let showpie = pulseConfig.getBool('showpie');
     if (showpie) {
@@ -1134,22 +954,33 @@ class OperationStatusPage extends pulsePage.BasePage {
     else {
       $('x-stacklight').hide();
     }
-    let showcurrenttool = pulseConfig.getBool('showcurrenttool');
-    if (showcurrenttool) {
+    let showcurrent = pulseConfig.getBool('showcurrent');
+    const currentDisplay = pulseConfig.getString('showcurrentdisplay');
+    const hasCurrentDisplay = currentDisplay === 'tool'
+      || currentDisplay === 'sequence'
+      || currentDisplay === 'override';
+    let showcurrenttool = hasCurrentDisplay
+      ? currentDisplay === 'tool'
+      : pulseConfig.getBool('showcurrenttool');
+    if (showcurrent && showcurrenttool) {
       $('.operationstatus-current-tool-div').show();
     }
     else {
       $('.operationstatus-current-tool-div').hide();
     }
-    let showcurrentsequence = pulseConfig.getBool('showcurrentsequence');
-    if (showcurrentsequence) {
+    let showcurrentsequence = hasCurrentDisplay
+      ? currentDisplay === 'sequence'
+      : pulseConfig.getBool('showcurrentsequence');
+    if (showcurrent && showcurrentsequence) {
       $('.operationstatus-current-sequence-div').show();
     }
     else {
       $('.operationstatus-current-sequence-div').hide();
     }
-    let showcurrentoverride = pulseConfig.getBool('showcurrentoverride');
-    if (showcurrentoverride) {
+    let showcurrentoverride = hasCurrentDisplay
+      ? currentDisplay === 'override'
+      : pulseConfig.getBool('showcurrentoverride');
+    if (showcurrent && showcurrentoverride) {
       $('.operationstatus-current-override-div').show();
     }
     else {
@@ -1179,7 +1010,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       $('.operationstatus-tool-div').hide();
     }
 
-    this._setResetBigDisplay();
+    this._applyTopDisplaySizing();
 
     /* RANGE */
 
