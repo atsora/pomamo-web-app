@@ -18,6 +18,7 @@
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-performancebar/x-performancebar.less";
 @import "x-motionpercentage/x-motionpercentage.less";
+@import "x-motiontime/x-motiontime.less";
 // Legends
 @import "x-reasongroups/x-reasongroups.less";
 @import "x-machinemodelegends/x-machinemodelegends.less";
@@ -59,12 +60,12 @@
   .performancebar-percent-position{
     box-sizing: border-box;
     padding-top : 12px;
-    
+
     display: flex;
     flex-direction: column; // align children
     justify-content: space-evenly;
 
-    x-motionpercentage{
+    x-motionpercentage, x-motiontime {
       margin-bottom: 18px; // To vertically center on bar
     }
   }

@@ -227,9 +227,18 @@ body {
   width: 270px;
   background-color: @color_background;
   color: @color_text;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   transition: transform 0.2s ease-out;
   border-left: 1px solid @color_window_border;
+}
+
+#pulse-panel-parameter-content {
+  flex: 1 1 auto;
+  min-height: 0; // allow the content area to shrink and scroll
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 
@@ -248,13 +257,19 @@ body {
   padding: 21px;
   box-sizing: border-box;
   transition: padding-bottom 0.2s ease-out;
-  overflow: auto;
-  height: 100%;
+  overflow: visible;
+  height: auto;
+  min-height: 100%;
 
 
   &.gridFullHeight {
     height: 100%;
   }
+}
+
+.appcontext-live .pulse-mainarea-inner {
+  overflow: auto;
+  height: 100%;
 }
 
 .pulse-header:before {
@@ -402,7 +417,7 @@ body {
   box-sizing: border-box;
   min-width: 400px;
   overflow-x: hidden;
-  overflow-y: hidden; // NO scroll here -> already managed
+  overflow-y: auto;
   color: @color_text_alternate;
   border: 1px solid @color_window_border;
   border-radius: @border_radius;
@@ -419,6 +434,10 @@ body {
     width: 100%;
     margin-top: 10px;
   }
+}
+
+.appcontext-live .pulse-mainarea {
+  overflow-y: hidden; // NO scroll for live displays
 }
 
 #pulse-pagination {
@@ -804,11 +823,11 @@ body {
 // PARAMETER PANEL options
 
 #pulse-panel-parameter-content {
-  overflow: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
   border-bottom: 1px solid @color_window_border;
   border-top: 1px solid @color_window_border_light;
   min-height: 48px;
@@ -1126,13 +1145,11 @@ body {
 
 .configuration-bottom-area {
   padding: 6px 10px 0 6px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: static;
   border-top: 1px solid @color_window_border_light;
   height: 30px; // 30 theme
   box-sizing: border-box;
+  flex: 0 0 auto;
 
   display: flex;
   flex-direction: row;
