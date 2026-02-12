@@ -82,14 +82,27 @@ class UtilizationBarPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
-    $('#showclockutilization').prop('checked', pulseConfig.getDefaultBool('showclock'));
-    $('#showclockutilization').change();
-    $('#showclockutilization').removeAttr('overridden');
+    const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', pulseConfig.getDefaultBool(configKey));
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
+    const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.val(value);
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
+    setDefaultChecked('showclockutilization', 'showclock');
 
     // 1 day
-    $('#displaydayshours').val(pulseConfig.getDefaultInt('displaydaysrange'));
+    setDefaultValue('displaydayshours', pulseConfig.getDefaultInt('displaydaysrange'));
     $('#displayisdays').prop('checked', true);
     $('#displayisdays').change();
+    $('#displayisdays').removeAttr('overridden');
   }
 
   // CONFIG PANEL - Function to read custom inputs

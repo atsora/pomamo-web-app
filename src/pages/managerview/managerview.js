@@ -127,19 +127,23 @@ class ManagerViewPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
-    $('#displayhoursrange').val(0); //pulseConfig.getDefaultInt('displayhoursrange'));
-    $('#displaydaysrange').val(1);  //pulseConfig.getDefaultInt('displaydaysrange'));
-    $('#displayshiftrangemanagerview').prop('checked',
-      pulseConfig.getDefaultBool('displayshiftrange'));
+    const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', pulseConfig.getDefaultBool(configKey));
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
 
-    $('#displayhoursrange').change();
-    $('#displayhoursrange').removeAttr('overridden');
+    const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.val(value);
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
 
-    $('#displaydaysrange').change();
-    $('#displaydaysrange').removeAttr('overridden');
-
-    $('#displayshiftrangemanagerview').change();
-    $('#displayshiftrangemanagerview').removeAttr('overridden');
+    setDefaultValue('displayhoursrange', 0);
+    setDefaultValue('displaydaysrange', 1);
+    setDefaultChecked('displayshiftrangemanagerview', 'displayshiftrange');
   }
 
   // CONFIG PANEL - Function to read custom inputs

@@ -100,15 +100,19 @@ class RunningPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues () {
+    const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', pulseConfig.getDefaultBool(configKey));
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
     // BAR (reason / production state)
-    $('#showproductionbar').prop('checked',
-      pulseConfig.getDefaultBool('showproductionbar'));
-    $('#showproductionbar').change();
-    $('#showproductionbar').removeAttr('overridden');
+    setDefaultChecked('showproductionbar');
 
     $('#showreasonbar').prop('checked', !pulseConfig.getDefaultBool('showproductionbar'));
     $('#showreasonbar').change();
-    $('#showreasonbar')
+    $('#showreasonbar').removeAttr('overridden');
   }
 
   // CONFIG PANEL - Function to read custom inputs

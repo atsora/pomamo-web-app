@@ -231,41 +231,42 @@ class OeeViewPage extends pulsePage.BasePage {
   }
 
   setDefaultOptionValues() {
-    const showPercentRadio = document.getElementById('productiongaugepercent');
-    const showRatioRadio = document.getElementById('productiongaugeratio');
-    if (pulseConfig.getDefaultBool('showpercent')) {
-      showPercentRadio.checked = true;
-      showRatioRadio.checked = false;
-      showPercentRadio.dispatchEvent(new Event('change', { bubbles: true }));
-    } else {
-      showPercentRadio.checked = false;
-      showRatioRadio.checked = true;
-      showRatioRadio.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-    showPercentRadio.removeAttribute('overridden');
-    showRatioRadio.removeAttribute('overridden');
+    const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', pulseConfig.getDefaultBool(configKey));
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
 
-    const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
-    const thresholdRedInput = document.getElementById('thresholdredproductionbar');
+    const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.val(value);
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
 
-    thresholdTarget.value = pulseConfig.getDefaultFloat('thresholdtargetproduction', 80);
-    thresholdRedInput.value = pulseConfig.getDefaultFloat('thresholdredproduction', 60);
+    const setDefaultRadioGroup = (value, valueToIdMap, { trigger = true } = {}) => {
+      Object.values(valueToIdMap).forEach((id) => {
+        $('#' + id).removeAttr('overridden');
+      });
+      const targetId = valueToIdMap[value];
+      if (targetId) {
+        const element = $('#' + targetId);
+        element.prop('checked', true);
+        if (trigger) element.change();
+      }
+    };
 
-    thresholdTarget.dispatchEvent(new Event('change', { bubbles: true }));
-    thresholdRedInput.dispatchEvent(new Event('change', { bubbles: true }));
+    setDefaultRadioGroup(pulseConfig.getDefaultBool('showpercent') ? 'percent' : 'ratio', {
+      percent: 'productiongaugepercent',
+      ratio: 'productiongaugeratio'
+    });
 
-    thresholdTarget.removeAttribute('overridden');
-    thresholdRedInput.removeAttribute('overridden');
+    setDefaultValue('thresholdtargetproductionbar', pulseConfig.getDefaultFloat('thresholdtargetproduction', 80));
+    setDefaultValue('thresholdredproductionbar', pulseConfig.getDefaultFloat('thresholdredproduction', 60));
 
     // showworkinfo = Show Operation
-    const showworkinfoCheckbox = document.getElementById('showworkinfo');
-    if (pulseConfig.getDefaultBool('showworkinfo')) {
-      showworkinfoCheckbox.checked = true;
-    } else {
-      showworkinfoCheckbox.checked = false;
-    }
-    showworkinfoCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-    showworkinfoCheckbox.removeAttribute('overridden');
+    setDefaultChecked('showworkinfo');
   }
 
   // getOptionValues uses the unified options-list pattern:
