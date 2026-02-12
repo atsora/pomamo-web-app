@@ -370,70 +370,54 @@ class OperatorDashboardPage extends pulsePage.BasePage {
   }
 
   setDefaultOptionValues() {
-    const showChangedToolsCheckbox = document.getElementById('showChangedTools');
-    showChangedToolsCheckbox.checked = pulseConfig.getDefaultBool('showChangedTools');
-    showChangedToolsCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-    showChangedToolsCheckbox.removeAttribute('overridden');
+    const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', pulseConfig.getDefaultBool(configKey));
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
 
-    const openStopClassificationCheckbox = document.getElementById('openStopClassification');
-    openStopClassificationCheckbox.checked = pulseConfig.getDefaultBool('openStopClassification');
-    openStopClassificationCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-    openStopClassificationCheckbox.removeAttribute('overridden');
+    const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.val(value);
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
 
-    const stopClassificationReopenDelayInput = document.getElementById('stopClassificationReopenDelay');
-    stopClassificationReopenDelayInput.value = pulseConfig.getDefaultInt('stopClassificationReopenDelay', 0);
-    stopClassificationReopenDelayInput.dispatchEvent(new Event('change', { bubbles: true }));
-    stopClassificationReopenDelayInput.removeAttribute('overridden');
+    const setDefaultRadioGroup = (value, valueToIdMap, { trigger = true } = {}) => {
+      Object.values(valueToIdMap).forEach((id) => {
+        $('#' + id).removeAttr('overridden');
+      });
+      const targetId = valueToIdMap[value];
+      if (targetId) {
+        const element = $('#' + targetId);
+        element.prop('checked', true);
+        if (trigger) element.change();
+      }
+    };
+
+    setDefaultChecked('showChangedTools');
+    setDefaultChecked('openStopClassification');
+    setDefaultValue('stopClassificationReopenDelay', pulseConfig.getDefaultInt('stopClassificationReopenDelay', 0));
 
     // Production bar
-    const showProductionBarCheckbox = document.getElementById('showproductionbar');
-    showProductionBarCheckbox.checked = pulseConfig.getDefaultBool('showproductionbar');
-    showProductionBarCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-    showProductionBarCheckbox.removeAttribute('overridden');
-
-    const showPercentRadio = document.getElementById('productionbarpercent');
-    const showRatioRadio = document.getElementById('productionbarratio');
-    if (pulseConfig.getDefaultBool('showpercent')) {
-      showPercentRadio.checked = true;
-      showPercentRadio.dispatchEvent(new Event('change', { bubbles: true }));
-    } else {
-      showRatioRadio.checked = true;
-      showRatioRadio.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-    showPercentRadio.removeAttribute('overridden');
-    showRatioRadio.removeAttribute('overridden');
+    setDefaultChecked('showproductionbar');
+    setDefaultRadioGroup(pulseConfig.getDefaultBool('showpercent') ? 'percent' : 'ratio', {
+      percent: 'productionbarpercent',
+      ratio: 'productionbarratio'
+    });
 
     // Show production display
-    const showProductionDisplayCheckbox = document.getElementById('showproductiondisplay');
-    showProductionDisplayCheckbox.checked = pulseConfig.getDefaultBool('showproductiondisplay');
-    showProductionDisplayCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-    showProductionDisplayCheckbox.removeAttribute('overridden');
+    setDefaultChecked('showproductiondisplay');
 
     // Production display type
-    const showGaugeRadio = document.getElementById('productiongauge');
-    const showPieRadio = document.getElementById('productionpie');
-    if (pulseConfig.getDefaultBool('showproductiongauge')) {
-      showGaugeRadio.checked = true;
-      showGaugeRadio.dispatchEvent(new Event('change', { bubbles: true }));
-    } else {
-      showPieRadio.checked = true;
-      showPieRadio.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-    showGaugeRadio.removeAttribute('overridden');
-    showPieRadio.removeAttribute('overridden');
+    setDefaultRadioGroup(pulseConfig.getDefaultBool('showproductiongauge') ? 'gauge' : 'pie', {
+      gauge: 'productiongauge',
+      pie: 'productionpie'
+    });
 
-    const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
-    const thresholdRedInput = document.getElementById('thresholdredproductionbar');
-
-    thresholdTarget.value = pulseConfig.getDefaultFloat('thresholdtargetproduction');
-    thresholdRedInput.value = pulseConfig.getDefaultFloat('thresholdredproduction');
-
-    thresholdTarget.dispatchEvent(new Event('change', { bubbles: true }));
-    thresholdRedInput.dispatchEvent(new Event('change', { bubbles: true }));
-
-    thresholdTarget.removeAttribute('overridden');
-    thresholdRedInput.removeAttribute('overridden');
-
+    setDefaultValue('thresholdtargetproductionbar', pulseConfig.getDefaultFloat('thresholdtargetproduction'));
+    setDefaultValue('thresholdredproductionbar', pulseConfig.getDefaultFloat('thresholdredproduction'));
   }
 
   // getOptionValues uses the unified options-list pattern:

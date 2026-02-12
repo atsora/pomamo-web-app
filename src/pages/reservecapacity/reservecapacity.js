@@ -129,29 +129,41 @@ class ReserveCapacityPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues () {
+    const setDefaultCheckedValue = (id, checked, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', checked);
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
+    const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.val(value);
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
     // MinChart
     let minchartvalue = pulseConfig.getDefault('minchartvalue');
     if ((undefined == minchartvalue) || ('' == minchartvalue)) {
-      $('#minchartcheck').prop('checked', false);
+      setDefaultCheckedValue('minchartcheck', false);
       //$('#minchartvalue').val(-70); // Not useful. Keep previous value
     }
     else {
-      $('#minchartcheck').prop('checked', true);
-      $('#minchartvalue').val(minchartvalue);
+      setDefaultCheckedValue('minchartcheck', true);
+      setDefaultValue('minchartvalue', minchartvalue);
     }
-    $('#minchartcheck').change();
 
     // MaxChart
     let maxchartvalue = pulseConfig.getDefault('maxchartvalue');
     if ((undefined == maxchartvalue) || ('' == maxchartvalue)) {
-      $('#maxchartcheck').prop('checked', false);
+      setDefaultCheckedValue('maxchartcheck', false);
       //$('#maxchartvalue').val(30); // Not useful. Keep previous value
     }
     else {
-      $('#maxchartcheck').prop('checked', true);
-      $('#maxchartvalue').val(maxchartvalue);
+      setDefaultCheckedValue('maxchartcheck', true);
+      setDefaultValue('maxchartvalue', maxchartvalue);
     }
-    $('#maxchartcheck').change();
   }
 
   // CONFIG PANEL - Function to read custom inputs

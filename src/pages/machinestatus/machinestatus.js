@@ -317,67 +317,45 @@ class MachineStatusPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
+    const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', pulseConfig.getDefaultBool(configKey));
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
     // showworkinfo
-    $('#showworkinfo').prop('checked', pulseConfig.getDefaultBool('showworkinfo'));
-    $('#showworkinfo').change();
-    $('#showworkinfo').removeAttr('overridden');
+    setDefaultChecked('showworkinfo');
 
     // Shift / Day
-    $('#displayshiftrange').prop('checked',
-      pulseConfig.getDefaultBool('displayshiftrange'));
-    $('#displayshiftrange').change();
-    $('#displayshiftrange').removeAttr('overridden');
-
-    $('#pierangeisday').prop('checked',
-      !pulseConfig.getDefaultBool('displayshiftrange'));
+    setDefaultChecked('displayshiftrange');
+    $('#pierangeisday').prop('checked', !pulseConfig.getDefaultBool('displayshiftrange'));
     $('#pierangeisday').change();
     $('#pierangeisday').removeAttr('overridden');
 
     // Percent / Time
-    $('#displaymotiontime').prop('checked',
-      pulseConfig.getDefaultBool('displaymotiontime'));
-    $('#displaymotiontime').change();
-    $('#displaymotiontime').removeAttr('overridden');
-
-    $('#displaymotionpercent').prop('checked',
-      !pulseConfig.getDefaultBool('displaymotiontime'));
+    setDefaultChecked('displaymotiontime');
+    $('#displaymotionpercent').prop('checked', !pulseConfig.getDefaultBool('displaymotiontime'));
     $('#displaymotionpercent').change();
     $('#displaymotionpercent').removeAttr('overridden');
 
     // Target
-    $('#showtarget').prop('checked', pulseConfig.getDefaultBool('showtarget'));
-    $('#showtarget').change();
-    $('#showtarget').removeAttr('overridden');
+    setDefaultChecked('showtarget');
 
     // Tools / Sequence
-    $('#showcurrent').prop('checked',
-      (pulseConfig.getDefaultBool('showcurrenttool') ||
-        pulseConfig.getDefaultBool('showcurrentsequence')));
-    // Call change to open/close subgroups
+    const showcurrentDefault = pulseConfig.getDefaultBool('showcurrenttool')
+      || pulseConfig.getDefaultBool('showcurrentsequence');
+    $('#showcurrent').prop('checked', showcurrentDefault);
     $('#showcurrent').change();
+    $('#showcurrent').removeAttr('overridden');
 
-    $('#showcurrenttool').prop('checked',
-      pulseConfig.getDefaultBool('showcurrenttool'));
-    $('#showcurrenttool').change();
-    $('#showcurrenttool').removeAttr('overridden');
-
-    $('#showcurrentsequence').prop('checked',
-      pulseConfig.getDefaultBool('showcurrentsequence'));
-    $('#showcurrentsequence').change();
-    $('#showcurrentsequence').removeAttr('overridden');
+    setDefaultChecked('showcurrenttool');
+    setDefaultChecked('showcurrentsequence');
 
     // Alarm
-    $('#showalarm').prop('checked', pulseConfig.getDefaultBool('showalarm'));
-    $('#showalarm').change();
-    $('#showalarm').removeAttr('overridden');
-
-    $('#showstacklight').prop('checked', pulseConfig.getDefaultBool('showstacklight'));
-    $('#showstacklight').change();
-    $('#showstacklight').removeAttr('overridden');
-
-    $('#showweeklybar').prop('checked', pulseConfig.getDefaultBool('showweeklybar'));
-    $('#showweeklybar').change();
-    $('#showweeklybar').removeAttr('overridden');
+    setDefaultChecked('showalarm');
+    setDefaultChecked('showstacklight');
+    setDefaultChecked('showweeklybar');
 
     $('#showcurrentweek').prop('checked',
       pulseConfig.getDefaultBool('weeklyshowcurrentweek'));

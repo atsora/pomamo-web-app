@@ -113,13 +113,15 @@ class ProductionMachiningPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
-    $('#thresholdtargetproduction').val(pulseConfig.getDefaultInt('thresholdtargetproduction'));
-    $('#thresholdtargetproduction').change();
-    $('#thresholdtargetproduction').removeAttr('overridden');
+    const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.val(value);
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
 
-    $('#thresholdredproduction').val(pulseConfig.getDefaultInt('thresholdredproduction'));
-    $('#thresholdredproduction').change();
-    $('#thresholdredproduction').removeAttr('overridden');
+    setDefaultValue('thresholdtargetproduction', pulseConfig.getDefaultInt('thresholdtargetproduction'));
+    setDefaultValue('thresholdredproduction', pulseConfig.getDefaultInt('thresholdredproduction'));
   }
 
   // CONFIG PANEL - Function to read custom inputs

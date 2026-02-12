@@ -82,17 +82,16 @@ class CombinedViewPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
-    $('#showtarget').prop('checked', pulseConfig.getDefaultBool('showtarget'));
-    $('#showtarget').change();
-    $('#showtarget').removeAttr('overridden');
+    const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', pulseConfig.getDefaultBool(configKey));
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
 
-    $('#showalarm').prop('checked', pulseConfig.getDefaultBool('showalarm'));
-    $('#showalarm').change();
-    $('#showalarm').removeAttr('overridden');
-
-    $('#showstacklight').prop('checked', pulseConfig.getDefaultBool('showstacklight'));
-    $('#showstacklight').change();
-    $('#showstacklight').removeAttr('overridden');
+    setDefaultChecked('showtarget');
+    setDefaultChecked('showalarm');
+    setDefaultChecked('showstacklight');
   }
 
   // CONFIG PANEL - Function to read custom inputs

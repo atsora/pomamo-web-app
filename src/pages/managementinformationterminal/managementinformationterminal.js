@@ -212,27 +212,44 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
+    const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', pulseConfig.getDefaultBool(configKey));
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
+    const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.val(value);
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
+    const setDefaultRadioGroup = (value, valueToIdMap, { trigger = true } = {}) => {
+      Object.values(valueToIdMap).forEach((id) => {
+        $('#' + id).removeAttr('overridden');
+      });
+      const targetId = valueToIdMap[value];
+      if (targetId) {
+        const element = $('#' + targetId);
+        element.prop('checked', true);
+        if (trigger) element.change();
+      }
+    };
 
     // showworkinfo
-    $('#showworkinfo').prop('checked', pulseConfig.getDefaultBool('showworkinfo'));
-    $('#showworkinfo').change();
-    $('#showworkinfo').removeAttr('overridden');
+    setDefaultChecked('showworkinfo');
 
     // Pie
-    let productionpercentinpie = pulseConfig.getDefaultString('productionpercentinpie');
-    $('#productionpercentinpie').prop('checked', 'true' == productionpercentinpie);
-    $('#productionactualonlyinpie').prop('checked', 'actualonly' == productionpercentinpie);
-    $('#productionactualtargetinpie').prop('checked',
-      ('true' != productionpercentinpie && 'actualonly' != productionpercentinpie));
-    $('#productionactualtargetinpie').change();
+    setDefaultRadioGroup(pulseConfig.getDefaultString('productionpercentinpie'), {
+      true: 'productionpercentinpie',
+      actualonly: 'productionactualonlyinpie',
+      actualtarget: 'productionactualtargetinpie'
+    });
 
-    $('#thresholdtargetproduction').val(pulseConfig.getDefaultInt('thresholdtargetproduction'));
-    $('#thresholdtargetproduction').change();
-    $('#thresholdtargetproduction').removeAttr('overridden');
-
-    $('#thresholdredproduction').val(pulseConfig.getDefaultInt('thresholdredproduction'));
-    $('#thresholdredproduction').change();
-    $('#thresholdredproduction').removeAttr('overridden');
+    setDefaultValue('thresholdtargetproduction', pulseConfig.getDefaultInt('thresholdtargetproduction'));
+    setDefaultValue('thresholdredproduction', pulseConfig.getDefaultInt('thresholdredproduction'));
   }
 
   // CONFIG PANEL - Function to read custom inputs

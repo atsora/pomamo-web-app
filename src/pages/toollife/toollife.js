@@ -97,18 +97,25 @@ class ToolLifePage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
+    const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.prop('checked', pulseConfig.getDefaultBool(configKey));
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
+
+    const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
+      const element = $('#' + id);
+      element.val(value);
+      if (trigger) element.change();
+      if (clearOverride) element.removeAttr('overridden');
+    };
 
     // expiring tools
-    const showtoolselectorSelector = document.getElementById('showtoolselector');
-    showtoolselectorSelector.value = pulseConfig.getDefaultString('toollifemachine.toollabelname');
-    showtoolselectorSelector.dispatchEvent(new Event('change', { bubbles: true }));
-    showtoolselectorSelector.removeAttribute('overridden');
+    setDefaultValue('showtoolselector', pulseConfig.getDefaultString('toollifemachine.toollabelname'));
 
     // remaining cycles
-    const showtoolremainingCheckbox = document.getElementById('showtoolremaining');
-    showtoolremainingCheckbox.checked = pulseConfig.getDefaultBool('toollifemachine.displayremainingcyclesbelowtool');
-    showtoolremainingCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-    showtoolremainingCheckbox.removeAttribute('overridden');
+    setDefaultChecked('showtoolremaining', 'toollifemachine.displayremainingcyclesbelowtool');
   }
 
   buildContent() {

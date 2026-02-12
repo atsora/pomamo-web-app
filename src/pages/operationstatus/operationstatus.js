@@ -683,9 +683,9 @@ class OperationStatusPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     //===============================================================================
-    //fonction d'automatisation des checked et des values pour les options en dessous
+    //automation function for checked and value entries for the options below
     //===============================================================================
-    //automatisation des checkbox
+    //checkbox automation
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
       const element = $('#' + id);
       element.prop('checked', pulseConfig.getDefaultBool(configKey));
@@ -693,7 +693,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       if (clearOverride) element.removeAttr('overridden');
     };
 
-    //automatisation des box à values
+    //automation of value boxes
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
       const element = $('#' + id);
       element.val(value);
@@ -701,7 +701,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       if (clearOverride) element.removeAttr('overridden');
     };
 
-    //automatisation des groupes de boutons radio (questionnaire)
+    //Automation of radio button groups (questionnaire)
     const setDefaultRadioGroup = (value, valueToIdMap, { trigger = true } = {}) => {
       Object.values(valueToIdMap).forEach((id) => {
         $('#' + id).removeAttr('overridden');
@@ -715,7 +715,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     };
 
     //=====================================================
-    // dénfinition des options checked ou values par défaut
+    // definition of checked options or default values
     //=====================================================
 
     // showworkinfo
