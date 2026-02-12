@@ -7,21 +7,31 @@ SPDX-License-Identifier: Apache-2.0
 
 <div class="param-group group-options">
   <div class="param-group-header group-options">
-    <div class="param-group-title group-options"><x-tr key="options.title" default="Options"></x-tr></div>
-    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+    <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
+        default="reset"></x-tr></button>
   </div>
 
   <div class="param-group-content group-options">
-    <div id="bound">
-      <label for="maxchartvalue">Maximum
-        <input type="checkbox" id="maxchartcheck" autocomplete="off" />
-        <input type="number" id="maxchartvalue" value="30" step="10" min="0" autocomplete="off" />
-      </label>
 
-      <label for="minchartvalue">Minimum
-        <input type="checkbox" id="minchartcheck" autocomplete="off" />
-        <input type="number" id="minchartvalue" value="-70" step="10" max="0" autocomplete="off" />
-      </label>
+    <!-- Chart bounds settings -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label>Thresholds</label>
+      </div>
+      <div class="subgroup">
+        <div class='inlined-radio'>
+          <input type="checkbox" id="maxchartcheck" autocomplete="off" />
+          <label for="maxchartcheck"><x-tr key="options.maximum" default="Maximum"></x-tr></label>
+          <input type="number" id="maxchartvalue" value="30" step="10" min="0" autocomplete="off" />
+        </div>
+        <div class='inlined-radio'>
+          <input type="checkbox" id="minchartcheck" autocomplete="off" />
+          <label for="minchartcheck"><x-tr key="options.minimum" default="Minimum"></x-tr></label>
+          <input type="number" id="minchartvalue" value="-70" step="10" max="0" autocomplete="off" />
+        </div>
+      </div>
     </div>
+
   </div>
 </div>

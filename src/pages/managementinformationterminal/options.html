@@ -7,49 +7,62 @@ SPDX-License-Identifier: Apache-2.0
 <div class="param-group group-options">
   <div class="param-group-header group-options">
     <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
-    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
+        default="reset"></x-tr></button>
   </div>
 
   <div class="param-group-content group-options">
+
+    <!-- Operation settings -->
     <div class="labelsubgroup">
-      <label for="showworkinfo"><x-tr key="options.showOperation" default="Show operation"></x-tr>
+      <div class='labelheader'>
+        <label for="showworkinfo"><x-tr key="options.showOperation" default="Show operation"></x-tr></label>
         <input type="checkbox" id="showworkinfo" autocomplete="off" />
-      </label>
+      </div>
     </div>
-    <!-- settings -->
+
+    <!-- Part count in pie settings -->
     <div class="labelsubgroup">
-      <label for="showproductionoperation"><x-tr key="options.showPartCountInPie" default="Show part count in pie"></x-tr>
-      </label>
-      <div class="subgroup radiogroup showproductionorpercent ">
+      <div class='labelheader'>
+        <label for="showproductionoperation"><x-tr key="options.showPartCountInPie"
+            default="Show part count in pie"></x-tr></label>
+      </div>
+      <div class="subgroup radiogroup showproductionorpercent">
         <div class='inlined-radio'>
           <input type="radio" id="productionpercentinpie" name="showproductioninpie" value="productionpercentinpie" />
-          <span for="productionpercentinpie"><x-tr key="content.percent" default="percent"></x-tr></span>
+          <label for="productionpercentinpie"><x-tr key="content.percent" default="percent"></x-tr></label>
         </div>
         <div class='inlined-radio'>
-          <input type="radio" id="productionactualtargetinpie" name="showproductioninpie" value="productionactualtargetinpie" />
-          <span for="productionactualtargetinpie"><x-tr key="content.actualTarget" default="actual/target"></x-tr></span>
+          <input type="radio" id="productionactualtargetinpie" name="showproductioninpie"
+            value="productionactualtargetinpie" />
+          <label for="productionactualtargetinpie"><x-tr key="content.actualTarget"
+              default="actual/target"></x-tr></label>
         </div>
         <div class='inlined-radio'>
           <input type="radio" id="productionactualonlyinpie" name="showproductioninpie"
             value="productionactualonlyinpie" />
-          <span for="productionactualonlyinpie"><x-tr key="content.actual" default="actual"></x-tr></span>
+          <label for="productionactualonlyinpie"><x-tr key="content.actual" default="actual"></x-tr></label>
         </div>
       </div>
     </div>
 
+    <!-- Thresholds color settings -->
     <div class="labelsubgroup">
-      <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
+      <div class='labelheader'>
+        <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
+      </div>
       <div class="subgroup radiogroup">
         <div class='inlined-radio'>
-          <label for="thresholdtargetproduction"><x-tr key="options.thresholdtarget" default="target"></x-tr>
-            <input type="number" id="thresholdtargetproduction" value="0" step="1" min="0" autocomplete="off" />
-          </label>
-          <label for="thresholdredproduction"><x-tr key="options.thresholdRed" default="Red"></x-tr>
-            <input type="number" id="thresholdredproduction" value="0" step="1" min="0" autocomplete="off" />
-          </label>
+          <label for="thresholdtargetproduction"><x-tr key="options.thresholdtarget" default="target"></x-tr></label>
+          <input type="number" id="thresholdtargetproduction" value="0" step="1" min="0" autocomplete="off" />
+        </div>
+        <div class='inlined-radio'>
+          <label for="thresholdredproduction"><x-tr key="options.thresholdRed" default="Red"></x-tr></label>
+          <input type="number" id="thresholdredproduction" value="0" step="1" min="0" autocomplete="off" />
         </div>
       </div>
       <div class="thresholdunitispart"></div>
     </div>
+
   </div>
 </div>

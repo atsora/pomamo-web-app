@@ -8,28 +8,34 @@ SPDX-License-Identifier: Apache-2.0
 <div class="param-group group-options">
   <div class="param-group-header group-options">
     <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
-    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
+        default="reset"></x-tr></button>
   </div>
 
   <div class="param-group-content group-options">
-    <div class="labelsubgroup radiogroup">
-      <label for="showclockutilization"><x-tr key="options.timeFrameSelection" default="Period: "></x-tr></label>
-      <input type="number" id="displaydayshours" value="" step="1" min="0" autocomplete="off" /></label>
 
-      <div class='inlined-radio'>
-        <input type="radio" id="displayisdays" name="dayshours" value="displayisdays">
-        <span for="pierangeisday"><x-tr key="options.timeFrameDays" default="Day(s)"></x-tr></span>
+    <!-- Time period selection -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showclockutilization"><x-tr key="options.timeFrameSelection" default="Period: "></x-tr></label>
       </div>
-      <div class='inlined-radio'>
-        <input type="radio" id="displayishours" name="dayshours" value="displayishours">
-        <span for="displayshiftrange"><x-tr key="options.timeFrameHours" default="Hour(s)"></x-tr></span>
+      <div class="subgroup radiogroup">
+        <div class='inlined-radio'>
+          <input type="radio" id="displayisdays" name="dayshours" value="displayisdays" />
+          <label for="displayisdays"><x-tr key="options.timeFrameDays" default="Day(s)"></x-tr></label>
+          <input type="radio" id="displayishours" name="dayshours" value="displayishours" />
+          <label for="displayishours"><x-tr key="options.timeFrameHours" default="Hour(s)"></x-tr></label>
+          <input type="number" id="displaydayshours" value="" step="1" min="0" autocomplete="off" />
+        </div>
       </div>
     </div>
-    
-    <div>
-      <label for="showclockutilization"><x-tr key="showClock" default="Show clock"></x-tr>
+
+    <!-- Clock display settings -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showclockutilization"><x-tr key="showClock" default="Show clock"></x-tr></label>
         <input type="checkbox" id="showclockutilization" autocomplete="off" />
-      </label>
+      </div>
     </div>
 
   </div>
