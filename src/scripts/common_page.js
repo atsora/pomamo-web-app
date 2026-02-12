@@ -59,12 +59,14 @@ var closeNavigationPanel = function (fast) {
 var initParameterPanel = function () {
   $('.param-group-title').click(function (e) {
     let group = $(this).parents('.param-group');
-    if ($(group).hasClass('opened')) {
-      $(group).removeClass('opened');
+    let content = $(group).find('.param-group-content').first();
+    if (content.is(':visible')) {
+      content.hide();
     }
     else {
-      $(group).addClass('opened');
+      content.css('display', 'flex');
     }
+    $(group).removeClass('opened');
   });
 }
 

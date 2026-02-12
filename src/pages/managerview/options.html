@@ -7,22 +7,34 @@ SPDX-License-Identifier: Apache-2.0
 
 <div class="param-group group-options">
   <div class="param-group-header group-options">
-    <div class="param-group-title group-options"><x-tr key="options.title" default="Options"></x-tr></div>
-    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+    <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
+        default="reset"></x-tr></button>
   </div>
 
   <div class="param-group-content group-options">
-    <div>
-      <label for="displayshiftrangemanagerview"><x-tr key="options.displayShift" default="Display Shift"></x-tr>
-        <input type="checkbox" id="displayshiftrangemanagerview" autocomplete="off" />
-      </label>
-    </div>
-    <div id="timeframemanagerview">
-      <label for="displaydaysrange"><x-tr key="options.timeFrameDays" default="Day(s)"></x-tr>
-        <input type="number" id="displaydaysrange" value="0" step="1" min="0" autocomplete="off" /></label>
 
-      <label for="displayhoursrange"><x-tr key="options.timeFrameHours" default="Hour(s)"></x-tr>
-        <input type="number" id="displayhoursrange" value="0" step="1" min="0" autocomplete="off" /></label>
+    <!-- Display shift settings -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="displayshiftrangemanagerview"><x-tr key="options.displayShift"
+            default="Display Shift"></x-tr></label>
+        <input type="checkbox" id="displayshiftrangemanagerview" autocomplete="off" />
+      </div>
+      <div id='timeframemanagerview' class="subgroup">
+        <div class='labelheader'>
+          <label style="font-size: 1em;">Time frame :</label>
+        </div>
+        <div class='inlined-radio'>
+          <label for="displaydaysrange"><x-tr key="options.timeFrameDays" default="Day(s)"></x-tr></label>
+          <input type="number" id="displaydaysrange" value="0" step="1" min="0" autocomplete="off" />
+        </div>
+        <div class='inlined-radio'>
+          <label for="displayhoursrange"><x-tr key="options.timeFrameHours" default="Hour(s)"></x-tr></label>
+          <input type="number" id="displayhoursrange" value="0" step="1" min="0" autocomplete="off" />
+        </div>
+      </div>
     </div>
+
   </div>
 </div>

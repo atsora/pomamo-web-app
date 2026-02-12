@@ -15,53 +15,63 @@ SPDX-License-Identifier: Apache-2.0
   <div class="param-group-content group-options">
 
     <div class="labelsubgroup">
-      <label for="showChangedTools"><x-tr key="options.showChangedTools" default="Show tool information"></x-tr>
+      <div class='labelheader'>
+        <label for="showChangedTools"><x-tr key="options.showChangedTools"
+            default="Show tool information"></x-tr></label>
         <input type="checkbox" id="showChangedTools" autocomplete="off" />
-      </label>
+      </div>
     </div>
 
     <div class="labelsubgroup">
-      <label for="openStopClassification"><x-tr key="options.openStopClassification"
-          default="Automatically open stop classification dialog"></x-tr>
+      <div class='labelheader'>
+        <label for="openStopClassification"><x-tr key="options.openStopClassification"
+            default="Automatically open stop classification dialog"></x-tr></label>
         <input type="checkbox" id="openStopClassification" autocomplete="off" />
-      </label>
+      </div>
       <div class="subgroup openStopClassificationDetails">
-        <label for="stopClassificationReopenDelay"><x-tr key="options.stopClassificationReopenDelay"
-            default="Reopen delay (seconds)"></x-tr>
+        <div class='inlined-radio'>
+          <label for="stopClassificationReopenDelay"><x-tr key="options.stopClassificationReopenDelay"
+              default="Reopen delay (seconds)"></x-tr></label>
           <input type="number" id="stopClassificationReopenDelay" value="0" step="1" min="0" max="3600"
             autocomplete="off" />
-        </label>
+        </div>
       </div>
     </div>
 
     <!-- switch between circular gauge and pie -->
     <div class="labelsubgroup">
-      <label for="showproductiondisplay"><x-tr key="options.productionDisplay" default="Production display"></x-tr>
+      <div class='labelheader'>
+        <label for="showproductiondisplay"><x-tr key="options.productionDisplay"
+            default="Production display"></x-tr></label>
         <input type="checkbox" id="showproductiondisplay" autocomplete="off" />
-      </label>
+      </div>
       <div class="subgroup radiogroup showproductiondisplaydetails">
         <div class='inlined-radio'>
           <input type="radio" id="productiongauge" name="productiondisplay" value="productiongauge" />
-          <span for="productiongauge"><x-tr key="options.gauge" default="Gauge"></x-tr></span>
+          <label for='productiongauge'><x-tr key="options.gauge" default="Gauge"></x-tr></label>
         </div>
         <div class='inlined-radio'>
           <input type="radio" id="productionpie" name="productiondisplay" value="productionpie" />
-          <span for="productionpie"><x-tr key="options.pie" default="advancement pie"></x-tr></span>
+          <label for='productionpie'><x-tr key="options.pie" default="advancement pie"></x-tr></label>
         </div>
       </div>
     </div>
 
     <!-- threshold and target settings -->
     <div class="labelsubgroup">
-      <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
+      <div class='labelheader'>
+        <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
+      </div>
       <div class="subgroup radiogroup">
         <div class='inlined-radio'>
-          <label for="thresholdtargetproductionbar"><x-tr key="options.target" default="Target"></x-tr>
-            <input type="number" id="thresholdtargetproductionbar" value="0" step="1" min="0" autocomplete="off" />
-          </label>
-          <label for="thresholdredproductionbar"><x-tr key="options.thresholdRed" default="Red"></x-tr>
-            <input type="number" id="thresholdredproductionbar" value="0" step="1" min="0" autocomplete="off" />
-          </label>
+          <label for="thresholdtargetproductionbar"><x-tr key="options.target" default="Target"></x-tr></label>
+          <input type="number" id="thresholdtargetproductionbar" value="0" step="1" min="0" autocomplete="off" />
+
+        </div>
+        <div class='inlined-radio'>
+          <label for="thresholdredproductionbar"><x-tr key="options.thresholdRed" default="Red"></x-tr></label>
+          <input type="number" id="thresholdredproductionbar" value="0" step="1" min="0" autocomplete="off" />
+
         </div>
       </div>
       <div class="thresholdunitispart"></div>
@@ -70,21 +80,23 @@ SPDX-License-Identifier: Apache-2.0
     <!-- Production bar settings -->
 
     <div class="labelsubgroup">
-      <label for="showproductionbar"><x-tr key="options.showProductionbar" default="Show production bar"></x-tr>
+      <div class='labelheader'>
+        <label for="showproductionbar"><x-tr key="options.showProductionbar"
+            default="Show production bar"></x-tr></label>
         <input type="checkbox" id="showproductionbar" autocomplete="off" />
-      </label>
-    </div>
-    <div class="labelsubgroup">
-      <div class='inlined-radio'>
-        <input type="radio" id="productionbarpercent" name="showproductionbar" value="productionbarpercent" />
-        <span for="productionbarpercent"><x-tr key="content.percent" default="percent"></x-tr></span>
       </div>
     </div>
     <div class="labelsubgroup">
-      <div class='inlined-radio'>
-        <input type="radio" id="productionbarratio" name="showproductionbar" value="productionbarratio" />
-        <span for="productionbarratio"><x-tr key="options.productionActualVsTarget"
-            default="production actual/target"></x-tr></span>
+      <div class="subgroup radiogroup">
+        <div class='inlined-radio'>
+          <input type="radio" id="productionbarpercent" name="showproductionbar" value="productionbarpercent" />
+          <label for="productionbarpercent"><x-tr key="content.percent" default="percent"></x-tr></label>
+        </div>
+        <div class='inlined-radio'>
+          <input type="radio" id="productionbarratio" name="showproductionbar" value="productionbarratio" />
+          <label for="productionbarratio"><x-tr key="options.productionActualVsTarget"
+              default="production actual/target"></x-tr></label>
+        </div>
       </div>
     </div>
   </div>

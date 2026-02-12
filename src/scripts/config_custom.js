@@ -20,4 +20,7 @@
 //PULSE_DEFAULT_CONFIG.roles.manager.displayedPages.push('plant');
 //PULSE_DEFAULT_CONFIG.roles.live.displayedPages.push('plant');
 
+// Development configuration
+tagConfig.mainpath = 'http://demo2.atsora.eu:5000/';
+
 PULSE_DEFAULT_CONFIG.general.displayshiftrange = 'true';

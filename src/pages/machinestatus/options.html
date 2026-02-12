@@ -7,95 +7,116 @@ SPDX-License-Identifier: Apache-2.0
 
 <div class="param-group group-options">
   <div class="param-group-header group-options">
-    <div class="param-group-title group-options"><x-tr key="options.title" default="Options"></x-tr></div>
-    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+    <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
+        default="reset"></x-tr></button>
   </div>
 
   <div class="param-group-content group-options">
-    <!-- Operation -->
+
+    <!-- Operation settings -->
     <div class="labelsubgroup">
-      <label for="showworkinfo"><x-tr key="options.showOperation" default="Show operation"></x-tr>
+      <div class='labelheader'>
+        <label for="showworkinfo"><x-tr key="options.showOperation" default="Show operation"></x-tr></label>
         <input type="checkbox" id="showworkinfo" autocomplete="off" />
-      </label>
+      </div>
     </div>
-    <!-- Pie period -->
-    <div>
-      <label>Utilization pie period</label>
+
+    <!-- Pie period settings -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label><x-tr key="options.pieUtilizationPeriod" default="Utilization pie period"></x-tr></label>
+      </div>
       <div class="subgroup radiogroup">
         <div class='inlined-radio'>
-          <input type="radio" id="pierangeisday" name="pieperiod" value="pierangeisday">
-          <span for="pierangeisday"><x-tr key="content.currentDay" default="current day"></x-tr></span>
+          <input type="radio" id="pierangeisday" name="pieperiod" value="pierangeisday" />
+          <label for="pierangeisday"><x-tr key="content.currentDay" default="current day"></x-tr></label>
         </div>
         <div class='inlined-radio'>
-          <input type="radio" id="displayshiftrange" name="pieperiod" value="displayshiftrange">
-          <span for="displayshiftrange"><x-tr key="content.currentShift" default="current shift"></x-tr></span>
+          <input type="radio" id="displayshiftrange" name="pieperiod" value="displayshiftrange" />
+          <label for="displayshiftrange"><x-tr key="content.currentShift" default="current shift"></x-tr></label>
         </div>
       </div>
     </div>
 
-    <!-- Current % or time -->
-    <div>
-      <label><x-tr key="options.displayUtilization" default="Display utilization"></x-tr></label>
+    <!-- Display utilization settings -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label><x-tr key="options.displayUtilization" default="Display utilization"></x-tr></label>
+      </div>
       <div class="subgroup radiogroup">
         <div class='inlined-radio'>
-          <input type="radio" id="displaymotionpercent" name="motiondisplay" value="displaymotionpercent">
-          <span for="displaymotionpercent"><x-tr key="content.percent" default="percent"></x-tr></span>
+          <input type="radio" id="displaymotionpercent" name="motiondisplay" value="displaymotionpercent" />
+          <label for="displaymotionpercent"><x-tr key="content.percent" default="percent"></x-tr></label>
         </div>
         <div class='inlined-radio'>
-          <input type="radio" id="displaymotiontime" name="motiondisplay" value="displaymotiontime">
-          <span for="displaymotiontime"><x-tr key="content.time" default="time"></x-tr></span>
+          <input type="radio" id="displaymotiontime" name="motiondisplay" value="displaymotiontime" />
+          <label for="displaymotiontime"><x-tr key="content.time" default="time"></x-tr></label>
         </div>
       </div>
     </div>
 
-    <!-- Current target settings -->
-    <div>
-      <label for="showtarget"><x-tr key="options.showUtilizationTarget" default="Show utilization target"></x-tr>
-        <input type="checkbox" id="showtarget" autocomplete="off" /></label>
+    <!-- Utilization target settings -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showtarget"><x-tr key="options.showUtilizationTarget"
+            default="Show utilization target"></x-tr></label>
+        <input type="checkbox" id="showtarget" autocomplete="off" />
+      </div>
     </div>
 
-    <!-- Current tool settings -->
-    <label for="showcurrent"><x-tr key="options.currentDataSelection" default="Current..."></x-tr>
-      <input type="checkbox" id="showcurrent" autocomplete="off" />
-    </label>
-    <!-- Current tool / sequence / none -->
-    <div class="subgroup radiogroup showcurrentdetails">
-      <div class='inlined-radio'>
-        <input type="radio" id="showcurrenttool" name="showcurrent" value="showcurrenttool" />
-        <span for="showcurrenttool"><x-tr key="content.tool" default="tool"></x-tr></span>
+    <!-- Current data selection -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showcurrent"><x-tr key="options.currentDataSelection" default="Current..."></x-tr></label>
+        <input type="checkbox" id="showcurrent" autocomplete="off" />
       </div>
-      <div class='inlined-radio'>
-        <input type="radio" id="showcurrentsequence" name="showcurrent" value="showcurrentsequence" />
-        <span for="showcurrentsequence"><x-tr key="content.sequence" default="sequence"></x-tr></span>
+      <div class="subgroup radiogroup showcurrentdetails">
+        <div class='inlined-radio'>
+          <input type="radio" id="showcurrenttool" name="showcurrent" value="showcurrenttool" />
+          <label for="showcurrenttool"><x-tr key="content.tool" default="tool"></x-tr></label>
+        </div>
+        <div class='inlined-radio'>
+          <input type="radio" id="showcurrentsequence" name="showcurrent" value="showcurrentsequence" />
+          <label for="showcurrentsequence"><x-tr key="content.sequence" default="sequence"></x-tr></label>
+        </div>
       </div>
     </div>
 
     <!-- Current alarm settings -->
-    <div>
-      <label for="showalarm"><x-tr key="options.showCurrentAlarm" default="Show current alarm"></x-tr>
-        <input type="checkbox" id="showalarm" autocomplete="off" /></label>
-    </div>
-
-    <!-- Current stacklight settings -->
-    <div>
-      <label for="showstacklight"><x-tr key="options.showStackLights" default="Show stack lights"></x-tr>
-        <input type="checkbox" id="showstacklight" autocomplete="off" /></label>
-    </div>
-
-    <!-- Current weekly settings -->
-    <div>
-      <label for="showweeklybar"><x-tr key="options.showSecondUtilizationBar" default="Show second utilization bar"></x-tr>
-        <input type="checkbox" id="showweeklybar" autocomplete="off" /></label>
-    </div>
-    <!--Weekly = current week or last 7 days -->
-    <div class="subgroup radiogroup showweeklydetails">
-      <div class='inlined-radio'>
-        <input type="radio" id="showlast7days" name="showweeklyperiod" value="showlast7days" />
-        <span for="showlast7days"><x-tr key="content.last7days" default="Last 7 days"></x-tr></span>
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showalarm"><x-tr key="options.showCurrentAlarm"
+            default="Show current alarm"></x-tr></label>
+        <input type="checkbox" id="showalarm" autocomplete="off" />
       </div>
-      <div class='inlined-radio'>
-        <input type="radio" id="showcurrentweek" name="showweeklyperiod" value="showcurrentweek" />
-        <span for="showcurrentweek"><x-tr key="content.currentWeek" default="Current week"></x-tr></span>
+    </div>
+
+    <!-- Stacklight settings -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showstacklight"><x-tr key="options.showStackLights"
+            default="Show stack lights"></x-tr></label>
+        <input type="checkbox" id="showstacklight" autocomplete="off" />
+      </div>
+    </div>
+
+    <!-- Second utilization bar settings -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showweeklybar"><x-tr key="options.showSecondUtilizationBar"
+            default="Show second utilization bar"></x-tr></label>
+        <input type="checkbox" id="showweeklybar" autocomplete="off" />
+      </div>
+      <div class="subgroup radiogroup showweeklydetails">
+        <div class='inlined-radio'>
+          <input type="radio" id="showlast7days" name="showweeklyperiod" value="showlast7days" />
+          <label for="showlast7days"><x-tr key="content.last7days" default="Last 7 days"></x-tr></label>
+        </div>
+        <div class='inlined-radio'>
+          <input type="radio" id="showcurrentweek" name="showweeklyperiod" value="showcurrentweek" />
+          <label for="showcurrentweek"><x-tr key="content.currentWeek" default="Current week"></x-tr></label>
+        </div>
       </div>
     </div>
   </div>

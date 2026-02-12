@@ -261,10 +261,6 @@
         left: 43%; // 50 - width/2
         top: 30%; // = 40 - height/2 = Not in the middle, but above (to se text too)
 
-        x-reasonbutton {
-          // Center
-          //transform: translate(-50%, -50%); // Not needed !
-        }
       }
     }
   }
@@ -302,13 +298,14 @@
 x-currentworkinfo {
   display: block;
   text-align: center;
-  background-color: @widget_background; // @box_header_color;
-  color: @widget_text;
-  border-bottom: solid 1px @color_window_alternate_border;
-  border-top: solid 1px @color_window_alternate_border;
-  height: 1.5em; // To force height even if no data - ONE LINE
+  color: @color_text;
+  font-size: 1.2em;
+  min-height: 1.5em; // To force height even if no data - ONE LINE
   padding: 2px 0 0 0; // For Edge top padding....
+  font-weight: bold;  // Bottom display .machinestatus-weekly-info { text-align: center; color: @color_text; font-size: 1.2em; min-height: 1.5em; // To force height even if no data - ONE LINE padding: 2px 0 0 0; // For Edge top padding.... font-weight: bold;
   box-sizing: border-box;
+  overflow: hidden; // For Chrome, small display = avoid 2 lines
+  margin-bottom: 0;
 
   overflow: hidden; // For Chrome, small display = avoid 2 lines
 }

@@ -8,190 +8,218 @@ SPDX-License-Identifier: Apache-2.0
 <div class="param-group group-options">
   <div class="param-group-header group-options">
     <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
-    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
+        default="reset"></x-tr></button>
   </div>
 
   <div class="param-group-content group-options">
 
+    <!-- Operation settings -->
     <div class="labelsubgroup">
-      <label for="showworkinfo"><x-tr key="options.showOperation" default="Show operation"></x-tr>
+      <div class='labelheader'>
+        <label for="showworkinfo"><x-tr key="options.showOperation" default="Show operation"></x-tr></label>
         <input type="checkbox" id="showworkinfo" autocomplete="off" />
-      </label>
-      <!-- Normal or BIG display -->
+      </div>
       <div class="subgroup radiogroup showworkinfodetails">
         <div class='inlined-radio'>
           <input type="radio" id="showworkinfosmall" class="showworkinfosmall" name="showworkinfo"
             value="showworkinfosmall" />
-          <span for="showworkinfosmall"><x-tr key="options.sizeSmall" default="Small"></x-tr></span>
+          <label for="showworkinfosmall"><x-tr key="options.sizeSmall" default="Small"></x-tr></label>
         </div>
         <div class='inlined-radio'>
           <input type="radio" id="showworkinfobig" class="showworkinfobig" name="showworkinfo"
             value="showworkinfobig" />
-          <span for="showworkinfobig"><x-tr key="options.sizeBig" default="Big"></x-tr></span>
+          <label for="showworkinfobig"><x-tr key="options.sizeBig" default="Big"></x-tr></label>
         </div>
       </div>
     </div>
-    <!-- currentmachinestatus settings -->
-    <div class="labelsubgroup">
-      <label for="showcurrentmachinestatuslogo"><x-tr key="options.showcurrentmachinestatuslogo" default="show status logo"></x-tr>
-        <input type="checkbox" id="showcurrentmachinestatuslogo" autocomplete="off" />
-      </label>
-      <label for="showcurrentmachinestatusletter"><x-tr key="options.showcurrentmachinestatusletter" default="show status"></x-tr>
-        <input type="checkbox" id="showcurrentmachinestatusletter" autocomplete="off" />
-      </label>
 
+    <!-- Current machine status settings -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showcurrentmachinestatuslogo"><x-tr key="options.showcurrentmachinestatuslogo"
+            default="show status logo"></x-tr></label>
+        <input type="checkbox" id="showcurrentmachinestatuslogo" autocomplete="off" />
+      </div>
+    </div>
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showcurrentmachinestatusletter"><x-tr key="options.showcurrentmachinestatusletter"
+            default="show status"></x-tr></label>
+        <input type="checkbox" id="showcurrentmachinestatusletter" autocomplete="off" />
+      </div>
     </div>
 
-        <!-- threshold and target settings -->
+    <!-- Thresholds color settings -->
     <div class="labelsubgroup">
-      <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
+      <div class='labelheader'>
+        <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
+      </div>
       <div class="subgroup radiogroup">
         <div class='inlined-radio'>
-          <label for="thresholdtargetproduction"><x-tr key="options.target" default="Target"></x-tr>
-            <input type="number" id="thresholdtargetproduction" value="0" step="1" min="0" autocomplete="off" />
-          </label>
-          <label for="thresholdredproduction"><x-tr key="options.thresholdRed" default="Red"></x-tr>
-            <input type="number" id="thresholdredproduction" value="0" step="1" min="0" autocomplete="off" />
-          </label>
+          <label for="thresholdtargetproduction"><x-tr key="options.target" default="Target"></x-tr></label>
+          <input type="number" id="thresholdtargetproduction" value="0" step="1" min="0" autocomplete="off" />
+        </div>
+        <div class='inlined-radio'>
+          <label for="thresholdredproduction"><x-tr key="options.thresholdRed" default="Red"></x-tr></label>
+          <input type="number" id="thresholdredproduction" value="0" step="1" min="0" autocomplete="off" />
         </div>
       </div>
       <div class="thresholdunitispart"></div>
     </div>
 
-
-
-    <!-- PMS settings -->
+    <!-- Production/Part count settings -->
     <div class="labelsubgroup">
-      <label for="showproductionoperation"><x-tr key="options.showPartCount" default="Show part count"></x-tr>
+      <div class='labelheader'>
+        <label for="showproductionoperation"><x-tr key="options.showPartCount" default="Show part count"></x-tr></label>
         <input type="checkbox" id="showproductionoperation" autocomplete="off" />
-      </label>
-      <div class="subgroup radiogroup showproductionoperationdetails ">
+      </div>
+      <div class="subgroup radiogroup showproductionoperationdetails">
         <div class='inlined-radio'>
           <input type="radio" id="productionpercent" name="showproduction" value="productionpercent" />
-          <span for="productionpercent"><x-tr key="content.percent" default="percent"></x-tr></span>
+          <label for="productionpercent"><x-tr key="content.percent" default="percent"></x-tr></label>
         </div>
         <div class='inlined-radio'>
           <input type="radio" id="productionactualtarget" name="showproduction" value="productionactualtarget" />
-          <span for="productionactualtarget"><x-tr key="content.actualVsTarget" default="actual/target"></x-tr></span>
+          <label for="productionactualtarget"><x-tr key="content.actualVsTarget"
+              default="actual/target"></x-tr></label>
         </div>
         <div class='inlined-radio'>
           <input type="radio" id="productionactualonly" name="showproduction" value="productionactualonly" />
-          <span for="productionactualtarget"><x-tr key="content.actual" default="actual"></x-tr></span>
+          <label for="productionactualonly"><x-tr key="content.actual" default="actual"></x-tr></label>
         </div>
       </div>
     </div>
 
+    <!-- Current data selection -->
     <div class="labelsubgroup">
-      <label for="showcurrent"><x-tr key="options.currentDataSelection" default="Current..."></x-tr>
+      <div class='labelheader'>
+        <label for="showcurrent"><x-tr key="options.currentDataSelection" default="Current..."></x-tr></label>
         <input type="checkbox" id="showcurrent" autocomplete="off" />
-      </label>
-      <!-- Current tool / sequence / none -->
+      </div>
       <div class="subgroup radiogroup showcurrentdetails">
         <div class='inlined-radio'>
           <input type="radio" id="showcurrenttool" name="showcurrent" value="showcurrenttool" />
-          <span for="showcurrenttool"><x-tr key="content.tool" default="Tool"></x-tr></span>
+          <label for="showcurrenttool"><x-tr key="content.tool" default="Tool"></x-tr></label>
         </div>
         <div class='inlined-radio'>
           <input type="radio" id="showcurrentsequence" name="showcurrent" value="showcurrentsequence" />
-          <span for="showcurrentsequence"><x-tr key="content.sequence" default="sequence"></x-tr></span>
+          <label for="showcurrentsequence"><x-tr key="content.sequence" default="sequence"></x-tr></label>
         </div>
         <div class='inlined-radio'>
           <input type="radio" id="showcurrentoverride" name="showcurrent" value="showcurrentoverride" />
-          <span for="showcurrentoverride"><x-tr key="content.overrides" default="overrides"></x-tr></span>
+          <label for="showcurrentoverride"><x-tr key="content.overrides" default="overrides"></x-tr></label>
         </div>
       </div>
     </div>
 
     <!-- Current alarm settings -->
     <div class="labelsubgroup">
-      <label for="showalarmoperation"><x-tr key="options.showCurrentAlarm" default="Show current alarm"></x-tr>
+      <div class='labelheader'>
+        <label for="showalarmoperation"><x-tr key="options.showCurrentAlarm"
+            default="Show current alarm"></x-tr></label>
         <input type="checkbox" id="showalarmoperation" autocomplete="off" />
-      </label>
-
+      </div>
       <div class="subgroup showalarmdetails">
-        <label for="showAlarmBelowIcon"><x-tr key="options.alarmsWithDetails" default="with alarm details"></x-tr>
+        <div class='inlined-radio'>
           <input type="checkbox" id="showAlarmBelowIcon" autocomplete="off" />
-        </label>
-        <label for="showUnknownAlarm"><x-tr key="options.alarmsUnknown" default="show unknown alarms"></x-tr>
+          <label for="showAlarmBelowIcon"><x-tr key="options.alarmsWithDetails"
+              default="with alarm details"></x-tr></label>
+        </div>
+        <div class='inlined-radio'>
           <input type="checkbox" id="showUnknownAlarm" autocomplete="off" />
-        </label>
+          <label for="showUnknownAlarm"><x-tr key="options.alarmsUnknown"
+              default="show unknown alarms"></x-tr></label>
+        </div>
       </div>
     </div>
 
     <!-- Pie settings -->
     <div class="labelsubgroup">
-      <label for="showpie"><x-tr key="options.showPie" default="Show pie"></x-tr>
+      <div class='labelheader'>
+        <label for="showpie"><x-tr key="options.showPie" default="Show pie"></x-tr></label>
         <input type="checkbox" id="showpie" autocomplete="off" />
-      </label>
-      <div class="subgroup radiogroup showproductionorpercent showpiedetails">
+      </div>
+      <div class="subgroup radiogroup showpiedetails">
         <div class='inlined-radio'>
-          <input type="radio" id="productionpercentinpie" name="showproductioninpie" value="productionpercentinpie" />
-          <span for="productionpercentinpie"><x-tr key="content.percent" default="percent"></x-tr></span>
+          <input type="radio" id="productionpercentinpie" name="showproductioninpie"
+            value="productionpercentinpie" />
+          <label for="productionpercentinpie"><x-tr key="content.percent" default="percent"></x-tr></label>
         </div>
         <div class='inlined-radio'>
           <input type="radio" id="productionactualtargetinpie" name="showproductioninpie"
             value="productionactualtargetinpie" />
-          <span for="productionactualtargetinpie"><x-tr key="content.actualVsTarget" default="actual/target"></x-tr></span>
+          <label for="productionactualtargetinpie"><x-tr key="content.actualVsTarget"
+              default="actual/target"></x-tr></label>
         </div>
         <div class='inlined-radio'>
           <input type="radio" id="productionactualonlyinpie" name="showproductioninpie"
             value="productionactualonlyinpie" />
-          <span for="productionactualonlyinpie"><x-tr key="content.actual" default="actual"></x-tr></span>
+          <label for="productionactualonlyinpie"><x-tr key="content.actual" default="actual"></x-tr></label>
         </div>
       </div>
     </div>
 
+    <!-- Stacklights settings -->
     <div class="labelsubgroup">
-      <label for="showstacklight"><x-tr key="options.showStackLights" default="Show stacklights"></x-tr>
+      <div class='labelheader'>
+        <label for="showstacklight"><x-tr key="options.showStackLights" default="Show stacklights"></x-tr></label>
         <input type="checkbox" id="showstacklight" autocomplete="off" />
-      </label>
+      </div>
     </div>
 
-    <!-- Iso file settings -->
+    <!-- ISO file settings -->
     <div class="labelsubgroup">
-      <label for="showisofile"><x-tr key="options.showNcProgram" default="Show NC program"></x-tr>
+      <div class='labelheader'>
+        <label for="showisofile"><x-tr key="options.showNcProgram" default="Show NC program"></x-tr></label>
         <input type="checkbox" id="showisofile" autocomplete="off" />
-      </label>
+      </div>
     </div>
 
     <!-- Tools settings -->
     <div class="labelsubgroup">
-      <label for="showtooloperation"><x-tr key="options.toolsExpiring" default="Expiring tools"></x-tr>
+      <div class='labelheader'>
+        <label for="showtooloperation"><x-tr key="options.toolsExpiring" default="Expiring tools"></x-tr></label>
         <input type="checkbox" id="showtooloperation" autocomplete="off" />
-      </label>
+      </div>
       <div class="subgroup showtoolsdetails">
-        <label for="showtoollabels">
-          <select name="showtoollabels" id="showtoolselector">
-          </select>
-        </label>
-        <label for="showtoolremaining"><x-tr key="options.showRemainingCycles" default="Show remaining cycles"></x-tr>
-          <input type="checkbox" id="showtoolremaining" />
-        </label>
+        <label for="showtoolselector"><x-tr key="options.toolSelection" default="Tool selection"></x-tr></label>
+        <select name="showtoollabels" id="showtoolselector">
+        </select>
+        <div class='inlined-radio'>
+          <input type="checkbox" id="showtoolremaining" autocomplete="off" />
+          <label for="showtoolremaining"><x-tr key="options.showRemainingCycles"
+              default="Show remaining cycles"></x-tr></label>
+        </div>
       </div>
     </div>
 
     <!-- Bar settings -->
     <div class="labelsubgroup">
-      <label for="showbaroperation"><x-tr key="options.showUtilizationBar" default="Show machine utilization bar"></x-tr>
+      <div class='labelheader'>
+        <label for="showbaroperation"><x-tr key="options.showUtilizationBar"
+            default="Show machine utilization bar"></x-tr></label>
         <input type="checkbox" id="showbaroperation" autocomplete="off" />
-      </label>
+      </div>
       <div class="subgroup showbardetails">
         <div class="radiogroup">
           <div class='inlined-radio'>
-            <input type="radio" id="barrangeisday" name="barperiod" value="barrangeisday">
-            <span for="barrangeisday"><x-tr key="content.currentDay" default="current day"></x-tr></span>
+            <input type="radio" id="barrangeisday" name="barperiod" value="barrangeisday" />
+            <label for="barrangeisday"><x-tr key="content.currentDay" default="current day"></x-tr></label>
           </div>
           <div class='inlined-radio'>
-            <input type="radio" id="displayshiftrange" name="barperiod" value="displayshiftrange">
-            <span for="displayshiftrange"><x-tr key="content.currentShift" default="current shift"></x-tr></span>
+            <input type="radio" id="displayshiftrange" name="barperiod" value="displayshiftrange" />
+            <label for="displayshiftrange"><x-tr key="content.currentShift" default="current shift"></x-tr></label>
           </div>
         </div>
-        <label for="showbar-alarms"><x-tr key="options.showAlarms" default="Show alarms"></x-tr>
-          <input type="checkbox" id="showbar-alarms" />
-        </label>
-        <label for="showbar-percent"><x-tr key="options.showPercent" default="Show percent"></x-tr>
-          <input type="checkbox" id="showbar-percent" />
-        </label>
+        <div class='inlined-radio'>
+          <input type="checkbox" id="showbar-alarms" autocomplete="off" />
+          <label for="showbar-alarms"><x-tr key="options.showAlarms" default="Show alarms"></x-tr></label>
+        </div>
+        <div class='inlined-radio'>
+          <input type="checkbox" id="showbar-percent" autocomplete="off" />
+          <label for="showbar-percent"><x-tr key="options.showPercent" default="Show percent"></x-tr></label>
+        </div>
       </div>
     </div>
 
