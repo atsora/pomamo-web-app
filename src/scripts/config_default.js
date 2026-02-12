@@ -247,6 +247,7 @@ PULSE_DEFAULT_CONFIG.pages = {
       cncvalue: true,
       click: {
         allbars: 'change',
+        reason: 'stopclassification'
       },
     }
   },
@@ -418,6 +419,7 @@ PULSE_DEFAULT_CONFIG.roles.operator.showcoloredbar = {
   click: {
     allbars: 'change',
     cncvalue: 'popup',
+    reason: 'stopclassification'
   },
   showdetails: [ //clickDisplayedDetails: [  == same as default - mandatory to allow single change
     'x-detailedreasonat',
