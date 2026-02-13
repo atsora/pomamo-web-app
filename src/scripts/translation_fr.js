@@ -45,6 +45,7 @@ ATSORA_LOCALE_CATALOG.fr.options = {
   sizeBig: "Grand",
   sizeSmall: "Petit",
   stopClassificationReopenDelay: 'Délai de réouverture (secondes)',
+  timeFrame: 'Période',
   timeFrameDays: "Jour(s)",
   timeFrameHours: 'Heure(s)',
   timeFrameSelection: 'Période : ',
@@ -55,6 +56,7 @@ ATSORA_LOCALE_CATALOG.fr.options = {
   thresholdOrange: 'Orange',
   thresholdPositiveError: 'Les seuils doivent être positifs',
   thresholdRed: 'Rouge',
+  toolSelection:'Sélection d\'outils',
   toolsExpiring: 'Outils expirés',
   thresholdMode: 'Mode de seuil',
   target: 'Objectif'
