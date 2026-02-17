@@ -609,6 +609,17 @@ var populateConfigPanel = function (currentPageMethods) {
       nextSeparator = '&';
     }
 
+    // On boucle pour récupérer tous les ancêtres stockés en mémoire
+    // et les remettre dans l'URL générée pour la copie.
+    for (let i = 1; i <= 20; i++) {
+      let val = pulseConfig.getString('ancestor' + i);
+      if (val && val !== '') {
+        url += '&ancestor' + i + '=' + val;
+      } else {
+        break; // On arrête dès qu'il n'y a plus d'ancêtre
+      }
+    }
+
     // GROUPS (when enabled)
     if (pulseConfig.getBool('enableGroups', false)) {
       // If not, we don't update the group list (it can be recalled in another page)
@@ -944,157 +955,106 @@ var isFullScreen = function () {
  *  - buildContent: optional function that build the content, if getMissingConfigs returns empty
  */
 exports.preparePage = function (currentPageMethods) {
+  // 1. Nettoyage préventif complet (Mémoire)
+  pulseConfig.setGlobal('machine', '');
+  pulseConfig.setGlobal('group', '');
+  for (let i = 1; i <= 20; i++) {
+    pulseConfig.set('ancestor' + i, '');
+  }
 
-  pulseConfig.setGlobal('machine', '');  // Remove
-  pulseConfig.setGlobal('group', '');   // Remove
-  pulseConfig.set('machine', '');       // Remove page-specific value
-  pulseConfig.set('group', '');        // Remove page-specific value
-  // Remove config from displayed URL and store them
-  let needReload = false;
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const pageName = pulseConfig.getPageName();
-  const preserveAncestorParams = (pageName === 'productiontracker');
-  const groupValues = params.getAll('group');
-  const machineValues = params.getAll('machine');
 
+  // 2. Sauvegarde Config (Ancestors + Group + Machine)
   params.forEach((value, key) => {
-    if (key === 'AppContext') {
-      return;
-    }
-
-    if (key === 'group' || key === 'machine') {
-      url.searchParams.delete(key);
-      needReload = true;
-      return;
-    }
-
     if (key.startsWith('ancestor')) {
       pulseConfig.set(key, value);
-      if (!preserveAncestorParams) {
-        url.searchParams.delete(key);
-        needReload = true;
-      }
-      return;
     }
-
-    pulseConfig.set(key, value);
-    url.searchParams.delete(key);
-    needReload = true;
   });
 
+  const groupValues = params.getAll('group');
   if (groupValues.length > 0) {
-    pulseConfig.set('group', groupValues.join(','), true);
-  } else {
-    // No group selection -> clear ancestor system
-    for (const key of Array.from(params.keys())) {
-      if (key.startsWith('ancestor')) {
-        url.searchParams.delete(key);
-        pulseConfig.set(key, '');
-        needReload = true;
-      }
-    }
+    const val = groupValues.filter(v => v !== "").join(',');
+    pulseConfig.set('group', val, true);
   }
+
+  const machineValues = params.getAll('machine');
   if (machineValues.length > 0) {
-    pulseConfig.set('machine', machineValues.join(','), true);
+    const valMachine = machineValues.filter(v => v !== "").join(',');
+    pulseConfig.set('machine', valMachine, true);
   }
 
-  if (needReload) {
-    window.open(url.toString(), '_self');
-  }
+  // Autres configs
+  const configsToSave = ['row', 'column', 'rotation', 'title', 'showlegend', 'showworkinfo', 'thresholdtargetproduction', 'thresholdredproduction'];
+  configsToSave.forEach(conf => {
+    if (params.has(conf)) {
+      pulseConfig.set(conf, params.get(conf));
+    }
+  });
 
-  $.ajaxSetup({
-    cache: false
-  }); /*remove cache for IE and Edge */
+  // 3. Maquillage de l'URL (Pour que le bouton Zoom fonctionne, on garde les ancestors)
+  const newParams = new URLSearchParams();
+  if (params.has('AppContext')) newParams.set('AppContext', params.get('AppContext'));
 
-  // Add appcontext-live class if AppContext is 'live'
-  if ('live' == pulseUtility.getURLParameter(window.location.href, 'AppContext')) {
-    $('.pulse-content').addClass('appcontext-live');
-  }
+  // On garde les ancêtres dans l'URL pour x-zoominpagebutton
+  params.forEach((value, key) => {
+    if (key.startsWith('ancestor')) newParams.set(key, value);
+  });
 
-  // Create common elements - MUST BE DONE FIRST !!! Before ALL other xTag
-  //initializeCheckers();- DONE in html
+  let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+  if (newParams.toString()) newUrl += '?' + newParams.toString();
 
-  // Prepare the navigation menu
+  window.history.replaceState({ path: newUrl }, '', newUrl);
+
+  // 4. Initialisation UI
+  $.ajaxSetup({ cache: false });
+  if (params.get('AppContext') == 'live') $('.pulse-content').addClass('appcontext-live');
+
   populateNavigationPanel();
   setNavigationLinks();
   initParameterPanel();
-
-  // Open / close panels when click on them
   animatePanels();
 
-
-  // Handle fullscreen button click, toggle fullscreen mode
-  $('#fullscreenbtn').click(function (e) {
-    if (isFullScreen()) {
-      exitFullScreen();
-    } else {
-      enterFullScreen();
-    }
+  $('#fullscreenbtn').click(function () {
+    if (isFullScreen()) exitFullScreen(); else enterFullScreen();
   });
 
-
-  // Display elements
-  let pageNameFromUrl = window.location.href.replace(/(.*\/)([^\\]*)(\.html.*)/, '$2');
-
-  // Theme switcher (to be adapted if more than 2 themes are available) and initialization
   $('#darkthemebtn').prop('checked', themeManager.current() == 'dark');
   $('#darkthemebtn').click(function () {
-    themeManager.load(themeManager.current() == 'light' ? 'dark' : 'light'); // Idea: create a toggle function?
+    themeManager.load(themeManager.current() == 'light' ? 'dark' : 'light');
   });
 
-  // == _setPageTitle
+  let pageNameFromUrl = pulseUtility.getCurrentPageName();
   let title1 = pulseConfig.pulseTranslate('general.title', 'Atsora Tracking');
   let title2 = pulseConfig.pulseTranslate('pages.' + pageNameFromUrl + '.title', '');
-
   if (pageNameFromUrl != 'login') {
     let override = pulseConfig.getString('title');
-    if (override != null && override != '')
-      title2 = decodeURIComponent(override);
+    if (override) title2 = decodeURIComponent(override);
   }
   $('head').find('title').html(title2 + (title2 != '' ? ' - ' : '') + title1);
   $('.pulse-header-title span').html((title2 != '' ? title2 : title1).toUpperCase());
 
-  // Check the configuration
+  // Vérification Config
   let configOk = true;
   if (typeof currentPageMethods.getMissingConfigs === 'function') {
-    let missingConfigs = currentPageMethods.getMissingConfigs();
-    configOk = (missingConfigs.length == 0);
+    configOk = (currentPageMethods.getMissingConfigs().length == 0);
+  }
+  if (configOk) closeParameterPanel(true); else openParameterPanel(true);
+  if ('home' == pageNameFromUrl) openNavigationPanel(true); else closeNavigationPanel(true);
+  if ($('.legend-content').length > 0 && $('.legend-content')[0].childElementCount > 1) showLegend();
 
-
-  }
-  if (configOk) {
-    closeParameterPanel(true);
-  }
-  else {
-    openParameterPanel(true);
-  }
-  if ('home' == pageNameFromUrl) {
-    openNavigationPanel(true);
-  }
-  else {
-    closeNavigationPanel(true);
-  }
-
-  // Show legend
-  let legendIsEmpty = ($('.legend-content')[0].childElementCount <= 1);
-  if (!legendIsEmpty)
-    showLegend();
-
-  // Build PAGE content
+  // Construction Contenu
   if (typeof currentPageMethods.buildContent === 'function')
     currentPageMethods.buildContent();
 
-  // Grid
   if (pulseConfig.getBool('canUseRowsToSetHeight'))
     $('.pulse-mainarea-inner').addClass('gridFullHeight');
   else
     $('.pulse-mainarea-inner').removeClass('gridFullHeight');
 
-  // Populate the configuration panel
   populateConfigPanel(currentPageMethods);
 
-  // Inline svg. The latest possible
+  // SVGs
   pulseSvg.inlineBackgroundSvg('#navigationpanelbtn');
   pulseSvg.inlineBackgroundSvg('#configpanelbtn');
   pulseSvg.inlineBackgroundSvg('#fullscreenbtn');
@@ -1102,4 +1062,12 @@ exports.preparePage = function (currentPageMethods) {
   pulseSvg.inlineBackgroundSvg('#help-icon');
   pulseSvg.inlineBackgroundSvg('.legend-toggle-icon-up');
   pulseSvg.inlineBackgroundSvg('.legend-toggle-icon-down');
+
+  // --- CRUCIAL : FORCER LE RAFRAICHISSEMENT DE X-ANCESTORS ---
+  // Comme il s'est initialisé AVANT le nettoyage, on le force à se redessiner MAINTENANT
+  $('x-ancestors').each(function () {
+    if (this.initialize) {
+      this.initialize();
+    }
+  });
 };
