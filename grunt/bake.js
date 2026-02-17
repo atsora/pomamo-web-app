@@ -125,13 +125,13 @@ module.exports = {
       dest: 'dist-es2015/operationstatus.html'
     }]
   },
-  operatordashboard: {
+  machinedashboard: {
     options: {
-      content: { pagename: 'operatordashboard' }
+      content: { pagename: 'machinedashboard' }
     },
     files: [{
       src: 'src/pages/template.html',
-      dest: 'dist-es2015/operatordashboard.html'
+      dest: 'dist-es2015/machinedashboard.html'
     }]
   },
   performancebar: {

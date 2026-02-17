@@ -227,7 +227,7 @@ PULSE_DEFAULT_CONFIG.pages = {
       },*/
     }
   },
-  operatordashboard: {
+  machinedashboard: {
     showChangedTools: true,
     showproductionbar: true,
     openStopClassification: true, // Enable automatic opening of stop classification dialog
@@ -327,7 +327,7 @@ PULSE_DEFAULT_CONFIG.pages = {
 
 /* displayedPages: array containing the pages available for the role, in the right order */
 PULSE_DEFAULT_CONFIG.roles.operator.displayedPages = [
-  'operatordashboard',
+  'machinedashboard',
   'running',
   //'productionmachining',
   //scheduledstatus',
@@ -370,7 +370,7 @@ PULSE_DEFAULT_CONFIG.roles.live.displayedPages = [
 PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [ // ALL
   'running', 'productionmachining',
   'scheduledstatus',
-  'toollife', 'machines', 'operatordashboard',
+  'toollife', 'machines', 'machinedashboard',
   'operationstatus',
   'managementinformationterminal',
   'utilizationbar', 'utilizationpie',
@@ -653,7 +653,7 @@ PULSE_DEFAULT_CONFIG.rolespages = {
     machines: {
       // Yes. Keep it empty to allow modifications
     },
-    operatordashboard: {
+    machinedashboard: {
       // Yes. Keep it empty to allow modifications
     },
     running: {
@@ -676,7 +676,7 @@ PULSE_DEFAULT_CONFIG.rolespages = {
       ],
       showIgnoredAlarm: true // used in x-detailedalarmsat and currenticoncncalarm
     },
-    operatordashboard: {
+    machinedashboard: {
       showIgnoredAlarm: true // used in x-detailedalarmsat and currenticoncncalarm
     },
     managementinformationterminal: {
