@@ -151,7 +151,7 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   oeeview: {
     title: 'OEE view'
   },
-  operatordashboard: {
+  machinedashboard: {
     title: 'Dashboard'
   },
   productionmachining: {
@@ -367,7 +367,7 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   oeeview: {
     title: 'Vue TRS'
   },
-  operatordashboard: {
+  machinedashboard: {
     title: 'Tableau de bord'
   },
   machinespecification: {
