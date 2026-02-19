@@ -619,9 +619,6 @@ PULSE_DEFAULT_CONFIG.rolespages = {
       showcoloredbar: {
         cncvalue: true
       }
-    },
-    oeeview: {
-      showPeriodtoolbar: true
     }
   },
   support: {

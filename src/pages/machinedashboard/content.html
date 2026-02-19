@@ -36,23 +36,23 @@ SPDX-License-Identifier: Apache-2.0
                     <div class="performance-display-wrapper">
                         <div class="numbers-content">
                             <div class="specificnumber-content production-content">
-                                <x-production machine-context="PulseWebApp"></x-production>
+                                <x-production machine-context="PulseWebApp" period-context="machinedashboard"></x-production>
                             </div>
                             <div class="specificnumber-content goal-content">
-                                <x-productionshiftgoal machine-context="PulseWebApp"
+                                <x-productionshiftgoal machine-context="PulseWebApp" period-context="machinedashboard"
                                 class="title-number-content text"></x-productionshiftgoal>
                             </div>
                         </div>
 
                         <x-defaultpie machine-context="PulseWebApp"></x-defaultpie>
-                        <x-productiongauge machine-context="PulseWebApp" motion-context='PulseWebApp'></x-productiongauge>
+                        <x-productiongauge machine-context="PulseWebApp" period-context="machinedashboard" motion-context='PulseWebApp'></x-productiongauge>
                     </div>
 
                     <div class="perf-tool-container">
                         <div class="title-number-content" id="performance-container">
                             <!-- <x-tr class="text" key="content.performance" default="Performance"></x-tr>  possibilité d'afficher le title performance-->
                             <div class="performancebar-bar-border">
-                                <x-productionbar machine-context='PulseWebApp' motion-context='PulseWebApp'></x-productionbar>
+                                <x-productionbar machine-context='PulseWebApp' motion-context='PulseWebApp' period-context="machinedashboard"></x-productionbar>
                             </div>
                         </div>
 
