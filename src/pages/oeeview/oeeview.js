@@ -251,7 +251,24 @@ class OeeViewPage extends pulsePage.BasePage {
     }).join('');
   }
 
+  buildContent() {
+    // 1. Gestion du mode d'affichage de la jauge (Percent / Ratio)
+    let showPercent = pulseConfig.getBool('showpercent');
+    let displayMode = showPercent ? 'percent' : 'ratio';
+    // On applique l'attribut à toutes les jauges (y compris les clones)
+    $('x-productiongauge').attr('display-mode', displayMode);
+
+    // 2. Gestion de l'affichage de WorkInfo
+    let showworkinfo = pulseConfig.getBool('showworkinfo');
+    if (showworkinfo) {
+      $('x-workinfo').show();
+    } else {
+      $('x-workinfo').hide();
+    }
+  }
 }
+
+
 
 $(document).ready(function () {
   pulsePage.preparePage(new OeeViewPage());
