@@ -30,7 +30,7 @@ require('x-tr/x-tr');
 require('x-openstopclassificationlistener/x-openstopclassificationlistener');
 require('x-defaultpie/x-defaultpie');
 require('x-motionpercentage/x-motionpercentage');
-require('x-scrapstatus/x-scrapstatus');
+/* require('x-scrapstatus/x-scrapstatus'); */
 require('x-periodmanager/x-periodmanager');
 require('x-productionbar/x-productionbar');
 require('x-productiongauge/x-productiongauge');
@@ -81,93 +81,133 @@ class machinedashboardPage extends pulsePage.BasePage {
   }
 
   initOptionValues() {
-    // Show changed tools
-    const updateChronologyMargin = () => {
-      const changedToolsVisible = document.querySelector('.changedtools-content') &&
-        getComputedStyle(document.querySelector('.changedtools-content')).display !== 'none';
-    };
+    // --- 1. SHOW CHANGED TOOLS ---
+    $('#showChangedTools').prop('checked', pulseConfig.getBool('showChangedTools'));
+    if (pulseConfig.getDefaultBool('showChangedTools') != pulseConfig.getBool('showChangedTools'))
+      $('#showChangedTools').attr('overridden', 'true');
+    $('#showChangedTools').change(function () {
+      let show = $('#showChangedTools').is(':checked');
+      pulseConfig.set('showChangedTools', show);
+      if (show) $('.changedtools-content').css('display', 'flex');
+      else $('.changedtools-content').hide();
+    });
 
-    this._showOption('showChangedTools', function () {
-      document.querySelector('.changedtools-content').style.display = 'flex';
-      updateChronologyMargin();
-    },
-      function () {
-        document.querySelector('.changedtools-content').style.display = 'none';
-        updateChronologyMargin();
-      });
+    // --- 2. OPEN STOP CLASSIFICATION ---
+    $('#openStopClassification').prop('checked', pulseConfig.getBool('openStopClassification'));
+    if (pulseConfig.getDefaultBool('openStopClassification') != pulseConfig.getBool('openStopClassification'))
+      $('#openStopClassification').attr('overridden', 'true');
+    $('#openStopClassification').change(() => {
+      let show = $('#openStopClassification').is(':checked');
+      pulseConfig.set('openStopClassification', show);
+      if (show) this._createOpenStopClassificationListener();
+      else this._deleteOpenStopClassificationListener();
+    });
 
-    window.addEventListener('resize', updateChronologyMargin);
-
-
-    // Open stop classification
-    this._showOption('openStopClassification', this._createOpenStopClassificationListener, this._deleteOpenStopClassificationListener);
-
-    // Stop classification reopen delay
+    // --- 3. REOPEN DELAY ---
     this._reopenStopClassificationDelay();
 
+    // --- 4. SHOW PRODUCTION BAR ---
+    $('#showproductionbar').prop('checked', pulseConfig.getBool('showproductionbar'));
+    if (pulseConfig.getDefaultBool('showproductionbar') != pulseConfig.getBool('showproductionbar'))
+      $('#showproductionbar').attr('overridden', 'true');
+    $('#showproductionbar').change(function () {
+      let show = $('#showproductionbar').is(':checked');
+      pulseConfig.set('showproductionbar', show);
+      if (show) {
+        $('x-productionbar').show();
+        $('.perf-tool-container').css('display', 'flex'); // Corrigé ici
+      } else {
+        $('x-productionbar').hide();
+        $('.perf-tool-container').hide(); // Corrigé ici
+      }
+    });
 
-    // Production bar options
-    this._showOption('showproductionbar',
-      function () {
-        const barElements = document.querySelectorAll('#performance-container');
-        barElements.forEach(el => el.style.display = 'flex');
-      },
-      function () {
-        const barElements = document.querySelectorAll('#performance-container');
-        barElements.forEach(el => el.style.display = 'none');
-      });
+    // --- 5. PERCENT VS RATIO ---
+    if (pulseConfig.getBool('showpercent')) {
+      $('#productionbarpercent').prop('checked', true);
+    } else {
+      $('#productionbarratio').prop('checked', true);
+    }
+    if (pulseConfig.getDefaultBool('showpercent') !== pulseConfig.getBool('showpercent')) {
+      $('#productionbarpercent').attr('overridden', 'true');
+      $('#productionbarratio').attr('overridden', 'true');
+    }
+    $('#productionbarpercent, #productionbarratio').change(function () {
+      let isPercent = $('#productionbarpercent').is(':checked');
+      pulseConfig.set('showpercent', isPercent);
+      let mode = isPercent ? 'percent' : 'ratio';
+      // S'applique aux éléments existants, et buildContent() gérera les clones futurs
+      $('x-productionbar').attr('display-mode', mode);
+      $('x-productiongauge').attr('display-mode', mode);
+    });
 
-    // Display mode: percent or ratio
-    this._productionBarDisplayMode();
-
-    // Show/hide production display
-    this._showOption('showproductiondisplay',
-      function () {
-        document.querySelector('.showproductiondisplaydetails').style.display = 'block';
-        // Trigger the currently selected radio to apply its display logic
-        const gaugeRadio = document.getElementById('productiongauge');
-        const pieRadio = document.getElementById('productionpie');
-        if (gaugeRadio.checked) {
-          gaugeRadio.dispatchEvent(new Event('change', { bubbles: true }));
-        } else if (pieRadio.checked) {
-          pieRadio.dispatchEvent(new Event('change', { bubbles: true }));
+    // --- 6. SHOW PRODUCTION DISPLAY (Le bouton principal) ---
+    $('#showproductiondisplay').prop('checked', pulseConfig.getBool('showproductiondisplay'));
+    if (pulseConfig.getDefaultBool('showproductiondisplay') != pulseConfig.getBool('showproductiondisplay'))
+      $('#showproductiondisplay').attr('overridden', 'true');
+    $('#showproductiondisplay').change(function () {
+      let show = $('#showproductiondisplay').is(':checked');
+      pulseConfig.set('showproductiondisplay', show);
+      if (show) {
+        $('.showproductiondisplaydetails').show();
+        let isGauge = $('#productiongauge').is(':checked');
+        if (isGauge) {
+          $('x-productiongauge').show();
+          $('x-defaultpie').hide();
+        } else {
+          $('x-productiongauge').hide();
+          $('x-defaultpie').show();
         }
-      },
-      function () {
-        document.querySelector('.showproductiondisplaydetails').style.display = 'none';
-        // Hide both components
-        document.querySelectorAll('x-productiongauge').forEach(el => {
-          el.style.display = 'none';
-        });
-        document.querySelectorAll('x-defaultpie').forEach(el => {
-          el.style.display = 'none';
-        });
-      });
+      } else {
+        $('.showproductiondisplaydetails').hide();
+        $('x-productiongauge').hide();
+        $('x-defaultpie').hide();
+      }
+    });
 
-    // Production display type: gauge or pie
-    this._productionDisplayType();
+    // --- 7. GAUGE VS PIE ---
+    if (pulseConfig.getBool('showproductiongauge')) {
+      $('#productiongauge').prop('checked', true);
+    } else {
+      $('#productionpie').prop('checked', true);
+    }
+    if (pulseConfig.getDefaultBool('showproductiongauge') !== pulseConfig.getBool('showproductiongauge')) {
+      $('#productiongauge').attr('overridden', 'true');
+      $('#productionpie').attr('overridden', 'true');
+    }
+    $('#productiongauge, #productionpie').change(function () {
+      let isGauge = $('#productiongauge').is(':checked');
+      pulseConfig.set('showproductiongauge', isGauge);
+      if ($('#showproductiondisplay').is(':checked')) {
+        if (isGauge) {
+          $('x-productiongauge').show();
+          $('x-defaultpie').hide();
+        } else {
+          $('x-productiongauge').hide();
+          $('x-defaultpie').show();
+        }
+      }
+    });
 
-    // Thresholds
+    // --- 8. THRESHOLDS ---
     const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
     const thresholdRedInput = document.getElementById('thresholdredproductionbar');
-
     thresholdTarget.value = pulseConfig.getFloat('thresholdtargetproduction');
     thresholdRedInput.value = pulseConfig.getFloat('thresholdredproduction');
-
     if (pulseConfig.getDefaultFloat('thresholdtargetproduction') !== pulseConfig.getFloat('thresholdtargetproduction')) {
       thresholdTarget.setAttribute('overridden', 'true');
     }
     if (pulseConfig.getDefaultFloat('thresholdredproduction') !== pulseConfig.getFloat('thresholdredproduction')) {
       thresholdRedInput.setAttribute('overridden', 'true');
     }
+    thresholdTarget.addEventListener('change', () => this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true));
+    thresholdRedInput.addEventListener('change', () => this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true));
 
-    thresholdTarget.addEventListener('change', function () {
-      this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true)
-    }.bind(this));
-
-    thresholdRedInput.addEventListener('change', function () {
-      this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true)
-    }.bind(this));
+    // Déclencheurs initiaux pour aligner l'interface
+    $('#showChangedTools').trigger('change');
+    $('#openStopClassification').trigger('change');
+    $('#showproductionbar').trigger('change');
+    $('#showproductiondisplay').trigger('change');
   }
 
   // Create the open stop classification listener element
@@ -418,11 +458,9 @@ class machinedashboardPage extends pulsePage.BasePage {
 
     setDefaultValue('thresholdtargetproductionbar', pulseConfig.getDefaultFloat('thresholdtargetproduction'));
     setDefaultValue('thresholdredproductionbar', pulseConfig.getDefaultFloat('thresholdredproduction'));
+
   }
 
-  // getOptionValues uses the unified options-list pattern:
-  // { id, type, param?, conditional? } -> "&param=value" fragments.
-  // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues() {
     const options = [
       { id: 'showChangedTools', type: 'checkbox' },
@@ -432,8 +470,8 @@ class machinedashboardPage extends pulsePage.BasePage {
       { id: 'productionbarpercent', type: 'radio', param: 'showpercent' },
       { id: 'showproductiondisplay', type: 'checkbox' },
       { id: 'productiongauge', type: 'radio', param: 'showproductiongauge' },
-      { id: 'thresholdtargetproductionbar', type: 'value', param: 'target' },
-      { id: 'thresholdredproductionbar', type: 'value', param: 'red' }
+      { id: 'thresholdtargetproductionbar', type: 'value', param: 'thresholdtargetproduction' },
+      { id: 'thresholdredproductionbar', type: 'value', param: 'thresholdredproduction' }
     ];
 
     return options.map(opt => {
@@ -449,46 +487,57 @@ class machinedashboardPage extends pulsePage.BasePage {
     }).join('');
   }
 
+
   buildContent() {
-    // allows the native page configuration (not in options) of the bars : show reason bar == always -> idem for SHOW x-reasongroups
-    let showBar = pulseConfig.getBool('showcoloredbar.cycle', false);
-    if (showBar) {
-      $('x-operationcyclebar').show();
-    }
-    else {
-      $('x-operationcyclebar').hide();
-    }
+let showBar = pulseConfig.getBool('showcoloredbar.cycle', false);
+    if (showBar) $('x-operationcyclebar').show(); else $('x-operationcyclebar').hide();
+
     showBar = pulseConfig.getBool('showcoloredbar.isofile', false);
-    if (showBar) {
-      $('x-isofileslotbar').show();
-    }
-    else {
-      $('x-isofileslotbar').hide();
-    }
+    if (showBar) $('x-isofileslotbar').show(); else $('x-isofileslotbar').hide();
+
     showBar = pulseConfig.getBool('showcoloredbar.cncalarm', false);
-    if (showBar) {
-      $('x-cncalarmbar').show();
-    }
-    else {
-      $('x-cncalarmbar').hide();
-    }
+    if (showBar) $('x-cncalarmbar').show(); else $('x-cncalarmbar').hide();
+
     showBar = pulseConfig.getBool('showcoloredbar.redstacklight', false);
-    if (showBar) {
-      $('x-redstacklightbar').show();
-    }
-    else {
-      $('x-redstacklightbar').hide();
+    if (showBar) $('x-redstacklightbar').show(); else $('x-redstacklightbar').hide();
+
+    // --- APPLICATION SUR LES CLONES DE X-GROUPARRAY ---
+    let showproductiondisplay = pulseConfig.getBool('showproductiondisplay');
+    let showproductiongauge = pulseConfig.getBool('showproductiongauge');
+    if (showproductiondisplay) {
+      if (showproductiongauge) {
+        $('x-productiongauge').show();
+        $('x-defaultpie').hide();
+      } else {
+        $('x-productiongauge').hide();
+        $('x-defaultpie').show();
+      }
+    } else {
+      $('x-productiongauge').hide();
+      $('x-defaultpie').hide();
     }
 
-    showBar = pulseConfig.getBool('showcoloredbar.cncvalue', false);
-    if (showBar) {
-      $('x-cncvaluebar').show();
-      $('x-fieldlegends').show();
+    let showproductionbar = pulseConfig.getBool('showproductionbar');
+    if (showproductionbar) {
+      $('x-productionbar').show();
+      $('.perf-tool-container').css('display', 'flex');
+    } else {
+      $('x-productionbar').hide();
+      $('.perf-tool-container').hide();
     }
-    else {
-      $('x-cncvaluebar').hide();
-      $('x-fieldlegends').hide();
+
+    let showChangedTools = pulseConfig.getBool('showChangedTools');
+    if (showChangedTools) {
+      $('.changedtools-content').css('display', 'flex');
+    } else {
+      $('.changedtools-content').hide();
     }
+
+    // NOUVEAU : Application des modes (percent/ratio) aux clones fraîchement créés
+    let showPercent = pulseConfig.getBool('showpercent');
+    let displayMode = showPercent ? 'percent' : 'ratio';
+    $('x-productionbar').attr('display-mode', displayMode);
+    $('x-productiongauge').attr('display-mode', displayMode);
   }
 
 }

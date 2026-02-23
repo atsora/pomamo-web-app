@@ -38,6 +38,7 @@
 @import "x-productionbar/x-productionbar.less";
 @import "x-productiongauge/x-productiongauge.less";
 
+
 .main-content {
   display: flex;
   flex-direction: row;
@@ -97,7 +98,7 @@ x-machinetab {
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
-  padding: 10px 20px;
+  padding: 10px 10px;
   flex-shrink: 1;
   width: 100%;
   justify-content: space-between;
@@ -151,7 +152,6 @@ x-machinetab {
           text-align: center;
           flex-grow: unset;
           font-size: 1.5em;
-
         }
 
         x-reasonbutton {
@@ -170,8 +170,6 @@ x-machinetab {
 
           .pulse-cellbar-past-data {
             display: none;
-
-
           }
 
           .pulse-cellbar-current-data {
@@ -345,7 +343,7 @@ x-machinetab {
       height: fit-content;
       justify-content: center;
 
-      /*       @media (max-height: 842px) {
+      /* @media (max-height: 842px) {
         row-gap: 15px;
       } */
 
@@ -363,12 +361,11 @@ x-machinetab {
         flex-wrap: nowrap;
         row-gap: 0.2em;
 
-
         x-production {
           display: flex;
           flex-direction: column;
 
-          /*           @media (max-height: 842px) {
+          /* @media (max-height: 842px) {
             row-gap: 7.5px;
           } */
 
@@ -379,7 +376,6 @@ x-machinetab {
             font-size: clamp(40px, 7vh, 60px);
             font-weight: bold;
             margin-bottom: 10px;
-
           }
 
           .production-content-text-actual {
@@ -393,7 +389,6 @@ x-machinetab {
             font-size: clamp(40px, 7vh, 60px);
             font-weight: bold;
             margin-bottom: 10px;
-
           }
 
           .production-content-text-target {
@@ -591,8 +586,7 @@ x-machinetab {
       .machine-component {
         width: 100%;
 
-
-          >div {
+        >div {
             min-height: 2em;
           }
 
@@ -622,25 +616,27 @@ x-machinetab {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    height: max-content;
+
+    height: 50px;
+    overflow: hidden;
+    flex-wrap: wrap;
 
     @media (max-width: 1000px) {
       // mobile
       justify-content: center;
       flex-direction: column;
+      height: auto;
     }
 
     .stops-content {
       display: flex;
       align-items: center;
-      align-self: stretch;
+      height: 100%; /* Height 100% au lieu de align-self stretch */
 
       @media (max-width: 1000px) {
         // mobile
         width: auto;
       }
-
-
 
       .pulse-lastbar {
         height: 100%;
@@ -660,13 +656,13 @@ x-machinetab {
         }
 
         .pulse-cellbar-past-data {
-          padding: 0px 12px;
+          padding: 0px 8px;
+          box-sizing: border-box;
           height: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-right-width: 0.5px;
-          border-left-color: @color_window_border;
+          column-gap: 5px;
           border: 1px solid @color_window_border;
           border-radius: @border_radius_small;
 
@@ -690,11 +686,10 @@ x-machinetab {
     }
 
     .period-content {
-      height: 100%;
+      height: 100%; /* Height 100% au lieu de align-self stretch */
       display: flex;
       align-items: center;
-      align-self: stretch;
-      width:fit-content;
+      width: fit-content;
 
       @media (max-width: 1000px) {
         display: none !important;
@@ -704,7 +699,7 @@ x-machinetab {
         margin: unset;
         display: flex;
         border: 1px solid @color_window_border;
-        padding: 8px 12px;
+        padding: 8px;
         border-radius: @border_radius_small;
 
         .content-period-buttons {
@@ -731,13 +726,16 @@ x-machinetab {
           height: 24px;
           display: flex;
           justify-content: center;
-          font-size: 1.5em;
+          font-size: 1.3em;
           font-weight: 500;
+          letter-spacing: -1px;
 
           .periodtoolbar-display {
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 0 4px;
+            letter-spacing: -1px;
           }
         }
 
@@ -752,6 +750,7 @@ x-machinetab {
     }
 
     .dailydate-content {
+      height: 100%; /* Ajout de Height 100% pour remplir l'espace des 50px */
       width: 100px;
       font-weight: bold;
       display: flex;
@@ -769,10 +768,11 @@ x-machinetab {
     }
 
     .hour-content {
+      height: 100%; /* Ajout de Height 100% pour remplir l'espace des 50px */
       font-weight: bold;
       font-size: 1.5em;
       display: flex;
-      align-content: center;
+      align-items: center; /* Remplacé align-content par align-items pour le flex-direction row parent */
 
       @media (max-width: 1000px) {
         // mobile
@@ -816,7 +816,7 @@ x-machinetab {
 
 .text-box {
 
-  font-size: 1.5em;
+  font-size: 1.3em;
   font-family: inherit;
   font-weight: 500;
 }
