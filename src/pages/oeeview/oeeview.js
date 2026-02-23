@@ -255,4 +255,9 @@ class OeeViewPage extends pulsePage.BasePage {
 
 $(document).ready(function () {
   pulsePage.preparePage(new OeeViewPage());
+  let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
+  // Masquer la barre de période si le contexte est "live"
+  if (tmpContexts.includes('live')) {
+    $('x-periodtoolbar').hide();
+  }
 });
