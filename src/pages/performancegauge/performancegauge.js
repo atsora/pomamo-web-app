@@ -152,6 +152,22 @@ class PerformanceGaugePage extends pulsePage.BasePage {
   }
 
   buildContent() {
+    let showMotionPercentage = pulseConfig.getBool('showmotionpercentage');
+    let display = pulseConfig.getString('showmotiondisplay') || 'percent';
+    let showPercent = (display === 'percent');
+
+    if (showMotionPercentage) {
+      if (showPercent) {
+        $('x-motionpercentage').show();
+        $('x-motiontime').hide();
+      } else {
+        $('x-motionpercentage').hide();
+        $('x-motiontime').show();
+      }
+    } else {
+      $('x-motionpercentage').hide();
+      $('x-motiontime').hide();
+    }
   }
 }
 
