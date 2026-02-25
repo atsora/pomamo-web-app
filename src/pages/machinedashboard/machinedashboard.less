@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2009-2023 Lemoine Automation Technologies
- *
- * SPDX-License-Identifier: Apache-2.0
+ * Copyright (C) 2025-2026 Atsora Solutions
  */
 
 
@@ -14,6 +12,7 @@
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-machinetab/x-machinetab.less";
 @import "x-lastmachinestatus/x-lastmachinestatus.less";
+@import "x-unansweredreasonnumber/x-unansweredreasonnumber.less";
 @import "x-operationcyclebar/x-operationcyclebar.less";
 @import "x-isofileslotbar/x-isofileslotbar.less";
 @import "x-reasonslotbar/x-reasonslotbar.less";
@@ -174,8 +173,42 @@ x-machinetab {
 
           .pulse-cellbar-past-data {
             display: none;
+          }
 
+          .pulse-cellbar-current-data {
+            height: unset;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            border-right: none;
+            padding-left: 24px;
+            padding-right: 24px;
+            font-size: 16px;
+            font-family: inherit;
+            font-weight: 500;
+            border-radius: @border_radius_small;
 
+            .pulse-missing-data {
+              display: none;
+            }
+
+            .lastmachinestatus-reason-label {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+      x-unansweredreasonnumber {
+        .pulse-cellbar-main {
+          height: unset;
+          display: flex;
+          justify-content: center;
+          filter: opacity(100%);
+
+          .pulse-cellbar-past-data {
+            display: none;
           }
 
           .pulse-cellbar-current-data {
