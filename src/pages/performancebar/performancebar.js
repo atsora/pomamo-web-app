@@ -151,7 +151,23 @@ class PerformanceBarPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  buildContent() {
+buildContent() {
+    let showMotionPercentage = pulseConfig.getBool('showmotionpercentage');
+    let display = pulseConfig.getString('showmotiondisplay') || 'percent';
+    let showPercent = (display === 'percent');
+
+    if (showMotionPercentage) {
+      $('.performancebar-percent-position').show();
+      if (showPercent) {
+        $('.performancebar-percent-position x-motionpercentage').show();
+        $('.performancebar-percent-position x-motiontime').hide();
+      } else {
+        $('.performancebar-percent-position x-motionpercentage').hide();
+        $('.performancebar-percent-position x-motiontime').show();
+      }
+    } else {
+      $('.performancebar-percent-position').hide();
+    }
   }
 }
 
