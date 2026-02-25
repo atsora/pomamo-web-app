@@ -341,6 +341,14 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
       $('.mit-show-running').hide();
     }
 
+    let showpie = pulseConfig.getBool('showpie');
+    if (showpie) {
+      $('.operationstatus-cycleprogress').show();
+    }
+    else {
+      $('.operationstatus-cycleprogress').hide();
+    }
+
     //showworkinfo
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     if (showworkinfo) {

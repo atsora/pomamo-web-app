@@ -48,81 +48,78 @@ class OeeViewPage extends pulsePage.BasePage {
     this._productionGaugeDisplayMode();
 
     // Thresholds
-    const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
-    const thresholdRedInput = document.getElementById('thresholdredproductionbar');
+    const thresholdTarget = $('#thresholdtargetproductionbar');
+    const thresholdRedInput = $('#thresholdredproductionbar');
 
-    thresholdTarget.value = pulseConfig.getFloat('thresholdtargetproduction', 80);
-    thresholdRedInput.value = pulseConfig.getFloat('thresholdredproduction', 60);
+    thresholdTarget.val(pulseConfig.getFloat('thresholdtargetproduction', 80));
+    thresholdRedInput.val(pulseConfig.getFloat('thresholdredproduction', 60));
 
     if (pulseConfig.getDefaultFloat('thresholdtargetproduction') !== pulseConfig.getFloat('thresholdtargetproduction')) {
-      thresholdTarget.setAttribute('overridden', 'true');
+      thresholdTarget.attr('overridden', 'true');
     }
     if (pulseConfig.getDefaultFloat('thresholdredproduction') !== pulseConfig.getFloat('thresholdredproduction')) {
-      thresholdRedInput.setAttribute('overridden', 'true');
+      thresholdRedInput.attr('overridden', 'true');
     }
 
-    thresholdTarget.addEventListener('change', function () {
-      this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true)
+    // CORRECTION : Utilisation de .change() (jQuery) pour capter le Reset
+    thresholdTarget.change(function () {
+      this._verficationThresholds(thresholdTarget.val(), thresholdRedInput.val());
     }.bind(this));
 
-    thresholdRedInput.addEventListener('change', function () {
-      this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true)
+    thresholdRedInput.change(function () {
+      this._verficationThresholds(thresholdTarget.val(), thresholdRedInput.val());
     }.bind(this));
 
     // showworkinfo = Show Operation
-    document.getElementById('showworkinfo').checked = pulseConfig.getBool('showworkinfo');
+    const showWorkInfoChk = $('#showworkinfo');
+    showWorkInfoChk.prop('checked', pulseConfig.getBool('showworkinfo'));
     if (pulseConfig.getDefaultBool('showworkinfo') != pulseConfig.getBool('showworkinfo')) {
-      document.getElementById('showworkinfo').setAttribute('overridden', 'true');
+      showWorkInfoChk.attr('overridden', 'true');
     }
-    document.getElementById('showworkinfo').addEventListener('change', function () {
-      pulseConfig.set('showworkinfo', document.getElementById('showworkinfo').checked);
 
-      let showworkinfo = pulseConfig.getBool('showworkinfo');
+    // CORRECTION : Utilisation de .change() (jQuery)
+    showWorkInfoChk.change(function () {
+      let isChecked = showWorkInfoChk.is(':checked');
+      pulseConfig.set('showworkinfo', isChecked);
 
-      if (showworkinfo) {
-        document.querySelectorAll('x-workinfo').forEach(el => {
-          el.style.display = '';
-        });
+      if (isChecked) {
+        $('x-workinfo').show();
       } else {
-        document.querySelectorAll('x-workinfo').forEach(el => {
-          el.style.display = 'none';
-        });
+        $('x-workinfo').hide();
       }
     });
-    document.getElementById('showworkinfo').dispatchEvent(new Event('change'));
+    // Déclenchement initial
+    showWorkInfoChk.trigger('change');
   }
 
   // Initialize the production gauge display mode radios
   _productionGaugeDisplayMode() {
-    const showPercentRadio = document.getElementById('productiongaugepercent');
-    const showRatioRadio = document.getElementById('productiongaugeratio');
+    const showPercentRadio = $('#productiongaugepercent');
+    const showRatioRadio = $('#productiongaugeratio');
 
     if (pulseConfig.getBool('showpercent')) {
-      showPercentRadio.checked = true;
+      showPercentRadio.prop('checked', true);
     } else {
-      showRatioRadio.checked = true;
+      showRatioRadio.prop('checked', true);
     }
 
     if (pulseConfig.getDefaultBool('showpercent') !== pulseConfig.getBool('showpercent')) {
-      showPercentRadio.setAttribute('overridden', 'true');
-      showRatioRadio.setAttribute('overridden', 'true');
+      showPercentRadio.attr('overridden', 'true');
+      showRatioRadio.attr('overridden', 'true');
     }
 
-    showPercentRadio.addEventListener('change', function () {
-      if (showPercentRadio.checked) {
+    // CORRECTION : Utilisation de .change() (jQuery) pour être compatible avec setDefaultOptionValues
+    showPercentRadio.change(function () {
+      if (showPercentRadio.is(':checked')) {
         pulseConfig.set('showpercent', true);
-        document.querySelectorAll('x-productiongauge').forEach(el => {
-          el.setAttribute('display-mode', 'percent');
-        });
+        $('x-productiongauge').attr('display-mode', 'percent');
       }
     });
 
-    showRatioRadio.addEventListener('change', function () {
-      if (showRatioRadio.checked) {
+    showRatioRadio.change(function () {
+      if (showRatioRadio.is(':checked')) {
         pulseConfig.set('showpercent', false);
-        document.querySelectorAll('x-productiongauge').forEach(el => {
-          el.setAttribute('display-mode', 'ratio');
-        });
+        $('x-productiongauge').attr('display-mode', 'ratio');
       }
     });
   }
@@ -233,8 +230,9 @@ class OeeViewPage extends pulsePage.BasePage {
   getOptionValues() {
     const options = [
       { id: 'productiongaugepercent', type: 'radio', param: 'showpercent' },
-      { id: 'thresholdtargetproductionbar', type: 'value', param: 'productiongauge.target' },
-      { id: 'thresholdredproductionbar', type: 'value', param: 'productiongauge.red' },
+      // CORRECTION: Utilisation des noms de paramètres corrects pour pulseConfig
+      { id: 'thresholdtargetproductionbar', type: 'value', param: 'thresholdtargetproduction' },
+      { id: 'thresholdredproductionbar', type: 'value', param: 'thresholdredproduction' },
       { id: 'showworkinfo', type: 'checkbox' }
     ];
 
@@ -251,8 +249,30 @@ class OeeViewPage extends pulsePage.BasePage {
     }).join('');
   }
 
+  buildContent() {
+    // 1. Gestion du mode d'affichage de la jauge (Percent / Ratio)
+    let showPercent = pulseConfig.getBool('showpercent');
+    let displayMode = showPercent ? 'percent' : 'ratio';
+    // On applique l'attribut à toutes les jauges (y compris les clones)
+    $('x-productiongauge').attr('display-mode', displayMode);
+
+    // 2. Gestion de l'affichage de WorkInfo
+    let showworkinfo = pulseConfig.getBool('showworkinfo');
+    if (showworkinfo) {
+      $('x-workinfo').show();
+    } else {
+      $('x-workinfo').hide();
+    }
+  }
 }
+
+
 
 $(document).ready(function () {
   pulsePage.preparePage(new OeeViewPage());
+  let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
+  // Masquer la barre de période si le contexte est "live"
+  if (tmpContexts && tmpContexts.includes('live')) {
+    $('x-periodtoolbar').hide();
+  }
 });
