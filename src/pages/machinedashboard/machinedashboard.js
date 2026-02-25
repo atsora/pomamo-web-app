@@ -11,6 +11,7 @@ require('x-grouparray/x-grouparray');
 require('x-machinetab/x-machinetab');
 require('x-machinedisplay/x-machinedisplay');
 require('x-lastmachinestatus/x-lastmachinestatus');
+require('x-unansweredreasonnumber/x-unansweredreasonnumber');
 require('x-datetimegraduation/x-datetimegraduation');
 require('x-operationcyclebar/x-operationcyclebar');
 require('x-reasonslotbar/x-reasonslotbar');
