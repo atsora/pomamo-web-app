@@ -403,19 +403,7 @@ x-machinetab {
             row-gap: 7.5px;
           } */
 
-          .production-actual-value {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: clamp(40px, 7vh, 60px);
-            font-weight: bold;
-            margin-bottom: 10px;
-          }
-
-          .production-content-text-actual {
-            font-size: clamp(14px, 1.8vh, 18px);
-          }
-
+          .production-actual-value,
           .production-target-value {
             display: flex;
             flex-direction: column;
@@ -425,14 +413,12 @@ x-machinetab {
             margin-bottom: 10px;
           }
 
+          .production-content-text-actual,
           .production-content-text-target {
             font-size: clamp(14px, 1.8vh, 18px);
           }
 
-          .production-actual-separator {
-            display: none;
-          }
-
+          .production-actual-separator,
           .production-target-separator {
             display: none;
           }
@@ -649,7 +635,7 @@ x-machinetab {
   .dashboard-footer {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     height: 50px;
     overflow: hidden;

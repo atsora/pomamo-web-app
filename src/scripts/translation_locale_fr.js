@@ -34,18 +34,7 @@ PULSE_DEFAULT_CONFIG.general.roles =
       role: 'liveadmin',
       display: 'Live'
       //,noAccess: true
-    }/*,
-    {
-      role: 'reportAdmin',
-      display: 'Reports'
-      //,noAccess: true
-    }*/
-    /*,
-    {
-      role: 'ITGuy',
-      display: null,
-      noAccess: true
-    }*/
+    }
   ];
 
 tagConfig.toollifemachine.toollabelsselections.display =
@@ -57,7 +46,7 @@ tagConfig.toollifemachine.toollabelsselections.display =
         showexpiredonly: true // To show tools expired only
         //mandatorygroup: 'ET0'
       },
-      // FYI : a group can be created using labels: [], showexpiredonly: false 
+      // FYI : a group can be created using labels: [], showexpiredonly: false
       // to show expired AND tools in warning with NO expirationdatetime
       {
         name: 'in1h',
