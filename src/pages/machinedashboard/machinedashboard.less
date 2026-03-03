@@ -635,7 +635,7 @@ x-machinetab {
   .dashboard-footer {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
 
     height: 50px;
     overflow: hidden;
@@ -715,23 +715,24 @@ x-machinetab {
         display: none !important;
       }
 
-      .periodtoolbar-toolbar {
+      .periodtoolbar {
         margin: unset;
         display: flex;
         border: 1px solid @color_window_border;
-        padding: 8px;
+        height: 100%;
         border-radius: @border_radius_small;
 
-        .content-period-buttons {
-          display: flex;
 
-          li {
+        .content-period-buttons { //masquer les boutons non utiles
+          flex-wrap: wrap;
+
+          .periodtoolbar-li-btn {
             display: none;
           }
 
-          li:has(.periodtoolbar-home),
-          li:has(.periodtoolbar-day),
-          li:has(.periodtoolbar-shift) {
+          .periodtoolbar-li-btn:has(.periodtoolbar-home),
+          .periodtoolbar-li-btn:has(.periodtoolbar-day),
+          .periodtoolbar-li-btn:has(.periodtoolbar-shift) {
             display: flex;
           }
         }
@@ -742,34 +743,25 @@ x-machinetab {
 
         .periodtoolbar-li-text {
           margin: 4px 0px;
-          width: 100%;
           height: 24px;
           display: flex;
           justify-content: center;
           font-size: 1.3em;
           font-weight: 500;
-          letter-spacing: -1px;
 
           .periodtoolbar-display {
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 0 4px;
-            letter-spacing: -1px;
           }
-        }
-
-        .periodtoolbar-li-btn {
-          height: 24px;
-          display: flex;
-          align-items: center;
-          margin: 4px 0px;
         }
       }
 
     }
 
-    .dailydate-content {
+    .dailydate-content,
+    .hour-content {
       height: 100%; /* Ajout de Height 100% pour remplir l'espace des 50px */
       width: 100px;
       font-weight: bold;
@@ -784,19 +776,6 @@ x-machinetab {
       .clock-div {
         height: unset;
         font-size: 1.2em;
-      }
-    }
-
-    .hour-content {
-      height: 100%; /* Ajout de Height 100% pour remplir l'espace des 50px */
-      font-weight: bold;
-      font-size: 1.5em;
-      display: flex;
-      align-items: center; /* Remplacé align-content par align-items pour le flex-direction row parent */
-
-      @media (max-width: 1000px) {
-        // mobile
-        display: none !important;
       }
     }
   }
