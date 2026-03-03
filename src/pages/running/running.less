@@ -48,156 +48,150 @@
 
 @import "style.less";
 
-.tile {
-  border-radius: @border_radius;
-  border: 1px solid @color_window_border;
-  margin: 4px 0 4px 0;
-  padding-top: 4px;
-}
 
-.main-table {
-  margin: 0 4px 4px 0;
-  padding-top: 0;
-}
+.running-header {
+  display: flex;
+  flex-direction: row;
+  padding: 0 5px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: 45px;
+  box-sizing: border-box;
+  overflow: hidden;
 
-.running-page {
-  x-grouparray {
-    .group-main {
+  .periodtoolbar {
+    display: flex;
+    justify-content: center;
+    border: 1px solid @color_window_border;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    box-sizing: border-box;
+  }
+
+  .div-datetime {
+    box-sizing: border-box;
+    background-color: @color_background;
+    border: 1px solid @color_window_border;
+    padding: 0 5px;
+    border-radius: @border_radius_small;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 5px;
+    height: 100%;
+    font-weight: bold;
+
+    .clock-div {
       display: flex;
-      flex-direction: column;
-      row-gap: 8px;
-      padding: 8px 0px;
-
-      li {
-        padding: 0px 12px;
-
-        .div-machine {
-          border: 1px solid #3f3f46;
-          border-radius: 6px;
-          padding: 0px 14px;
-          box-sizing: border-box;
-        }
-      }
+      align-items: center;
+      line-height: normal;
     }
   }
 
-  .one_machine_cell {
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+  margin: 10px 0 4px 0;
+  padding: 10px 0;
+  gap: 2px;
+  width: auto;
+}
+
+.datetimegraduation {
+  margin: 0 4em 0 18vw !important; //sum of right and left width of elements next to div bar
+  padding: 0 42px !important;
+  width: auto   !important;
+}
+
+
+.group-main {
+  display: flex !important;
+  flex-direction: column ;
+  row-gap: 8px !important;
+}
+
+.one_machine_cell {
+  display: flex;
+  flex-direction: row; // align children
+  padding: 0px 12px;
+  height: 85px;
+}
+
+.div-machine {
+  border: 1px solid #3f3f46;
+  border-radius: @border_radius_small;
+  padding: 0px 1vw;
+  box-sizing: border-box;
+  width: 18vw;
+
+  .div-current {
+
+    background-color: transparent;
+    padding: 4px;
+    min-height: 32px;
     display: flex;
     flex-direction: row; // align children
-    padding: 0 4px;
 
-    &.top_cell {
-      align-items: center;
-
-      .div-current {
-        background-color: @color_background !important;
-        border: 1px solid @color_window_border;
-        margin-left: -8px;
-        padding: 5.5px 4px !important;
-      }
-
-      .div-machine {
-        margin-left: 33px;
-        width: 18%;
-      }
+    .clock-div {
+      display: inline-block;
+      padding: 0 5px;
     }
 
-    .div-machine {
-      width: 19%;
-
-      //<x-machinedisplay></x-machinedisplay>
-      .div-current {
-        .bar-rounded-shadow;
-
-        background-color: transparent;
-        padding: 4px;
-        min-height: 32px;
-        display: flex;
-        flex-direction: row; // align children
-
-        .label-current,
-        .clock-div {
-          display: inline-block;
-          padding: 0 5px;
-        }
-
-        .label-current {
-          margin-top: 7px; // For quick vertical align -> To check and change
-        }
-
-        .div-current-left {
-          //<x-reasonbutton></x-reasonbutton>
-          height: 32px;
-          width: 32px;
-        }
-
-        .div-current-right {
-          flex-grow: 1;
-          padding-left: 4px;
-          width: 80%; // to allow '...'
-
-          display: flex;
-          flex-direction: column; // align children
-
-          font-size: 0.8em;
-        }
-      }
+    .div-current-left {
+      height: 32px;
+      width: 32px;
     }
 
-    .div-bar {
-      flex: 1;
-      overflow: hidden; // For fast resize
-      display: flex;
-      min-height: 2em;
-      align-items: center;
-      align-items: center;
-      justify-content: center;
-
-      .pulse-bar-div {
-        // align with graduation
-        margin-right: 30px;
-        margin-left: 34px;
-        position: unset;
-        width: 100%;
-        height: fit-content;
-      }
-
-      .periodtoolbar {
-        display: flex;
-        justify-content: center;
-
-        .periodtoolbar-toolbar {
-          border: 1px solid @color_window_border;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: fit-content;
-        }
-      }
-    }
-
-    .div-percent {
-      width: 5em;
-      margin-top: 18px;
+    .div-current-right {
+      flex-grow: 1;
+      padding-left: 4px;
+      width: 80%; // to allow '...'
 
       display: flex;
       flex-direction: column; // align children
-      justify-content: space-evenly;
 
-      x-motionpercentage,
-      x-motiontime {
-        font-size: 1.3em;
-        line-height: 1.3em;
-      }
+      font-size: 0.8em;
     }
   }
+}
 
-  .div-percent:has(x-motionpercentage) {
-    width: auto !important;
-    min-width: 46.5px;
+.div-bar {
+  flex: 1;
+  overflow: hidden; // For fast resize
+  display: flex;
+  min-height: 2em;
+  height: 100%;
+  align-items: center;
+  align-items: center;
+  justify-content: center;
+
+  .pulse-bar-div {
+    margin: 0 30px;
+    position: unset;
+    width: 100%;
+    height: fit-content;
   }
+}
 
-  .one_machine_cell:has(x-datetimegraduation) {
-    padding: 0 0 0 24px;
+.div-percent {
+  width: 4em;
+  margin-top: 15px;
+
+  display: flex;
+  flex-direction: column; // align children
+  align-items: center;
+  justify-content: center;
+
+  x-motionpercentage,
+  x-motiontime {
+    font-size: 1.3em;
+    line-height: 1.3em;
   }
 }
