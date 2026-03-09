@@ -110,24 +110,22 @@ SPDX-License-Identifier: Apache-2.0
     </defs>
   </svg>
   <div class="pulse-header">
-    <div class="pulse-header-center">
-      <div class="pulse-header-title" class="title">
-        <span></span>
-      </div>
-    </div>
-    <div class="pulse-header-right">
-      <button id="configpanelbtn" class="activated" title="Settings" role="button"></button>
-    </div>
-    <div class="pulse-header-close-to-right">
-      <button id="fullscreenbtn" title="FullScreen" role="button"></button>
-    </div>
-    <div class="pulse-header-close-to-right group-machines">
-      <button id="machineselectionbtn" title="MachineSelection" role="button"></button>
-    </div>
     <div class="pulse-header-left">
       <button id="navigationpanelbtn" title="Menu" role="button"></button>
       <div class="navbar-apps">
       </div>
+    </div>
+    <div class="pulse-header-title title">
+      <span></span>
+    </div>
+    <div class="pulse-header-close-to-right group-machines">
+      <button id="machineselectionbtn" title="MachineSelection" role="button"></button>
+    </div>
+    <div class="pulse-header-close-to-right">
+      <button id="fullscreenbtn" title="FullScreen" role="button"></button>
+    </div>
+    <div class="pulse-header-right">
+      <button id="configpanelbtn" class="activated" title="Settings" role="button"></button>
     </div>
   </div>
   <div class="pulse-header-rotation-progress"></div>
@@ -146,7 +144,7 @@ SPDX-License-Identifier: Apache-2.0
           <div class="pulse-mainarea-inner">
             <x-message></x-message>
             <x-checkserveraccess></x-checkserveraccess>
-            <x-checkpath></x-checkpath>          
+            <x-checkpath></x-checkpath>
             <!-- CUSTOM allowed -->
             <!--(bake {{pagename}}/content.html)-->
           </div>

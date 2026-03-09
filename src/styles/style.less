@@ -78,20 +78,6 @@ svg {
   visibility: visible !important;
 }
 
-
-/* TO ADD, but not global ! -> in each page
-a {
-  color: @color_window_alternate;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-a:visited {
-  color: @color_window_alternate;
-}
-*/
-
 /* Efficiency Colors */
 .bad-efficiency {
   color: @bad_efficiency_base !important;
@@ -158,9 +144,6 @@ body {
   background-color: @color_background;
 }
 
-@header_background_color_1: lighten(@color_window, 4%);
-@header_background_color_2: darken(@color_window, 4%);
-
 .pulse-content {
   display: flex;
   flex-direction: column;
@@ -178,15 +161,6 @@ body {
     margin-left: 7px !important;
     padding: 7px 0 7px 6.5px;
   }
-}
-
-.pulse-header {
-  width: 100%;
-  padding: 0.5rem 0;
-  /* Standard syntax */
-  color: fade(@color_text, 90%); // Change color when background is changed to see any text
-  z-index: 100;
-  flex: 0 0 auto; // keep natural height, don't steal remaining space
 }
 
 #pulse-inner {
@@ -212,10 +186,11 @@ body {
   flex-grow: 0;
   flex-shrink: 0;
   z-index: 51;
-  width: 270px;
+  width: 20vw;
   transition: width 0.2s;
   color: @color_text;
   overflow: auto;
+  box-sizing: border-box;
 }
 
 #pulse-panel-parameter {
@@ -270,38 +245,6 @@ body {
 .appcontext-live .pulse-mainarea-inner {
   overflow: auto;
   height: 100%;
-}
-
-.pulse-header:before {
-  /* customer logo if needed */
-  content: "";
-  //background-image: @customer_logo;
-  background-position: top right;
-  background-repeat: no-repeat;
-  background-size: contain;
-  position: absolute;
-  opacity: 0.3;
-  top: 7px;
-  right: 237px;
-  width: 20%;
-  height: 35px;
-  z-index: -1;
-}
-
-.pulse-header:after {
-  /* main logo */
-  content: "";
-  background-image: @product_logo;
-  background-position: top left;
-  background-repeat: no-repeat;
-  background-size: contain;
-  position: absolute;
-  opacity: 0.7;
-  top: 11px;
-  left: 131px;
-  width: 20%;
-  height: 24px;
-  z-index: -1;
 }
 
 .pulse-mainarea-bottom {
@@ -452,38 +395,119 @@ body {
 
 // HEADER
 
+@header_background_color_1: lighten(@color_window, 4%);
+@header_background_color_2: darken(@color_window, 4%);
+
+.pulse-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 5vh;
+  padding: 0.5vh 0.2vw;
+  box-sizing: border-box;
+  color: fade(@color_text, 90%);
+  z-index: 100;
+  flex: 0 0 auto;
+  position: relative;
+
+  &:before {
+    /* customer logo if needed */
+    content: "";
+    //background-image: @customer_logo;
+    background-position: center right;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    opacity: 0.3;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 237px;
+    width: 20%;
+    height: 60%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  &:after {
+    /* main logo */
+    content: "";
+    background-image: @product_logo;
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    opacity: 0.7;
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 17%;
+    height: 55%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  button {
+    height: 80%;
+    aspect-ratio: 1;
+    border: none;
+    position: relative;
+    background-color: transparent;
+    padding: 0;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  button.activated svg {
+    stroke: @color_highlight;
+    fill: @color_highlight;
+  }
+
+  button.disabled svg {
+    stroke: @color_gray;
+    fill: @color_gray;
+  }
+
+  button.disabled:hover svg {
+    stroke: @color_gray;
+    fill: @color_gray;
+  }
+}
+
+.pulse-header-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  box-sizing: border-box;
+}
+
 .pulse-header-title {
-  font-size: 21px;
-  margin-top: 3px;
-  margin-left: 5px;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
+  font-size: clamp(12px, 2.5vh, 21px);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-weight: normal !important;
 }
 
 .title {
   font-weight: bold;
   text-transform: uppercase;
   text-shadow: 1px 1px 0 fade(darken(@color_text, 60%), 60%), -1px -1px 1px fade(darken(@color_text, 90%), 70%);
-  color: fade(@color_text, 90%); // Idem as above in .pulse-header
+  color: fade(@color_text, 90%);
   cursor: default;
 }
 
-.pulse-header-left {
-  display: flex; // pour navbar-apps
-  flex-direction: row;
-  //float: left;
-  //border-right: 1px solid @color_window_border;
-  padding: 2px;
-  height: 28px;
-  box-sizing: content-box;
-}
-
 .pulse-header-right {
-  float: right;
-  padding: 3px 2px 1px 2px;
-  height: 28px;
-  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  box-sizing: border-box;
   border-radius: @border_radius_small;
 
   &:hover {
@@ -492,12 +516,12 @@ body {
 }
 
 .pulse-header-close-to-right {
-  display: flex; // easy align children
+  display: flex;
+  align-items: center;
   border-radius: @border_radius_small;
-  float: right;
-  height: 28px;
-  box-sizing: content-box;
-  padding: 3px 2px 1px 2px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 2px;
 
   &:hover {
     background-color: @color_highlight_alternate;
@@ -509,12 +533,18 @@ body {
 
   x-logindisplay {
     .logindisplay-content {
-      height: 20px; // Fixed height
-      padding: 2px 5px;
+      height: auto;
+      padding: 2px 5px 2px 5px;
+      font-size: 1.8vh;
       color: @color_text_button;
       border-radius: 3px;
       position: relative;
       border: 1px solid @color_window_border;
+
+      .logindisplay-icon {
+        height: 2vh;
+        width: 2vh;
+      }
 
       &:hover {
         background-color: @color_background_alternate;
@@ -523,9 +553,9 @@ body {
   }
 
   #help-div {
-    height: 20px; // Fixed height
+    height: auto;
     padding: 2px 5px;
-    margin-top: 5px;
+    margin: 0 5px;
     margin-right: 5px;
     margin-left: 5px;
     background-color: @color_window_border;
@@ -560,30 +590,11 @@ body {
   }
 }
 
-.pulse-header-center {
-  position: absolute;
-  left: 200px;
-  right: 200px;
-  text-align: center;
-}
-
-.pulse-header-center a {
-  text-decoration: none;
-}
-
-.pulse-header button {
-  height: 28px;
-  width: 28px;
-  border: none;
-  position: relative;
-  background-color: transparent;
-  padding: 0;
-}
-
 #navigationpanelbtn {
-  padding: 2px 4px 2px 4px;
+  padding: 5px;
+  height: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: @border_radius_small;
-  margin-left: 7.5px;
   .create_svg('menu', @color_text_alternate, @color_text_alternate);
 
   &:hover {
@@ -601,23 +612,6 @@ body {
 
 #configpanelbtn {
   .create_svg('actions', @color_text_alternate, @color_text_alternate);
-}
-
-
-//.pulse-header button.withHover:hover svg,
-.pulse-header button.activated svg {
-  stroke: @color_highlight;
-  fill: @color_highlight;
-}
-
-.pulse-header button.disabled svg {
-  stroke: @color_gray;
-  fill: @color_gray;
-}
-
-.pulse-header button.disabled:hover svg {
-  stroke: @color_gray;
-  fill: @color_gray;
 }
 
 .pulse-header-rotation-progress {
@@ -640,17 +634,19 @@ body {
   // apps access
   display: flex;
   flex-direction: row;
-  //flex-wrap: true;
+  align-items: center;
   margin-left: 10px;
+  height: 100%;
 
   .navbar-app-container {
     cursor: pointer;
     display: flex;
     align-items: center;
+    height: 100%;
 
     .navbar-app-content {
-      height: 32px;
-      width: 32px;
+      height: 100%;
+      aspect-ratio: 1;
 
       // see .create_svg
       //background-image: done in js using inlineBackgroundSvg
@@ -684,7 +680,7 @@ body {
 // NAVIGATION PANEL
 
 #navbar>ul {
-  padding: 0;
+  padding: 0 0.5vw;
   margin: 0;
   display: block;
   display: flex;
@@ -705,7 +701,6 @@ body {
 
     &:has(.tooltip_disabled) {
       justify-content: left;
-      margin-left: 7px;
       column-gap: 10px;
       padding-left: 6.5px
     }
@@ -739,25 +734,27 @@ body {
 
     &>span.menutext {
       display: block;
-      font-size: 0.9em;
+      font-size: 0.85vw;
       align-content: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     &>div.menuicon {
       // background-image: done using js. See create_svg to use currentcolor
       background-repeat: no-repeat; // for safety
       // color: NOT @color_text_alternate; //== USE currentcolor = MAIN to fill svg
+      flex-shrink: 0;
 
       svg {
-        height: 22px;
-        width: 22px; // To avoid strange displays if svg is badly defined
+        height: 1.5vw;
+        width: 1.5vw;
 
         // background-image: done using js. See create_svg to use currentcolor
         //fill: NOT @color_text_alternate;
         //color: NOT @color_text_alternate; //== USE currentcolor = parent color:
       }
-
-      float: left;
     }
 
     &>ul {
@@ -813,7 +810,7 @@ body {
     }
 
     #pulse-panel-navigation {
-      width: 49px;
+      width: 3vw;
       transition: width 0.2s;
       overflow: hidden;
     }
