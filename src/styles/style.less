@@ -680,7 +680,7 @@ body {
 // NAVIGATION PANEL
 
 #navbar>ul {
-  padding: 0 0.5vw;
+  padding: 0;
   margin: 0;
   display: block;
   display: flex;
@@ -721,6 +721,11 @@ body {
     &.expandable {
       display: flex;
       flex-direction: column;
+
+      &:has(> ul[style*="block"]) {
+        background-color: @color_window_alternate;
+        border-radius: @border_radius_small;
+      }
     }
 
     &.selected {
@@ -734,7 +739,7 @@ body {
 
     &>span.menutext {
       display: block;
-      font-size: 0.85vw;
+      font-size: 1vw;
       align-content: center;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -771,6 +776,7 @@ body {
         color: @color_text_alternate;
         cursor: pointer;
         font-weight: normal;
+        font-size: 1vw;
 
         &.selected {
           padding: 5px 10px 5px 6px;
@@ -810,7 +816,7 @@ body {
     }
 
     #pulse-panel-navigation {
-      width: 3vw;
+      width: 3.5vw;
       transition: width 0.2s;
       overflow: hidden;
     }
