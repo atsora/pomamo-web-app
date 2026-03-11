@@ -273,5 +273,10 @@ class RunningPage extends pulsePage.BasePage {
 $(document).ready(function () {
   pulsePage.preparePage(new RunningPage());
 
+  let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
+  if (tmpContexts && tmpContexts.includes('live')) {
+    $('.running-header').hide();
+  }
+
   $('x-datetimegraduation').load(); // DTG can not manage resize when hidden
 });
