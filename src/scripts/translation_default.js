@@ -443,6 +443,224 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   }
 };
 
+// - de translations
+
+ATSORA_LOCALE_CATALOG.de.options = {
+  title: 'Optionen',
+  alarmsUnknown: 'Unbekannte Alarme anzeigen',
+  alarmsWithDetails: 'mit Alarmdetails',
+  currentDataSelection: 'Aktuell...',
+  deltaPart: 'Delta Teile/Ziel',
+  displayShift: 'Schicht anzeigen',
+  displayUtilization: 'Auslastung anzeigen',
+  highlightPartCount: 'Teileanzahl hervorheben',
+  openStopClassification: 'Stillstandsklassifizierungs-Fenster automatisch öffnen',
+  productionActualVsTarget: 'Ist-/Soll-Produktion',
+  productionDisplay: 'Betrieblicher Puls',
+  gauge: 'Leistungsanzeige',
+  pie: 'Betriebsstatus',
+  productiongauge: 'Produktionsanzeige',
+  resetButton: 'Zurücksetzen',
+  showAlarms: 'Alarme anzeigen',
+  showBar: 'Balken anzeigen',
+  showClock: 'Uhr anzeigen',
+  showcurrentmachinestatuslogo: 'Statuslogo anzeigen',
+  showcurrentmachinestatusletter: 'Maschinenstatus anzeigen',
+  showCurrentAlarm: 'Aktuellen Alarm anzeigen',
+  showNcProgram: 'NC-Programm anzeigen',
+  showOperation: 'Vorgang anzeigen',
+  showPartCount: 'Teileanzahl anzeigen',
+  showPartCountInPie: 'Teileanzahl im Diagramm anzeigen',
+  showPercent: 'Prozent anzeigen',
+  showProductionbar: 'Leistungsbalken anzeigen',
+  showPie: 'Diagramm anzeigen',
+  showRemainingCycles: 'Verbleibende Zyklen anzeigen',
+  showReserveCapacity: 'Reservekapazität anzeigen',
+  showSecondUtilizationBar: 'Zweiten Auslastungsbalken anzeigen',
+  showStackLights: 'Signalleuchte anzeigen',
+  showUtilizationBar: 'Maschinenauslastungsbalken anzeigen',
+  showUtilizationTarget: 'Auslastungsziel anzeigen',
+  sizeBig: 'Groß',
+  sizeSmall: 'Klein',
+  stopClassificationReopenDelay: 'Verzögerung beim Wiederöffnen (Sekunden)',
+  timeFrame: 'Zeitrahmen',
+  timeFrameDays: 'Tag(e)',
+  timeFrameHours: 'Stunde(n)',
+  timeFrameSelection: 'Zeitraum: ',
+  thresholdsColor: 'Schwellenwertfarben Produktion / Ziel (%)',
+  thresholdError: 'Zielwert muss größer als der rote Schwellenwert sein',
+  thresholdMaxError: 'Prozentwerte dürfen 100 nicht überschreiten',
+  thresholdNaNError: 'Schwellenwerte müssen gültige Zahlen sein',
+  thresholdOrange: 'Orange',
+  thresholdPositiveError: 'Zielwert muss positiv sein',
+  thresholdRed: 'Rot',
+  toolSelection: 'Werkzeugauswahl',
+  toolsExpiring: 'Ablaufende Werkzeuge',
+  showChangedTools: 'Werkzeuginformationen anzeigen',
+  showProductionGauge: 'Leistungsanzeige anzeigen',
+  thresholdMode: 'Schwellenwertmodus',
+  target: 'Zielwert'
+}
+
+ATSORA_LOCALE_CATALOG.de.parameters = {
+  columns: 'Spalten',
+  copyUrl: 'URL kopieren',
+  customTitle: 'Benutzerdefinierter Titel',
+  darkTheme: 'Dunkles Design',
+  displayUrl: 'URL anzeigen',
+  editButton: 'Bearbeiten',
+  machines: 'Maschinen',
+  page: 'Seite',
+  resetButton: 'Zurücksetzen',
+  rotations: 'Rotation(en)',
+  rows: 'Zeilen',
+  showLegend: 'Legende anzeigen',
+  webAppVersion: 'Web-App-Version'
+}
+
+ATSORA_LOCALE_CATALOG.de.content = {
+  actual: 'Ist-Wert',
+  actualVsTarget: 'Ist/Soll',
+  bookmark: 'URL als Lesezeichen',
+  copyurl: 'URL kopieren',
+  currentColon: 'Aktuell:',
+  currentDay: 'Aktueller Tag',
+  currentShift: 'Aktuelle Schicht',
+  currentWeek: 'Aktuelle Woche',
+  days: '(7 Tage)',
+  failure: 'Fehler',
+  inProgress: 'in Bearbeitung',
+  last7days: 'Letzte 7 Tage',
+  legend: 'Legende',
+  overrides: 'Überschreibungen',
+  part: 'Teil',
+  percent: '%',
+  productionState: 'Produktionsstatus',
+  reason: 'Stillstandsgrund',
+  reports: 'Berichte',
+  sequence: 'Sequenz',
+  time: 'Uhrzeit',
+  today: 'Heute',
+  tool: 'Werkzeug',
+  utilization: 'Auslastung',
+  week: 'Woche',
+  yesterday: 'Gestern',
+  reference: 'Referenz',
+  performance: 'Leistung',
+  changedtools: 'Werkzeuge',
+  state: 'Zustand',
+  success: 'Erfolg',
+}
+
+ATSORA_LOCALE_CATALOG.de.dialog = {
+  confirmation: 'Bestätigung',
+  details: 'Details',
+  error: 'Fehler',
+  information: 'Information',
+  select: 'Auswählen',
+  wait: 'Bitte warten...',
+  warning: 'Warnung'
+}
+
+ATSORA_LOCALE_CATALOG.de.error = {
+  machineRequired: 'Bitte mindestens eine Maschine auswählen',
+  min1hour: 'Bitte mindestens eine Stunde auswählen'
+}
+
+ATSORA_LOCALE_CATALOG.de.pages = {
+  index: {
+    title: 'Index'
+  },
+  login: {
+    title: 'Anmelden'
+  },
+  home: {
+    title: 'Startseite'
+  },
+
+  // Manager and operator views
+  machines: {
+    title: 'Maschinen'
+  },
+  machinespecification: {
+    title: 'Maschinenansicht: Tag und Woche'
+  },
+  oeeview: {
+    title: 'OEE-Ansicht'
+  },
+  machinedashboard: {
+    title: 'Dashboard'
+  },
+  productionmachining: {
+    title: 'Fertigungsstatus'
+  },
+  running: {
+    title: 'Aktueller Betrieb'
+  },
+  scheduledstatus: {
+    title: 'Planungsstatus'
+  },
+  toollife: {
+    title: 'Werkzeugstandzeit'
+  },
+
+  // Manager, operator and LIVE
+  managementinformationterminal: {
+    title: 'Betriebsinformationsterminal'
+  },
+  operationstatus: {
+    title: 'Betriebsstatus'
+  },
+
+  // Add in plugin
+  productiontracker: {
+    title: 'Produktionsverfolgung'
+  },
+  mpmilestones: {
+    title: ''
+  },
+  plant: {
+    title: 'Werksübersicht'
+  },
+  reservecapacity: {
+    title: 'Reservekapazität'
+  },
+
+  // LIVE display
+  utilizationbar: {
+    title: 'Auslastung',
+    subtitle: 'Balken'
+  },
+  utilizationpie: {
+    title: 'Auslastung',
+    subtitle: 'Kreisdiagramm'
+  },
+  performancebar: {
+    title: 'Leistung',
+    subtitle: 'Horizontale Anzeige'
+  },
+  performancegauge: {
+    title: 'Leistung',
+    subtitle: 'Kreisanzeige'
+  },
+  combinedview: {
+    title: 'Kombinierte Ansicht',
+    options: {
+      title: 'Optionen',
+      reset: 'Zurücksetzen',
+    }
+  },
+  machinestatus: {
+    title: 'Maschinenstatus'
+  },
+  managerview: {
+    title: 'Schichtleiteransicht'
+  },
+  motionsummary: {
+    title: 'Betriebsübersicht'
+  }
+};
+
 // Force the locale of the catalog
 ATSORA_CATALOG = ATSORA_LOCALE_CATALOG.default;
 
