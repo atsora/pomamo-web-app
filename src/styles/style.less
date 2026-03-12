@@ -458,6 +458,7 @@ body {
   flex: 0 0 auto;
   position: relative;
   justify-content: space-between;
+  gap: 5px;
 
   &:before {
     /* customer logo if needed */
@@ -502,21 +503,21 @@ body {
     position: relative;
     background-color: transparent;
     padding: 0;
+    border-radius: @border_radius_small;
+
+    &:hover {
+      background-color: @color_highlight_alternate;
+    }
 
     svg {
-      width: 100%;
-      height: 100%;
+      height: 80% !important;
+      width: 80% !important;
     }
   }
 
   button.activated svg {
     stroke: @color_highlight;
     fill: @color_highlight;
-  }
-
-  button.disabled svg {
-    stroke: @color_gray;
-    fill: @color_gray;
   }
 
   button.disabled:hover svg {
@@ -557,28 +558,13 @@ body {
   align-items: center;
   height: 100%;
   box-sizing: border-box;
-  border-radius: @border_radius_small;
-
-  &:hover {
-    background-color: @color_highlight_alternate;
-  }
 }
 
 .pulse-header-close-to-right {
   display: flex;
   align-items: center;
-  border-radius: @border_radius_small;
   height: 100%;
   box-sizing: border-box;
-  padding: 0 2px;
-
-  &:hover {
-    background-color: @color_highlight_alternate;
-  }
-
-  &:has(x-logindisplay):hover {
-    background-color: transparent;
-  }
 
   x-logindisplay {
     .logindisplay-content {
@@ -589,11 +575,6 @@ body {
       border-radius: 3px;
       position: relative;
       border: 1px solid @color_window_border;
-
-      .logindisplay-icon {
-        height: 22px;
-        width: 22px;
-      }
 
       &:hover {
         background-color: @color_background_alternate;
@@ -634,24 +615,10 @@ body {
     }
   }
 
-  button {
-    margin: 0px 2px;
-  }
 }
 
 #navigationpanelbtn {
-  padding: 5px;
-  aspect-ratio: 1 / 1;
-  box-sizing: border-box;
-  border-radius: @border_radius_small;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   .create_svg('menu', @color_text_alternate, @color_text_alternate);
-
-  &:hover {
-    background-color: @color_highlight_alternate;
-  }
 }
 
 #fullscreenbtn {
