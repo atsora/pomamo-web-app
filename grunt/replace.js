@@ -12,7 +12,7 @@ module.exports = {
         },
         {
           match: /WebAppVersion/g,
-          replacement: '<%= pkg.version %>' // Web App Version
+          replacement: '<%= pomamoversion %>' // <%= pkg.version =%> may work, but be more consistent using the same method as above
         }
       ]
     },
