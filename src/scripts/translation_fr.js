@@ -74,8 +74,7 @@ ATSORA_LOCALE_CATALOG.fr.parameters = {
   resetButton: "Réinitialiser",
   rotations: "Rotation(s)",
   rows: "Lignes",
-  showLegend: "Afficher la légende",
-  webAppVersion: "Version de la web app"
+  showLegend: "Afficher la légende"
 }
 
 ATSORA_LOCALE_CATALOG.fr.content = {

@@ -77,8 +77,7 @@ ATSORA_LOCALE_CATALOG.default.parameters = {
   resetButton: "Reset",
   rotations: "Rotation(s)",
   rows: "Rows",
-  showLegend: "Show legend",
-  webAppVersion: "Web app version"
+  showLegend: "Show legend"
 }
 
 ATSORA_LOCALE_CATALOG.default.content = {
@@ -296,8 +295,7 @@ ATSORA_LOCALE_CATALOG.fr.parameters = {
   resetButton: "Réinitialiser",
   rotations: "Rotation(s)",
   rows: "Lignes",
-  showLegend: "Afficher la légende",
-  webAppVersion: "Version de la web app"
+  showLegend: "Afficher la légende"
 }
 
 ATSORA_LOCALE_CATALOG.fr.content = {
@@ -514,8 +512,7 @@ ATSORA_LOCALE_CATALOG.de.parameters = {
   resetButton: 'Zurücksetzen',
   rotations: 'Rotation(en)',
   rows: 'Zeilen',
-  showLegend: 'Legende anzeigen',
-  webAppVersion: 'Web-App-Version'
+  showLegend: 'Legende anzeigen'
 }
 
 ATSORA_LOCALE_CATALOG.de.content = {
