@@ -8,7 +8,8 @@ var pulseUtility = require('pulseUtility');
 var pulsePage = require('pulsePage');
 var eventBus = require('eventBus');
 
-require('x-grouparray/x-grouparray');
+require('x-grouplist/x-grouplist');
+require('x-rotationprogress/x-rotationprogress');
 require('x-machinedisplay/x-machinedisplay');
 require('x-toollifemachine/x-toollifemachine');
 require('x-tr/x-tr');
@@ -18,7 +19,6 @@ class ToolLifePage extends pulsePage.BasePage {
     super();
 
     // General configuration
-    this.canConfigureColumns = false;
     pulseConfig.set('column', '');
   }
 

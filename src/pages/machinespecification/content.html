@@ -1,13 +1,15 @@
 <!--
 Copyright (C) 2009-2023 Lemoine Automation Technologies
+Copyright (C) 2025 Atsora Solutions
 
 SPDX-License-Identifier: Apache-2.0
 -->
 
 <div class='main-table-box'>
-  <x-periodmanager exclude-now='false' displaydaysrange=1 period-context='periodContextToday'></x-periodmanager>
-  <x-periodmanager exclude-now='true' displaydaysrange=1 period-context='periodContextYesterday'></x-periodmanager>
-  <x-periodmanager exclude-now='true' displaydaysrange=7 period-context='periodContextLast7Days'></x-periodmanager>
-
-  <x-grouparray templateid='boxtoclone' ></x-grouparray>
+  <x-periodmanager exclude-now='false' displaydaysrange=1 period-context='machinespecification'></x-periodmanager>
+  <x-periodmanager exclude-now='true' displaydaysrange=1 displayshiftrange='false' displayweekrange='false' period-context='periodContextYesterday'></x-periodmanager>
+  <x-periodmanager exclude-now='true' displaydaysrange=7 displayshiftrange='false' displayweekrange='false' period-context='periodContextLast7Days'></x-periodmanager>
+  <x-rotationprogress display-mode="bar"></x-rotationprogress>
+  <x-groupgrid templateid='boxtoclone'></x-groupgrid>
+  <x-rotationprogress display-mode="text"></x-rotationprogress>
 </div>

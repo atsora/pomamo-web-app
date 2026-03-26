@@ -7,27 +7,16 @@ var pulseConfig = require('pulseConfig');
 var pulseUtility = require('pulseUtility');
 var pulsePage = require('pulsePage');
 
-require('x-grouparray/x-grouparray');
+require('x-grouplist/x-grouplist');
+require('x-rotationprogress/x-rotationprogress');
 
 require('x-machinedisplay/x-machinedisplay');
 require('x-productionmachiningstatus/x-productionmachiningstatus');
 require('x-lastworkinformation/x-lastworkinformation');
 require('x-currentcncvalue/x-currentcncvalue');
 require('x-lastshift/x-lastshift');
-/* Replace x-RCB */
 require('x-datetimegraduation/x-datetimegraduation');
-require('x-shiftslotbar/x-shiftslotbar');
-require('x-machinestatebar/x-machinestatebar');
-require('x-observationstatebar/x-observationstatebar');
-require('x-operationcyclebar/x-operationcyclebar');
-require('x-operationslotbar/x-operationslotbar');
-require('x-productionstatebar/x-productionstatebar');
-require('x-reasonslotbar/x-reasonslotbar');
-require('x-cncalarmbar/x-cncalarmbar');
-require('x-redstacklightbar/x-redstacklightbar');
-require('x-cncvaluebar/x-cncvaluebar');
-require('x-isofileslotbar/x-isofileslotbar');
-/* end replace RCB */
+require('x-barstack/x-barstack'); // pulls in all bar components
 require('x-motionpercentage/x-motionpercentage');
 require('x-motiontime/x-motiontime');
 require('x-periodtoolbar/x-periodtoolbar');
@@ -44,7 +33,6 @@ class RunningPage extends pulsePage.BasePage {
     super();
 
     // General configuration
-    this.canConfigureColumns = false;
     pulseConfig.set('column', '');
   }
 
@@ -59,42 +47,23 @@ class RunningPage extends pulsePage.BasePage {
     // BAR : day / shift
     $('#showproductionbar').prop('checked',
       pulseConfig.getBool('showproductionbar'));
-    $('#showproductionbar').change(function () {
-      let showproductionbar = $('#showproductionbar').is(':checked');
-      // Store
+    const applyBarChoice = (showproductionbar) => {
       pulseConfig.set('showproductionbar', showproductionbar);
-      // Display
+      document.querySelectorAll('x-barstack').forEach(el => el._applySwitch());
       if (showproductionbar) {
-        $('x-reasonslotbar').hide();
         $('x-reasongroups').hide();
-        $('x-productionstatebar').show();
         $('x-productionstatelegends').show();
-      }
-      else {
-        $('x-reasonslotbar').show();
+      } else {
         $('x-reasongroups').show();
-        $('x-productionstatebar').hide();
         $('x-productionstatelegends').hide();
       }
+    };
+    $('#showproductionbar').change(function () {
+      applyBarChoice($('#showproductionbar').is(':checked'));
     });
     $('#showreasonbar').prop('checked', !pulseConfig.getBool('showproductionbar'));
     $('#showreasonbar').change(function () {
-      let showproductionbar = !$('#showreasonbar').is(':checked');
-      // Store
-      pulseConfig.set('showproductionbar', showproductionbar);
-      // Display
-      if (showproductionbar) {
-        $('x-reasonslotbar').hide();
-        $('x-reasongroups').hide();
-        $('x-productionstatebar').show();
-        $('x-productionstatelegends').show();
-      }
-      else {
-        $('x-reasonslotbar').show();
-        $('x-reasongroups').show();
-        $('x-productionstatebar').hide();
-        $('x-productionstatelegends').hide();
-      }
+      applyBarChoice(!$('#showreasonbar').is(':checked'));
     });
   }
 
@@ -149,9 +118,7 @@ class RunningPage extends pulsePage.BasePage {
 
   buildContent () {
 
-    //pulseConfig.set('column', 1); // Always ! -> Not here, in x-grouparray
-
-    // Link between these displays are removed - In case of bad config, job can be displayed twice (ex: dev)
+    //Link between these displays are removed - In case of bad config, job can be displayed twice (ex: dev)
     let addProductionMachining = pulseConfig.getBool('currentdisplay.displayjobshiftpartcount', false);
     let displayJob = pulseConfig.getBool('currentdisplay.displayjob', true);
     let displayShift = pulseConfig.getBool('currentdisplay.displayshift', true);
@@ -182,87 +149,21 @@ class RunningPage extends pulsePage.BasePage {
       $('x-currentcncvalue').hide();
     }
 
-    // show Bars
-    let showBar = pulseConfig.getBool('showcoloredbar.shift', false);
-    if (showBar) {
-      $('x-shiftslotbar').show();
-    }
-    else {
-      $('x-shiftslotbar').hide();
-    }
-
-    showBar = pulseConfig.getBool('showcoloredbar.machinestate', false);
-    if (showBar) {
-      $('x-machinestatebar').show();
-    }
-    else {
-      $('x-machinestatebar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.observationstate', false);
-    if (showBar) {
-      $('x-observationstatebar').show();
-    }
-    else {
-      $('x-observationstatebar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.cycle', false);
-    if (showBar) {
-      $('x-operationcyclebar').show();
-    }
-    else {
-      $('x-operationcyclebar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.operation', false);
-    if (showBar) {
-      $('x-operationslotbar').show();
-    }
-    else {
-      $('x-operationslotbar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.isofile', false);
-    if (showBar) {
-      $('x-isofileslotbar').show();
-    }
-    else {
-      $('x-isofileslotbar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.cncalarm', false);
-    if (showBar) {
-      $('x-cncalarmbar').show();
-    }
-    else {
-      $('x-cncalarmbar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.redstacklight', false);
-    if (showBar) {
-      $('x-redstacklightbar').show();
-    }
-    else {
-      $('x-redstacklightbar').hide();
-    }
-    // show reason bar == always -> idem for SHOW x-reasongroups - see below
-    showBar = pulseConfig.getBool('showcoloredbar.cncvalue', false);
-    if (showBar) {
-      $('x-cncvaluebar').show();
+    // Bars are now managed by x-barstack reading pulseConfig directly.
+    // Only non-bar elements need explicit show/hide here.
+    const showCncValue = pulseConfig.getBool('showcoloredbar.cncvalue', false);
+    if (showCncValue) {
       $('x-fieldlegends').show();
-    }
-    else {
-      $('x-cncvaluebar').hide();
+    } else {
       $('x-fieldlegends').hide();
     }
 
-    // Reason bar and x-reasongroups CAN be replaced by production state
-    let showproductionbar = pulseConfig.getBool('showproductionbar', false);
+    const showproductionbar = pulseConfig.getBool('showproductionbar', false);
     if (showproductionbar) {
-      $('x-reasonslotbar').hide();
       $('x-reasongroups').hide();
-      $('x-productionstatebar').show();
       $('x-productionstatelegends').show();
-    }
-    else {
-      $('x-reasonslotbar').show();
+    } else {
       $('x-reasongroups').show();
-      $('x-productionstatebar').hide();
       $('x-productionstatelegends').hide();
     }
 

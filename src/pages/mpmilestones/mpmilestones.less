@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ * Copyright (C) 2025 Atsora Solutions
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -14,23 +15,80 @@
 @import "x-machineselection/x-machineselection.less";
 
 // Local
-@import "x-grouparray/x-grouparray.less";
+@import "x-groupgrid/x-groupgrid.less";
+@import "x-rotationprogress/x-rotationprogress.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-milestonesmanager/x-milestonesmanager.less";
 
 @import "style.less";
 
+
+.pulse-mainarea-inner {
+  padding: 1.5vh 1.5vw;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+// Grille scrollable
+x-groupgrid {
+  overflow-y: auto;
+  height: 100%;
+
+  .groupgrid-main {
+    height: auto !important;
+    align-content: start;
+  }
+
+  .groupgrid-item {
+    height: auto;
+    min-height: 40vh;
+  }
+}
+
+.appcontext-live x-groupgrid {
+  .groupgrid-main {
+    height: 100% !important;
+    grid-auto-rows: 1fr;
+  }
+
+  .groupgrid-item {
+    height: 100%;
+    min-height: unset;
+  }
+}
+
 .tile {
+  container-type: size;
+  container-name: maintile;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
 .tile-title {
-  border-top-left-radius: @border_radius;
-  border-top-right-radius: @border_radius;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  padding: 4px 10px 4px 10px;
+  background-color: @color_background_alternate;
+  color: @box_header_text_color;
+  white-space: nowrap;
+  font-size: 5cqh !important;
 
   x-machinedisplay {
     text-align: center;
+
+    .machinedisplay-data {
+      font-size: 5cqh !important;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     span {
       width: auto;
@@ -39,7 +97,29 @@
 }
 
 .tile-content {
-  border-radius: @border_radius;
+  background-color: @color_background;
+  color: @box_text_color;
+  box-sizing: border-box;
+  padding: 1.5cqh 1.5cqw;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-height: 0;
+  overflow: hidden;
+
+  .mpmilestones-main-div {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 0;
+    overflow: hidden;
+
+    x-milestonesmanager {
+      flex-grow: 1;
+      min-height: 0;
+    }
+  }
 }
 
 // No legend
@@ -47,17 +127,11 @@
   display: none !important;
 }
 
-// Small screen adaptation
-@media (max-width: 685px) {
-  .select-role-div {
-    width: 100%;
-  }
-
-  .component-cell {
-    margin-bottom: 0px !important;
-  }
-
-  .tile-content {
-    height: 300px;
-  }
+.main-table-box {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }

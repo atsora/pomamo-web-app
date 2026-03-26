@@ -4,8 +4,7 @@ Copyright (C) 2009-2023 Lemoine Automation Technologies
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<div class='single-cell' id='boxtoclone'>
-  <div class="tile">
+<div class="tile" id='boxtoclone'>
     <div class="tile-title combinedview-title">
       <div class="combinedview-title-left">
         <x-runningbutton></x-runningbutton>
@@ -34,10 +33,7 @@ SPDX-License-Identifier: Apache-2.0
       </div>
       <div class="combinedview-bottombar">
         <div class="combinedview-bottomleftbar">
-          <div class="combinedview-bar pulse-bar-div">
-            <x-runningslotbar height=40 period-context='combinedview_6days' motion-context='motion_6day_mach'>
-            </x-runningslotbar>
-          </div>
+          <x-barstack period-context='combinedview_6days' motion-context='motion_6day_mach' main-bar='running'></x-barstack>
           <x-datetimegraduation period-context='combinedview_6days' bottom='true'></x-datetimegraduation>
         </div>
         <div class="combinedview-motionpercentage">
@@ -45,5 +41,4 @@ SPDX-License-Identifier: Apache-2.0
         </div>
       </div>
     </div>
-  </div>
 </div>

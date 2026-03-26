@@ -6,7 +6,8 @@
 var pulseConfig = require('pulseConfig');
 var pulsePage = require('pulsePage');
 
-require('x-grouparray/x-grouparray');
+require('x-grouplist/x-grouplist');
+require('x-rotationprogress/x-rotationprogress');
 
 require('x-machinedisplay/x-machinedisplay');
 require('x-lastmachinestatetemplate/x-lastmachinestatetemplate');
@@ -17,11 +18,19 @@ class ScheduledStatusPage extends pulsePage.BasePage {
     super();
 
     // General configuration
-    this.canConfigureColumns = false;
     pulseConfig.set('column', '');
   }
 
-  getMissingConfigs () {
+  // CONFIG PANEL - Init
+  initOptionValues() {
+  }
+
+  // CONFIG PANEL - Function to read custom inputs
+  getOptionValues() {
+    return '';
+  }
+
+  getMissingConfigs() {
     let missingConfigs = [];
 
     let groups = pulseConfig.getArray('group');
@@ -30,14 +39,18 @@ class ScheduledStatusPage extends pulsePage.BasePage {
       (groups == null || groups.length == 0)) {
       missingConfigs.push({
         selector: 'x-machineselection, #editmachines, .group-machines',
-        message: pulseConfig.pulseTranslate('error.machineRequired','Please select at least one machine')
+        message: pulseConfig.pulseTranslate('error.machineRequired', 'Please select at least one machine')
       });
     }
 
     return missingConfigs;
   }
 
-  buildContent () {
+  // CONFIG PANEL - Default values
+  setDefaultOptionValues() {
+  }
+
+  buildContent() {
   }
 }
 

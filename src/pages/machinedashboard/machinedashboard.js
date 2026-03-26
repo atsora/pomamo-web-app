@@ -13,12 +13,7 @@ require('x-machinedisplay/x-machinedisplay');
 require('x-lastmachinestatus/x-lastmachinestatus');
 require('x-unansweredreasonnumber/x-unansweredreasonnumber');
 require('x-datetimegraduation/x-datetimegraduation');
-require('x-operationcyclebar/x-operationcyclebar');
-require('x-reasonslotbar/x-reasonslotbar');
-require('x-cncalarmbar/x-cncalarmbar');
-require('x-redstacklightbar/x-redstacklightbar');
-require('x-cncvaluebar/x-cncvaluebar');
-require('x-isofileslotbar/x-isofileslotbar');
+require('x-barstack/x-barstack'); // pulls in all bar components
 require('x-toollifemachine/x-toollifemachine');
 require('x-productiontrackergraph/x-productiontrackergraph');
 require('x-reasongroups/x-reasongroups');
@@ -41,8 +36,6 @@ class machinedashboardPage extends pulsePage.BasePage {
     super();
 
     // General configuration
-    this.canConfigureColumns = false;
-    this.canConfigureRows = false;
   }
 
   getMissingConfigs() {
@@ -107,7 +100,18 @@ class machinedashboardPage extends pulsePage.BasePage {
     // --- 3. REOPEN DELAY ---
     this._reopenStopClassificationDelay();
 
-    // --- 4. SHOW PRODUCTION BAR ---
+    // --- 4. SHOW PRODUCTION TRACKER GRAPH ---
+    $('#showproductiontrackergraph').prop('checked', pulseConfig.getBool('showproductiontrackergraph'));
+    if (pulseConfig.getDefaultBool('showproductiontrackergraph') != pulseConfig.getBool('showproductiontrackergraph'))
+      $('#showproductiontrackergraph').attr('overridden', 'true');
+    $('#showproductiontrackergraph').change(function () {
+      let show = $('#showproductiontrackergraph').is(':checked');
+      pulseConfig.set('showproductiontrackergraph', show);
+      if (show) $('x-productiontrackergraph').show();
+      else $('x-productiontrackergraph').hide();
+    });
+
+    // --- 5. SHOW PRODUCTION BAR ---
     $('#showproductionbar').prop('checked', pulseConfig.getBool('showproductionbar'));
     if (pulseConfig.getDefaultBool('showproductionbar') != pulseConfig.getBool('showproductionbar'))
       $('#showproductionbar').attr('overridden', 'true');
@@ -116,14 +120,14 @@ class machinedashboardPage extends pulsePage.BasePage {
       pulseConfig.set('showproductionbar', show);
       if (show) {
         $('x-productionbar').show();
-        $('.perf-tool-container').css('display', 'flex'); // Corrigé ici
+        $('.performancebar-bar-border').show();
       } else {
         $('x-productionbar').hide();
-        $('.perf-tool-container').hide(); // Corrigé ici
+        $('.performancebar-bar-border').hide();
       }
     });
 
-    // --- 5. PERCENT VS RATIO ---
+    // --- 6. PERCENT VS RATIO ---
     if (pulseConfig.getBool('showpercent')) {
       $('#productionbarpercent').prop('checked', true);
     } else {
@@ -142,7 +146,7 @@ class machinedashboardPage extends pulsePage.BasePage {
       $('x-productiongauge').attr('display-mode', mode);
     });
 
-    // --- 6. SHOW PRODUCTION DISPLAY (Le bouton principal) ---
+    // --- 7. SHOW PRODUCTION DISPLAY (Le bouton principal) ---
     $('#showproductiondisplay').prop('checked', pulseConfig.getBool('showproductiondisplay'));
     if (pulseConfig.getDefaultBool('showproductiondisplay') != pulseConfig.getBool('showproductiondisplay'))
       $('#showproductiondisplay').attr('overridden', 'true');
@@ -193,12 +197,12 @@ class machinedashboardPage extends pulsePage.BasePage {
     // --- 8. THRESHOLDS ---
     const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
     const thresholdRedInput = document.getElementById('thresholdredproductionbar');
-    thresholdTarget.value = pulseConfig.getFloat('thresholdtargetproduction');
-    thresholdRedInput.value = pulseConfig.getFloat('thresholdredproduction');
-    if (pulseConfig.getDefaultFloat('thresholdtargetproduction') !== pulseConfig.getFloat('thresholdtargetproduction')) {
+    thresholdTarget.value = pulseConfig.getFloat('thresholdtargetproduction', 80);
+    thresholdRedInput.value = pulseConfig.getFloat('thresholdredproduction', 60);
+    if (pulseConfig.getDefaultFloat('thresholdtargetproduction', 80) !== pulseConfig.getFloat('thresholdtargetproduction', 80)) {
       thresholdTarget.setAttribute('overridden', 'true');
     }
-    if (pulseConfig.getDefaultFloat('thresholdredproduction') !== pulseConfig.getFloat('thresholdredproduction')) {
+    if (pulseConfig.getDefaultFloat('thresholdredproduction', 60) !== pulseConfig.getFloat('thresholdredproduction', 60)) {
       thresholdRedInput.setAttribute('overridden', 'true');
     }
     thresholdTarget.addEventListener('change', () => this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true));
@@ -441,6 +445,9 @@ class machinedashboardPage extends pulsePage.BasePage {
     setDefaultChecked('openStopClassification');
     setDefaultValue('stopClassificationReopenDelay', pulseConfig.getDefaultInt('stopClassificationReopenDelay', 0));
 
+    // Production tracker graph
+    setDefaultChecked('showproductiontrackergraph');
+
     // Production bar
     setDefaultChecked('showproductionbar');
     setDefaultRadioGroup(pulseConfig.getDefaultBool('showpercent') ? 'percent' : 'ratio', {
@@ -465,6 +472,7 @@ class machinedashboardPage extends pulsePage.BasePage {
   getOptionValues() {
     const options = [
       { id: 'showChangedTools', type: 'checkbox' },
+      { id: 'showproductiontrackergraph', type: 'checkbox' },
       { id: 'openStopClassification', type: 'checkbox' },
       { id: 'stopClassificationReopenDelay', type: 'value' },
       { id: 'showproductionbar', type: 'checkbox' },
@@ -490,17 +498,7 @@ class machinedashboardPage extends pulsePage.BasePage {
 
 
   buildContent() {
-let showBar = pulseConfig.getBool('showcoloredbar.cycle', false);
-    if (showBar) $('x-operationcyclebar').show(); else $('x-operationcyclebar').hide();
-
-    showBar = pulseConfig.getBool('showcoloredbar.isofile', false);
-    if (showBar) $('x-isofileslotbar').show(); else $('x-isofileslotbar').hide();
-
-    showBar = pulseConfig.getBool('showcoloredbar.cncalarm', false);
-    if (showBar) $('x-cncalarmbar').show(); else $('x-cncalarmbar').hide();
-
-    showBar = pulseConfig.getBool('showcoloredbar.redstacklight', false);
-    if (showBar) $('x-redstacklightbar').show(); else $('x-redstacklightbar').hide();
+    // Bars are managed by x-barstack reading pulseConfig directly.
 
     // --- APPLICATION SUR LES CLONES DE X-GROUPARRAY ---
     let showproductiondisplay = pulseConfig.getBool('showproductiondisplay');
@@ -518,13 +516,17 @@ let showBar = pulseConfig.getBool('showcoloredbar.cycle', false);
       $('x-defaultpie').hide();
     }
 
+    let showproductiontrackergraph = pulseConfig.getBool('showproductiontrackergraph');
+    if (showproductiontrackergraph) $('x-productiontrackergraph').show();
+    else $('x-productiontrackergraph').hide();
+
     let showproductionbar = pulseConfig.getBool('showproductionbar');
     if (showproductionbar) {
       $('x-productionbar').show();
-      $('.perf-tool-container').css('display', 'flex');
+      $('.performancebar-bar-border').show();
     } else {
       $('x-productionbar').hide();
-      $('.perf-tool-container').hide();
+      $('.performancebar-bar-border').hide();
     }
 
     let showChangedTools = pulseConfig.getBool('showChangedTools');

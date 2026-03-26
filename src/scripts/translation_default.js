@@ -61,6 +61,7 @@ ATSORA_LOCALE_CATALOG.default.options = {
   toolsExpiring: 'Expiring tools',
   showChangedTools: 'Show tool information',
   showProductionGauge: 'Show performance gauge',
+  showProductiontrackergraph: 'Show production tracker graph',
   thresholdMode: 'Threshold mode',
   target: 'Target'
 }
@@ -279,6 +280,7 @@ ATSORA_LOCALE_CATALOG.fr.options = {
   toolSelection: 'Sélection d\'outils',
   showChangedTools: 'Afficher les informations d\'outils',
   showProductionGauge: 'Afficher la jauge de performance',
+  showProductiontrackergraph: 'Afficher le graphique de suivi de production',
   thresholdMode: 'Mode de seuil',
   target: 'Objectif'
 }
@@ -496,6 +498,7 @@ ATSORA_LOCALE_CATALOG.de.options = {
   toolsExpiring: 'Ablaufende Werkzeuge',
   showChangedTools: 'Werkzeuginformationen anzeigen',
   showProductionGauge: 'Leistungsanzeige anzeigen',
+  showProductiontrackergraph: 'Produktionsverfolgungsdiagramm anzeigen',
   thresholdMode: 'Schwellenwertmodus',
   target: 'Zielwert'
 }

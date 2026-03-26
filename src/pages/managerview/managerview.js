@@ -7,20 +7,14 @@ var pulseUtility = require('pulseUtility');
 var pulsePage = require('pulsePage');
 var eventBus = require('eventBus');
 
-require('x-grouparray/x-grouparray');
+require('x-grouplist/x-grouplist');
+require('x-rotationprogress/x-rotationprogress');
 
 require('x-machinedisplay/x-machinedisplay');
 require('x-datetimegraduation/x-datetimegraduation');
 require('x-lastworkinformation/x-lastworkinformation');
 require('x-currentcncvalue/x-currentcncvalue');
-require('x-machinestatebar/x-machinestatebar');
-require('x-observationstatebar/x-observationstatebar');
-require('x-operationcyclebar/x-operationcyclebar');
-require('x-operationslotbar/x-operationslotbar');
-require('x-reasonslotbar/x-reasonslotbar');
-require('x-redstacklightbar/x-redstacklightbar');
-require('x-cncvaluebar/x-cncvaluebar');
-require('x-isofileslotbar/x-isofileslotbar');
+require('x-barstack/x-barstack'); // pulls in all bar components
 require('x-motionpercentage/x-motionpercentage');
 require('x-motiontime/x-motiontime');
 require('x-periodmanager/x-periodmanager');
@@ -32,10 +26,6 @@ require('x-tr/x-tr');
 class ManagerViewPage extends pulsePage.BasePage {
   constructor() {
     super();
-
-    // General configuration
-    this.canConfigureColumns = false;
-    pulseConfig.set('column', '');
   }
 
   // CONFIG PANEL - Init
@@ -192,63 +182,12 @@ class ManagerViewPage extends pulsePage.BasePage {
     else
       $('x-lastworkinformation').hide();
 
-    let showBar = pulseConfig.getBool('showcoloredbar.shift', false);
-    if (showBar)
-      $('x-shiftslotbar').show();
-    else
-      $('x-shiftslotbar').hide();
-
-
-    showBar = pulseConfig.getBool('showcoloredbar.machinestate', false);
-    if (showBar)
-      $('x-machinestatebar').show();
-    else
-      $('x-machinestatebar').hide();
-
-    showBar = pulseConfig.getBool('showcoloredbar.observationstate', false);
-    if (showBar)
-      $('x-observationstatebar').show();
-    else
-      $('x-observationstatebar').hide();
-
-    showBar = pulseConfig.getBool('showcoloredbar.cycle', false);
-    if (showBar)
-      $('x-operationcyclebar').show();
-    else
-      $('x-operationcyclebar').hide();
-
-    showBar = pulseConfig.getBool('showcoloredbar.operation', false);
-    if (showBar)
-      $('x-operationslotbar').show();
-    else
-      $('x-operationslotbar').hide();
-
-    showBar = pulseConfig.getBool('showcoloredbar.isofile', false);
-    if (showBar)
-      $('x-isofileslotbar').show();
-    else
-      $('x-isofileslotbar').hide();
-
-    showBar = pulseConfig.getBool('showcoloredbar.cncalarm', false);
-    if (showBar)
-      $('x-cncalarmbar').show();
-    else
-      $('x-cncalarmbar').hide();
-
-    showBar = pulseConfig.getBool('showcoloredbar.redstacklight', false);
-    if (showBar)
-      $('x-redstacklightbar').show();
-    else
-      $('x-redstacklightbar').hide();
-
-    // show reason bar == always -> idem for SHOW x-reasongroups
-    showBar = pulseConfig.getBool('showcoloredbar.cncvalue', false);
-    if (showBar) {
-      $('x-cncvaluebar').show();
+    // Bars are now managed by x-barstack reading pulseConfig directly.
+    // Only non-bar elements need explicit show/hide here.
+    const showCncValue = pulseConfig.getBool('showcoloredbar.cncvalue', false);
+    if (showCncValue) {
       $('x-fieldlegends').show();
-    }
-    else {
-      $('x-cncvaluebar').hide();
+    } else {
       $('x-fieldlegends').hide();
     }
   }

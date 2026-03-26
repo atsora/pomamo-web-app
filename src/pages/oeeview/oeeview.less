@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 // Global
 @import "style.less";
 @import "pulse.exports.light.less";
 
 @import "x-periodmanager/x-periodmanager.less";
-@import "x-grouparray/x-grouparray.less";
+@import "x-groupgrid/x-groupgrid.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-reasonbutton/x-reasonbutton.less";
 @import "x-lastmachinestatus/x-lastmachinestatus.less";
@@ -20,171 +19,252 @@
 @import "x-periodtoolbar/x-periodtoolbar.less";
 @import "x-workinfo/x-workinfo.less";
 @import "x-stopclassification/x-stopclassification.less";
+@import "x-rotationprogress/x-rotationprogress.less";
 
-// Positioning
+// Masquage temporaire du backend buggé
+x-lastmachinestatus {
+  display: none !important;
+}
 
+.pulse-mainarea-inner {
+  padding: 1.5vh 1.5vw;
+}
+
+// --- 1. LA TUILE (LE CONTENEUR MAÎTRE) ---
 .tile {
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+  /* Flexbox Vertical classique */
   display: flex;
   flex-direction: column;
-  height: 100%; // Take full available height
+  /* Prend toute la place offerte par la grille parente */
+  height: 100%;
+  width: 100%;
+  /* Sécurité absolue : Rien ne doit sortir */
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  /* On définit le contexte de taille ici */
+  container-type: size;
+  container-name: maintile;
 }
 
+// --- 2. EN-TÊTE ---
 .tile-title {
+  /* Flex rigide : ne grandit pas, ne rétrécit pas */
+  flex: 0 0 auto;
+  display: flex;
   flex-direction: column;
-  border-top-left-radius: @border_radius;
-  border-top-right-radius: @border_radius;
+  position: relative;
+  padding: 4px 10px 4px 10px;
+  background-color: @color_background_alternate;
+  color: @box_header_text_color;
+  /* Sécurité Hauteur Max */
+  max-height: 25%;
 
   .oeeview-top-title {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: -10px;
+    width: 100%;
+
+    // [MODIF] Augmentation police titre
+    // Avant: 10px, 6cqh, 22px
+    font-size: 8cqh !important;
+    line-height: 1.1;
 
     x-machinedisplay {
+      font-size: 1em;
+      min-width: 0;
       .machinedisplay-data {
         text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: bold;
       }
     }
 
     x-reasonbutton {
-      margin: 0 0 0 15px;
-    }
-  }
+      margin-left: 0.5em;
+      flex-shrink: 0;
+      height: 1.2em;
+      width: auto;
 
-  x-lastmachinestatus {
-    .pulse-cellbar-main {
+      display: flex;
+      align-items: center;
       justify-content: center;
-
-      .pulse-cellbar-current-data {
-        border-radius: @border_radius_small;
+      .pulse-icon-content,
+      .reasonbutton-svg {
+        height: 100%;
+        width: auto;
+        display: flex;
+        align-items: center;
       }
 
-      .pulse-cellbar-last {
-        display: none;
-      }
-
-      .pulse-cellbar-first {
-        border: unset !important;
-
-        .lastmachinestatus-reason-label {
-          display: none;
-        }
-
-        .pulse-missing-data {
-          display: none !important;
-        }
-
-        #questionmarkcurrentcell {
-          display: none !important;
-        }
+      svg {
+        height: 100%;
+        width: auto;
+        max-width: unset;
+        max-height: 100%;
       }
     }
   }
 }
 
-
+// --- 3. CONTENU PRINCIPAL ---
 .tile-content {
+  background-color: @color_background;
+  color: @box_text_color;
   display: flex;
   flex-direction: column;
-  flex: 1;
 
+  /* Prend tout l'espace restant */
+  flex: 1 1 0px;
+
+  width: 100%;
+  padding: 2.5cqmin;
+  box-sizing: border-box;
+  min-height: 0; /* CRUCIAL pour empêcher le débordement */
+
+  // Section Info (Equipe/Opérateur)
   x-workinfo {
     align-self: center;
-    margin-bottom: 12px;
+    flex-shrink: 0;
+    max-width: 100%;
+    min-height: 0;
+
+    // [MODIF] Augmentation police info
+    // Avant: 9px, 4cqh, 14px
+    font-size: 5cqh;
   }
 
+  // Section Basse (Chiffres + Jauge)
   .oee-bottom {
     display: flex;
     flex-direction: row;
+    /* Prend l'espace restant */
+    flex: 1 1 0px;
+
+    width: 100%;
     overflow: hidden;
-    border-radius: @border_radius;
-    flex-grow: 1; // Grow to fill available space
-    flex-shrink: 1; // Can shrink if needed
-    min-height: 0; // Allow flex children to shrink below content size
+    align-items: stretch;
+    min-height: 0;
   }
 
+  // Colonne de Gauche (Chiffres)
   .oee-number {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 50%;
-    gap: 3px;
-    margin: 0;
-    padding: 0;
-    min-width: 0; // Allow content to shrink
-    flex-shrink: 1;
-
+    flex: 1;
+    gap: 0;
+    min-width: 0;
+    min-height: 0;
     x-production,
     x-productionshiftgoal {
       width: 100%;
-      min-height: 0;
-      min-width: 0;
-      flex: 0 0 auto; // Take only needed space
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 0;
     }
 
     x-production {
-      display: flex;
       flex-direction: column;
-      row-gap: 3px;
-
-      .production-actual-value {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-width: 0;
-
-        .production-actual-separator {
-          display: none;
-        }
-      }
-
+      .production-actual-value,
       .production-target-value {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
+        width: 100%;
         min-width: 0;
-
+        // On s'assure que le contenu interne ne force pas la taille
+        flex: 1 1 0px;
+        .production-actual-separator,
         .production-target-separator {
           display: none;
         }
       }
-
     }
   }
 
+  // Colonne de Droite (Jauge)
   .oee-gauge {
     width: 50%;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
-    padding: 0;
-    min-width: 0; // Allow content to shrink
-    flex-shrink: 1;
-
+    min-width: 0;
+    min-height: 0;
     x-productiongauge {
       width: 100%;
-      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       min-height: 0;
-      min-width: 0;
-      flex-shrink: 1;
-
       .productiongauge-gauge {
-        flex: unset;
         width: 100%;
-        min-width: 0;
-        min-height: 0;
+        height: 100%;
+        max-height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        svg, canvas {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
       }
     }
   }
+
+  // --- TYPOGRAPHIE RESPONSIVE (AJUSTÉE) ---
+
+  span, div {
+    font-weight: bold;
+  }
+
+  // Textes descriptifs (Target, Actual...)
+  .productionshiftgoal-content,
+  .production-content {
+    // [MODIF] Augmentation labels
+    // Avant: 9px, 4cqh, 16px
+    font-size: 4cqw;
+    line-height: 1;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Chiffres principaux
+  .production-number-actual,
+  .production-number-target,
+  .productionshiftgoal-data {
+    // [MODIF] Augmentation gros chiffres
+    // Avant: 12px, 10cqh, 45px
+    // On passe à 15cqh pour que ça remplisse bien
+    font-size: 15cqh;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  // Texte dans la jauge
+  .productiongauge-text {
+    // [MODIF] Augmentation texte jauge
+    // Avant: 10px, 5cqh, 25px
+    font-size: 8cqh;
+    line-height: 1;
+  }
 }
 
+// --- BARRE D'OUTILS EXTERNE ---
 x-periodtoolbar {
   margin-bottom: 8px;
   display: flex;
@@ -200,50 +280,13 @@ x-periodtoolbar {
   }
 }
 
-x-grouparray {
-  .group-single {
-    padding-top: 0 !important;
-  }
+// --- STRUCTURE GLOBALE (Page) ---
+.main-table-box {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
 }
 
-/* .main-table-box {
-  .group-main {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    grid-auto-rows: 1fr;
-    gap: 5px;
-    align-content: start;
-  }
 
-  .group-single {
-    width: auto !important;
-    height: fit-content !important;
-  }
-
-  .single-cell,
-  .tile {
-    height: 100%;
-  }
-} */
-
-// Text
-
-.tile-content {
-
-  span,
-  div {
-    font-weight: bold;
-  }
-
-  .production-number-actual,
-  .production-number-target,
-  .productionshiftgoal-data {
-    font-size: clamp(16px, 5vh, 60px);
-    line-height: 1.1;
-  }
-
-  .productiongauge-text {
-    font-size: clamp(14px, 3.5vh, 35px);
-  }
-
-}

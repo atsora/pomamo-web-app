@@ -29,6 +29,7 @@
 @import "x-showrunningdialogbutton/x-showrunningdialogbutton.less";
 @import "style.less";
 
+
 // For running dialog
 @import "../running/running.less";
 @import "pulsecomponent-detailspopup.less";
@@ -39,8 +40,7 @@
 
 // Use Full screen
 .pulse-mainarea-inner,
-.main-table-box,
-.single-cell {
+.main-table-box {
   box-sizing: border-box;
   height: 100%;
 }
@@ -94,16 +94,22 @@ x-groupsingroup {
 .tile {
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+  box-sizing: border-box;
   padding-top: 0;
   margin-top: 0 !important;
   display: flex;
   flex-direction: column;
   height: 100%; // Take full available height
+  overflow: hidden;
 }
 
 .tile-title {
-  border-top-left-radius: @border_radius;
-  border-top-right-radius: @border_radius;
+  flex-direction: row;
+  position: relative;
+  padding: 4px 10px 4px 10px;
+  background-color: @color_background_alternate;
+  color: @box_header_text_color;
+  white-space: nowrap;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -117,6 +123,8 @@ x-groupsingroup {
 
     x-machinedisplay {
       text-align: center;
+      font-size: 1.8em ;
+
 
       span {
         width: auto;
@@ -131,7 +139,9 @@ x-groupsingroup {
 }
 
 .tile-content {
-  border-radius: @border_radius;
+  background-color: @color_background;
+  color: @box_text_color;
+  padding: 1.5cqh 1.5cqw;
   display: flex;
   flex-direction: column; // align children
   overflow: hidden; // Hide bottom displays when to small

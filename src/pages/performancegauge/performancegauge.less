@@ -13,7 +13,8 @@
 @import "x-machineselection/x-machineselection.less";
 
 // Local
-@import "x-grouparray/x-grouparray.less";
+@import "x-groupgrid/x-groupgrid.less";
+@import "x-rotationprogress/x-rotationprogress.less";
 @import "x-reasonbutton/x-reasonbutton.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-performancegauge/x-performancegauge.less";
@@ -23,34 +24,94 @@
 @import "x-machinemodelegends/x-machinemodelegends.less";
 @import "style.less";
 
+
+.pulse-mainarea-inner {
+  padding: 1.5vh 1.5vw;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+x-groupgrid {
+  overflow-y: auto;
+  height: 100%;
+
+  .groupgrid-main {
+    height: auto !important;
+    align-content: start;
+  }
+
+  .groupgrid-item {
+    height: auto;
+    min-height: 40vh;
+  }
+}
+
+.appcontext-live x-groupgrid {
+  .groupgrid-main {
+    height: 100% !important;
+    grid-auto-rows: 1fr;
+  }
+
+  .groupgrid-item {
+    height: 100%;
+    min-height: unset;
+  }
+}
+
 .tile {
+  container-type: size;
+  container-name: maintile;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   height: 100%;
   min-height: 0;
+  overflow: hidden;
 }
 
-.tile-title{
-  border-top-left-radius: @border_radius;
-  border-top-right-radius: @border_radius;
+.tile-title {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  padding: 4px 10px 4px 10px;
+  background-color: @color_background_alternate;
+  color: @box_header_text_color;
+  white-space: nowrap;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  font-size: 6cqh !important;
 
   x-reasonbutton {
     margin: 0;
+    width: 9cqh;
+    height: 9cqh;
   }
 
   .machinedisplay-position {
     flex-grow: unset;
     flex-shrink: unset;
+
+    x-machinedisplay {
+      font-size: 1em !important;
+      .machinedisplay-data {
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: bold;
+      }
+    }
   }
 }
 
-.tile-content{
-  border-radius: @border_radius;
+.tile-content {
+  background-color: @color_background;
+  color: @box_text_color;
+  box-sizing: border-box;
+  padding: 1.5cqh 1.5cqw;
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -58,35 +119,37 @@
   width: 100%;
   overflow: hidden;
   position: relative;
+
+  x-performancegauge {
+    display: block;
+    text-align: center;
+    flex: 1 1 auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: 2cqh;
+    overflow: hidden;
+    min-height: 0;
+  }
 }
 
-// GAUGE position
-.machineperformancegauge {
-  display: inline-block;
-  text-align: center;
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  padding-top: 12px;
-  flex: 1 1 auto;
-  overflow: hidden;
-}
 x-motionpercentage {
   position: absolute;
   bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 2em; // overload main in pie/gauge
+  font-size: 10cqh !important;
   line-height: 1em;
 }
+
 x-motiontime {
   position: absolute;
   bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 2em;
+  font-size: 10cqh !important;
   line-height: 1em;
 }
+
 .performancegauge-svg { position: relative; }
 
 .needle {
@@ -99,7 +162,16 @@ x-motiontime {
 
 // Override for mobile that sets height: auto
 @media (max-width: 685px) {
-  .single-cell {
+  .tile {
     height: 100% !important;
   }
+}
+
+.main-table-box {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }

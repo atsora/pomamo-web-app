@@ -10,7 +10,7 @@ var eventBus = require('eventBus');
 
 require('x-reasonbutton/x-reasonbutton');
 require('x-machinedisplay/x-machinedisplay');
-require('x-reasonslotbar/x-reasonslotbar');
+require('x-barstack/x-barstack'); // pulls in all bar components
 require('x-motionpercentage/x-motionpercentage');
 require('x-datetimegraduation/x-datetimegraduation');
 require('x-clock/x-clock');
@@ -18,7 +18,8 @@ require('x-periodmanager/x-periodmanager');
 require('x-machinemodelegends/x-machinemodelegends');
 require('x-reasongroups/x-reasongroups');
 
-require('x-grouparray/x-grouparray');
+require('x-groupgrid/x-groupgrid');
+require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
 
@@ -29,7 +30,28 @@ class UtilizationBarPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Init
   initOptionValues() {
-    // Prepare custom inputs
+    // Layout
+    const defaultLayoutChk = $('#defaultlayout');
+    const rotationSettings = $('.rotation-settings');
+    const machinesPerPageInput = $('#machinesperpage');
+
+    defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
+    if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
+      defaultLayoutChk.attr('overridden', true);
+
+    defaultLayoutChk.change(() => {
+      let isDefault = defaultLayoutChk.is(':checked');
+      pulseConfig.set('defaultlayout', isDefault);
+      if (isDefault) {
+        rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
+        machinesPerPageInput.val(16).change();
+      } else {
+        rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
+      }
+    }).trigger('change');
+
+    machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 16));
+    $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
 
     // show clock
     $('#showclockutilization').prop('checked', pulseConfig.getBool('showclock'));
@@ -103,6 +125,11 @@ class UtilizationBarPage extends pulsePage.BasePage {
     $('#displayisdays').prop('checked', true);
     $('#displayisdays').change();
     $('#displayisdays').removeAttr('overridden');
+
+    // Layout : défaut = rotation standard (defaultlayout=true, 16 par page)
+    $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
+    $('#machinesperpage').val(16).removeAttr('overridden');
+    $('#rotationdelay').val(10).removeAttr('overridden');
   }
 
   // CONFIG PANEL - Function to read custom inputs
@@ -111,13 +138,17 @@ class UtilizationBarPage extends pulsePage.BasePage {
   // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues() {
     const options = [
-      { id: 'showclockutilization', type: 'checkbox', param: 'showclock' }
+      { id: 'showclockutilization', type: 'checkbox', param: 'showclock' },
+      { id: 'defaultlayout', type: 'checkbox' },
+      { id: 'machinesperpage', type: 'value' },
+      { id: 'rotationdelay', type: 'value' }
     ];
 
     let optionsValues = options.map(opt => {
       const el = document.getElementById(opt.id);
-      if (!el) return '';
+      if (!el || $(el).is(':hidden')) return '';
       const paramName = opt.param || opt.id;
+      if (opt.type === 'value') return `&${paramName}=${el.value}`;
       return `&${paramName}=${el.checked}`;
     }).join('');
 

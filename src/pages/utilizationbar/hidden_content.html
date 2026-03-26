@@ -7,8 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <!--x-periodmanager exclude-now='false' >
 </x-periodmanager-->
-<div class='single-cell' id='boxtoclone'>
-  <div class="tile">
+<div class="tile" id='boxtoclone'>
     <div class="tile-title">
       <x-reasonbutton></x-reasonbutton>
       <div class="machinedisplay-position">
@@ -16,19 +15,12 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
     <div class="tile-content">
-      <div class="machineutilizationbar-bar-and-percent">
-        <div class="machineutilizationbar-bar-box">
-          <div class="machineutilizationbar-bar-border pulse-bar-div">
-            <x-reasonslotbar motion-context="motion_machine" height="60">
-            </x-reasonslotbar>
-          </div>
-          <x-datetimegraduation bottom="true">
-          </x-datetimegraduation>
-        </div>
-        <div class="utilizationbar-percent-position">
-          <x-motionpercentage motion-context="motion_machine"></x-motionpercentage>
-        </div>
+      <div class="machineutilizationbar-bar-box">
+        <x-barstack period-context="utilizationbar" motion-context="motion_machine"></x-barstack>
+        <x-datetimegraduation period-context="utilizationbar" bottom="true"></x-datetimegraduation>
+      </div>
+      <div class="utilizationbar-percent-position">
+        <x-motionpercentage motion-context="motion_machine"></x-motionpercentage>
       </div>
     </div>
-  </div>
 </div>

@@ -34,3 +34,37 @@ SPDX-License-Identifier: Apache-2.0
 
   </div>
 </div>
+
+<div class="param-group group-layout">
+  <div class="param-group-header group-layout">
+    <div class="param-group-title"><x-tr key="options.layoutSettings" default="Layout"></x-tr></div>
+    <button class="param-group-button" id="resetlayout"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+  </div>
+
+  <div class="param-group-content group-layout">
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="defaultlayout"><x-tr key="options.defaultLayout" default="Use default layout (16)"></x-tr></label>
+        <input type="checkbox" id="defaultlayout" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="labelsubgroup rotation-settings">
+      <div class='labelheader'>
+        <label><x-tr key="options.rotationSettings" default="Rotation Settings"></x-tr></label>
+      </div>
+      <div class="subgroup">
+        <div class='inlined-radio'>
+          <label for="machinesperpage"><x-tr key="options.machinesPerPage" default="Machines / page"></x-tr></label>
+          <input type="number" id="machinesperpage" min="1" max="16" step="1" />
+        </div>
+        <div class='inlined-radio'>
+          <label for="rotationdelay"><x-tr key="options.rotationDelay" default="Delay (sec)"></x-tr></label>
+          <input type="number" id="rotationdelay" min="3" step="1" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

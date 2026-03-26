@@ -13,8 +13,6 @@ class ValidatePage extends pulsePage.BasePage {
     super();
 
     // General configuration
-    this.canConfigureColumns = false; // useful only if createTableCell is defined
-    this.canConfigureRows = false; // useful only if createTableCell is defined
     this.showMachineselection = false;
   }
 

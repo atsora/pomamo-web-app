@@ -29,6 +29,8 @@ PULSE_DEFAULT_CONFIG.general.showlegend = 'dynamic'; // Can be 'true', 'false', 
 PULSE_DEFAULT_CONFIG.general.enableGroups = false; // Can be 'true' to display machines by groups (including dynamic groups)
 PULSE_DEFAULT_CONFIG.general.allowpagerotation = false;
 PULSE_DEFAULT_CONFIG.general.allowproductionbar = false; // Default
+PULSE_DEFAULT_CONFIG.general.thresholdtargetproduction = 80;
+PULSE_DEFAULT_CONFIG.general.thresholdredproduction = 60;
 
 /* menuType: can be overload by role
 * - 'fullOrIcon': icon + text or just icon, factorization per title NOT possible
@@ -54,12 +56,12 @@ PULSE_DEFAULT_CONFIG.general.showcoloredbar = {
   // top
   shift: false,
   machinestate: false,
-  observationstate: true,
+  observationstate: false,
   // middle
-  operation: true,
+  operation: false,
   isofile: false,
   cncalarm: false,
-  redstacklight: true,
+  redstacklight: false,
   cncvalue: false,
   // click on any bar
   click: {
@@ -118,10 +120,16 @@ PULSE_DEFAULT_CONFIG.pages = {
       //'x-lastworkinformation',
       //'x-sequencebar',                              // to remove in 6.0
       'x-toollifemachine', // prod only -> remove for MOLD file
-      'x-cycleprogressbar' // prod only -> remove for MOLD file
+      'x-cycleprogressbar', // prod only -> remove for MOLD file
       //,'x-lastmachinestatetemplate'                  // + setup
+      'x-unansweredreasonnumber',
+      'x-reasonbutton',
+      'title-lastmachinestatus'
     ],
     showcoloredbar: {
+      observationstate: true,
+      operation: true,
+      redstacklight: true,
       // middle
       cncvalue: true,
       // click on any bar
@@ -133,7 +141,10 @@ PULSE_DEFAULT_CONFIG.pages = {
   machinespecification: {
     enableGroups: true,
     row: 1,
-    column: 1
+    column: 1,
+    showcoloredbar: {
+      cncvalue: true
+    }
   },
   machinestatus: {
     enableGroups: true,
@@ -161,12 +172,14 @@ PULSE_DEFAULT_CONFIG.pages = {
       displayjob: false
     },
     showcoloredbar: {
+      observationstate: true,
+      operation: true,
       // middle
       cncvalue: true,
       // click on any bar
-      /*click: {
-        allbars: 'none' // each bar can be overloaded. Possible values: none, change, popup, details
-      },*/
+      click: {
+        allbars: 'details' // each bar can be overloaded. Possible values: none, change, popup, details
+      },
     }
   },
   motionsummary: {
@@ -221,6 +234,8 @@ PULSE_DEFAULT_CONFIG.pages = {
     showcoloredbar: {
       // middle
       cncalarm: false, //true, // Removed because too slow (cf NR-2019-05)
+      redstacklight: true, // always in DOM — visibility driven by barshowalarms option at runtime
+      cncvalue: true,
       // click on any bar
       /*click: {
         allbars: 'none' // each bar can be overloaded. Possible values: none, change, popup, details
@@ -242,6 +257,8 @@ PULSE_DEFAULT_CONFIG.pages = {
     showpercent: true,
     showproductiondisplay: true, // Show/hide production display section
     showproductiongauge: true, // true: show gauge, false: show pie
+
+    showproductiontrackergraph: true,
 
     showcoloredbar: {
       cncvalue: true,
@@ -286,9 +303,18 @@ PULSE_DEFAULT_CONFIG.pages = {
       displayjob: false,
       displayshift: false,
       displaycncvalue: true
+    },
+    showcoloredbar: {
+      observationstate: true,
+      operation: true,
+      redstacklight: true,
+      cncvalue: true,
+      click: {
+        allbars: 'details' // Possible values: none, change, popup, details, stopclassification
+      }
     }
     //,showOverwriteRequired: true, // == default tagConfig
-    /*showcoloredbar: { // Removed
+    /*showcoloredbar_bars: { // Removed
       // middle
       cycle: true,
       operationslot: true,
@@ -400,7 +426,7 @@ PULSE_DEFAULT_CONFIG.roles.live.showlegend = 'true';
 PULSE_DEFAULT_CONFIG.roles.live.menuType = 'textOrNothing';
 PULSE_DEFAULT_CONFIG.roles.live.allowpagerotation = true;
 PULSE_DEFAULT_CONFIG.roles.live.customTitle = true;
-PULSE_DEFAULT_CONFIG.roles.live.showoverwriterequired = 'false';
+PULSE_DEFAULT_CONFIG.roles.live.showoverwriterequired = 'true';
 
 // Special for Support
 PULSE_DEFAULT_CONFIG.roles.support.cancelHorizontalSplitInBar = 'false';

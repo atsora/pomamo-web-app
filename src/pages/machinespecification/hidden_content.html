@@ -5,8 +5,7 @@ Copyright (C) 2025 Atsora Solutions
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<div class='single-cell' id='boxtoclone'>
-  <div class="tile">
+<div class="tile" id='boxtoclone'>
     <div class="tile-title">
       <div class="machinedisplay-position">
         <x-machinedisplay></x-machinedisplay>
@@ -14,50 +13,43 @@ SPDX-License-Identifier: Apache-2.0
     </div>
     <div class="tile-content">
       <!-- TODAY -->
-      <div class="machinepecification-line">
-        <div class="machinepecification-period-div">
-          <span class="machinepecification-period-span"><x-tr key="content.today" default="Today"></x-tr></span>
+      <div class="machinespecification-line">
+        <div class="machinespecification-period-div">
+          <span class="machinespecification-period-span"><x-tr key="content.today" default="Today"></x-tr></span>
         </div>
-        <div class="machinepecification-bar">
-          <div class="machinepecification-bar-border pulse-bar-div">
-            <x-reasonslotbar height=70 period-context="periodContextToday" motion-context="motionContextToday"></x-reasonslotbar>
-            <x-cncvaluebar height=25 period-context="periodContextToday"></x-cncvaluebar>
-          </div>
-          <x-datetimegraduation bottom=true period-context="periodContextToday"></x-datetimegraduation>
+        <div class="machinespecification-bar">
+          <x-barstack period-context="machinespecification" motion-context="motionContextToday"></x-barstack>
+          <x-datetimegraduation bottom=true period-context="machinespecification"></x-datetimegraduation>
         </div>
-        <div class="machinepecification-motion">
+        <div class="machinespecification-motion">
           <x-motionpercentage motion-context='motionContextToday'></x-motionpercentage>
           <x-motiontime motion-context='motionContextToday'></x-motiontime>
         </div>
       </div>
       <!-- YESTERDAY -->
-      <div class="machinepecification-line">
-        <div class="machinepecification-period-div">
-          <span class="machinepecification-period-span"><x-tr key="content.yesterday" default="Yesterday"></x-tr></span>
+      <div class="machinespecification-line">
+        <div class="machinespecification-period-div">
+          <span class="machinespecification-period-span"><x-tr key="content.yesterday" default="Yesterday"></x-tr></span>
         </div>
-        <div class="machinepecification-bar">
-          <div class="machinepecification-bar-border pulse-bar-div">
-            <x-runningslotbar height=95 period-context="periodContextYesterday" motion-context="motionContextYesterday"></x-runningslotbar>
-          </div>
+        <div class="machinespecification-bar">
+          <x-barstack period-context="periodContextYesterday" motion-context="motionContextYesterday" main-bar="running"></x-barstack>
           <x-datetimegraduation bottom=true period-context="periodContextYesterday"></x-datetimegraduation>
         </div>
-        <div class="machinepecification-motion">
+        <div class="machinespecification-motion">
           <x-motionpercentage motion-context='motionContextYesterday'></x-motionpercentage>
           <x-motiontime motion-context='motionContextYesterday'></x-motiontime>
         </div>
       </div>
       <!-- Last 7 days -->
-      <div class="machinepecification-line">
-        <div class="machinepecification-period-div">
-          <span class="machinepecification-period-span"><x-tr key="content.last7days" default="Last 7 days"></x-tr></span>
+      <div class="machinespecification-line">
+        <div class="machinespecification-period-div">
+          <span class="machinespecification-period-span"><x-tr key="content.last7days" default="Last 7 days"></x-tr></span>
         </div>
-        <div class="machinepecification-bar">
-          <div class="machinepecification-bar-border pulse-bar-div">
-            <x-runningslotbar height=95 period-context="periodContextLast7Days" motion-context="motionContextLast7Days"></x-runningslotbar>
-          </div>
+        <div class="machinespecification-bar">
+          <x-barstack period-context="periodContextLast7Days" motion-context="motionContextLast7Days" main-bar="running"></x-barstack>
           <x-datetimegraduation bottom=true period-context="periodContextLast7Days"></x-datetimegraduation>
         </div>
-        <div class="machinepecification-motion">
+        <div class="machinespecification-motion">
           <x-motionpercentage motion-context='motionContextLast7Days'></x-motionpercentage>
           <x-motiontime motion-context='motionContextLast7Days'></x-motiontime>
         </div>
@@ -65,5 +57,4 @@ SPDX-License-Identifier: Apache-2.0
       </div>
 
     </div>
-  </div>
 </div>

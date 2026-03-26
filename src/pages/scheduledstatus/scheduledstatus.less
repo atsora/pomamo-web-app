@@ -20,18 +20,18 @@
 
 @import "style.less";
 
-.machine-and-bar-table {
-  border-radius: @border_radius;
+x-grouplist {
 
   .group-main {
     display: flex;
     flex-direction: column;
     padding: 16px 24px;
     row-gap: 16px;
+    background-color: @color_background;
+    border-radius: @border_radius;
 
     .group-single {
       order: 999999999; // default = bottom = more than 2 years in minutes
-      padding: 0px 12px;
     }
   }
 
@@ -48,15 +48,13 @@
     vertical-align: middle;
 
     >.div-machine {
-      width: 10%;
-      min-width: 24ex;
+      width: 15%;
       box-sizing: border-box;
       line-height: 2em; // == vertical align
     }
 
     >.div-bar {
       width: 85%;
-      flex: 1;
       box-sizing: border-box;
     }
 

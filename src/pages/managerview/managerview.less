@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ * Copyright (C) 2025 Atsora Solutions
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -8,28 +9,13 @@
 @import "pulse.customdialog.less";
 
 @import "pulse.exports.light.less"; // Global import
-// @import "x-checkcurrenttime/x-checkcurrenttime.less";
-// @import "x-checkpath/x-checkpath.less";
-// @import "x-checkversion/x-checkversion.less";
-// @import "x-checkconfigupdate/x-checkconfigupdate.less";
-// @import "x-checklogin/x-checklogin.less";
-// @import "x-message/x-message.less";
-
 @import "x-machineselection/x-machineselection.less";
 
 // Local
-@import "x-grouparray/x-grouparray.less";
+@import "x-grouplist/x-grouplist.less";
 @import "x-currentcncvalue/x-currentcncvalue.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-datetimegraduation/x-datetimegraduation.less";
-@import "x-machinestatebar/x-machinestatebar.less";
-@import "x-observationstatebar/x-observationstatebar.less";
-@import "x-operationcyclebar/x-operationcyclebar.less";
-@import "x-operationslotbar/x-operationslotbar.less";
-@import "x-reasonslotbar/x-reasonslotbar.less";
-@import "x-redstacklightbar/x-redstacklightbar.less";
-@import "x-cncvaluebar/x-cncvaluebar.less";
-@import "x-isofileslotbar/x-isofileslotbar.less";
 @import "x-motionpercentage/x-motionpercentage.less";
 @import "x-motiontime/x-motiontime.less";
 @import "x-reasongroups/x-reasongroups.less";
@@ -37,102 +23,129 @@
 @import "x-reasonbutton/x-reasonbutton.less";
 @import "x-machinemodelegends/x-machinemodelegends.less";
 @import "x-stopclassification/x-stopclassification.less";
+@import "x-barstack/x-barstack.less";
 @import "style.less";
 
 
-.main-table {
-  // see running-table for inspiration
-  /* included tile */
+.appcontext-live {
+  .tile {
+    overflow-y: hidden;
+  }
+}
 
+.pulse-mainarea-inner {
+  padding: 1.5vh 1.5vw;
   display: flex;
-  flex-direction: column; // align children
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+  box-sizing: border-box;
+  background-color: @color_background;
+  color: @box_text_color;
+  padding: 5px 0;
+  gap: 2px;
+  width: auto;
+  flex: 1;
+  min-height: 0;
+  container-type: inline-size;
+  overflow-y: auto;
+}
 
-  x-grouparray {
-    .one_machine_cell {
-      margin: 0 12px;
+.datetimegraduation {
+  // margin = width of side columns (.div-machine left, .div-percent right)
+  // padding = cell padding (1vw) + stackbar margin (2vw) = 3vw
+  margin: 0 5cqw 0 16vw !important;
+  padding: 0 3vw !important;
+  width: auto !important;
+}
 
-      .div-machine {
-        padding: 6px 14px;
-        border: 1px solid @color_window_border;
-        border-radius: @border_radius_small;
-        box-sizing: border-box;
-      }
-    }
 
-    .group-main {
-      display: flex;
-      flex-direction: column;
-      row-gap: 12px;
-
-      li:first-of-type {
-        margin-top: 18px;
-      }
-
-      li:last-of-type {
-        margin-bottom: 22px;
-      }
-    }
+x-grouplist {
+  .group-single {
+    container-type: inline-size;
+    min-height: fit-content;
   }
 
-  .one_machine_cell {
+  .group-main {
+    gap: 8px;
+  }
+}
+
+.one_machine_cell {
+  display: flex;
+  flex-direction: row;
+  padding: 0 1vw;
+  height: 100%;
+  align-items: center;
+}
+
+.div-machine {
+  border: 0.2cqh solid #3f3f46;
+  border-radius: @border_radius_small;
+  padding: 4px 1vw;
+  box-sizing: border-box;
+  width: 16vw;
+  min-height: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+
+  .div-machine-left {
+    flex-shrink: 0;
+    height: 4cqw;
+    width: 4cqw;
+  }
+
+  .div-machine-right {
+    flex: 1;
+    padding-left: 4px;
+    overflow: hidden;
     display: flex;
-    flex-direction: row; // align children
+    flex-direction: column;
+    justify-content: center;
 
-    &.top_cell {
-      align-items: center;
-      padding-left: 24px;
-
-      .div-percent {
-        width: 80px;
-      }
+    .machinedisplay-data {
+      font-size: 1.4cqw;
     }
 
-    .div-machine {
+    .div-current {
+      background-color: transparent;
+      padding: 2px 0;
+      min-height: 0;
       display: flex;
-      flex-shrink: 0; // Aucune réduction
-      width: 15%; // Fixe - not % else strange behavior for graduation
-      padding-left: 6px;
-
-      .div-machine-left {
-        flex-shrink: 0; // Aucune réduction
-        height: 32px;
-        width: 32px;
-      }
-
-      .div-machine-right {
-        padding-left: 4px;
-      }
+      flex-direction: row;
+      font-size: 1.1cqw;
     }
+  }
+}
 
-    .div-bar {
-      flex-grow: 99999;
-      flex-shrink: 99999;
-      overflow: hidden; // To avoid too big graduation
+x-barstack {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  margin: 0 2vw;
+}
 
-      .pulse-bar-div {
-        margin-right: 34px;
-        margin-left: 42px;
-        // local :
-        font-size: 1em;
-        line-height: 2em;
+.div-percent {
+  width: 5cqw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-        >.middle-bar {
-          min-height: 2em;
-        }
-      }
-    }
-
-    .div-percent {
-      flex-shrink: 0; // Aucune réduction
-
-      display: flex;
-      flex-direction: column; // align children
-      justify-content: space-evenly;
-      min-width: 55.7px;
-      font-size: 1em;
-    }
+  x-motionpercentage,
+  x-motiontime {
+    font-size: 2cqw;
+    line-height: 2cqw;
   }
 }
 
