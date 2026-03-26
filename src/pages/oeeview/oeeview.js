@@ -9,10 +9,11 @@ var eventBus = require('eventBus');
 
 require('x-tr/x-tr');
 require('x-periodmanager/x-periodmanager');
-require('x-grouparray/x-grouparray');
+require('x-groupgrid/x-groupgrid');
 require('x-machinedisplay/x-machinedisplay');
 require('x-reasonbutton/x-reasonbutton');
-require('x-lastmachinestatus/x-lastmachinestatus');
+//require('x-lastmachinestatus/x-lastmachinestatus');
+require('x-rotationprogress/x-rotationprogress');
 require('x-production/x-production');
 require('x-productionshiftgoal/x-productionshiftgoal');
 require('x-productiongauge/x-productiongauge');
@@ -20,12 +21,12 @@ require('x-periodtoolbar/x-periodtoolbar');
 require('x-workinfo/x-workinfo');
 
 
-
 class OeeViewPage extends pulsePage.BasePage {
   constructor() {
     super();
+    // On garde la sélection de machine
+    this.showMachineselection = true;
   }
-
 
   getMissingConfigs() {
     let missingConfigs = [];
@@ -43,7 +44,92 @@ class OeeViewPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  // [MODIFICATION] Logique conditionnelle Live vs Historique
   initOptionValues() {
+    // Vérification du contexte
+    let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
+    let isLive = tmpContexts && tmpContexts.includes('live');
+
+    // --- GESTION DES OPTIONS DE ROTATION ---
+    const defaultLayoutChk = $('#defaultlayout');
+    const rotationSettings = $('.rotation-settings');
+    const machinesPerPageInput = $('#machinesperpage');
+
+    if (!isLive) {
+      // CAS HISTORIQUE : On désactive la rotation et on active le scroll
+
+      // 1. Masquer les options de rotation dans le panneau
+      // On cache le parent (la ligne entière .param-row) pour faire propre
+      defaultLayoutChk.closest('.param-row').hide(); // Si structure param-row
+      defaultLayoutChk.parent().hide(); // Fallback
+      rotationSettings.hide();
+
+      // 2. Forcer la configuration pour "Tout Afficher"
+      // On force le mode "custom" (pas default) pour accepter notre grand nombre
+      pulseConfig.set('defaultlayout', false);
+      // On met un nombre énorme pour que le moteur croie que tout tient sur une page
+      pulseConfig.set('machinesperpage', 10000);
+
+      // On met à jour les inputs au cas où (pour ne pas créer de confusion)
+      defaultLayoutChk.prop('checked', false);
+      machinesPerPageInput.val(10000);
+
+      // 3. Activer le Scroll (CSS Injection)
+      // On force le conteneur de la grille à scroller verticalement
+      // x-groupgrid contient .groupgrid-main
+// 3. Activer le Scroll (CSS Injection)
+      $('head').append(`
+        <style>
+          /* 1. Le composant x-groupgrid devient la zone de scroll */
+          x-groupgrid {
+            flex: 1 1 auto !important; /* Il prend l'espace dispo */
+            height: 100% !important;   /* Reste calé au parent */
+            min-height: 0 !important;  /* Empêche le débordement flex */
+            overflow-y: auto !important; /* C'EST ICI QUE LE SCROLL APPARAIT */
+            display: block !important;
+          }
+
+          /* 2. La grille à l'intérieur grandit autant que nécessaire */
+          x-groupgrid .groupgrid-main {
+            display: grid !important;
+            height: auto !important; /* LAISSE GRANDIR LA HAUTEUR */
+            min-height: 100% !important;
+            align-content: start !important; /* Empile les éléments en haut */
+
+            /* 3. CRUCIAL : On force une hauteur minimale par ligne */
+            /* Sinon la grille essaie de diviser la hauteur d'écran par 100 machines */
+            grid-auto-rows: minmax(300px, auto) !important;
+            padding-bottom: 50px !important;
+          }
+        </style>
+      `);
+
+    } else {
+      // CAS LIVE : Comportement Standard (Rotation)
+
+      // Initialisation depuis la config
+      defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
+
+      // Si "Default" est coché, on grise/cache les options manuelles
+      defaultLayoutChk.change(() => {
+        let isDefault = defaultLayoutChk.is(':checked');
+        pulseConfig.set('defaultlayout', isDefault);
+
+        if (isDefault) {
+          rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
+          $('#machinesperpage').val(12).change(); // Forcer le maximum
+        } else {
+          rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
+        }
+      }).trigger('change');
+
+      // Initialisation des valeurs
+      machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
+      $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+    }
+
+    // --- AUTRES OPTIONS (Communes) ---
+
     // Display mode: percent or ratio
     this._productionGaugeDisplayMode();
 
@@ -61,7 +147,6 @@ class OeeViewPage extends pulsePage.BasePage {
       thresholdRedInput.attr('overridden', 'true');
     }
 
-    // CORRECTION : Utilisation de .change() (jQuery) pour capter le Reset
     thresholdTarget.change(function () {
       this._verficationThresholds(thresholdTarget.val(), thresholdRedInput.val());
     }.bind(this));
@@ -77,7 +162,6 @@ class OeeViewPage extends pulsePage.BasePage {
       showWorkInfoChk.attr('overridden', 'true');
     }
 
-    // CORRECTION : Utilisation de .change() (jQuery)
     showWorkInfoChk.change(function () {
       let isChecked = showWorkInfoChk.is(':checked');
       pulseConfig.set('showworkinfo', isChecked);
@@ -88,7 +172,6 @@ class OeeViewPage extends pulsePage.BasePage {
         $('x-workinfo').hide();
       }
     });
-    // Déclenchement initial
     showWorkInfoChk.trigger('change');
   }
 
@@ -108,7 +191,6 @@ class OeeViewPage extends pulsePage.BasePage {
       showRatioRadio.attr('overridden', 'true');
     }
 
-    // CORRECTION : Utilisation de .change() (jQuery) pour être compatible avec setDefaultOptionValues
     showPercentRadio.change(function () {
       if (showPercentRadio.is(':checked')) {
         pulseConfig.set('showpercent', true);
@@ -126,7 +208,6 @@ class OeeViewPage extends pulsePage.BasePage {
 
   // Verify threshold values
   _verficationThresholds(targetValue, redValue) {
-    // Find or create error message element
     let errorMessage = document.getElementById('thresholdErrorMessage');
     if (!errorMessage) {
       errorMessage = document.createElement('div');
@@ -141,42 +222,35 @@ class OeeViewPage extends pulsePage.BasePage {
       }
     }
 
-    // Check if values are valid numbers
     if (isNaN(redValue) || isNaN(targetValue)) {
       errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdNaNError', 'Threshold values must be valid numbers');
       errorMessage.style.display = 'block';
       return false;
     }
 
-
-    // values between 0 and 100
     if (redValue < 0 || targetValue <= 0) {
       errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdPositiveError', 'Threshold values must be positive');
       errorMessage.style.display = 'block';
       return false;
     }
 
-    // In percentage mode: target > red (normal logic)
     if (Number(targetValue) <= Number(redValue)) {
       errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdError', 'Target threshold must be greater than red threshold');
       errorMessage.style.display = 'block';
       return false;
     }
 
-    // Percentage cannot exceed 100
     if (redValue > 100 || targetValue > 100) {
       errorMessage.textContent = pulseConfig.pulseTranslate('options.thresholdMaxError', 'Percentage values cannot exceed 100');
       errorMessage.style.display = 'block';
       return false;
     }
 
-    // store values
     pulseConfig.set('thresholdtargetproduction', parseFloat(targetValue));
     pulseConfig.set('thresholdredproduction', parseFloat(redValue));
 
     errorMessage.style.display = 'none';
 
-    // Dispatch to update displays
     eventBus.EventBus.dispatchToAll('configChangeEvent',
       {
         config: 'thresholdsupdated'
@@ -222,23 +296,30 @@ class OeeViewPage extends pulsePage.BasePage {
 
     // showworkinfo = Show Operation
     setDefaultChecked('showworkinfo');
+
+    // [MODIFICATION] Reset Layout seulement si Live
+    let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
+    if (tmpContexts && tmpContexts.includes('live')) {
+        setDefaultChecked('defaultlayout'); // Reset layout only in live
+    }
   }
 
-  // getOptionValues uses the unified options-list pattern:
-  // { id, type, param?, conditional? } -> "&param=value" fragments.
-  // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues() {
     const options = [
       { id: 'productiongaugepercent', type: 'radio', param: 'showpercent' },
-      // CORRECTION: Utilisation des noms de paramètres corrects pour pulseConfig
       { id: 'thresholdtargetproductionbar', type: 'value', param: 'thresholdtargetproduction' },
       { id: 'thresholdredproductionbar', type: 'value', param: 'thresholdredproduction' },
-      { id: 'showworkinfo', type: 'checkbox' }
+      { id: 'showworkinfo', type: 'checkbox' },
+      // Rotation params
+      { id: 'defaultlayout', type: 'checkbox' },
+      { id: 'machinesperpage', type: 'value' },
+      { id: 'rotationdelay', type: 'value' }
     ];
 
     return options.map(opt => {
       const el = document.getElementById(opt.id);
-      if (!el) return '';
+      // [MODIF] Si l'élément est caché (mode historique), on ne l'envoie pas dans l'URL ou on envoie la config
+      if (!el || $(el).is(':hidden')) return '';
 
       const paramName = opt.param || opt.id;
       if (opt.type === 'checkbox' || opt.type === 'radio') {
@@ -250,13 +331,10 @@ class OeeViewPage extends pulsePage.BasePage {
   }
 
   buildContent() {
-    // 1. Gestion du mode d'affichage de la jauge (Percent / Ratio)
     let showPercent = pulseConfig.getBool('showpercent');
     let displayMode = showPercent ? 'percent' : 'ratio';
-    // On applique l'attribut à toutes les jauges (y compris les clones)
     $('x-productiongauge').attr('display-mode', displayMode);
 
-    // 2. Gestion de l'affichage de WorkInfo
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     if (showworkinfo) {
       $('x-workinfo').show();
@@ -265,8 +343,6 @@ class OeeViewPage extends pulsePage.BasePage {
     }
   }
 }
-
-
 
 $(document).ready(function () {
   pulsePage.preparePage(new OeeViewPage());

@@ -17,26 +17,7 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
   </div>
-  <div class="div-bar">
-    <div class="pulse-bar-div">
-      <div class="top-bar">
-        <x-shiftslotbar period-context="managerview"></x-shiftslotbar>
-        <x-machinestatebar period-context="managerview"></x-machinestatebar>
-        <x-observationstatebar period-context="managerview"></x-observationstatebar>
-      </div>
-      <div class="middle-bar">
-        <x-operationcyclebar period-context="managerview"></x-operationcyclebar>
-        <x-operationslotbar period-context="managerview"></x-operationslotbar>
-        <x-isofileslotbar period-context="managerview"></x-isofileslotbar>
-        <x-reasonslotbar motion-context="motion_machine" period-context="managerview">
-        </x-reasonslotbar>
-        <x-cncalarmbar period-context="managerview"></x-cncalarmbar>
-        <x-redstacklightbar period-context="managerview"></x-redstacklightbar>
-        <x-cncvaluebar period-context="managerview"></x-cncvaluebar>
-      </div>
-      <div class="bottom-bar"></div>
-    </div>
-  </div>
+  <x-barstack period-context="managerview" motion-context="motion_machine"></x-barstack>
   <div class="div-percent">
     <x-motionpercentage motion-context="motion_machine" period-context="managerview"></x-motionpercentage>
     <x-motiontime motion-context="motion_machine" period-context="managerview"></x-motiontime>

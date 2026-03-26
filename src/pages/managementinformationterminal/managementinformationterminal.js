@@ -25,8 +25,6 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
   constructor() {
     super();
 
-    this.canConfigureColumns = false;
-    this.canConfigureRows = false;
     pulseConfig.set('column', '');
     pulseConfig.set('row', '');
   }

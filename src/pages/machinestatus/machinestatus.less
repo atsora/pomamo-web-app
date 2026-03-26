@@ -18,7 +18,8 @@
 @import "x-machineselection/x-machineselection.less";
 
 // Local
-@import "x-grouparray/x-grouparray.less";
+@import "x-groupgrid/x-groupgrid.less";
+@import "x-rotationprogress/x-rotationprogress.less";
 @import "x-reasonbutton/x-reasonbutton.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-currentworkinfo/x-currentworkinfo.less";
@@ -32,48 +33,88 @@
 @import "x-motiontime/x-motiontime.less";
 @import "x-motiontime/x-motiontime.less";
 @import "x-datetimegraduation/x-datetimegraduation.less";
-@import "x-cncvaluebar/x-cncvaluebar.less";
-@import "x-reasonslotbar/x-reasonslotbar.less";
+@import "x-barstack/x-barstack.less";
 @import "x-machinemodelegends/x-machinemodelegends.less";
 @import "x-performancetarget/x-performancetarget.less";
 @import "x-reasongroups/x-reasongroups.less";
 @import "style.less";
 
 
-.tile {
-  border-radius: @border_radius;
-  border: 1px solid @color_window_border;
+.main-table-box {
   display: flex;
   flex-direction: column;
-  height: 100%; // Take full available height
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.pulse-mainarea-inner {
+  padding: 1.5vh 1.5vw;
+}
+
+
+.tile {
+  container-type: size;
+  container-name: maintile;
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  overflow: hidden;
 }
 
 .tile-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: relative;
+  padding: 4px 10px 4px 10px;
+  background-color: @color_background_alternate;
+  color: @box_header_text_color;
+  white-space: nowrap;
   border-top-left-radius: @border_radius;
   border-top-right-radius: @border_radius;
+  font-size: clamp(11px, 6cqh, 1000px) !important;
 
   x-machinedisplay {
+    font-size: 1em !important;
     text-align: center;
 
     span {
       width: auto;
     }
+
+    .machinedisplay-data {
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: bold;
+    }
   }
 }
 
 .tile-content {
+  background-color: @color_background;
+  color: @box_text_color;
+  border-bottom-left-radius: @border_radius;
+  border-bottom-right-radius: @border_radius;
   display: flex;
   flex-direction: column; // align children
   overflow-y: auto; // Allow vertical scrolling
   overflow-x: hidden;
-  border-radius: @border_radius;
   flex-grow: 1; // Grow to fill available space
   flex-shrink: 1; // Can shrink if needed
   min-height: 0; // Allow flex children to shrink below content size
+  padding: 1cqh 4cqw;
+  gap: 1cqh;
 
   .machinestatus-top-div {
     // currentworkinfo
-    margin-top: 4px;
     flex-shrink: 0; // Don't shrink
     flex-basis: auto;
   }
@@ -88,7 +129,7 @@
     .machinestatus-today-or-shift-or-week {
       flex-grow: 1; // Strech
       font-weight: bold;
-      font-size: clamp(12px, 2vh, 1.5em);
+      font-size: clamp(10px, 3.5cqh, 1000px);
       line-height: 1.2;
 
       x-freetext {
@@ -113,25 +154,25 @@
 
     .machinestatus-actual {
       //float: right;
-      margin-left: 10px;
+      margin-left: 1cqw;
 
       x-motionpercentage {
         flex-grow: 1; // Strech
         text-align: right;
-        font-size: clamp(20px, 4vh, 3em);
+        font-size: clamp(12px, 10cqh, 1000px);
       }
 
       x-motiontime {
         display: none; // default
         flex-grow: 1; // Strech
         text-align: right;
-        font-size: clamp(20px, 4vh, 3em);
+        font-size: clamp(12px, 10cqh, 1000px);
       }
     }
 
     .machinestatus-target {
       //float: right;
-      margin-left: 10px;
+      margin-left: 1cqw;
 
       x-performancetarget {
         font-weight: bold;
@@ -139,7 +180,7 @@
         .performancetarget-span {
           display: block;
           text-align: center;
-          font-size: clamp(16px, 3vh, 2em);
+          font-size: clamp(10px, 7cqh, 1000px);
           line-height: 1.1;
 
           &::before {
@@ -174,7 +215,7 @@
       flex-basis: 15%;
 
       position: relative;
-      padding: 4px;
+      padding: 0.5cqmin;
 
       min-height: 50px; // height in % not working
       //box-sizing: border-box;
@@ -244,7 +285,7 @@
       display: inline-block;
       position: relative; // For machinestatus-reasonbutton-position's position
 
-      padding: 4px;
+      padding: 0.5cqmin;
       box-sizing: border-box;
 
       x-reasonslotpie {
@@ -267,9 +308,6 @@
 
   // BOTTOM DISPLAY
   .machinestatus-weekly-info {
-    margin-top: 10px;
-    padding-top: 5px;
-    margin-bottom: 10px;
     flex-shrink: 0; // Don't shrink
     flex-basis: auto;
   }
@@ -277,11 +315,12 @@
   .machinestatus-weekly-bar-position {
     flex-shrink: 0; // Don't shrink
     flex-basis: auto;
-    .pulse-bar-div {
+
+    x-barstack {
+      height: 30px;   // matches original height=24 (reasonslot) + height=6 (cncvalue)
+      width: auto;    // prevent margin overflow
       margin-left: @margin_graduation;
       margin-right: @margin_graduation;
-      border-right-width: @border_length;
-      border-left-width: @border_length;
     }
 
     x-datetimegraduation {
@@ -299,19 +338,13 @@ x-currentworkinfo {
   display: block;
   text-align: center;
   color: @color_text;
-  font-size: 1.2em;
+  font-size: clamp(10px, 3.5cqh, 1000px);
   min-height: 1.5em; // To force height even if no data - ONE LINE
-  padding: 2px 0 0 0; // For Edge top padding....
+  padding: 0.5cqh 0 0 0; // For Edge top padding....
   font-weight: bold;  // Bottom display .machinestatus-weekly-info { text-align: center; color: @color_text; font-size: 1.2em; min-height: 1.5em; // To force height even if no data - ONE LINE padding: 2px 0 0 0; // For Edge top padding.... font-weight: bold;
   box-sizing: border-box;
   overflow: hidden; // For Chrome, small display = avoid 2 lines
   margin-bottom: 0;
 
   overflow: hidden; // For Chrome, small display = avoid 2 lines
-}
-
-@media (max-width: 685px) {
-  .tile {
-    height: 350px;
-  }
 }

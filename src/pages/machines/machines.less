@@ -22,17 +22,10 @@
 @import "x-lastmachinestatus/x-lastmachinestatus.less";
 @import "x-stopclassification/x-stopclassification.less";
 @import "x-unansweredreasonslotlist/x-unansweredreasonslotlist.less";
+@import "x-reasonbutton/x-reasonbutton.less";
+@import "x-unansweredreasonnumber/x-unansweredreasonnumber.less";
 @import "x-periodmanager/x-periodmanager.less";
-@import "x-shiftslotbar/x-shiftslotbar.less";
-@import "x-machinestatebar/x-machinestatebar.less";
-@import "x-observationstatebar/x-observationstatebar.less";
-@import "x-operationcyclebar/x-operationcyclebar.less";
-@import "x-operationslotbar/x-operationslotbar.less";
-@import "x-isofileslotbar/x-isofileslotbar.less";
-@import "x-reasonslotbar/x-reasonslotbar.less";
-@import "x-cncalarmbar/x-cncalarmbar.less";
-@import "x-redstacklightbar/x-redstacklightbar.less";
-@import "x-cncvaluebar/x-cncvaluebar.less";
+@import "x-barstack/x-barstack.less";
 
 @import "x-motionpercentage/x-motionpercentage.less";
 @import "x-motiontime/x-motiontime.less";
@@ -93,11 +86,6 @@
         // For message position :
         position: relative;
 
-        /*x-grouparray{
-          //width: 100%;
-          //height: 100%;
-        }*/
-
         .single-machine-tab {
           width: 200px; // Could be done in another way
         }
@@ -133,8 +121,12 @@
     }
   }
 
-  .machinedetails {
+  .tile {
     border-radius: @border_radius;
+    background-color: @color_background;
+    color: @box_text_color;
+    width: 100%;
+    height: 100%;
 
     x-lastmachinestatetemplate {
       .pulse-cellbar-main {
@@ -186,15 +178,67 @@
     flex-shrink: 1;
     flex-grow: 1;
 
-    .machinetitle {
+    .tile-title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 4px 10px 4px 10px;
+      color: @box_header_text_color;
       border-radius: @border_radius_small;
       margin-bottom: 15px;
       background-color: @color_background;
       border: 1px solid @color_window_border;
+      white-space: nowrap;
+      font-size: 1.8em;
+      line-height: 1.8em;
 
-      x-machinedisplay {
-        width: 100%;
-        text-align: center;
+      .machine-name {
+        display: flex;
+        align-items: center;
+        column-gap: 1.5em;
+
+        x-machinedisplay {
+          font-weight: bold;
+          text-transform: uppercase;
+          text-align: center;
+        }
+
+        x-reasonbutton {
+          margin-left: unset;
+          width: 22px;
+          height: 22px;
+        }
+      }
+
+      x-lastmachinestatus.title-lastmachinestatus .pulse-cellbar-main {
+        height: unset;
+        display: flex;
+        justify-content: center;
+        filter: opacity(100%);
+
+        .pulse-cellbar-past-data {
+          display: none;
+        }
+
+        .pulse-cellbar-current-data {
+          line-height: normal;
+          display: flex;
+          padding-left: 24px;
+          padding-right: 24px;
+          font-size: 16px;
+          height: fit-content;
+          justify-content: center;
+          font-family: inherit;
+          font-weight: 500;
+          border-radius: @border_radius_small;
+
+          .pulse-missing-data,
+          .lastmachinestatus-reason-label {
+            display: none;
+          }
+        }
       }
     }
 
@@ -222,6 +266,18 @@
           .pulse-cellbar-main {
             background-color: @color_background_alternate;
             border-radius: @border_radius_small;
+          }
+        }
+
+        x-unansweredreasonnumber {
+          .pulse-cellbar-main {
+            border-radius: @border_radius_small;
+            border: 1px solid @color_window_border;
+            box-sizing: border-box;
+          }
+          .pulse-cellbar-past-data {
+            width: 100%;
+            justify-content: center;
           }
         }
 
@@ -257,14 +313,11 @@
             margin-bottom: 10px; // to create space around
             margin-top: 10px; // to create space around
 
-            .pulse-bar-div {
-              // sub-bar
-              //.bar-rounded-shadow; // Rounded border + shadow
-              // align with graduation
-              margin-right: @margin_graduation; //23px;
-              margin-left: @margin_graduation; //24px;
-              border-top-left-radius: unset;
-              border-top-right-radius: unset;
+            x-barstack {
+              height: 80px;
+              width: auto;
+              margin-right: @margin_graduation;
+              margin-left: @margin_graduation;
             }
           }
 
@@ -292,9 +345,6 @@
 
 // end machines-main
 
-
-
-
 // main bars margin (padding can not be used everywhere)
 
 /* cycleprogressbar */
@@ -302,15 +352,12 @@
   .bar-rounded-shadow; // LIKE .pulse-bar-div
 }
 
-/* performance bar */
-/*x-performancebar{
-  .performancebar {
-    //border: 1px solid @color_text_alternate;
-  }
-}*/
 
-// BARS
-/*.middle-bar{
-  width: auto; //100%;
-}*/
-// end BARS
+@media (max-width: 685px) {
+  .machines-main .tile{
+    padding: 10px 5px;
+  }
+  .right-percent{
+    width: auto;
+  }
+}

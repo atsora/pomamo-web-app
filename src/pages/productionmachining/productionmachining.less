@@ -20,21 +20,24 @@
 @import "style.less";
 
 
-.machine-and-bar-table {
-  border-radius: @border_radius;
+x-grouplist {
 
-  .group-main{
+  .group-main {
     display: flex;
     flex-direction: column;
     row-gap: 12px;
     padding: 16px 24px;
+    border-radius: @border_radius;
+    background-color: @color_background;
 
-    .group-single{
+    .group-single {
       order: 999999; // default = bottom
-      padding: 0px 12px;
+      border-radius: @border_radius_small;
     }
   }
-  .one-machine-cell{ // == group-single // could be display:contents when available
+
+  .one-machine-cell {
+    // == group-single // could be display:contents when available
     width: 100%;
     box-sizing: border-box;
     //margin: 10px auto; //1%;
@@ -46,12 +49,12 @@
     vertical-align: middle;
 
     >.div-machine {
-      width: 10%;
-      min-width: 24ex;
+      width: 15%;
       box-sizing: border-box;
-      line-height : 2em; // == vertical align
+      line-height: 2em;
     }
-    >.div-bar{
+
+    >.div-bar {
       width: 85%;
       box-sizing: border-box;
       flex: 1;
@@ -59,6 +62,6 @@
   }
 }
 
-.legend-content{
+.legend-content {
   display: none !important;
 }

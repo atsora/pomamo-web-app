@@ -5,8 +5,7 @@ Copyright (C) 2025 Atsora Solutions
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<div class='single-cell' id='boxtoclone'>
-  <div class="tile">
+<div class="tile" id='boxtoclone'>
     <div class="tile-title">
       <x-reasonbutton></x-reasonbutton>
       <div class="machinedisplay-position">
@@ -14,11 +13,8 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
     <div class="tile-content">
-      <div class="machineperformancegauge">
-        <x-performancegauge motion-context='motion_machine'></x-performancegauge>
-      </div>
+      <x-performancegauge motion-context='motion_machine'></x-performancegauge>
       <x-motionpercentage motion-context='motion_machine'></x-motionpercentage>
       <x-motiontime motion-context='motion_machine'></x-motiontime>
     </div>
-  </div>
 </div>

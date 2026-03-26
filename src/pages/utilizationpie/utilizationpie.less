@@ -13,7 +13,8 @@
 @import "x-machineselection/x-machineselection.less";
 
 // Local
-@import "x-grouparray/x-grouparray.less";
+@import "x-groupgrid/x-groupgrid.less";
+@import "x-rotationprogress/x-rotationprogress.less";
 @import "x-reasonbutton/x-reasonbutton.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-reasonslotpie/x-reasonslotpie.less";
@@ -22,68 +23,129 @@
 @import "x-machinemodelegends/x-machinemodelegends.less";
 @import "style.less";
 
+
+.pulse-mainarea-inner {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+x-groupgrid {
+  overflow-y: auto;
+  height: 100%;
+
+  .groupgrid-main {
+    height: auto !important;
+    align-content: start;
+  }
+
+  .groupgrid-item {
+    height: auto;
+    min-height: 40vh;
+  }
+}
+
+.appcontext-live x-groupgrid {
+  .groupgrid-main {
+    height: 100% !important;
+    grid-auto-rows: 1fr;
+  }
+
+  .groupgrid-item {
+    height: 100%;
+    min-height: unset;
+  }
+}
+
 .tile {
+  container-type: size;
+  container-name: maintile;
   border-radius: @border_radius;
   border: 1px solid @box_header_color;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   height: 100%;
   min-height: 0;
+  overflow: hidden;
 }
 
 .tile-title {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  padding: 4px 10px 4px 10px;
+  background-color: @color_background_alternate;
+  color: @box_header_text_color;
+  white-space: nowrap;
   align-items: center;
   justify-content: center;
-  border-top-left-radius: @border_radius;
-  border-top-right-radius: @border_radius;
   flex-shrink: 0;
+  font-size: 6cqh !important;
 
   x-reasonbutton {
     margin: 0;
+    width: 9cqh;
+    height: 9cqh;
   }
 
   .machinedisplay-position {
     flex-grow: unset;
     flex-shrink: unset;
+
+    x-machinedisplay {
+      font-size: 1em !important;
+      .machinedisplay-data {
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: bold;
+      }
+    }
   }
 }
 
 .tile-content {
-  border-radius: @border_radius;
+  background-color: @color_background;
+  color: @box_text_color;
+  box-sizing: border-box;
+  padding: 1.5cqh 1.5cqw;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex: 1 1 auto;
   height: 100%;
   width: 100%;
-  flex: 1 1 auto;
   overflow: hidden;
+  min-height: 0;
 
-  .utilizationpie-reasonslotpie-motionpercentage {
+  .utilizationpie-today {
+    justify-content: center;
+    font-size: 5cqh !important;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  x-reasonslotpie {
     flex: 1;
-    margin-top: 12px;
-    display: flex;
-    flex-direction: row;
+    min-height: 50px;
+    height: 100%;
+    width: 100%;
     overflow: hidden;
-    min-height: 0;
-
-    .utilizationpie-today {
-      justify-content: center;
-      font-size: 2em;
-      flex-shrink: 0;
-    }
-
-    .utilizationpie-reasonslotpie {
-      flex: 1;
-      min-height: 50px;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-    }
   }
 }
 
 // Override for mobile that sets height: auto
 @media (max-width: 685px) {
-  .single-cell {
+  .tile {
     height: 100% !important;
   }
+}
+
+.main-table-box {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }

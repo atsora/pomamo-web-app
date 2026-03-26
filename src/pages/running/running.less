@@ -8,12 +8,12 @@
 // Global :
 @import "pulse.customdialog.less";
 
-@import "x-grouparray/x-grouparray.less";
-
 @import "pulse.exports.light.less"; // Global import
 @import "x-machineselection/x-machineselection.less";
 
 // Local
+@import "x-rotationprogress/x-rotationprogress.less";
+@import "x-grouplist/x-grouplist.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 
 @import "x-productionmachiningstatus/x-productionmachiningstatus.less";
@@ -21,17 +21,7 @@
 @import "x-lastshift/x-lastshift.less";
 
 @import "x-datetimegraduation/x-datetimegraduation.less";
-@import "x-shiftslotbar/x-shiftslotbar.less";
-@import "x-machinestatebar/x-machinestatebar.less";
-@import "x-observationstatebar/x-observationstatebar.less";
-@import "x-operationcyclebar/x-operationcyclebar.less";
-@import "x-operationslotbar/x-operationslotbar.less";
-@import "x-isofileslotbar/x-isofileslotbar.less";
-@import "x-productionstatebar/x-productionstatebar.less";
-@import "x-reasonslotbar/x-reasonslotbar.less";
-@import "x-cncalarmbar/x-cncalarmbar.less";
-@import "x-redstacklightbar/x-redstacklightbar.less";
-@import "x-cncvaluebar/x-cncvaluebar.less";
+@import "x-barstack/x-barstack.less"; // pulls in all bar styles
 @import "x-stopclassification/x-stopclassification.less";
 
 @import "x-motionpercentage/x-motionpercentage.less";
@@ -47,6 +37,8 @@
 @import 'x-machinemodelegends/x-machinemodelegends.less';
 
 @import "style.less";
+
+
 
 
 .running-header {
@@ -99,7 +91,7 @@
     gap: 5px;
     height: 100%;
     width: 18vw;
-    margin-left: 16px;
+    margin-left: 1vw;
     font-weight: bold;
 
     .clock-div {
@@ -111,51 +103,87 @@
 
 }
 
+.pulse-mainarea-inner {
+  padding: 1.5vh 1.5vw;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
 .tile {
   display: flex;
   flex-direction: column;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
-  padding: 10px 0;
+  box-sizing: border-box; // Ensure consistent box-sizing
+  background-color: @color_background;
+  color: @box_text_color;
+  padding: 5px 0;
   gap: 2px;
   width: auto;
-  height: auto;
+  flex: 1;
+  min-height: 0;
+  container-type: inline-size;
+  overflow-y: auto;
+}
+
+.appcontext-live {
+  .tile {
+    box-sizing: border-box;
+    overflow-y: hidden;
+  }
 }
 
 .datetimegraduation {
-  margin: 0 4em 0 18vw !important; //sum of right and left width of elements next to div bar
-  padding: 0 42px !important;
+  // margin = width of side columns (.div-machine left, .div-percent right)
+  // padding = cell padding (1vw) + pulse-bar-div margin (2vw) = 3vw
+  margin: 0 4.5cqw 0 18vw !important;
+  padding: 0 3vw !important;
   width: auto !important;
 }
 
 
-.group-main {
-  display: flex !important;
-  flex-direction: column;
-  row-gap: 8px !important;
+x-grouplist {
+  .group-single {
+    container-type: inline-size;
+    min-height: fit-content; // grows if content exceeds flex-distributed share
+  }
+
+  .group-main {
+    gap: 1vh;
+  }
 }
 
 .one_machine_cell {
   display: flex;
-  flex-direction: row; // align children
-  padding: 0px 12px;
-  height: fit-content;
+  flex-direction: row;
+  padding: 0 1vw;
+  height: 100%;
+  align-items: center;
 }
 
 .div-machine {
-  border: 1px solid #3f3f46;
+  border: 0.1cqw solid #3f3f46;
   border-radius: @border_radius_small;
-  padding: 3px 1vw 0 1vw;
+  padding: 0.3cqw 1vw;
   box-sizing: border-box;
   width: 18vw;
+  min-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+
+  x-machinedisplay {
+    font-size: 1.4cqw;
+  }
 
   .div-current {
-
     background-color: transparent;
-    padding: 4px;
-    min-height: 32px;
+    height: fit-content;
     display: flex;
-    flex-direction: row; // align children
+    flex-direction: row;
 
     .clock-div {
       display: inline-block;
@@ -163,17 +191,18 @@
     }
 
     .div-current-left {
-      height: 32px;
-      width: 32px;
+      height: 3cqw;
+      width: 3cqw;
     }
 
     .div-current-right {
       flex-grow: 1;
       padding-left: 4px;
-      width: 80%; // to allow '...'
+      width: 80%;
       display: flex;
-      flex-direction: column; // align children
-      font-size: 0.8em;
+      flex-direction: column;
+      font-size: 0.85cqw;
+      height: fit-content;
 
       a {
         color: @color_text_alternate;
@@ -182,27 +211,15 @@
   }
 }
 
-.div-bar {
+x-barstack {
   flex: 1;
-  overflow: hidden; // For fast resize
-  display: flex;
-  min-height: 2em;
   height: 100%;
-  align-items: center;
-  align-items: center;
-  justify-content: center;
-
-  .pulse-bar-div {
-    margin: 0 30px;
-    position: unset;
-    width: 100%;
-    height: fit-content;
-  }
+  overflow: hidden;
+  margin: 0 2vw;
 }
 
 .div-percent {
-  width: 4em;
-  margin-top: 15px;
+  width: 6cqw;
 
   display: flex;
   flex-direction: column; // align children
@@ -211,7 +228,30 @@
 
   x-motionpercentage,
   x-motiontime {
-    font-size: 1.3em;
-    line-height: 1.3em;
+    font-size: 2cqw;
+    line-height: 2cqw;
+  }
+}
+
+@media (max-width: 685px) {
+  x-grouplist {
+    .group-single {
+      min-height: fit-content !important; // group-single anchors on div-machine height when text hasn't shrunk yet
+    }
+
+    .group-main {
+      padding: 0;
+    }
+  }
+
+  .one_machine_cell {
+    align-items: stretch; // let children fill the row height instead of centering
+    padding: 0 2vw;
+  }
+
+  x-barstack {
+    align-self: stretch; // stretch to row height (set by div-machine content)
+    height: auto; // don't reference parent height: 100% which fails on auto parent
+    margin: 0 1cqw;
   }
 }

@@ -156,6 +156,9 @@ body {
   .pulse-header {
     height: 5vh;
     padding: 0.5vh 0.5vw;
+    &:after {
+      left: 10%;
+    }
   }
 
   .pulse-header-title {
@@ -311,48 +314,52 @@ body {
 
   .legend-content {
     display: inline-block;
+    container-type: inline-size;
+    container-name: legend-content;
     margin: auto;
     text-align: center;
-    width: 54%; // 100% - real margin - 2* 20% == LOGO / was max-width
+    width: 60%; // was 54%
     background-color: @box_color;
     color: @box_text_color;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    border-top-left-radius: 0.3cqw;
+    border-top-right-radius: 0.3cqw;
     border-left: 1px solid darken(@box_color, 10%);
     border-right: 1px solid darken(@box_color, 10%);
     border-top: 1px solid darken(@box_color, 10%);
     z-index: 25;
 
     box-sizing: border-box;
-    font-size: 0.9em;
+    font-size: 1cqw;
+    position: relative; // anchor for absolute toggle
 
     pointer-events: initial; // restore click to see tooltip
 
     .legend-toggle {
       content: "Legend";
-      line-height: 30px;
-      padding: 0 10px;
+      font-size: 2.1cqw;
+      line-height: 3.5cqw;
+      padding: 0 1cqw;
       text-align: center;
       background-color: @box_color;
       color: @box_text_color;
-      float: left;
-      margin-top: -31px;
-      margin-left: -1px;
+      position: absolute;
+      bottom: 100%;
+      left: -1px; // align with legend-content left border
       border-left: 1px solid darken(@box_color, 10%);
       border-right: 1px solid darken(@box_color, 10%);
       border-top: 1px solid darken(@box_color, 10%);
-      border-top-left-radius: 3px;
-      border-top-right-radius: 3px;
+      border-top-left-radius: 0.3cqw;
+      border-top-right-radius: 0.3cqw;
       cursor: pointer;
       pointer-events: initial;
-      width: 85px;
+      width: 11cqw;
 
       .legend-toggle-icon-up,
       .legend-toggle-icon-down {
-        width: 14px;
-        height: 20px;
+        width: 1.35cqw;
+        height: 1.93cqw;
         float: right;
-        margin: 5px;
+        margin: 0.5cqw;
       }
 
       .legend-toggle-icon-up {
@@ -409,6 +416,8 @@ body {
   min-width: 400px;
   overflow-x: hidden;
   overflow-y: auto;
+  position: relative; // explicit containing block for pulse-mainarea-bottom
+  z-index: 0;         // stacking context at 0 — keeps legend below nav panel (z-index: 51)
   color: @color_text_alternate;
   border: 1px solid @color_window_border;
   border-radius: @border_radius;
@@ -429,6 +438,24 @@ body {
 
 .appcontext-live .pulse-mainarea {
   overflow-y: hidden; // NO scroll for live displays
+}
+
+.appcontext-live .legend-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  .legend-group {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// Layout options are only relevant in live mode
+.param-group.group-layout {
+  display: none;
+}
+.appcontext-live .param-group.group-layout {
+  display: block;
 }
 
 #pulse-pagination {
@@ -1164,138 +1191,6 @@ body {
   }
 }
 
-// Remove list style for ALL groups
-.group-main {
-  //ol
-  list-style-type: none;
-  padding: 0px;
-  margin: 0px;
-}
-
-// CENTER TABLE
-.main-table {
-  // global
-  box-sizing: border-box;
-  //height: 100%;
-  width: auto !important;
-  margin: 4px;
-  padding: 4px;
-
-  border-spacing: 0;
-  overflow: hidden;
-
-  //.group {
-  .group-container {
-
-    //ol
-    x-grouparray {
-      width: 100%;
-      height: 100%;
-    }
-
-    .group-single {
-      // li
-      display: inline-block;
-      list-style: none;
-      vertical-align: top;
-      position: relative;
-
-      .single-cell {
-        // == boxtoclone
-        padding: 7px;
-        height: 100%;
-        width: 100%;
-        box-sizing: border-box;
-      }
-    }
-  }
-}
-
-// CENTER TABLE
-.main-table-box {
-  // with rows AND columns
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%; // == tile
-  //margin: 0;
-  border-spacing: 0;
-  overflow: hidden;
-
-  //.group {
-  .group-main {
-    //ol // or group-container ?
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: stretch;
-    align-content: flex-start;
-
-    x-grouparray {
-      box-sizing: border-box;
-      width: 100%;
-      height: 100%;
-    }
-
-    .group-single {
-      // li
-      display: inline-block;
-      list-style: none;
-      vertical-align: top;
-      position: relative;
-
-      padding: 4px;
-      box-sizing: border-box;
-
-      .single-cell {
-        // == boxtoclone
-        //padding: 4px;
-        height: 100%;
-        width: 100%;
-        box-sizing: border-box;
-      }
-    }
-  }
-}
-
-/* x-grouparray and other list of x-machinedisplay + pulse-bar-div */
-
-.machine-and-bar-table {
-  // === single column
-  width: auto !important; // to overload tile
-  margin: 4px;
-  box-sizing: border-box;
-
-  .group-main {
-    list-style-type: none;
-    padding: 4px;
-    margin: 0px;
-  }
-
-  .group-single {
-    // == compatible with x-grouparray
-    //width: 99% !important;
-    //margin: 0px 0.5% !important;
-    padding: 4px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row; // align children
-    justify-content: space-between;
-
-    align-items: flex-start; // Alignés sur la ligne du haut
-    vertical-align: middle;
-
-    >x-machinedisplay {
-      width: 15%;
-      box-sizing: border-box;
-    }
-
-    >.pulse-bar-div {
-      width: 85%;
-      box-sizing: border-box;
-    }
-  }
-}
 
 
 // SWITCH //
@@ -1349,74 +1244,6 @@ input:checked+.slider::before {
   -ms-transform: translateX(13px);
   transform: translateX(13px);
 }
-
-// TILE //
-
-.tile {
-  background-color: @color_background;
-  color: @box_text_color;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-}
-
-.tile-title {
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  padding: 4px 10px 4px 10px;
-  background-color: @color_background_alternate;
-  color: @box_header_text_color;
-  white-space: nowrap;
-
-  x-reasonbutton {
-    width: 32px;
-    height: 32px;
-    margin: auto;
-    margin-right: 4px;
-  }
-
-  x-runningbutton {
-    width: 32px;
-    height: 32px;
-    margin: auto;
-    margin-right: 4px;
-  }
-
-  x-machinedisplay {
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 1.8em;
-    line-height: 1.8em;
-  }
-
-  >x-machinedisplay {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto;
-  }
-
-  .machinedisplay-position {
-    // auto-width :
-    flex-grow: 1;
-    flex-shrink: 1;
-    overflow-x: hidden;
-    overflow-y: hidden; // Hide vertical scrollbar in title
-
-    x-machinedisplay {
-      width: 100%; // for "..."
-    }
-  }
-}
-
-.tile-content {
-  height: fit-content;
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-  position: relative;
-}
-
 
 // DEFAULT / COMMON STYLE FOR X-COMPONENT //
 
@@ -1501,22 +1328,30 @@ x-motiontime {
 
   .navbar-apps,
   .pulse-header-title,
-  .pulse-header-close-to-right {
+  .pulse-header-close-to-right:not(:has(x-logindisplay)) {
     display: none;
+  }
+
+  .pulse-header-close-to-right:has(x-logindisplay) {
+    margin-left: auto;
+    min-width: 0;
+
+    x-logindisplay .logindisplay-content {
+      max-width: 30vw;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
 
   // Cells are all visible (no rotation) and full-width (no columns)
-  .main-table-box,
-  .component-cell,
-  .group-single {
+  .component-cell {
     width: 100% !important;
     display: block !important;
   }
 
-  .component-cell,
-  .group-single,
-  .single-cell {
+  .component-cell {
     padding: 0 !important;
     min-height: 0 !important;
     height: auto !important;
@@ -1547,7 +1382,6 @@ x-motiontime {
 
   .pulse-mainarea-inner {
     padding: 0px !important;
-    height: initial !important;
   }
 
   .pulse-mainarea-bottom {
@@ -1560,6 +1394,7 @@ x-motiontime {
 
     .legend-wrapper {
       transform: none !important;
+      display: none;
     }
 
     .legend-content {
@@ -1570,6 +1405,10 @@ x-motiontime {
     .legend-toggle {
       display: none !important;
     }
+  }
+
+  .appcontext-live .pulse-mainarea-bottom .legend-wrapper {
+    display: block;
   }
 
   // Logos

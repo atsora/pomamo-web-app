@@ -8,13 +8,8 @@ var pulsePage = require('pulsePage');
 
 require('x-machinedisplay/x-machinedisplay');
 require('x-currentcncvalue/x-currentcncvalue');
-// BARS
 require('x-datetimegraduation/x-datetimegraduation');
-require('x-reasonslotbar/x-reasonslotbar');
-require('x-cncvaluebar/x-cncvaluebar');
-require('x-datetimegraduation/x-datetimegraduation');
-require('x-runningslotbar/x-runningslotbar');
-// End BARS
+require('x-barstack/x-barstack');
 require('x-motionpercentage/x-motionpercentage');
 require('x-motiontime/x-motiontime');
 require('x-periodmanager/x-periodmanager');
@@ -22,7 +17,8 @@ require('x-periodmanager/x-periodmanager');
 require('x-reasongroups/x-reasongroups');
 require('x-fieldlegends/x-fieldlegends');
 
-require('x-grouparray/x-grouparray');
+require('x-groupgrid/x-groupgrid');
+require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
 class MachineSpecificationPage extends pulsePage.BasePage {
@@ -30,13 +26,31 @@ class MachineSpecificationPage extends pulsePage.BasePage {
     super();
 
     // because many row/col is not ready (fixed height) -> //TODO
-    this.canConfigureColumns = false;
-    this.canConfigureRows = false;
+    pulseConfig.set('defaultlayout', false);
     pulseConfig.set('column', '');
     pulseConfig.set('row', '');
   }
 
-  getMissingConfigs () {
+  // CONFIG PANEL - Init
+  initOptionValues() {
+    // Always 1 machine per page
+    $('#machinesperpage').val(1).change();
+    $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+  }
+
+  // CONFIG PANEL - Default values
+  setDefaultOptionValues() {
+    $('#rotationdelay').val(10).removeAttr('overridden');
+  }
+
+  // CONFIG PANEL - Function to read custom inputs
+  getOptionValues() {
+    const delay = document.getElementById('rotationdelay');
+    const result = (delay && !$(delay).is(':hidden')) ? `&rotationdelay=${delay.value}` : '';
+    return `&machinesperpage=1${result}`;
+  }
+
+  getMissingConfigs() {
     let missingConfigs = [];
 
     let groups = pulseConfig.getArray('group');
@@ -52,11 +66,10 @@ class MachineSpecificationPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  buildContent () {
+  buildContent() {
   }
-
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
   pulsePage.preparePage(new MachineSpecificationPage());
 });

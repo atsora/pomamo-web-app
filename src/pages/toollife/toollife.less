@@ -8,61 +8,111 @@
 @import "pulse.customdialog.less";
 
 @import "pulse.exports.light.less"; // Global import
-// @import "x-checkcurrenttime/x-checkcurrenttime.less";
-// @import "x-checkpath/x-checkpath.less";
-// @import "x-checkversion/x-checkversion.less";
-// @import "x-checkconfigupdate/x-checkconfigupdate.less";
-// @import "x-checklogin/x-checklogin.less";
-// @import "x-message/x-message.less";
 
 @import "x-machineselection/x-machineselection.less";
 
 // Local
+@import "x-rotationprogress/x-rotationprogress.less";
+@import "x-grouplist/x-grouplist.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-toollifemachine/x-toollifemachine.less";
 
 @import "style.less";
 
-.machine-and-bar-table {
+x-grouplist {
+  height: auto;
+  container-type: inline-size;
   border-radius: @border_radius;
+  background-color: @color_background;
 
   .group-main {
-    display: flex;
-    flex-direction: column;
-    padding: 16px 24px;
-    row-gap: 16px;
+    height: auto;
+    padding: 1.5vh 2vw;
+    gap: 1vh;
 
     .group-single {
-      padding: 0px 12px;
+      height: 5cqh;
+      box-sizing: border-box;
+      border-radius: @border_radius_small;
+    }
+
+    .one-machine-cell {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1cqw;
+      font-size: 2cqh;
+
     }
   }
 
-
-  .one-machine-cell{ // == group-single // could be display:contents when available
-    width: 100%;
+  x-machinedisplay {
+    width: 15cqw;
     box-sizing: border-box;
-    //margin: 10px auto; //1%;
-    display: flex;
-    flex-direction: row; // align children
-    justify-content: space-between;
-
-    align-items: flex-start; // Alignés sur la ligne du haut
-    vertical-align: middle;
-
-    >.div-machine {
-      width: 10%;
-      min-width: 24ex;
-      box-sizing: border-box;
-      line-height : 2.6em; // == vertical align
+    flex-shrink: 0;
+    text-align: center;
+    .machinedisplay-data {
+      text-align: left;
     }
-    >.div-bar{
-      width: 85%;
+  }
+
+  x-toollifemachine {
+    background-color: @color_background_alternate;
+    border-radius: @border_radius_small;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+
+    &.pulse-lastbar .toollifemachine-soon-title-svg .toollifemachine-soon-title-svg-text {
+      font-size: 1cqh; // 0,3,2 > component's 0,2,1
+      font-weight: bolder;
+      fill: currentColor;
+    }
+
+    &.pulse-lastbar .pulse-cellbar-main {
+      flex: 1;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5cqh 0;
       box-sizing: border-box;
-      flex: 1
+
+      .pulse-cellbar-first {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        align-self: auto !important; // selector: x-grouplist x-toollifemachine.pulse-lastbar .pulse-cellbar-main .pulse-cellbar-first = 0,3,2 > common's 0,3,0
+      }
+
+      .toollife-separator-svg {
+        height: 1.5em; // explicit — height: 100% has no reliable flex reference in this chain
+      }
+    }
+
+    .toollifemachine-soon-title,
+    .toollifemachine-soon-svg {
+      height: 100%;
+      width: max-content;
+      align-items: center;
+    }
+
+    .pulse-cellbar-current-data,
+    .pulse-cellbar-last {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      font-size: 2cqh !important;
+      align-self: auto !important;
     }
   }
 }
 
-.legend-content{
+.legend-content {
   display: none !important;
 }

@@ -8,7 +8,8 @@ var pulsePage = require('pulsePage');
 var eventBus = require('eventBus');
 var pulseUtility = require('pulseUtility');
 
-require('x-grouparray/x-grouparray');
+require('x-grouplist/x-grouplist');
+require('x-rotationprogress/x-rotationprogress');
 require('x-productionmachiningstatus/x-productionmachiningstatus');
 require('x-machinedisplay/x-machinedisplay');
 require('x-tr/x-tr');
@@ -18,7 +19,6 @@ class ProductionMachiningPage extends pulsePage.BasePage {
     super();
 
     // General configuration
-    this.canConfigureColumns = false;
   }
 
   initOptionValues() {

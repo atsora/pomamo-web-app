@@ -5,8 +5,7 @@ Copyright (C) 2025 Atsora Solutions
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<div class='single-cell' id='boxtoclone' >
-  <div class="tile" >
+<div class="tile" id='boxtoclone' >
     <div class="tile-title">
       <div class="machinedisplay-position">
         <x-machinedisplay></x-machinedisplay>
@@ -68,12 +67,8 @@ SPDX-License-Identifier: Apache-2.0
       </div>
 
       <div class="machinestatus-weekly-bar-position">
-        <div class="pulse-bar-div">
-          <x-reasonslotbar height=24 period-context='machinestatus_7days' motion-context='motion_7days_mach'></x-reasonslotbar>
-          <x-cncvaluebar height=6 period-context= 'machinestatus_7days'></x-cncvaluebar>
-        </div>
+        <x-barstack period-context='machinestatus_7days' motion-context='motion_7days_mach'></x-barstack>
         <x-datetimegraduation period-context='machinestatus_7days' bottom='true'></x-datetimegraduation>
       </div>
     </div>
-  </div>
 </div>

@@ -12,9 +12,14 @@ SPDX-License-Identifier: Apache-2.0
     <x-grouparray templateid='boxtoclone' column=1 row=100 forcestaticlist=true></x-grouparray>
   </div>
 
-  <div class="machinedetails tile grouparray-dependant">
-    <div class="machinetitle tile-title">
-      <x-machinedisplay machine-context="PulseWebApp"></x-machinedisplay>
+  <div class="tile grouparray-dependant">
+    <div class="tile-title">
+      <div class="machine-name">
+        <x-machinedisplay machine-context="PulseWebApp"></x-machinedisplay>
+        <x-reasonbutton machine-context="PulseWebApp"></x-reasonbutton>
+      </div>
+      <x-lastmachinestatus class="title-lastmachinestatus" machine-context="PulseWebApp" status-context="PulseWebApp"
+        period-context="machines"></x-lastmachinestatus>
     </div>
     <div class="machine-component" id='coloredbar'>
       <div class="pulse-bar-div">
@@ -23,24 +28,7 @@ SPDX-License-Identifier: Apache-2.0
             <div class="graduation-bar">
               <x-datetimegraduation period-context="machines"></x-datetimegraduation>
             </div>
-            <div class="pulse-bar-div">
-              <div class="top-bar">
-                <x-shiftslotbar machine-context="PulseWebApp" period-context="machines"></x-shiftslotbar>
-                <x-machinestatebar machine-context="PulseWebApp" period-context="machines"></x-machinestatebar>
-                <x-observationstatebar machine-context="PulseWebApp" period-context="machines"></x-observationstatebar>
-              </div>
-              <div class="middle-bar">
-                <x-operationcyclebar machine-context="PulseWebApp" period-context="machines"></x-operationcyclebar>
-                <x-operationslotbar machine-context="PulseWebApp" period-context="machines"></x-operationslotbar>
-                <x-isofileslotbar machine-context="PulseWebApp" period-context="machines"></x-isofileslotbar>
-                <x-reasonslotbar machine-context="PulseWebApp" motion-context="PulseWebApp" period-context="machines">
-                </x-reasonslotbar>
-                <x-cncalarmbar machine-context="PulseWebApp" period-context="machines"></x-cncalarmbar>
-                <x-redstacklightbar machine-context="PulseWebApp" period-context="machines"></x-redstacklightbar>
-                <x-cncvaluebar machine-context="PulseWebApp" period-context="machines"></x-cncvaluebar>
-              </div>
-              <div class="bottom-bar"></div>
-            </div>
+            <x-barstack period-context="machines" motion-context="PulseWebApp" machine-context="PulseWebApp"></x-barstack>
           </div>
           <div class="right-percent">
             <x-motionpercentage motion-context="PulseWebApp" machine-context="PulseWebApp" period-context="machines">
@@ -95,6 +83,12 @@ SPDX-License-Identifier: Apache-2.0
       <div class="pulse-bar-div">
         <x-lastmachinestatetemplate machine-context="PulseWebApp" period-context="machines">
         </x-lastmachinestatetemplate>
+      </div>
+    </div>
+    <div class="machine-component" id='URN'>
+      <div class="pulse-bar-div">
+        <x-unansweredreasonnumber machine-context="PulseWebApp" period-context="machines"
+          status-context="PulseWebApp"></x-unansweredreasonnumber>
       </div>
     </div>
   </div>

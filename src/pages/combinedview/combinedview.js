@@ -14,11 +14,12 @@ require('x-stacklight/x-stacklight');
 require('x-runningslotpie/x-runningslotpie');
 require('x-motionpercentage/x-motionpercentage');
 require('x-datetimegraduation/x-datetimegraduation');
-require('x-runningslotbar/x-runningslotbar');
+require('x-barstack/x-barstack'); // pulls in all bar components
 require('x-periodmanager/x-periodmanager');
 require('x-machinemodelegends/x-machinemodelegends');
 require('x-runninglegends/x-runninglegends');
-require('x-grouparray/x-grouparray');
+require('x-groupgrid/x-groupgrid');
+require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
 class CombinedViewPage extends pulsePage.BasePage {
@@ -28,6 +29,29 @@ class CombinedViewPage extends pulsePage.BasePage {
 
   // CONFIG PANEL - Init
   initOptionValues() {
+    // Layout
+    const defaultLayoutChk = $('#defaultlayout');
+    const rotationSettings = $('.rotation-settings');
+    const machinesPerPageInput = $('#machinesperpage');
+
+    defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
+    if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
+      defaultLayoutChk.attr('overridden', true);
+
+    defaultLayoutChk.change(() => {
+      let isDefault = defaultLayoutChk.is(':checked');
+      pulseConfig.set('defaultlayout', isDefault);
+      if (isDefault) {
+        rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
+        machinesPerPageInput.val(12).change();
+      } else {
+        rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
+      }
+    }).trigger('change');
+
+    machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
+    $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+
     $('#showtarget').prop('checked', pulseConfig.getBool('showtarget'));
     if (pulseConfig.getDefaultBool('showtarget') != pulseConfig.getBool('showtarget')) {
       $('#showtarget').attr('overridden', 'true');
@@ -89,6 +113,11 @@ class CombinedViewPage extends pulsePage.BasePage {
       if (clearOverride) element.removeAttr('overridden');
     };
 
+    // Layout
+    $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
+    $('#machinesperpage').val(12).removeAttr('overridden');
+    $('#rotationdelay').val(10).removeAttr('overridden');
+
     setDefaultChecked('showtarget');
     setDefaultChecked('showalarm');
     setDefaultChecked('showstacklight');
@@ -100,6 +129,9 @@ class CombinedViewPage extends pulsePage.BasePage {
   // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues() {
     const options = [
+      { id: 'defaultlayout', type: 'checkbox' },
+      { id: 'machinesperpage', type: 'value' },
+      { id: 'rotationdelay', type: 'value' },
       { id: 'showtarget', type: 'checkbox' },
       { id: 'showalarm', type: 'checkbox' },
       { id: 'showstacklight', type: 'checkbox' }

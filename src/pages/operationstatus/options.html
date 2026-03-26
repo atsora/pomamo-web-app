@@ -1,10 +1,3 @@
-<!--
-Copyright (C) 2009-2023 Lemoine Automation Technologies
-Copyright (C) 2025 Atsora Solutions
-
-SPDX-License-Identifier: Apache-2.0
--->
-
 <div class="param-group group-options">
   <div class="param-group-header group-options">
     <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
@@ -14,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 
   <div class="param-group-content group-options">
 
-    <!-- Operation settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showworkinfo"><x-tr key="options.showOperation" default="Show operation"></x-tr></label>
@@ -34,7 +26,6 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- Current machine status settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showcurrentmachinestatuslogo"><x-tr key="options.showcurrentmachinestatuslogo"
@@ -50,7 +41,6 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- Thresholds color settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
@@ -68,7 +58,6 @@ SPDX-License-Identifier: Apache-2.0
       <div class="thresholdunitispart"></div>
     </div>
 
-    <!-- Production/Part count settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showproductionoperation"><x-tr key="options.showPartCount" default="Show part count"></x-tr></label>
@@ -91,7 +80,6 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- Current data selection -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showcurrent"><x-tr key="options.currentDataSelection" default="Current..."></x-tr></label>
@@ -113,7 +101,6 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- Current alarm settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showalarmoperation"><x-tr key="options.showCurrentAlarm"
@@ -134,7 +121,6 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- Pie settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showpie"><x-tr key="options.showPie" default="Show pie"></x-tr></label>
@@ -160,7 +146,6 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- Stacklights settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showstacklight"><x-tr key="options.showStackLights" default="Show stacklights"></x-tr></label>
@@ -168,7 +153,6 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- ISO file settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showisofile"><x-tr key="options.showNcProgram" default="Show NC program"></x-tr></label>
@@ -176,7 +160,6 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- Tools settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showtooloperation"><x-tr key="options.toolsExpiring" default="Expiring tools"></x-tr></label>
@@ -194,7 +177,6 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- Bar settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showbaroperation"><x-tr key="options.showUtilizationBar"
@@ -219,6 +201,40 @@ SPDX-License-Identifier: Apache-2.0
         <div class='inlined-radio'>
           <input type="checkbox" id="showbar-percent" autocomplete="off" />
           <label for="showbar-percent"><x-tr key="options.showPercent" default="Show percent"></x-tr></label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="param-group group-layout">
+  <div class="param-group-header group-layout">
+    <div class="param-group-title"><x-tr key="options.layoutSettings" default="Layout"></x-tr></div>
+    <button class="param-group-button" id="resetlayout"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+  </div>
+
+  <div class="param-group-content group-layout">
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="defaultlayout"><x-tr key="options.defaultLayout" default="Use default layout (12)"></x-tr></label>
+        <input type="checkbox" id="defaultlayout" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="labelsubgroup rotation-settings">
+      <div class='labelheader'>
+        <label><x-tr key="options.rotationSettings" default="Rotation Settings"></x-tr></label>
+      </div>
+      <div class="subgroup">
+        <div class='inlined-radio'>
+          <label for="machinesperpage"><x-tr key="options.machinesPerPage" default="Machines / page"></x-tr></label>
+          <input type="number" id="machinesperpage" min="1" max="100" step="1" />
+        </div>
+        <div class='inlined-radio'>
+          <label for="rotationdelay"><x-tr key="options.rotationDelay" default="Delay (sec)"></x-tr></label>
+          <input type="number" id="rotationdelay" min="3" step="1" />
         </div>
       </div>
     </div>

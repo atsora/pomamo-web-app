@@ -1,24 +1,17 @@
 /*
  * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ * Copyright (C) 2025 Atsora Solutions
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 
 // Global :
 @import "pulse.customdialog.less";
-
-@import "pulse.exports.light.less"; // Global import
-// @import "x-checkcurrenttime/x-checkcurrenttime.less";
-// @import "x-checkpath/x-checkpath.less";
-// @import "x-checkversion/x-checkversion.less";
-// @import "x-checkconfigupdate/x-checkconfigupdate.less";
-// @import "x-checklogin/x-checklogin.less";
-// @import "x-message/x-message.less";
-
+@import "pulse.exports.light.less";
 @import "x-machineselection/x-machineselection.less";
 
 // Local
-@import "x-grouparray/x-grouparray.less";
+@import "x-groupgrid/x-groupgrid.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-defaultpie/x-defaultpie.less";
 @import "x-freetext/x-freetext.less";
@@ -30,465 +23,504 @@
 @import "x-currentworkinfo/x-currentworkinfo.less";
 @import "x-workinfo/x-workinfo.less";
 @import "x-production/x-production.less";
-@import "x-toollifemachine/x-toollifemachine.less"; // adapted below
+@import "x-toollifemachine/x-toollifemachine.less";
 @import "x-periodmanager/x-periodmanager.less";
 @import "x-datetimegraduation/x-datetimegraduation.less";
-@import "x-shiftslotbar/x-shiftslotbar.less";
-@import "x-machinestatebar/x-machinestatebar.less";
-@import "x-observationstatebar/x-observationstatebar.less";
-@import "x-operationcyclebar/x-operationcyclebar.less";
-@import "x-operationslotbar/x-operationslotbar.less";
-@import "x-isofileslotbar/x-isofileslotbar.less";
-@import "x-reasonslotbar/x-reasonslotbar.less";
-@import "x-cncalarmbar/x-cncalarmbar.less";
-@import "x-redstacklightbar/x-redstacklightbar.less";
+@import "x-barstack/x-barstack.less";
 @import "x-stopclassification/x-stopclassification.less";
-@import "x-cncvaluebar/x-cncvaluebar.less";
 @import "x-motionpercentage/x-motionpercentage.less";
 @import "style.less";
 
-a {
-  color: @color_text;
+
+// Sécurité visibilité pour le framework Pulse
+x-groupgrid {
+  display: flex !important;
+  min-height: 100px;
 }
 
+.pulse-mainarea-inner {
+  padding: 1.5vh 1.5vw;
+}
+
+// --- 1. LA TUILE (LE CONTENEUR MAÎTRE) ---
 .tile {
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
+
   display: flex;
   flex-direction: column;
-  height: 100%; // Take full available height
+
+  height: 100%;
+  width: 100%;
+  min-height: 200px; // Évite le collapse à 0 qui bloque les data
+
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+
+  /* Context pour les Container Queries */
+  container-type: size;
+  container-name: maintile;
 }
 
-
-.machinedisplay-position {
+// --- 2. EN-TÊTE (identique à oeeview) ---
+.tile-title {
+  flex: 0 0 auto;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  padding: 4px 10px 4px 10px;
+  background-color: @color_background_alternate;
+  color: @box_header_text_color;
+  max-height: 25%;
 
-  x-machinedisplay {
-    display: inline-block;
-    width: auto;
-    max-width: fit-content;
-    flex-shrink: 0;
-    margin-left: 0;
-  }
-
-  x-reasonbutton {
-    width: 30px ;
-    height: 30px ;
+  .oeeview-top-title {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    margin-left: 0;
-  }
-  x-reasonbutton svg {
-    margin-top: 2px;
-    width: 1.5em ;
-  }
-}
-
-.tile-title {
-  border-top-left-radius: @border_radius;
-  border-top-right-radius: @border_radius;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding-top: 0 ;
-  flex-shrink: 0;
-
-  x-lastmachinestatus {
     width: 100%;
+
+    // Identique à oeeview
+    font-size: clamp(14px, 6cqh, 1000px) !important;
+    line-height: 1.1;
+
+    x-machinedisplay {
+      font-size: 1em;
+      min-width: 0;
+
+      .machinedisplay-data {
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: bold;
+      }
+    }
+
+    x-reasonbutton {
+      margin-left: 0.5em;
+      flex-shrink: 0;
+      height: 1.2em;
+      width: 1.2em;
+      min-width: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+
+      .pulse-icon-content,
+      .reasonbutton-svg {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      svg {
+        height: 100%;
+        width: auto;
+        max-width: unset;
+        max-height: 100%;
+        display: block !important;
+      }
+    }
   }
 
+  // Sous-titre Statut (Current Reason)
   .lastmachinestatus-current-reason-only {
     display: flex;
-    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: clamp(10px, 4cqh, 18px);
 
-    .pulse-cellbar-main {
-      display: flex ;
-      justify-content: center ;
-      width: 100% ;
-      height: unset ;
-      align-items: center ;
-      filter: opacity(100%) ;
-
-      .pulse-cellbar-between {
-        display: none ;
-      }
-
-      .pulse-cellbar-past-data {
-        display: none ;
-      }
-
-      .pulse-cellbar-current-data {
-        width: 100% ;
-        display: flex ;
-        justify-content: center ;
-        align-items: center ;
-        height: unset ;
-        border: none ;
-        border-radius: @border_radius_small;
-        background: none;
-        color: inherit ;
-        font-size: inherit ;
-        font-weight: inherit ;
-
-        &::before,
-        &::after {
-          display: none ;
-          content: none ;
-        }
-
-        // Hide everything except reason data
-        i,
-        .lastmachinestatus-reason-label,
-        svg,
-        .pulse-missing-data {
-          display: none ;
-        }
-
-        .lastmachinestatus-reason-data {
-          display: inline ;
-          text-align: center ;
-          width: auto ;
-          margin: 0 ;
-          padding: 0 ;
-          flex: 0 ;
-        }
-      }
+    x-lastmachinestatus {
+      display: flex !important;
+      width: 100%;
+      justify-content: center;
     }
+
+    .pulse-cellbar-main, .pulse-cellbar-current-data {
+      background: none !important;
+      border: none !important;
+      color: inherit !important;
+      height: auto !important;
+      width: auto !important;
+    }
+    .pulse-cellbar-between, .pulse-cellbar-past-data, i, svg { display: none !important; }
+    .lastmachinestatus-reason-label { display: none !important; }
   }
 }
 
-// tile-content
+// --- 3. CONTENU PRINCIPAL ---
 .tile-content {
+  background-color: @color_background;
+  color: @box_text_color;
   display: flex;
-  flex-direction: column; // align children
-  overflow-y: auto; // Allow vertical scrolling if content overflows
-  overflow-x: hidden;
-  border-radius: @border_radius;
-  flex-grow: 1; // Grow to fill available space
-  flex-shrink: 1; // Can shrink if needed
-  min-height: 0; // Allow flex children to shrink below content size
+  flex-direction: column;
+  flex: 1 1 0px;
+  width: 100%;
+  height: 100%;
+  padding: 1cqmin;
+  box-sizing: border-box;
+  min-height: 0;
+  overflow: hidden;
+  gap: 1cqh; // Espace entre les grandes sections (top / middle / bottom)
 
+  // ========================================
+  // --- ZONE HAUTE (Info / Production) ---
+  // Pas de height fixé : la font-size clampée pilote la taille
+  // ========================================
   .operationstatus-top-div {
-    // operationstatus-pms-div
-    flex-shrink: 0; // Don't shrink - keep full size
-    flex-basis: auto; // Use natural size
-
-    &.big-display {
-      flex-grow: 0; // Don't grow - keep size
-    }
-  }
-
-  .operationstatus-middle-div {
-    // operationstatus-alarm-pie-stacklight
-    flex-grow: 2; // Strech to available space
-    flex-shrink: 1; // Can shrink if needed
-    min-height: 0; // Allow flex to shrink below content size
-
+    flex: 0 0 auto;
     display: flex;
-    flex-direction: row; // children alignment
-    align-items: stretch; // center; // = Vertical center - Paragon stacklight align
-    justify-content: space-between; // Keep pie in the middle
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    // font-size clampé en cqh/vh pour que la hauteur soit responsive
+    // Valeur par défaut — surchargée par _applyTopDisplaySizing() via inline style
+    font-size: clamp(10px, 5cqh, 5vh);
 
-    .operationstatus-cycleprogress {
-      flex-shrink: 3; // Can shrink but not as much
-      flex-grow: 2;
-      flex-basis: 65%;
-      //height: 100%; // Not compatible with align-items: stretch;
-      box-sizing: border-box;
-      padding: 4px; // To simulate margin around
-    }
-
-    .operationstatus-light-div,
-    .operationstatus-tool-and-alarm-div {
-      display: inline-block;
-      //width:
-      flex-basis: 15%;
-      flex-grow: 1; // To grow when NO PIE
-      flex-shrink: 0; // Don't shrink below basis
-
-      // Vertical center :
-      position: relative;
-      // height: 100%; // Not compatible with align-items: stretch;
-      min-height: 50px; // height in % not working at Paragon/Eaton
-
-      x-stacklight {
-        position: relative;
-        max-height: 80%;
-        max-width: 80%;
-        transform: translate(-50%, -50%);
-        top: 50%;
-        left: 50%;
-      }
-    }
-
-    // Current tool / seq / overrides
-    .operationstatus-current-tool-div,
-    .operationstatus-current-sequence-div,
-    .operationstatus-current-override-div {
-      position: absolute;
-      top: 20%;
+    x-currentworkinfo, x-workinfo {
+      text-align: center;
       width: 100%;
-
-      x-currenttool {
-        font-size: 1.5em;
-
-        .currenttool-data {
-          display: block;
-          text-align: center;
-          font-weight: bold;
-        }
-      }
-
-      x-currentcncvalue {
-        .currentcncvalue-data-label {
-          display: inline-block;
-          font-size: 0.6em;
-        }
-
-        .currentcncvalue-data-span {
-          font-style: italic;
-          font-size: 0.9em;
-        }
-      }
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 1em !important;
+      font-weight: bold;
     }
 
-    // Alarm
-    .operationstatus-alarm-left-div {
-      box-sizing: border-box;
-      height: 40%;
-      // Vertical align
-      position: absolute;
+    x-production {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 100%;
-      transform: translateY(-50%);
-      top: 50%;
+      font-size: 1em !important;
+      font-weight: bold;
+      overflow: hidden;
+      white-space: nowrap;
 
-      x-currenticoncncalarm {
-        // Make it smaller and centered
-        box-sizing: border-box;
-        position: absolute;
-        height: 80%;
-        width: 80%;
-
-        transform: translate(-50%, -50%);
-        top: 50%;
-        left: 50%;
-
-        svg {
-          width: 70%;
-          margin-left: 15%;
-          box-sizing: border-box;
-        }
-      }
-    }
-  }
-
-  .operationstatus-bottom-div {
-    // operationstatus-tool-div & operationstatus-bar & operationstatus-alarm-bottom-div
-    // Auto size and position
-    padding-top: 5px;
-    box-sizing: border-box;
-    flex-shrink: 0; // Don't shrink - keep full size
-    flex-basis: auto; // Use natural size
-    min-height: 0; // Allow overflow if needed
-  }
-
-  .operationstatus-isofile-div {
-    font-size: 1.5em;
-    text-align: center;
-  }
-
-  .operationstatus-alarm-bottom-div {
-    min-height: 0; // Allow flex to shrink
-
-    x-currenticoncncalarm {
-      // Make it smaller and centered
-      box-sizing: border-box;
-      height: auto;
-      min-height: 20px;
-      width: 100%;
-
-      .pulse-icon-content {
+      .production-content {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        flex-wrap: nowrap;
+      }
+
+      // Masquer l'horloge "at HH:MM:" mais garder les labels Actual/Target
+      .production-clock-content {
+        display: none !important;
+      }
+
+      .production-content-text-actual,
+      .production-content-text-target {
+        display: inline-flex;
+        align-items: center;
+        opacity: 0.8;
+        margin-right: 2px;
+      }
+
+      .production-actual-value,
+      .production-target-value {
+        display: flex;
         align-items: center;
       }
 
-      .pulse-icon-cncalarm {
-        height: 20px !important;
-        box-sizing: border-box;
+      .production-separator:before {
+        content: " / ";
+        padding: 0 2px;
+      }
+    }
+  }
 
-        svg {
-          height: 20px;
-          box-sizing: border-box;
+  // ========================================
+  // --- ZONE MILIEU (Tools / Pie / Stacklight) ---
+  // flex: 1 1 auto → prend TOUT l'espace restant
+  // ========================================
+  .operationstatus-middle-div {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+
+    // Colonne Gauche (Données techniques)
+    .operationstatus-tool-and-alarm-div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+
+      x-currenttool, x-currentsequence, x-currentcncvalue {
+        width: 100%;
+        text-align: center;
+        font-size: clamp(9px, 2.5cqw, 1000px) !important;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .operationstatus-current-override-div {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        x-currentcncvalue {
+          white-space: normal;
+          text-wrap: wrap;
+          overflow: visible;
+
+          .currentcncvalue-data {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+          .currentcncvalue-data-label {
+            display: block;
+          }
         }
       }
 
-      .currenticoncncalarm-text {
-        position: static;
-        margin-top: 2px;
-      }
-    }
-  }
-}
+      .operationstatus-alarm-left-div {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 0;
+        overflow: hidden;
 
-// Top display
-x-currentworkinfo,
-x-workinfo {
-  display: block;
-  text-align: center;
-  color: @color_text;
-  font-size: 1.2em;
-  min-height: 1.5em; // To force height even if no data - ONE LINE
-  padding: 2px 0 0 0; // For Edge top padding....
-  box-sizing: border-box;
-  overflow: hidden; // For Chrome, small display = avoid 2 lines
-  margin-bottom: 0;
-
-  .workinfo-singledata {
-    font-size: inherit;
-  }
-}
-
-x-production {
-  text-align: center;
-  font-size: 1.5em;
-  font-weight: bold;
-  min-height: 30px; // uniform display
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .production-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-
-
-
-
-  .production-separator:before {
-    content: " - "; // '/' can be added OR min-width
-    padding-left: 2px;
-    padding-right: 2px;
-    box-sizing: border-box;
-    white-space: pre;
-  }
-
-  .production-clock-content {
-    display: none;
-  }
-
-}
-
-
-// END top display
-
-// Long text linked to pie
-x-freetext {
-  .freetext-content {
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.3em;
-  }
-}
-
-// TOOLLIFE - hide un-needed data
-.operationstatus-tool-div {
-  box-sizing: border-box;
-  padding: 5px;
-  width: 100%;
-}
-
-x-toollifemachine {
-  .pulse-cellbar-main {
-    // To start display from right
-    justify-content: flex-end;
-    // To always display data on the right even when overflow is hidden
-    flex-flow: row-reverse nowrap !important;
-
-    overflow: hidden; // only 1 line display
-  }
-
-  .pulse-cellbar-between {
-    display: none !important;
-  }
-
-  .pulse-cellbar-current-data {
-    display: none !important;
-  }
-}
-
-// END TOOLLIFE
-
-// BARS
-.operationstatus-bar {
-  width: 100%;
-  height: auto; // Flexible height
-  min-height: 0; // Allow flex to shrink
-  margin-top: auto; // Push to bottom
-
-  display: flex;
-  flex-direction: row; // align children
-
-  .div-bar {
-    flex-shrink: 99999;
-    flex-grow: 99999;
-    overflow: hidden; // for faster re-size
-
-    .operationstatus-div-bar {
-      display: block;
-      //margin: 5px;
-      // Align with graduation
-      margin-left: @margin_graduation;
-      margin-right: @margin_graduation;
-      border-width: 0px 1px 0px 1px;
-      border-style: solid;
-      border-color: transparent;
-
-      .top-bar {
-        width: auto; //100%;
-      }
-
-      .middle-bar {
-        width: auto; //100%;
-      }
-
-      .bottom-bar {
-        width: auto; //100%;
-      }
-    }
-
-    x-datetimegraduation {
-      .datetimegraduation-axis {
-        .domain {
-          stroke: transparent;
+        x-currenticoncncalarm {
+          height: 100%; width: 100%;
+          display: flex; justify-content: center; align-items: center;
+          svg { max-width: 80%; max-height: 80%; }
         }
       }
     }
+
+    // Colonne Centrale (Cycle Progress Pie)
+    .operationstatus-cycleprogress {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+
+      x-defaultpie {
+        width: 100%; height: 100%;
+        display: flex; justify-content: center; align-items: center;
+        svg { max-width: 100%; max-height: 100%; object-fit: contain; }
+      }
+
+      x-freetext {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: clamp(10px, 4cqw, 1000px) !important;
+        font-weight: bold;
+        pointer-events: none;
+      }
+    }
+
+    // Colonne Droite (Stacklight)
+    .operationstatus-light-div {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+
+      x-stacklight {
+        height: 100%; width: 100%;
+        display: flex; justify-content: center; align-items: center;
+        svg, .stacklight-container { max-height: 100%; max-width: 100%; }
+      }
+    }
   }
 
-  .div-percent {
-    min-width: 3em;
-    margin-bottom: 25px; // == graduation
-
+  // ========================================
+  // --- ZONE BASSE (ISO / Tools / Barres) ---
+  // info-row : font-size clampé (contenu texte)
+  // bar-row  : height clampé (contenu graphique)
+  // ========================================
+  .operationstatus-bottom-div {
+    flex: 0 0 auto;
     display: flex;
-    flex-direction: column; // align children
-    justify-content: space-evenly;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    gap: 0.5cqh; // Espace entre sous-sections (alarm / info / bar)
 
-    //x-motionpercentage {}
+    // Alarme : ligne propre au-dessus de info-row, pleine largeur
+    .operationstatus-alarm-bottom-div {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0 6px;
+      box-sizing: border-box;
+      font-size: clamp(8px, 4cqh, 4vh) !important;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+
+      x-currenticoncncalarm {
+        display: flex !important;
+        align-items: center;
+        width: 100%;
+        justify-content: center;
+
+        .pulse-icon-content {
+          display: flex !important;
+          align-items: center;
+          gap: 2px;
+          width: auto !important;
+          height: auto !important;
+        }
+
+        .pulse-icon-cncalarm {
+          height: 1.4em;
+          width: 1.4em;
+          flex-shrink: 0;
+        }
+
+        .currenticoncncalarm-text {
+          position: static !important;
+          font-size: 0.75em;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 20em;
+          width: auto !important;
+          height: auto !important;
+          max-height: none !important;
+        }
+      }
+    }
+
+    // Ligne texte (isofile + toollife) : la font-size pilote la hauteur
+    .operationstatus-info-row {
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1cqh;
+      padding: 0 1cqw;
+      align-items: center;
+      width: 100%;
+      font-size: clamp(8px, 4cqh, 4vh) !important;
+      font-weight: bold;
+      white-space: nowrap;
+      box-sizing: border-box;
+
+      // Wrapper divs pour show/hide via JS
+      .operationstatus-isofile-div {
+        flex: 0 1 auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      // Toollife : aligné à droite, font-size réduit pour adapter les em internes
+      .operationstatus-tool-div {
+        flex: 0 1 auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-width: 0;
+        overflow: hidden;
+        margin-left: auto;
+        height: 100%;
+      }
+    }
+
+    // Ligne barre (reason bar + percent) : height fixe clampé
+    .operationstatus-bar-row {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      height: clamp(14px, 20cqh, 8vh);
+
+      .div-bar {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        x-barstack {
+          flex: 1 1 0;
+          min-height: 0;
+          width: auto;
+          margin: 0 24px;
+        }
+      }
+
+
+      .div-percent {
+        font-size: clamp(9px, 4cqh, 4vh) !important;
+        font-weight: bold;
+        display: flex;
+        margin-top: 1%;
+        align-self: flex-start;
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  // --- x-toollifemachine compact dans operationstatus ---
+  // Masquer l'opération à gauche et le séparateur, ne garder que les outils
+  x-toollifemachine {
+    .pulse-cellbar-current-data { display: none !important; }
+    .pulse-cellbar-between { display: none !important; }
+
+    .pulse-cellbar-main,
+    .pulse-cellbar-past-data,
+    .pulse-cellbar-last {
+      font-size: clamp(12px, 5cqh, 5vh) !important;
+    }
+
+    .toollifemachine-soon-title {
+      font-size: clamp(12px, 4cqh, 5vh) !important;
+      height: 100%;
+    }
   }
 }
 
-// end BARS
-
-.legend-content {
-  display: none !important;
+// --- STRUCTURE GLOBALE ---
+.main-table-box {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
 }
+
+// redstacklight: hidden by default, revealed via class set in initOptionValues before grid builds
+x-redstacklightbar { display: none !important; }
+.barshowalarms-active x-redstacklightbar { display: block !important; }

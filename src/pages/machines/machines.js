@@ -13,18 +13,11 @@ require('x-lastserialnumber/x-lastserialnumber');
 require('x-lastworkinformation/x-lastworkinformation');
 require('x-lastmachinestatetemplate/x-lastmachinestatetemplate');
 require('x-lastmachinestatus/x-lastmachinestatus');
+require('x-unansweredreasonnumber/x-unansweredreasonnumber');
+require('x-reasonbutton/x-reasonbutton');
 require('x-periodmanager/x-periodmanager');
 require('x-datetimegraduation/x-datetimegraduation');
-require('x-shiftslotbar/x-shiftslotbar');
-require('x-machinestatebar/x-machinestatebar');
-require('x-observationstatebar/x-observationstatebar');
-require('x-operationcyclebar/x-operationcyclebar');
-require('x-operationslotbar/x-operationslotbar');
-require('x-reasonslotbar/x-reasonslotbar');
-require('x-cncalarmbar/x-cncalarmbar');
-require('x-redstacklightbar/x-redstacklightbar');
-require('x-cncvaluebar/x-cncvaluebar');
-require('x-isofileslotbar/x-isofileslotbar');
+require('x-barstack/x-barstack');
 require('x-motionpercentage/x-motionpercentage');
 require('x-motiontime/x-motiontime');
 
@@ -52,8 +45,6 @@ class MachinesPage extends pulsePage.BasePage {
     super();
 
     // General configuration
-    this.canConfigureColumns = false;
-    this.canConfigureRows = false;
   }
 
   getMissingConfigs () {
@@ -73,80 +64,15 @@ class MachinesPage extends pulsePage.BasePage {
   }
 
   buildContent () {
-    // show Bars
-    let showBar = pulseConfig.getBool('showcoloredbar.shift', false);
-    if (showBar) {
-      $('x-shiftslotbar').show();
-    }
-    else {
-      $('x-shiftslotbar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.machinestate', false);
-    if (showBar) {
-      $('x-machinestatebar').show();
-    }
-    else {
-      $('x-machinestatebar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.observationstate', false);
-    if (showBar) {
-      $('x-observationstatebar').show();
-    }
-    else {
-      $('x-observationstatebar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.cycle', false);
-    if (showBar) {
-      $('x-operationcyclebar').show();
-    }
-    else {
-      $('x-operationcyclebar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.operation', false);
-    if (showBar) {
-      $('x-operationslotbar').show();
-    }
-    else {
-      $('x-operationslotbar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.isofile', false);
-    if (showBar) {
-      $('x-isofileslotbar').show();
-    }
-    else {
-      $('x-isofileslotbar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.cncalarm', false);
-    if (showBar) {
-      $('x-cncalarmbar').show();
-    }
-    else {
-      $('x-cncalarmbar').hide();
-    }
-    showBar = pulseConfig.getBool('showcoloredbar.redstacklight', false);
-    if (showBar) {
-      $('x-redstacklightbar').show();
-    }
-    else {
-      $('x-redstacklightbar').hide();
-    }
-    // show reason bar == always -> idem for SHOW x-reasongroups
-    showBar = pulseConfig.getBool('showcoloredbar.cncvalue', false);
-    if (showBar) {
-      $('x-cncvaluebar').show();
-      $('x-fieldlegends').show();
-    }
-    else {
-      $('x-cncvaluebar').hide();
-      $('x-fieldlegends').hide();
-    }
-
     // find components to display
     let componentsToDisplay = pulseConfig.getArray('componentsToDisplay', []);
     let componentsString = componentsToDisplay.join(',');
     console.log('Components to display: ' + componentsString);
 
     $('.machine-component').hide(); // Hide all - Not possible in css :(
+    $('.tile-title x-reasonbutton').hide();
+    $('.title-lastmachinestatus').hide();
+
     for (let i = 0; i < componentsToDisplay.length; i++) {
       $(componentsToDisplay[i]).parents('.machine-component').show();
 
@@ -156,6 +82,12 @@ class MachinesPage extends pulsePage.BasePage {
       if (componentsToDisplay[i] == 'coloredbarwithpercent') {
         $('.div-bar-and-percent').parents('.machine-component').show();
         $('.right-percent').show();
+      }
+      if (componentsToDisplay[i] == 'x-reasonbutton') {
+        $('.tile-title x-reasonbutton').show();
+      }
+      if (componentsToDisplay[i] == 'title-lastmachinestatus') {
+        $('.title-lastmachinestatus').show();
       }
     }
   }

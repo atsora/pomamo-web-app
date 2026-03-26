@@ -1,20 +1,17 @@
 <!--
 Copyright (C) 2009-2023 Lemoine Automation Technologies
+Copyright (C) 2025 Atsora Solutions
 
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<div class='main-table tile'>
-  <x-periodmanager exclude-now='false' period-context="managerview" ></x-periodmanager>
+<x-periodmanager exclude-now='false' period-context="managerview"></x-periodmanager>
 
-  <div class='one_machine_cell top_cell'>
-    <div class="div-status"></div>
-    <div class="div-machine"></div>
-    <div class="div-bar">
-      <x-datetimegraduation period-context="managerview" ></x-datetimegraduation>
-    </div>
-    <div class="div-percent"></div>
-  </div>
+<x-rotationprogress display-mode="bar"></x-rotationprogress>
 
-  <x-grouparray templateid='boxtoclone' column=1></x-grouparray>
+<div class="tile">
+  <x-datetimegraduation period-context="managerview"></x-datetimegraduation>
+  <x-grouplist templateid='boxtoclone'></x-grouplist>
 </div>
+
+<x-rotationprogress display-mode="text"></x-rotationprogress>

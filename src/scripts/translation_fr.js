@@ -35,6 +35,7 @@ ATSORA_LOCALE_CATALOG.fr.options = {
   showPercent: "Afficher le pourcentage",
   showPie: "Afficher le graphique",
   showProductionGauge: 'Afficher la jauge de performance',
+  showProductiontrackergraph: 'Afficher le graphique de suivi de production',
   showProductionbar: 'Afficher la barre de performance',
   showRemainingCycles: "Afficher le nombre de cycles restants",
   showReserveCapacity: "Afficher la capacité de réserve",

@@ -6,7 +6,9 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <div class='main-table-box'>
-  <x-periodmanager exclude-now='false'></x-periodmanager>
-  <x-grouparray templateid='boxtoclone'></x-grouparray>
+  <x-rotationprogress display-mode="bar"></x-rotationprogress>
+  <x-periodmanager period-context="utilizationbar" exclude-now='false'></x-periodmanager>
+  <x-groupgrid templateid='boxtoclone'></x-groupgrid>
+  <x-rotationprogress display-mode="text"></x-rotationprogress>
 </div>
 <x-clock></x-clock>

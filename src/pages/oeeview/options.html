@@ -1,9 +1,3 @@
-<!--
-Copyright (C) 2025 Atsora Solutions
-
-SPDX-License-Identifier: Apache-2.0
--->
-
 <div class="param-group group-options">
   <div class="param-group-header group-options">
     <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
@@ -13,7 +7,6 @@ SPDX-License-Identifier: Apache-2.0
 
   <div class="param-group-content group-options">
 
-    <!-- Thresholds color settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label><x-tr key="options.thresholdsColor" default="Thresholds color (%)"></x-tr></label>
@@ -31,7 +24,6 @@ SPDX-License-Identifier: Apache-2.0
       <div class="thresholdunitispart"></div>
     </div>
 
-    <!-- Production gauge settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label><x-tr key="options.productionGauge" default="Production gauge"></x-tr></label>
@@ -49,11 +41,43 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- Work info settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
         <label for="showworkinfo"><x-tr key="options.showOperation" default="Show operation"></x-tr></label>
         <input type="checkbox" id="showworkinfo" autocomplete="off" />
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="param-group group-layout">
+  <div class="param-group-header group-layout">
+    <div class="param-group-title"><x-tr key="options.layoutSettings" default="Layout"></x-tr></div>
+    <button class="param-group-button" id="resetlayout"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+  </div>
+
+  <div class="param-group-content group-layout">
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="defaultlayout"><x-tr key="options.defaultLayout" default="Use default layout (12)"></x-tr></label>
+        <input type="checkbox" id="defaultlayout" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="labelsubgroup rotation-settings">
+      <div class='labelheader'>
+        <label><x-tr key="options.rotationSettings" default="Rotation Settings"></x-tr></label>
+      </div>
+      <div class="subgroup">
+        <div class='inlined-radio'>
+          <label for="machinesperpage"><x-tr key="options.machinesPerPage" default="Machines / page"></x-tr></label>
+          <input type="number" id="machinesperpage" min="1" max="12" step="1" />
+        </div>
+        <div class='inlined-radio'>
+          <label for="rotationdelay"><x-tr key="options.rotationDelay" default="Delay (sec)"></x-tr></label>
+          <input type="number" id="rotationdelay" min="3" step="1" />
+        </div>
       </div>
     </div>
 
