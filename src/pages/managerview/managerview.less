@@ -70,7 +70,7 @@
 x-grouplist {
   .group-single {
     container-type: inline-size;
-    min-height: fit-content;
+    min-height: fit-content !important;
   }
 
   .group-main {
@@ -82,7 +82,7 @@ x-grouplist {
   display: flex;
   flex-direction: row;
   padding: 0 1vw;
-  height: 100%;
+  height: auto;
   align-items: center;
 }
 
@@ -129,7 +129,8 @@ x-grouplist {
 
 x-barstack {
   flex: 1;
-  height: 100%;
+  align-self: stretch;
+  height: auto;
   overflow: hidden;
   margin: 0 2vw;
 }
@@ -146,6 +147,52 @@ x-barstack {
   x-motiontime {
     font-size: 2cqw;
     line-height: 2cqw;
+  }
+}
+
+@media (max-width: 900px) and (orientation: portrait) {
+  .datetimegraduation {
+    margin: 0 15vw 0 38vw !important;
+    padding: 0 3.2vw !important;
+  }
+
+  .one_machine_cell {
+    min-height: 70px;
+    align-items: stretch;
+    padding: 0 2vw;
+  }
+
+  .div-machine {
+    width: 38vw;
+
+    .div-machine-left {
+      height: 24px;
+      width: 24px;
+    }
+
+    .div-machine-right {
+      .machinedisplay-data {
+        font-size: 18px;
+      }
+
+      .div-current {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .div-percent {
+    width: 15vw;
+
+    x-motionpercentage,
+    x-motiontime {
+      font-size: 20px;
+      line-height: 20px;
+    }
+  }
+
+  x-barstack {
+    margin: 0 1.2vw;
   }
 }
 
