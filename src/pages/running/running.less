@@ -44,14 +44,16 @@
 .running-header {
   display: flex;
   flex-direction: row-reverse;
-  margin: 4px 0 10px 0;
-  align-items: center;
+  margin: 5px 0 ;
+  align-items: center;  
   flex-wrap: wrap;
   height: 45px;
   box-sizing: border-box;
   overflow: hidden;
 
   x-periodtoolbar {
+    flex: 0 1 auto;
+    min-width: 280px;
     margin: 0 auto;
   }
 
@@ -72,9 +74,8 @@
     display: flex;
     justify-content: center;
     border: 1px solid @color_window_border;
-    display: flex;
     align-items: center;
-    width: fit-content;
+    width: 100%;
     box-sizing: border-box;
   }
 
@@ -138,7 +139,7 @@
 .datetimegraduation {
   // margin = width of side columns (.div-machine left, .div-percent right)
   // padding = cell padding (1vw) + pulse-bar-div margin (2vw) = 3vw
-  margin: 0 4.5cqw 0 18vw !important;
+  margin: 0 6cqw 0 18vw !important;
   padding: 0 3vw !important;
   width: auto !important;
 }
@@ -147,7 +148,7 @@
 x-grouplist {
   .group-single {
     container-type: inline-size;
-    min-height: fit-content; // grows if content exceeds flex-distributed share
+    min-height: fit-content !important; // grows if content exceeds flex-distributed share
   }
 
   .group-main {
@@ -159,7 +160,7 @@ x-grouplist {
   display: flex;
   flex-direction: row;
   padding: 0 1vw;
-  height: 100%;
+  height: auto;
   align-items: center;
 }
 
@@ -213,7 +214,8 @@ x-grouplist {
 
 x-barstack {
   flex: 1;
-  height: 100%;
+  align-self: stretch;
+  height: auto;
   overflow: hidden;
   margin: 0 2vw;
 }
@@ -233,11 +235,54 @@ x-barstack {
   }
 }
 
+@media (max-width: 900px) and (orientation: portrait) {
+  .datetimegraduation {
+    margin: 0 50px 0 38vw !important;
+    padding: 0 3.2vw !important;
+  }
+
+  .one_machine_cell {
+    min-height: 70px;
+    align-items: stretch;
+  }
+
+  .div-machine {
+    width: 38vw;
+    padding: 4px 2vw;
+
+    x-machinedisplay {
+      font-size: 18px;
+    }
+
+    .div-current {
+      .div-current-left {
+        height: 24px;
+        width: 24px;
+      }
+
+      .div-current-right {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .div-percent {
+    width: 50px;
+
+    x-motionpercentage,
+    x-motiontime {
+      font-size: 20px;
+      line-height: 20px;
+    }
+  }
+
+  x-barstack {
+    margin: 0 1.2vw !important;
+  }
+}
+
 @media (max-width: 685px) {
   x-grouplist {
-    .group-single {
-      min-height: fit-content !important; // group-single anchors on div-machine height when text hasn't shrunk yet
-    }
 
     .group-main {
       padding: 0;
@@ -250,8 +295,19 @@ x-barstack {
   }
 
   x-barstack {
-    align-self: stretch; // stretch to row height (set by div-machine content)
-    height: auto; // don't reference parent height: 100% which fails on auto parent
     margin: 0 1cqw;
+  }
+
+  .running-header {
+    height: 72px;
+
+    x-periodtoolbar .periodtoolbar {
+      flex-wrap: wrap;
+    }
+
+    x-periodtoolbar .content-period-buttons {
+      width: 100%;
+      justify-content: center;
+    }
   }
 }
