@@ -17,11 +17,33 @@ require('x-groupgrid/x-groupgrid');
 require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
+/**
+ * Utilization Pie page — grid view of utilization pie charts per machine.
+ *
+ * Displays a grid (x-groupgrid) with, for each machine, a reason-slot pie chart
+ * (x-reasonslotpie). Rotation only — no additional display options.
+ *
+ * Configurable options:
+ *  - `defaultlayout` / `machinesperpage` / `rotationdelay` : rotation (default: 12 machines/page)
+ *
+ * Components: x-groupgrid, x-reasonslotpie, x-machinedisplay, x-motionpercentage,
+ * x-periodmanager, x-machinemodelegends, x-reasongroups, x-rotationprogress.
+ *
+ * @extends pulsePage.BasePage
+ */
 class UtilizationPiePage extends pulsePage.BasePage {
   constructor() {
     super();
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Rotation layout: `defaultlayout` checkbox grays out rotation inputs when checked
+   * and forces `machinesperpage` to 12.
+   *
+   * Configs read/written: `defaultlayout`, `machinesperpage`, `rotationdelay`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     const defaultLayoutChk = $('#defaultlayout');
@@ -47,14 +69,23 @@ class UtilizationPiePage extends pulsePage.BasePage {
     $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
   }
 
+  /**
+   * Resets layout options to their default values (defaultlayout=true, 12/page, delay=10s).
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
-    // Layout : défaut = rotation standard (defaultlayout=true, 12 par page)
+    // Layout: default rotation (defaultlayout=true, 12 per page)
     $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
     $('#machinesperpage').val(12).removeAttr('overridden');
     $('#rotationdelay').val(10).removeAttr('overridden');
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   * Hidden elements (e.g. rotation inputs when defaultlayout=true) are skipped.
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
     const options = [
@@ -72,6 +103,12 @@ class UtilizationPiePage extends pulsePage.BasePage {
     }).join('');
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -88,6 +125,7 @@ class UtilizationPiePage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /** No components to drive at load time. */
   buildContent() {
   }
 }

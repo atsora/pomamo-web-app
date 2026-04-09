@@ -28,7 +28,33 @@ require('x-fieldlegends/x-fieldlegends');
 require('x-machinemodelegends/x-machinemodelegends');
 require('x-tr/x-tr');
 
+/**
+ * Running page — real-time per-machine view with status bars and operation info.
+ *
+ * Displays a list of machines (x-grouplist) with, for each machine:
+ * a stack of bars (x-barstack), current info (job, shift, CNC),
+ * and the reason entry button (x-reasonbutton).
+ *
+ * Two mutually exclusive bar modes:
+ *  - **Production bar** (showproductionbar=true)  : x-productionstatelegends visible,
+ *    x-reasongroups hidden.
+ *  - **Reason bar**     (showproductionbar=false) : x-reasongroups visible,
+ *    x-productionstatelegends hidden.
+ *
+ * The bar option is only exposed if `allowproductionbar` = true in the config.
+ *
+ * Components: x-grouplist, x-barstack, x-machinedisplay, x-lastworkinformation,
+ * x-currentcncvalue, x-lastshift, x-productionmachiningstatus, x-periodtoolbar, x-clock,
+ * x-reasonbutton, x-reasongroups, x-fieldlegends, x-machinemodelegends,
+ * x-productionstatelegends.
+ *
+ * @extends pulsePage.BasePage
+ */
 class RunningPage extends pulsePage.BasePage {
+  /**
+   * Forces `column=''` in pulseConfig to disable column mode
+   * (x-grouplist must render as a list, not a grid).
+   */
   constructor() {
     super();
 
@@ -36,6 +62,19 @@ class RunningPage extends pulsePage.BasePage {
     pulseConfig.set('column', '');
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Hides the options group if `allowproductionbar` = false (the production bar
+   * is not available in this deployed configuration).
+   *
+   * Bar radio management (showproductionbar / showreasonbar):
+   *  - The two radios are linked in inverse logic (one is the NOT of the other).
+   *  - `applyBarChoice(bool)` centralizes the change: updates pulseConfig,
+   *    forces barstack reload, and alternates the visible legend.
+   *
+   * Configs read/written: `allowproductionbar` (read-only), `showproductionbar`.
+   */
   // CONFIG PANEL - Init
   initOptionValues () {
     // Allow choose production bar display
@@ -67,6 +106,13 @@ class RunningPage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Resets options to their default values.
+   *
+   * Resets `showproductionbar` via `setDefaultChecked`, then manually syncs
+   * the inverse radio `showreasonbar` (= !showproductionbar)
+   * since it is not stored directly in pulseConfig.
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues () {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -84,6 +130,12 @@ class RunningPage extends pulsePage.BasePage {
     $('#showreasonbar').removeAttr('overridden');
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   * Only `showproductionbar` is exported (showreasonbar is its inverse and is not stored).
+   *
+   * @returns {string} Query string fragment, e.g. `&showproductionbar=true`.
+   */
   // CONFIG PANEL - Function to read custom inputs
   // getOptionValues uses the unified options-list pattern:
   // { id, type, param?, conditional? } -> "&param=value" fragments.
@@ -100,6 +152,12 @@ class RunningPage extends pulsePage.BasePage {
     }).join('');
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs () {
     let missingConfigs = [];
 
@@ -116,6 +174,21 @@ class RunningPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Applies the current configuration to DOM components.
+   *
+   * Components driven by `currentdisplay.*` (independent configs, not linked):
+   *  - `displayjobshiftpartcount` → x-productionmachiningstatus
+   *  - `displayjob`               → x-lastworkinformation
+   *  - `displayshift`             → x-lastShift
+   *  - `displaycncvalue`          → x-currentcncvalue
+   *
+   * Components driven by other configs:
+   *  - `showcoloredbar.cncvalue` → x-fieldlegends (CNC legend)
+   *  - `showproductionbar`       → x-reasongroups / x-productionstatelegends (mutually exclusive)
+   *
+   * Note: bars (x-barstack) read pulseConfig directly — no need to drive them here.
+   */
   buildContent () {
 
     //Link between these displays are removed - In case of bad config, job can be displayed twice (ex: dev)
@@ -172,12 +245,17 @@ class RunningPage extends pulsePage.BasePage {
 }
 
 $(document).ready(function () {
+  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
   pulsePage.preparePage(new RunningPage());
 
+  // In live mode, the time navigation header is hidden
+  // (the live running page has no period selection).
   let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
   if (tmpContexts && tmpContexts.includes('live')) {
     $('.running-header').hide();
   }
 
+  // x-datetimegraduation cannot handle resize when hidden at mount time —
+  // force load after the page is visible.
   $('x-datetimegraduation').load(); // DTG can not manage resize when hidden
 });

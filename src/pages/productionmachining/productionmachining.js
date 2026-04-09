@@ -14,6 +14,19 @@ require('x-productionmachiningstatus/x-productionmachiningstatus');
 require('x-machinedisplay/x-machinedisplay');
 require('x-tr/x-tr');
 
+/**
+ * Production Machining page — list view of machining production status per machine.
+ *
+ * Displays a vertical list of machines (x-grouplist) with, for each machine,
+ * the current machining production status (x-productionmachiningstatus).
+ *
+ * Configurable options:
+ *  - `thresholdtargetproduction` / `thresholdredproduction` : color thresholds (integer %)
+ *
+ * Components: x-grouplist, x-productionmachiningstatus, x-machinedisplay.
+ *
+ * @extends pulsePage.BasePage
+ */
 class ProductionMachiningPage extends pulsePage.BasePage {
   constructor() {
     super();
@@ -21,6 +34,15 @@ class ProductionMachiningPage extends pulsePage.BasePage {
     // General configuration
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Threshold management: listeners are bound to both `input` AND `change`
+   * for real-time validation. The `overridden` attribute is set only after
+   * successful validation via `_verficationThresholds`.
+   *
+   * Configs read/written: `thresholdtargetproduction`, `thresholdredproduction`.
+   */
   initOptionValues() {
     var self = this;
     // Prepare custom inputs / Visibilities
@@ -57,6 +79,20 @@ class ProductionMachiningPage extends pulsePage.BasePage {
 
   }
 
+  /**
+   * Validates and applies the production color thresholds.
+   *
+   * Same logic as oeeview._verficationThresholds — see that file for full details.
+   * Error container: `.thresholdunitispart` (no fallback).
+   * Values are integers (not floats) on this page.
+   *
+   * On success, dispatches `configChangeEvent { config: 'thresholdsupdated' }`
+   * to notify x-productionmachiningstatus.
+   *
+   * @param {number|string} targetValue - Target threshold (%), integer.
+   * @param {number|string} redValue    - Red threshold (%), integer.
+   * @returns {boolean} true if valid and applied, false otherwise.
+   */
   _verficationThresholds(targetValue, redValue) {
     // Find or create error message element
     let errorMessage = document.getElementById('thresholdErrorMessage');
@@ -111,6 +147,9 @@ class ProductionMachiningPage extends pulsePage.BasePage {
     return true;
   }
 
+  /**
+   * Resets thresholds to their default values via the standard `setDefaultValue` helper.
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
@@ -124,6 +163,12 @@ class ProductionMachiningPage extends pulsePage.BasePage {
     setDefaultValue('thresholdredproduction', pulseConfig.getDefaultInt('thresholdredproduction'));
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   * Only includes threshold values if they are valid integers.
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   // getOptionValues uses the unified options-list pattern:
   // { id, type, param?, conditional? } -> "&param=value" fragments.
@@ -142,6 +187,12 @@ class ProductionMachiningPage extends pulsePage.BasePage {
     }).join('');
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -158,11 +209,16 @@ class ProductionMachiningPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * No components to drive at load time — x-productionmachiningstatus reads
+   * pulseConfig directly via its own mechanisms.
+   */
   buildContent() {
   }
 
 }
 
 $(document).ready(function () {
+  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
   pulsePage.preparePage(new ProductionMachiningPage());
 });

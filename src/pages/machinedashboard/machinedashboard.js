@@ -31,6 +31,28 @@ require('x-periodmanager/x-periodmanager');
 require('x-productionbar/x-productionbar');
 require('x-productiongauge/x-productiongauge');
 
+/**
+ * Machine Dashboard page — detailed per-machine dashboard.
+ *
+ * Displays a horizontal grid of machines (x-grouparray) with, for each machine,
+ * a rich set of configurable components: status bars (x-barstack),
+ * production tracking graph (x-productiontrackergraph), production gauge or pie chart
+ * (x-productiongauge / x-defaultpie), production bar (x-productionbar),
+ * changed tools (x-toollifemachine), stop classification (x-openstopclassificationlistener).
+ *
+ * Configurable options:
+ *  - `showChangedTools`              : display changed tools
+ *  - `openStopClassification`        : stop classification popup (component injected dynamically)
+ *  - `stopClassificationReopenDelay` : automatic reopen delay
+ *  - `showproductiontrackergraph`    : production tracking graph
+ *  - `showproductionbar`             : production bar + border
+ *  - `showpercent`                   : display mode % or ratio (x-productionbar, x-productiongauge)
+ *  - `showproductiondisplay`         : show production gauge/pie
+ *  - `showproductiongauge`           : gauge (true) or pie chart (false)
+ *  - `thresholdtargetproduction` / `thresholdredproduction` : color thresholds
+ *
+ * @extends pulsePage.BasePage
+ */
 class machinedashboardPage extends pulsePage.BasePage {
   constructor() {
     super();
@@ -38,6 +60,12 @@ class machinedashboardPage extends pulsePage.BasePage {
     // General configuration
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -54,6 +82,17 @@ class machinedashboardPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Generic helper to initialize a checkbox option.
+   *
+   * Reads the value from pulseConfig, checks the checkbox, marks `overridden` if
+   * the value differs from the default, then binds a listener that persists the value
+   * and calls `functionCheck` or `functionUncheck` based on the state.
+   *
+   * @param {string}   option          - Config key AND DOM id of the checkbox.
+   * @param {Function} functionCheck   - Callback when the checkbox is checked.
+   * @param {Function} functionUncheck - Callback when the checkbox is unchecked.
+   */
   // Initialize an option checkbox
   _showOption(option, functionCheck, functionUncheck) {
     const checkbox = document.getElementById(option);
@@ -74,6 +113,22 @@ class machinedashboardPage extends pulsePage.BasePage {
     checkbox.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
+  /**
+   * Initializes the options panel and binds all UI listeners.
+   *
+   * Initialization sequence (8 blocks):
+   *  1. showChangedTools       — display changed tools (`.changedtools-content`)
+   *  2. openStopClassification — dynamically create/destroy x-openstopclassificationlistener
+   *  3. stopClassificationReopenDelay — numeric delay input
+   *  4. showproductiontrackergraph — tracking graph
+   *  5. showproductionbar + %/ratio mode — production bar
+   *  6. showpercent            — % vs ratio radios (x-productionbar + x-productiongauge)
+   *  7. showproductiondisplay + showproductiongauge — gauge vs pie (nested)
+   *  8. thresholds             — color thresholds (validated via `_verficationThresholds`)
+   *
+   * Final triggers: manually fires key option listeners to sync visual state
+   * as soon as the panel opens.
+   */
   initOptionValues() {
     // --- 1. SHOW CHANGED TOOLS ---
     $('#showChangedTools').prop('checked', pulseConfig.getBool('showChangedTools'));
@@ -141,12 +196,12 @@ class machinedashboardPage extends pulsePage.BasePage {
       let isPercent = $('#productionbarpercent').is(':checked');
       pulseConfig.set('showpercent', isPercent);
       let mode = isPercent ? 'percent' : 'ratio';
-      // S'applique aux éléments existants, et buildContent() gérera les clones futurs
+      // Applies to existing elements; buildContent() will handle future clones
       $('x-productionbar').attr('display-mode', mode);
       $('x-productiongauge').attr('display-mode', mode);
     });
 
-    // --- 7. SHOW PRODUCTION DISPLAY (Le bouton principal) ---
+    // --- 7. SHOW PRODUCTION DISPLAY (main toggle) ---
     $('#showproductiondisplay').prop('checked', pulseConfig.getBool('showproductiondisplay'));
     if (pulseConfig.getDefaultBool('showproductiondisplay') != pulseConfig.getBool('showproductiondisplay'))
       $('#showproductiondisplay').attr('overridden', 'true');
@@ -208,13 +263,23 @@ class machinedashboardPage extends pulsePage.BasePage {
     thresholdTarget.addEventListener('change', () => this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true));
     thresholdRedInput.addEventListener('change', () => this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true));
 
-    // Déclencheurs initiaux pour aligner l'interface
+    // Initial triggers to sync the UI state
     $('#showChangedTools').trigger('change');
     $('#openStopClassification').trigger('change');
     $('#showproductionbar').trigger('change');
     $('#showproductiondisplay').trigger('change');
   }
 
+  /**
+   * Creates and injects the x-openstopclassificationlistener element into the DOM.
+   *
+   * The component is appended to the body (outside the tile template) because it is
+   * page-global — it listens to all stops and opens a classification popup.
+   * Checks for an existing component before injecting (idempotent).
+   *
+   * Attributes injected: machine-context="PulseWebApp", period-context="machinedashboard",
+   *                      status-context="PulseWebApp".
+   */
   // Create the open stop classification listener element
   _createOpenStopClassificationListener() {
     document.querySelector('.openStopClassificationDetails').style.display = 'block';
@@ -229,6 +294,10 @@ class machinedashboardPage extends pulsePage.BasePage {
     }
   }
 
+  /**
+   * Removes the x-openstopclassificationlistener element from the DOM and hides its UI.
+   * Inverse operation of `_createOpenStopClassificationListener()`.
+   */
   // Delete the open stop classification listener element
   _deleteOpenStopClassificationListener() {
     document.querySelector('.openStopClassificationDetails').style.display = 'none';
@@ -239,6 +308,12 @@ class machinedashboardPage extends pulsePage.BasePage {
     }
   }
 
+  /**
+   * Initializes the stop classification reopen delay numeric input.
+   *
+   * Reads `stopClassificationReopenDelay` (default: 5s), marks `overridden` if modified,
+   * and persists to pulseConfig on each valid change (integer >= 0).
+   */
   // Initialize the reopen stop classification delay input
   _reopenStopClassificationDelay() {
     const stopClassificationReopenDelayInput = document.getElementById('stopClassificationReopenDelay');
@@ -254,6 +329,13 @@ class machinedashboardPage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Initializes the production bar display mode radios (% or ratio).
+   *
+   * Note: this method is not called from initOptionValues — the equivalent logic
+   * is inlined in block 6. It remains available as a refactored alternative.
+   * Simultaneously affects x-productionbar and x-productiongauge via `setAttribute('display-mode')`.
+   */
   // Initialize the production bar display mode radios
   _productionBarDisplayMode() {
     const showPercentRadio = document.getElementById('productionbarpercent');
@@ -295,6 +377,14 @@ class machinedashboardPage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Initializes the production display type radios (gauge vs pie chart).
+   *
+   * Note: this method is not called from initOptionValues — the equivalent logic
+   * is inlined in block 7. It remains available as a refactored alternative.
+   * Show/hide depends on `showproductiondisplay`: if production is not displayed,
+   * both components are hidden regardless of the gauge/pie choice.
+   */
   // Initialize the production display type radios (gauge vs pie)
   _productionDisplayType() {
     const showGaugeRadio = document.getElementById('productiongauge');
@@ -353,6 +443,20 @@ class machinedashboardPage extends pulsePage.BasePage {
     }
   }
 
+  /**
+   * Validates and applies the production bar/gauge color thresholds.
+   *
+   * Same logic as oeeview._verficationThresholds — see that file for details.
+   * Difference: the error container falls back to `.showproductionbardetails`
+   * (instead of `.showproductiongaugedetails` in oeeview).
+   *
+   * On success, dispatches `configChangeEvent { config: 'thresholdsupdated' }`
+   * to notify x-productionbar and x-productiongauge components.
+   *
+   * @param {number|string} targetValue - Target threshold (green → orange), in %.
+   * @param {number|string} redValue    - Critical threshold (orange → red), in %.
+   * @returns {boolean} true if valid and applied, false otherwise.
+   */
   // Verify threshold values
   _verficationThresholds(targetValue, redValue) {
     // Find or create error message element
@@ -414,6 +518,15 @@ class machinedashboardPage extends pulsePage.BasePage {
     return true;
   }
 
+  /**
+   * Resets all options to their default values (panel "reset" button).
+   *
+   * Uses the three standard local helpers (setDefaultChecked, setDefaultValue,
+   * setDefaultRadioGroup) to cover all input types in the panel.
+   *
+   * Reset order: changed tools → stop classification → delay → production graph
+   *   → production bar + %/ratio mode → production display → gauge/pie → thresholds.
+   */
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
       const element = $('#' + id);
@@ -469,6 +582,15 @@ class machinedashboardPage extends pulsePage.BasePage {
 
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Uses the unified declarative pattern `{ id, type, param? }`.
+   * Radios (productionbarpercent, productiongauge) are exported via their
+   * semantic `param` (showpercent, showproductiongauge).
+   *
+   * @returns {string} Query string fragment.
+   */
   getOptionValues() {
     const options = [
       { id: 'showChangedTools', type: 'checkbox' },
@@ -497,10 +619,26 @@ class machinedashboardPage extends pulsePage.BasePage {
   }
 
 
+  /**
+   * Applies the current configuration to DOM components.
+   *
+   * Called after option initialization to sync the visual state with
+   * URL params / localStorage. Also handles clones created by x-grouparray
+   * that do not yet exist when initOptionValues runs.
+   *
+   * Components driven:
+   *  - `showproductiondisplay` + `showproductiongauge` → x-productiongauge / x-defaultpie
+   *  - `showproductiontrackergraph`                    → x-productiontrackergraph
+   *  - `showproductionbar`                             → x-productionbar + `.performancebar-bar-border`
+   *  - `showChangedTools`                              → `.changedtools-content`
+   *  - `showpercent`                                   → `display-mode` attribute on x-productionbar + x-productiongauge
+   *
+   * Note: bars (x-barstack) read pulseConfig directly — no need to drive them here.
+   */
   buildContent() {
     // Bars are managed by x-barstack reading pulseConfig directly.
 
-    // --- APPLICATION SUR LES CLONES DE X-GROUPARRAY ---
+    // --- APPLY TO X-GROUPARRAY CLONES ---
     let showproductiondisplay = pulseConfig.getBool('showproductiondisplay');
     let showproductiongauge = pulseConfig.getBool('showproductiongauge');
     if (showproductiondisplay) {
@@ -536,7 +674,7 @@ class machinedashboardPage extends pulsePage.BasePage {
       $('.changedtools-content').hide();
     }
 
-    // NOUVEAU : Application des modes (percent/ratio) aux clones fraîchement créés
+    // Apply display mode (percent/ratio) to freshly created clones
     let showPercent = pulseConfig.getBool('showpercent');
     let displayMode = showPercent ? 'percent' : 'ratio';
     $('x-productionbar').attr('display-mode', displayMode);
@@ -546,5 +684,6 @@ class machinedashboardPage extends pulsePage.BasePage {
 }
 
 $(document).ready(function () {
+  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
   pulsePage.preparePage(new machinedashboardPage());
 });

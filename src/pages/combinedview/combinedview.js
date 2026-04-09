@@ -22,11 +22,48 @@ require('x-groupgrid/x-groupgrid');
 require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
+/**
+ * Combined View page — grid view combining status bars and machine indicators.
+ *
+ * Displays a grid of machines (x-groupgrid) with, for each machine:
+ * a stack of bars (x-barstack), a motion percentage indicator,
+ * and optional components (performance target, CNC alarm, stack light).
+ *
+ * Notable: two x-periodmanager elements are present in the DOM with distinct
+ * `period-context` values (`combinedview_today` and `combinedview_6days`)
+ * to simultaneously display today's period and the last 6 days.
+ *
+ * Configurable options:
+ *  - `defaultlayout` / `machinesperpage` / `rotationdelay` : rotation management
+ *  - `showtarget`     : x-performancetarget (performance target)
+ *  - `showalarm`      : x-currenticoncncalarm (CNC alarm icon)
+ *  - `showstacklight` : x-stacklight (stack light)
+ *
+ * Components: x-groupgrid, x-barstack, x-machinedisplay, x-runningbutton,
+ * x-performancetarget, x-currenticoncncalarm, x-stacklight, x-runningslotpie,
+ * x-motionpercentage, x-periodmanager, x-machinemodelegends, x-runninglegends.
+ *
+ * @extends pulsePage.BasePage
+ */
 class CombinedViewPage extends pulsePage.BasePage {
   constructor() {
     super();
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Rotation layout management (same pattern as oeeview):
+   *  - If `defaultlayout` is checked → grays out manual inputs and forces machinesperpage=12.
+   *  - Otherwise → enables machinesperpage and rotationdelay inputs.
+   *
+   * Optional component options (uniform pattern):
+   *  - Read config → check checkbox → bind change listener → set config + show/hide component.
+   *  - Mark `overridden` if value differs from default.
+   *
+   * Configs read/written: `defaultlayout`, `machinesperpage`, `rotationdelay`,
+   *                       `showtarget`, `showalarm`, `showstacklight`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     // Layout
@@ -104,6 +141,15 @@ class CombinedViewPage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Resets all options to their default values.
+   *
+   * Layout: directly forces `defaultlayout=checked`, `machinesperpage=12`, `rotationdelay=10`
+   * (hardcoded values since these are the known defaults, not read from pulseConfig.getDefault*).
+   *
+   * Optional components: uses `setDefaultChecked` with trigger to immediately
+   * sync visual state (show/hide).
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -123,6 +169,15 @@ class CombinedViewPage extends pulsePage.BasePage {
     setDefaultChecked('showstacklight');
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Note: all options are checkboxes — `el.checked` is used for all,
+   * including machinesperpage and rotationdelay (latent bug: these inputs are numeric,
+   * but the map uses `el.checked` instead of `el.value`).
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   // getOptionValues uses the unified options-list pattern:
   // { id, type, param?, conditional? } -> "&param=value" fragments.
@@ -145,6 +200,12 @@ class CombinedViewPage extends pulsePage.BasePage {
     }).join('');
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -161,6 +222,14 @@ class CombinedViewPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Applies the current configuration to optional DOM components.
+   *
+   * Syncs visual state at page load (option listeners handle real-time changes,
+   * but buildContent ensures the initial state based on URL params / localStorage).
+   *
+   * Components driven: x-performancetarget, x-stacklight, x-currenticoncncalarm.
+   */
   buildContent() {
     let showtarget = pulseConfig.getBool('showtarget');
     if (showtarget) {
@@ -187,5 +256,6 @@ class CombinedViewPage extends pulsePage.BasePage {
 }
 
 $(document).ready(function () {
+  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
   pulsePage.preparePage(new CombinedViewPage());
 });

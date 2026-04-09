@@ -19,11 +19,51 @@ require('x-groupgrid/x-groupgrid');
 require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
+/**
+ * Performance Gauge page — grid view of performance gauges per machine.
+ *
+ * Displays a grid (x-groupgrid) with, for each machine, a performance gauge
+ * (x-performancegauge) and an optional motion indicator (x-motionpercentage or x-motiontime).
+ *
+ * Configurable options:
+ *  - `defaultlayout` / `machinesperpage` / `rotationdelay` : rotation (default: 12 machines/page)
+ *  - `showmotionpercentage` : show the motion indicator
+ *  - `showmotiondisplay`    : indicator type — 'percent' (x-motionpercentage) or 'time' (x-motiontime)
+ *
+ * Identical option structure to performancebar.js — only the main component
+ * (x-performancegauge vs x-performancebar) and the default machinesperpage (12 vs 16) differ.
+ *
+ * Components: x-groupgrid, x-performancegauge, x-machinedisplay,
+ * x-motionpercentage, x-motiontime, x-periodmanager, x-reasonbutton,
+ * x-machinemodelegends, x-reasongroups, x-rotationprogress.
+ *
+ * @extends pulsePage.BasePage
+ */
 class PerformanceGaugePage extends pulsePage.BasePage {
   constructor() {
     super();
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Rotation layout: `defaultlayout` checkbox grays out inputs when checked,
+   * default 12 machines/page.
+   *
+   * Motion management (two nested levels):
+   *  1. `showmotionpercentage` (checkbox): enables/disables motion display
+   *     and shows/hides the `.showmotionpercentagedetails` option group.
+   *  2. `showmotiondisplay` (percent/time radios): switches between x-motionpercentage
+   *     and x-motiontime (mutually exclusive, via `updateMotionDisplay`).
+   *
+   * Local helpers:
+   *  - `syncRadioGroup`      : checks the radio matching a config value
+   *  - `bindRadioGroup`      : binds listeners on a radio group via a value→id map
+   *  - `updateMotionDisplay` : applies show/hide based on the selected mode
+   *
+   * Configs read/written: `defaultlayout`, `machinesperpage`, `rotationdelay`,
+   *                       `showmotionpercentage`, `showmotiondisplay`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     // Layout
@@ -111,6 +151,12 @@ class PerformanceGaugePage extends pulsePage.BasePage {
     $('#showmotionpercentage').trigger('change');
   }
 
+  /**
+   * Resets all options to their default values.
+   *
+   * Layout: directly forces defaultlayout=checked, machinesperpage=12, rotationdelay=10.
+   * Motion: uses `setDefaultChecked` and `setDefaultRadioGroup` helpers.
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -144,6 +190,14 @@ class PerformanceGaugePage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Hidden elements (e.g. rotation options) are skipped.
+   * `showmotiondisplay` is appended separately after the main options map.
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
     const options = [
@@ -170,6 +224,12 @@ class PerformanceGaugePage extends pulsePage.BasePage {
     return result;
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -186,6 +246,13 @@ class PerformanceGaugePage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Applies the current configuration to DOM components.
+   *
+   * Motion indicator logic (two-level):
+   *  - If `showmotionpercentage` is false → hide both x-motionpercentage and x-motiontime.
+   *  - If true → show only the one matching `showmotiondisplay` ('percent' or 'time').
+   */
   buildContent() {
     let showMotionPercentage = pulseConfig.getBool('showmotionpercentage');
     let display = pulseConfig.getString('showmotiondisplay') || 'percent';

@@ -30,15 +30,78 @@ require('x-groupgrid/x-groupgrid');
 require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
+/**
+ * Machine Status page — grid view of per-machine status dashboards.
+ *
+ * One of the most feature-rich pages: combines daily info (pie, bars, motion, target),
+ * optional tool/sequence indicators, alarm, stacklight, and a weekly bar section.
+ * Supports both live (rotation) and historical (scroll) modes.
+ *
+ * Configurable options:
+ *  - `defaultlayout` / `machinesperpage` / `rotationdelay` : rotation — live mode only (default: 12/page)
+ *  - `showworkinfo`                  : show x-currentworkinfo (operation name)
+ *  - `displayshiftrange`             : pie range — shift (true) or day (false, default)
+ *  - `displaymotiontime`             : motion display — time (true) or percent (false, default);
+ *                                      switching to time disables and unchecks `showtarget`
+ *  - `showtarget`                    : show `.machinestatus-target` (x-performancetarget);
+ *                                      forced to false and disabled when displaymotiontime=true
+ *  - `showcurrenttool`               : show tool indicator — mutually exclusive with showcurrentsequence
+ *  - `showcurrentsequence`           : show sequence indicator — mutually exclusive with showcurrenttool;
+ *                                      parent checkbox `#showcurrent` controls subgroup visibility
+ *  - `showalarm`                     : show x-currenticoncncalarm
+ *  - `showstacklight`                : show x-stacklight
+ *  - `showweeklybar`                 : show weekly bar section (.machinestatus-weekly-info);
+ *                                      parent controls subgroup visibility
+ *  - `weeklyshowcurrentweek`         : weekly range — current week (true) or last 7 days (false);
+ *                                      drives `#period-for-week` attributes and `.machinestatus-label`
+ *
+ * Live vs historical mode: detected via `AppContext` URL parameter containing 'live'.
+ * Historical mode: rotation hidden, machinesperpage=10000, CSS injected for scrollable x-groupgrid.
+ *
+ * Components: x-groupgrid, x-machinedisplay, x-currentworkinfo, x-freetext,
+ * x-performancetarget, x-currentsequence, x-currenttool, x-currenticoncncalarm,
+ * x-stacklight, x-reasonslotpie, x-motionpercentage, x-motiontime,
+ * x-datetimegraduation, x-barstack, x-periodmanager, x-machinemodelegends,
+ * x-reasongroups, x-rotationprogress.
+ *
+ * @extends pulsePage.BasePage
+ */
 class MachineStatusPage extends pulsePage.BasePage {
   constructor() {
     super();
     this.showMachineselection = true;
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Live vs historical branching (detected once at init):
+   *  - Historical: hides rotation controls, sets machinesperpage=10000, injects scroll CSS.
+   *  - Live: standard rotation layout (defaultlayout checkbox, 12/page default).
+   *
+   * Section overview:
+   *  1. Layout / rotation (live only)
+   *  2. showworkinfo — shows/hides x-currentworkinfo
+   *  3. Pie range — `#displayshiftrange` / `#pierangeisday` radios (shift or day)
+   *  4. Motion display — `#displaymotiontime` / `#displaymotionpercent` radios (time or percent);
+   *     selecting time mode unchecks and disables `#showtarget`
+   *  5. Target — `#showtarget` shows/hides `.machinestatus-target`
+   *  6. Current tool/sequence — `#showcurrent` parent controls `.showcurrentdetails` subgroup;
+   *     `#showcurrenttool` and `#showcurrentsequence` are mutually exclusive (checking one hides the other)
+   *  7. Alarm — `#showalarm` shows/hides x-currenticoncncalarm
+   *  8. Stacklight — `#showstacklight` shows/hides x-stacklight
+   *  9. Weekly bar — `#showweeklybar` parent controls `.machinestatus-weekly-info` and
+   *     `.showweeklydetails` subgroup; `#showcurrentweek` / `#showlast7days` radios drive
+   *     `#period-for-week` attributes (`exclude-now`, `displayweekrange`) and the week label
+   *
+   * Configs read/written: `defaultlayout`, `machinesperpage`, `rotationdelay`,
+   *                       `showworkinfo`, `displayshiftrange`, `displaymotiontime`,
+   *                       `showtarget`, `showcurrenttool`, `showcurrentsequence`,
+   *                       `showalarm`, `showstacklight`, `showweeklybar`, `weeklyshowcurrentweek`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
-    // --- LOGIQUE LIVE vs HISTORIQUE ---
+    // --- LIVE vs HISTORICAL ---
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
     let isLive = tmpContexts && tmpContexts.includes('live');
 
@@ -47,7 +110,7 @@ class MachineStatusPage extends pulsePage.BasePage {
     const machinesPerPageInput = $('#machinesperpage');
 
     if (!isLive) {
-      // CAS HISTORIQUE : Scroll activé, Rotation désactivée
+      // Historical mode: rotation hidden, infinite page, scroll CSS injected
       defaultLayoutChk.closest('.param-row').hide();
       defaultLayoutChk.parent().hide();
       rotationSettings.hide();
@@ -78,7 +141,7 @@ class MachineStatusPage extends pulsePage.BasePage {
         </style>
       `);
     } else {
-      // CAS LIVE : Rotation activée
+      // Live mode: standard rotation layout
       defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
 
       defaultLayoutChk.change(() => {
@@ -95,7 +158,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
       $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
     }
-    // --- FIN LOGIQUE LIVE/HISTORIQUE ---
+    // --- END LIVE/HISTORICAL ---
 
     // showworkinfo = Show Operation
     $('#showworkinfo').prop('checked', pulseConfig.getBool('showworkinfo'));
@@ -114,7 +177,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       }
     });
 
-    // Shift / Day
+    // Pie range: Shift or Day (mutually exclusive radios)
     $('#displayshiftrange').prop('checked', pulseConfig.getBool('displayshiftrange'));
     $('#pierangeisday').prop('checked', !pulseConfig.getBool('displayshiftrange'));
     $('#displayshiftrange').change(function () {
@@ -134,7 +197,8 @@ class MachineStatusPage extends pulsePage.BasePage {
         { 'config': 'displayshiftrange' });
     });
 
-    // Percent / Time
+    // Motion display: Time or Percent (mutually exclusive radios).
+    // When time mode is selected, showtarget is unchecked and disabled (incompatible).
     $('#displaymotiontime').prop('checked', pulseConfig.getBool('displaymotiontime'));
     $('#displaymotionpercent').prop('checked', !pulseConfig.getBool('displaymotiontime'));
     $('#displaymotiontime').change(function () {
@@ -149,7 +213,7 @@ class MachineStatusPage extends pulsePage.BasePage {
         // weekly
         $('.machinestatus-weekly-info').find('x-motiontime').show();
         $('.machinestatus-weekly-info').find('x-motionpercentage').hide();
-        // Reset show target
+        // Reset show target (incompatible with time mode)
         $('#showtarget').prop('checked', false);
         $('#showtarget').change();
         $('#showtarget').prop('disabled', true);  //hide();
@@ -177,7 +241,7 @@ class MachineStatusPage extends pulsePage.BasePage {
         // weekly
         $('.machinestatus-weekly-info').find('x-motiontime').show();
         $('.machinestatus-weekly-info').find('x-motionpercentage').hide();
-        // Reset show target
+        // Reset show target (incompatible with time mode)
         $('#showtarget').prop('checked', false);
         $('#showtarget').change();
         $('#showtarget').prop('disabled', true); //.hide();
@@ -194,7 +258,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       }
     });
 
-    // Target
+    // Target: shows/hides .machinestatus-target — disabled when in time mode
     $('#showtarget').prop('checked', pulseConfig.getBool('showtarget'));
     if (pulseConfig.getDefaultBool('showtarget') != pulseConfig.getBool('showtarget')) {
       $('#showtarget').attr('overridden', 'true');
@@ -212,7 +276,9 @@ class MachineStatusPage extends pulsePage.BasePage {
       }
     });
 
-    // Current Tool/ Sequences
+    // Current Tool / Sequence:
+    // #showcurrent is a parent checkbox that controls .showcurrentdetails subgroup visibility.
+    // #showcurrenttool and #showcurrentsequence are mutually exclusive: checking one unchecks the other.
     $('#showcurrent').prop('checked', (pulseConfig.getBool('showcurrenttool') || pulseConfig.getBool('showcurrentsequence')));
     $('#showcurrent').change(function () {
       let showcurrent = $('#showcurrent').is(':checked');
@@ -247,7 +313,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       // Display
       if (showcurrenttool) {
         $('.machinestatus-current-tool-div').show();
-        // Hide Sequence
+        // Mutually exclusive: hide sequence
         pulseConfig.set('showcurrentsequence', false);
         $('.machinestatus-current-sequence-div').hide();
       }
@@ -266,7 +332,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       // Display
       if (showcurrentsequence) {
         $('.machinestatus-current-sequence-div').show();
-        // Hide Tool
+        // Mutually exclusive: hide tool
         pulseConfig.set('showcurrenttool', false);
         $('.machinestatus-current-tool-div').hide();
       }
@@ -293,6 +359,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       }
     });
 
+    // Stacklight
     $('#showstacklight').prop('checked', pulseConfig.getBool('showstacklight'));
     if (pulseConfig.getDefaultBool('showstacklight') != pulseConfig.getBool('showstacklight')) {
       $('#showstacklight').attr('overridden', 'true');
@@ -310,7 +377,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       }
     });
 
-    // Week visibility
+    // Weekly bar: parent checkbox controls .machinestatus-weekly-info and .showweeklydetails subgroup
     $('#showweeklybar').prop('checked', pulseConfig.getBool('showweeklybar'));
     if (pulseConfig.getDefaultBool('showweeklybar') != pulseConfig.getBool('showweeklybar')) {
       $('#showweeklybar').attr('overridden', 'true');
@@ -337,7 +404,8 @@ class MachineStatusPage extends pulsePage.BasePage {
     });
     $('#showweeklybar').trigger('change'); // To open/close subgroup
 
-    // Week range
+    // Weekly range: current week or last 7 days (mutually exclusive radios).
+    // Drives #period-for-week attributes (exclude-now, displayweekrange) and .machinestatus-label text.
     let weeklyshowcurrentweek = pulseConfig.getBool('weeklyshowcurrentweek');
     $('#showlast7days').prop('checked', !weeklyshowcurrentweek);
     $('#showlast7days').change(function () {
@@ -376,6 +444,14 @@ class MachineStatusPage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Resets all options to their default values.
+   *
+   * Uses the standard `setDefaultChecked` helper for all checkboxes.
+   * Manually resets the `#pierangeisday` and `#displaymotionpercent` complementary radios.
+   * `#showcurrent` is derived from the defaults of showcurrenttool and showcurrentsequence.
+   * Layout reset only applies in live mode (rotation controls are hidden in historical mode).
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -423,13 +499,22 @@ class MachineStatusPage extends pulsePage.BasePage {
     $('#showcurrentweek').change();
     //$('#showcurrentweek').removeAttr('overridden');
 
-    // Layout - seulement si Live
+    // Layout - live mode only
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
     if (tmpContexts && tmpContexts.includes('live')) {
       setDefaultChecked('defaultlayout');
     }
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Hidden elements are skipped (handles historical mode where rotation controls are hidden).
+   * `showcurrenttool` and `showcurrentsequence` are appended conditionally based on `#showcurrent`.
+   * `weeklyshowcurrentweek` is appended only when `showweeklybar` is checked.
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   // getOptionValues uses the unified options-list pattern:
   // { id, type, param?, conditional? } -> "&param=value" fragments.
@@ -459,7 +544,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       return `&${paramName}=${el.checked}`;
     }).join('');
 
-    // Handle showcurrent condition
+    // showcurrenttool and showcurrentsequence are conditional on parent #showcurrent
     if (document.getElementById('showcurrent')?.checked) {
       result += `&showcurrenttool=${document.getElementById('showcurrenttool')?.checked}`;
       result += `&showcurrentsequence=${document.getElementById('showcurrentsequence')?.checked}`;
@@ -467,7 +552,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       result += '&showcurrenttool=false&showcurrentsequence=false';
     }
 
-    // Handle weekly bar condition
+    // weeklyshowcurrentweek is only relevant when the weekly section is shown
     if (document.getElementById('showweeklybar')?.checked) {
       result += `&weeklyshowcurrentweek=${document.getElementById('showcurrentweek')?.checked}`;
     }
@@ -475,6 +560,12 @@ class MachineStatusPage extends pulsePage.BasePage {
     return result;
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -491,6 +582,14 @@ class MachineStatusPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Applies the current configuration to all DOM components at load time.
+   *
+   * Drives the same show/hide logic as the change listeners, reading directly from
+   * pulseConfig. Also applies the weekly range attributes to `#period-for-week`.
+   *
+   * Note: reason bar is always shown (no option for it) — comment retained as documentation.
+   */
   buildContent() {
     // allows the native page configuration (not in options) of the bars : show reason bar == always -> idem for SHOW x-reasongroups
     let showworkinfo = pulseConfig.getBool('showworkinfo');
@@ -509,7 +608,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       // weekly
       $('.machinestatus-weekly-info').find('x-motiontime').show();
       $('.machinestatus-weekly-info').find('x-motionpercentage').hide();
-      // Reset show target
+      // Reset show target (incompatible with time mode)
       $('#showtarget').prop('checked', false);
       $('#showtarget').change();
       $('#showtarget').prop('disabled', true); // .hide();

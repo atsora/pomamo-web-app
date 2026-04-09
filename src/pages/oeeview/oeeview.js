@@ -21,13 +21,36 @@ require('x-periodtoolbar/x-periodtoolbar');
 require('x-workinfo/x-workinfo');
 
 
+/**
+ * OEE View page — displays OEE indicators per machine or group.
+ *
+ * Two operating modes depending on the `AppContext` URL parameter:
+ *  - **live**       : automatic machine rotation, layout options enabled.
+ *  - **historical** : rotation disabled, vertical scroll enabled via CSS injection,
+ *                     all machines displayed on a single page (machinesperpage=10000).
+ *
+ * Components: x-groupgrid, x-periodmanager, x-machinedisplay,
+ * x-production, x-productiongauge, x-workinfo, x-periodtoolbar, x-rotationprogress.
+ *
+ * @extends pulsePage.BasePage
+ */
 class OeeViewPage extends pulsePage.BasePage {
+  /**
+   * Enables the machine selector in the header (inherited from BasePage).
+   */
   constructor() {
     super();
-    // On garde la sélection de machine
+    // Keep machine selection visible
     this.showMachineselection = true;
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected,
+   * pointing to available machine selectors in the UI.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -44,60 +67,72 @@ class OeeViewPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  // [MODIFICATION] Logique conditionnelle Live vs Historique
+  /**
+   * Initializes the options panel and binds all UI listeners.
+   *
+   * Conditional behavior based on `AppContext` (URL):
+   *  - **live**       : shows rotation options (defaultlayout, machinesperpage, rotationdelay).
+   *  - **historical** : hides rotation options, forces machinesperpage=10000,
+   *                     injects CSS to enable vertical scroll on x-groupgrid.
+   *
+   * Common options (live + historical):
+   *  - Production gauge display mode (% or ratio)
+   *  - Color thresholds (thresholdtargetproduction, thresholdredproduction)
+   *  - Operation info display (showworkinfo → x-workinfo)
+   *
+   * Called by pulsePage.preparePage() after DOM is ready.
+   */
+  // [MODIFICATION] Conditional logic: Live vs Historical
   initOptionValues() {
-    // Vérification du contexte
+    // Check context
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
     let isLive = tmpContexts && tmpContexts.includes('live');
 
-    // --- GESTION DES OPTIONS DE ROTATION ---
+    // --- ROTATION LAYOUT OPTIONS ---
     const defaultLayoutChk = $('#defaultlayout');
     const rotationSettings = $('.rotation-settings');
     const machinesPerPageInput = $('#machinesperpage');
 
     if (!isLive) {
-      // CAS HISTORIQUE : On désactive la rotation et on active le scroll
+      // HISTORICAL MODE: disable rotation, enable vertical scroll
 
-      // 1. Masquer les options de rotation dans le panneau
-      // On cache le parent (la ligne entière .param-row) pour faire propre
-      defaultLayoutChk.closest('.param-row').hide(); // Si structure param-row
-      defaultLayoutChk.parent().hide(); // Fallback
+      // 1. Hide rotation options in the panel
+      defaultLayoutChk.closest('.param-row').hide(); // if .param-row structure exists
+      defaultLayoutChk.parent().hide(); // fallback
       rotationSettings.hide();
 
-      // 2. Forcer la configuration pour "Tout Afficher"
-      // On force le mode "custom" (pas default) pour accepter notre grand nombre
+      // 2. Force "show all" configuration
+      // Force custom mode (not default) to accept a large page count
       pulseConfig.set('defaultlayout', false);
-      // On met un nombre énorme pour que le moteur croie que tout tient sur une page
+      // Set a huge number so the rotation engine treats everything as one page
       pulseConfig.set('machinesperpage', 10000);
 
-      // On met à jour les inputs au cas où (pour ne pas créer de confusion)
+      // Sync inputs to avoid confusion
       defaultLayoutChk.prop('checked', false);
       machinesPerPageInput.val(10000);
 
-      // 3. Activer le Scroll (CSS Injection)
-      // On force le conteneur de la grille à scroller verticalement
-      // x-groupgrid contient .groupgrid-main
-// 3. Activer le Scroll (CSS Injection)
+      // 3. Enable vertical scroll via CSS injection
+      // Force the grid container to scroll vertically
       $('head').append(`
         <style>
-          /* 1. Le composant x-groupgrid devient la zone de scroll */
+          /* 1. x-groupgrid becomes the scroll area */
           x-groupgrid {
-            flex: 1 1 auto !important; /* Il prend l'espace dispo */
-            height: 100% !important;   /* Reste calé au parent */
-            min-height: 0 !important;  /* Empêche le débordement flex */
-            overflow-y: auto !important; /* C'EST ICI QUE LE SCROLL APPARAIT */
+            flex: 1 1 auto !important; /* takes available space */
+            height: 100% !important;   /* stays anchored to parent */
+            min-height: 0 !important;  /* prevents flex overflow */
+            overflow-y: auto !important; /* THIS IS WHERE SCROLL APPEARS */
             display: block !important;
           }
 
-          /* 2. La grille à l'intérieur grandit autant que nécessaire */
+          /* 2. Inner grid grows as needed */
           x-groupgrid .groupgrid-main {
             display: grid !important;
-            height: auto !important; /* LAISSE GRANDIR LA HAUTEUR */
+            height: auto !important; /* ALLOW HEIGHT TO GROW */
             min-height: 100% !important;
-            align-content: start !important; /* Empile les éléments en haut */
+            align-content: start !important; /* stack items from top */
 
-            /* 3. CRUCIAL : On force une hauteur minimale par ligne */
-            /* Sinon la grille essaie de diviser la hauteur d'écran par 100 machines */
+            /* 3. CRITICAL: enforce a minimum row height */
+            /* Without this, the grid tries to divide screen height by 100 machines */
             grid-auto-rows: minmax(300px, auto) !important;
             padding-bottom: 50px !important;
           }
@@ -105,30 +140,30 @@ class OeeViewPage extends pulsePage.BasePage {
       `);
 
     } else {
-      // CAS LIVE : Comportement Standard (Rotation)
+      // LIVE MODE: standard behavior (rotation)
 
-      // Initialisation depuis la config
+      // Initialize from config
       defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
 
-      // Si "Default" est coché, on grise/cache les options manuelles
+      // When "Default" is checked, gray out manual inputs
       defaultLayoutChk.change(() => {
         let isDefault = defaultLayoutChk.is(':checked');
         pulseConfig.set('defaultlayout', isDefault);
 
         if (isDefault) {
           rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
-          $('#machinesperpage').val(12).change(); // Forcer le maximum
+          $('#machinesperpage').val(12).change(); // force max
         } else {
           rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
         }
       }).trigger('change');
 
-      // Initialisation des valeurs
+      // Initialize values
       machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
       $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
     }
 
-    // --- AUTRES OPTIONS (Communes) ---
+    // --- COMMON OPTIONS (live + historical) ---
 
     // Display mode: percent or ratio
     this._productionGaugeDisplayMode();
@@ -175,6 +210,17 @@ class OeeViewPage extends pulsePage.BasePage {
     showWorkInfoChk.trigger('change');
   }
 
+  /**
+   * Initializes the production gauge display mode radios (% or ratio).
+   *
+   * Reads `showpercent` config and checks the matching radio.
+   * Marks radios as `overridden` if value differs from default.
+   * Listeners update `pulseConfig` and the `display-mode` attribute
+   * on all `x-productiongauge` elements.
+   *
+   * Config read: `showpercent` (bool)
+   * Attribute set: `x-productiongauge[display-mode]` → 'percent' | 'ratio'
+   */
   // Initialize the production gauge display mode radios
   _productionGaugeDisplayMode() {
     const showPercentRadio = $('#productiongaugepercent');
@@ -206,6 +252,26 @@ class OeeViewPage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Validates and applies the production gauge color thresholds.
+   *
+   * Validation rules (in order):
+   *  1. Both values must be valid numbers (not NaN).
+   *  2. redValue >= 0, targetValue > 0.
+   *  3. targetValue > redValue (target threshold must exceed red threshold).
+   *  4. Both values <= 100 (they are percentages).
+   *
+   * On error: displays a message in `#thresholdErrorMessage` (created on the fly
+   * if absent) and returns false without modifying the config.
+   *
+   * On success: persists values in pulseConfig and dispatches
+   * `configChangeEvent { config: 'thresholdsupdated' }` via eventBus to
+   * notify x-productiongauge / x-productionshiftgoal components.
+   *
+   * @param {number|string} targetValue - Target threshold (green → orange), in %.
+   * @param {number|string} redValue    - Critical threshold (orange → red), in %.
+   * @returns {boolean} true if valid and applied, false otherwise.
+   */
   // Verify threshold values
   _verficationThresholds(targetValue, redValue) {
     let errorMessage = document.getElementById('thresholdErrorMessage');
@@ -259,6 +325,20 @@ class OeeViewPage extends pulsePage.BasePage {
     return true;
   }
 
+  /**
+   * Resets all options to their default values (panel "reset" button).
+   *
+   * Uses three local helpers to factor out the reset logic:
+   *  - `setDefaultChecked(id, configKey?)` : reset checkbox + remove `overridden`
+   *  - `setDefaultValue(id, value)`        : reset numeric input + remove `overridden`
+   *  - `setDefaultRadioGroup(value, map)`  : reset a radio group by semantic value
+   *
+   * Options reset:
+   *  - showpercent radios (productiongaugepercent / productiongaugeratio)
+   *  - thresholdtargetproduction / thresholdredproduction
+   *  - showworkinfo checkbox
+   *  - defaultlayout checkbox (live mode only — rotation does not exist in historical mode)
+   */
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
       const element = $('#' + id);
@@ -297,13 +377,22 @@ class OeeViewPage extends pulsePage.BasePage {
     // showworkinfo = Show Operation
     setDefaultChecked('showworkinfo');
 
-    // [MODIFICATION] Reset Layout seulement si Live
+    // [MODIFICATION] Reset layout only in live mode — rotation does not exist in historical mode
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
     if (tmpContexts && tmpContexts.includes('live')) {
         setDefaultChecked('defaultlayout'); // Reset layout only in live
     }
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Iterates over the declared option list and builds `&param=value` for each.
+   * Hidden elements (e.g. rotation options in historical mode) are skipped
+   * to avoid encoding forced values that do not reflect user choices.
+   *
+   * @returns {string} Query string fragment, e.g. `&showpercent=true&showworkinfo=false`.
+   */
   getOptionValues() {
     const options = [
       { id: 'productiongaugepercent', type: 'radio', param: 'showpercent' },
@@ -318,7 +407,7 @@ class OeeViewPage extends pulsePage.BasePage {
 
     return options.map(opt => {
       const el = document.getElementById(opt.id);
-      // [MODIF] Si l'élément est caché (mode historique), on ne l'envoie pas dans l'URL ou on envoie la config
+      // [MODIF] If element is hidden (historical mode), skip it
       if (!el || $(el).is(':hidden')) return '';
 
       const paramName = opt.param || opt.id;
@@ -330,6 +419,14 @@ class OeeViewPage extends pulsePage.BasePage {
     }).join('');
   }
 
+  /**
+   * Applies the current configuration to DOM components.
+   *
+   * Called by pulsePage after `initOptionValues()`, syncs the visual state
+   * with values read from pulseConfig (URL params or localStorage):
+   *  - `showpercent`  → `display-mode` attribute on x-productiongauge ('percent'|'ratio')
+   *  - `showworkinfo` → show/hide x-workinfo
+   */
   buildContent() {
     let showPercent = pulseConfig.getBool('showpercent');
     let displayMode = showPercent ? 'percent' : 'ratio';
@@ -345,9 +442,13 @@ class OeeViewPage extends pulsePage.BasePage {
 }
 
 $(document).ready(function () {
+  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
   pulsePage.preparePage(new OeeViewPage());
+
+  // In live mode, the period is managed in real time by x-periodmanager —
+  // x-periodtoolbar (manual period navigation) is irrelevant and hidden.
   let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
-  // Masquer la barre de période si le contexte est "live"
+  // Hide period toolbar if context is "live"
   if (tmpContexts && tmpContexts.includes('live')) {
     $('x-periodtoolbar').hide();
   }
