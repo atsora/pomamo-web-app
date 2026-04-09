@@ -34,13 +34,60 @@ require('x-motionpercentage/x-motionpercentage');
 
 require('x-tr/x-tr');
 
+/**
+ * Operation Status page — grid view of per-machine operation dashboards.
+ *
+ * The most feature-rich page in the application. Combines: workinfo display,
+ * machine status logo/letter, production tracking with thresholds, cycle progress pie,
+ * current tool/sequence/override indicators, alarms, stacklight, ISO file, tool life,
+ * and a utilization bar — all individually configurable.
+ *
+ * Supports both live (rotation) and historical (scroll) modes.
+ *
+ * Configurable options:
+ *  - `defaultlayout` / `machinesperpage` / `rotationdelay`    : rotation — live mode only (12/page)
+ *  - `showworkinfo`                         : show workinfo component; when `showproduction` is on,
+ *                                             shows x-workinfo; otherwise x-currentworkinfo
+ *  - `showworkinfobig` / `showworkinfosmall`: workinfo font size radios; drives `_applyTopDisplaySizing`
+ *  - `showcurrentmachinestatuslogo`         : show x-reasonbutton (machine state icon)
+ *  - `showcurrentmachinestatusletter`       : show x-lastmachinestatus (state letter)
+ *  - `showproduction`                       : show x-production + sets `hidesecondproductiondisplay`;
+ *                                             when on, x-workinfo used instead of x-currentworkinfo;
+ *                                             sub-options: productionpercent radios (true/actualonly/actualtarget)
+ *                                             + thresholds (_verficationThresholds)
+ *  - `showcurrent`                          : parent for current display sub-options
+ *  - `showcurrentdisplay`                   : 3-way radio (tool/sequence/override) — mutually exclusive;
+ *                                             drives `updateCurrentDisplays`
+ *  - `showalarm`                            : show alarm icon; sub-options: showAlarmBelowIcon (layout),
+ *                                             showUnknownAlarm
+ *  - `showpie`                              : show `.operationstatus-cycleprogress`;
+ *                                             sub-option: productionpercentinpie radios
+ *  - `showstacklight`                       : show x-stacklight
+ *  - `showisofile`                          : show `.operationstatus-isofile-div`
+ *  - `showtool`                             : show `.operationstatus-tool-div` (tool life);
+ *                                             sub-options: toollabelname select, displayremainingcyclesbelowtool
+ *  - `showbar`                              : show `.operationstatus-bar` (utilization bar);
+ *                                             sub-options: displayshiftrange radios, barshowalarms, barshowpercent
+ *
+ * Live vs historical mode: detected via `AppContext` URL parameter containing 'live'.
+ * Historical mode: rotation hidden, machinesperpage=10000, CSS injected for scrollable x-groupgrid.
+ *
+ * @extends pulsePage.BasePage
+ */
 class OperationStatusPage extends pulsePage.BasePage {
   constructor() {
     super();
-    // [MODIF] Désactivation ancienne grille + Activation sélection machine
     this.showMachineselection = true;
   }
 
+  /**
+   * Returns whether the workinfo is currently in 'big' mode.
+   *
+   * Checks the DOM radio first (during options panel interaction); falls back to pulseConfig.
+   * Used by `_applyTopDisplaySizing` to set the appropriate font size.
+   *
+   * @returns {boolean} true if big mode is active.
+   */
   _isWorkInfoBig() {
     const smallElement = document.getElementById('showworkinfosmall');
     if (smallElement) {
@@ -49,6 +96,16 @@ class OperationStatusPage extends pulsePage.BasePage {
     return pulseConfig.getBool('showworkinfobig');
   }
 
+  /**
+   * Applies the workinfo font size to all `.operationstatus-top-div` elements
+   * using a container-query-aware clamp value.
+   *
+   * Big mode: `clamp(10px, 7cqh, 5vh)` — larger text.
+   * Small mode: `clamp(10px, 5cqh, 5vh)` — more compact text.
+   *
+   * Called after any layout change that affects the top div dimensions
+   * (workinfo size radios, alarm, pie, stacklight toggles).
+   */
   _applyTopDisplaySizing() {
     let size = this._isWorkInfoBig()
       ? 'clamp(10px, 7cqh, 5vh)'
@@ -58,11 +115,52 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Local helpers defined inline:
+   *  - `syncRadioGroup(value, valueToIdMap, fallbackValue)`: checks the radio matching `value`
+   *  - `bindRadioGroup(valueToIdMap, onSelect)`: binds change listeners on a radio group
+   *  - `updateCurrentDisplays()`: applies show/hide to tool/sequence/override divs
+   *  - `syncCurrentSelection(value)`: writes all three showcurrent* configs and calls updateCurrentDisplays
+   *
+   * Live vs historical branching (detected once at init):
+   *  - Historical: hides rotation controls, sets machinesperpage=10000, injects scroll CSS.
+   *  - Live: standard rotation layout (defaultlayout checkbox, 12/page default).
+   *
+   * Section overview:
+   *  1. Layout / rotation (live only)
+   *  2. showworkinfo + workinfo size radios (small/big)
+   *  3. showcurrentmachinestatuslogo → x-reasonbutton
+   *  4. showcurrentmachinestatusletter → x-lastmachinestatus
+   *  5. showproductionoperation (`showproduction`) + `hidesecondproductiondisplay` side-effect;
+   *     workinfo display logic: production on → x-workinfo, off → x-currentworkinfo
+   *  6. Production percent radios (true/actualonly/actualtarget)
+   *  7. Thresholds (target, red) validated via `_verficationThresholds`
+   *  8. Current display: showcurrent parent + 3-way radio (tool/sequence/override)
+   *  9. Alarm: showalarmoperation + showAlarmBelowIcon (left/bottom layout) + showUnknownAlarm
+   * 10. Pie: showpie + productionpercentinpie radios
+   * 11. Stacklight
+   * 12. ISO file
+   * 13. Tool: showtooloperation + tool label select + showtoolremaining
+   * 14. Bar: showbaroperation + day/shift radios + showbar-alarms + showbar-percent
+   *
+   * Configs read/written: `defaultlayout`, `machinesperpage`, `rotationdelay`,
+   *   `showworkinfo`, `showworkinfobig`, `showcurrentmachinestatuslogo`,
+   *   `showcurrentmachinestatusletter`, `showproduction`, `hidesecondproductiondisplay`,
+   *   `productionpercent`, `thresholdtargetproduction`, `thresholdredproduction`,
+   *   `showcurrent`, `showcurrentdisplay`, `showcurrenttool`, `showcurrentsequence`,
+   *   `showcurrentoverride`, `showalarm`, `currenticoncncalarm.showAlarmBelowIcon`,
+   *   `showUnknownAlarm`, `showpie`, `productionpercentinpie`, `showstacklight`,
+   *   `showisofile`, `showtool`, `toollifemachine.toollabelname`, `toollabelname`,
+   *   `toollifemachine.displayremainingcyclesbelowtool`, `showbar`, `displayshiftrange`,
+   *   `barshowalarms`, `barshowpercent`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     var self = this;
 
-    // [MODIF] --- LOGIQUE LIVE vs HISTORIQUE ---
+    // --- LIVE vs HISTORICAL ---
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
     let isLive = tmpContexts && tmpContexts.includes('live');
 
@@ -71,7 +169,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     const machinesPerPageInput = $('#machinesperpage');
 
     if (!isLive) {
-      // CAS HISTORIQUE : Scroll activé, Rotation désactivée
+      // Historical mode: rotation hidden, infinite page, scroll CSS injected
       defaultLayoutChk.closest('.param-row').hide();
       defaultLayoutChk.parent().hide(); // Fallback
       rotationSettings.hide();
@@ -82,7 +180,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       defaultLayoutChk.prop('checked', false);
       machinesPerPageInput.val(10000);
 
-      // Injection CSS pour le SCROLL
+      // Inject CSS for scroll
       $('head').append(`
         <style>
           x-groupgrid {
@@ -104,7 +202,7 @@ class OperationStatusPage extends pulsePage.BasePage {
         </style>
       `);
     } else {
-      // CAS LIVE : Rotation activée
+      // Live mode: standard rotation layout
       defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
 
       defaultLayoutChk.change(() => {
@@ -122,7 +220,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
       $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
     }
-    // [FIN MODIF LOGIQUE]
+    // --- END LIVE/HISTORICAL ---
 
 
     const syncRadioGroup = (value, valueToIdMap, fallbackValue) => {
@@ -142,7 +240,9 @@ class OperationStatusPage extends pulsePage.BasePage {
       });
     };
 
-    // showworkinfo = Show Operation
+    // showworkinfo = Show Operation.
+    // When showproduction is on: x-workinfo is used instead of x-currentworkinfo.
+    // The .showworkinfodetails subgroup is shown/hidden based on the checkbox state.
     $('#showworkinfo').prop('checked', pulseConfig.getBool('showworkinfo'));
     if (pulseConfig.getDefaultBool('showworkinfo') != pulseConfig.getBool('showworkinfo')) {
       $('#showworkinfo').attr('overridden', 'true');
@@ -177,7 +277,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showworkinfo').trigger('change');
 
-    // operation size
+    // Workinfo size radios (small/big): drives _applyTopDisplaySizing for font size
     const workInfoSizeMap = { small: 'showworkinfosmall', big: 'showworkinfobig' };
     const workInfoSize = pulseConfig.getBool('showworkinfobig') ? 'big' : 'small';
     syncRadioGroup(workInfoSize, workInfoSizeMap, 'small');
@@ -187,7 +287,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     self._applyTopDisplaySizing();
 
-    //showcurrentmachinestatuslogo
+    // showcurrentmachinestatuslogo: shows/hides x-reasonbutton (machine state icon)
     $('#showcurrentmachinestatuslogo').prop('checked', pulseConfig.getBool('showcurrentmachinestatuslogo'));
     if (pulseConfig.getDefaultBool('showcurrentmachinestatuslogo') != pulseConfig.getBool('showcurrentmachinestatuslogo'))
       $('#showcurrentmachinestatuslogo').attr('overridden', 'true');
@@ -201,7 +301,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showcurrentmachinestatuslogo').change();
 
-    //showcurrentmachinestatusletter
+    // showcurrentmachinestatusletter: shows/hides x-lastmachinestatus (state letter badge)
     $('#showcurrentmachinestatusletter').prop('checked', pulseConfig.getBool('showcurrentmachinestatusletter'));
     if (pulseConfig.getDefaultBool('showcurrentmachinestatusletter') != pulseConfig.getBool('showcurrentmachinestatusletter'))
       $('#showcurrentmachinestatusletter').attr('overridden', 'true');
@@ -215,7 +315,10 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showcurrentmachinestatusletter').change();
 
-    //showproductionoperation
+    // showproductionoperation (maps to config key 'showproduction').
+    // Side-effect: sets hidesecondproductiondisplay (suppresses duplicate production display in x-production).
+    // Workinfo routing: production on → x-workinfo; off → x-currentworkinfo.
+    // .showproductionoperationdetails subgroup shown when checked.
     $('#showproductionoperation').prop('checked', pulseConfig.getBool('showproduction'));
     if (pulseConfig.getDefaultBool('showproduction') != pulseConfig.getBool('showproduction'))
       $('#showproductionoperation').attr('overridden', 'true');
@@ -256,7 +359,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showproductionoperation').trigger('change');
 
-    // Production Percent
+    // Production Percent radios: true (full %) / actualonly / actualtarget
     let productionpercent = pulseConfig.getString('productionpercent');
     const productionPercentMap = {
       true: 'productionpercent',
@@ -269,7 +372,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'productionpercent' });
     });
 
-    // Thresholds
+    // Thresholds (target and red): validated via _verficationThresholds on every input/change event
     $('#thresholdtargetproduction').val(pulseConfig.getInt('thresholdtargetproduction'));
     var changetarget = function () {
       if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
@@ -288,6 +391,8 @@ class OperationStatusPage extends pulsePage.BasePage {
     $('#thresholdredproduction').bind('input', changeRed);
     $('#thresholdredproduction').change(changeRed);
 
+    // updateCurrentDisplays: applies show/hide to tool/sequence/override divs
+    // based on parent #showcurrent and the selected radio.
     const updateCurrentDisplays = () => {
       const showcurrent = $('#showcurrent').is(':checked');
       const showcurrenttool = $('#showcurrenttool').is(':checked');
@@ -315,6 +420,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       self._applyTopDisplaySizing();
     };
 
+    // syncCurrentSelection: writes all three showcurrent* configs atomically and refreshes DOM
     const syncCurrentSelection = (value) => {
       pulseConfig.set('showcurrentdisplay', value);
       pulseConfig.set('showcurrenttool', value === 'tool');
@@ -323,6 +429,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       updateCurrentDisplays();
     };
 
+    // Current display 3-way radio: tool / sequence / override (mutually exclusive)
     const currentSelectionMap = {
       tool: 'showcurrenttool',
       sequence: 'showcurrentsequence',
@@ -333,6 +440,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       syncCurrentSelection(value);
     });
 
+    // showcurrent parent checkbox: derives initial value from showcurrentdisplay or legacy showcurrent config
     const showcurrentRaw = pulseConfig.getString('showcurrent');
     const hasExplicitShowCurrent = showcurrentRaw === 'true' || showcurrentRaw === 'false';
     const showcurrentValue = hasExplicitShowCurrent
@@ -356,7 +464,10 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showcurrent').trigger('change');
 
-    // Alarm
+    // Alarm: showalarmoperation (maps to 'showalarm').
+    // Sub-options: showAlarmBelowIcon (bottom vs left layout), showUnknownAlarm.
+    // .showalarmdetails subgroup controlled by alarm checkbox.
+    // _applyTopDisplaySizing called on any alarm layout change.
     $('#showalarmoperation').prop('checked', pulseConfig.getBool('showalarm'));
     if (pulseConfig.getDefaultBool('showalarm') != pulseConfig.getBool('showalarm'))
       $('#showalarmoperation').attr('overridden', 'true');
@@ -385,6 +496,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showalarmoperation').trigger('change');
 
+    // Alarm position: below icon (bottom div) vs beside icon (left div)
     $('#showAlarmBelowIcon').prop('checked', pulseConfig.getBool('currenticoncncalarm.showAlarmBelowIcon'));
     if (pulseConfig.getDefaultBool('currenticoncncalarm.showAlarmBelowIcon') != pulseConfig.getBool('currenticoncncalarm.showAlarmBelowIcon'))
       $('#showAlarmBelowIcon').attr('overridden', 'true');
@@ -402,6 +514,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'showAlarmBelowIcon' });
     });
 
+    // showUnknownAlarm: whether to display alarms of unknown type
     $('#showUnknownAlarm').prop('checked', pulseConfig.getBool('showUnknownAlarm'));
     if (pulseConfig.getDefaultBool('showUnknownAlarm') != pulseConfig.getBool('showUnknownAlarm'))
       $('#showUnknownAlarm').attr('overridden', 'true');
@@ -411,7 +524,10 @@ class OperationStatusPage extends pulsePage.BasePage {
       eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'showUnknownAlarm' });
     });
 
-    // Pie
+    // Pie (cycle progress): shows/hides .operationstatus-cycleprogress.
+    // Sub-option: productionpercentinpie radios (true/actualonly/actualtarget).
+    // .showpiedetails subgroup controlled by pie checkbox.
+    // _applyTopDisplaySizing called on toggle.
     $('#showpie').prop('checked', pulseConfig.getBool('showpie'));
     if (pulseConfig.getDefaultBool('showpie') != pulseConfig.getBool('showpie'))
       $('#showpie').attr('overridden', 'true');
@@ -432,6 +548,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showpie').trigger('change');
 
+    // Production percent in pie radios: true / actualonly / actualtarget
     const productionPercentInPieMap = {
       true: 'productionpercentinpie',
       actualonly: 'productionactualonlyinpie',
@@ -443,7 +560,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'productionpercentinpie' });
     });
 
-    // Stacklight
+    // Stacklight: shows/hides x-stacklight; _applyTopDisplaySizing called on toggle
     $('#showstacklight').prop('checked', pulseConfig.getBool('showstacklight'));
     if (pulseConfig.getDefaultBool('showstacklight') != pulseConfig.getBool('showstacklight'))
       $('#showstacklight').attr('overridden', 'true');
@@ -458,7 +575,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       self._applyTopDisplaySizing();
     });
 
-    // Isofile
+    // ISO file: shows/hides .operationstatus-isofile-div
     $('#showisofile').prop('checked', pulseConfig.getBool('showisofile'));
     if (pulseConfig.getDefaultBool('showisofile') != pulseConfig.getBool('showisofile'))
       $('#showisofile').attr('overridden', 'true');
@@ -473,7 +590,10 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showisofile').change();
 
-    // TOOL
+    // Tool life: showtooloperation (maps to 'showtool').
+    // Sub-options: tool label select (populated from toollifemachine.toollabelsselections config array),
+    //              showtoolremaining (remaining cycles below tool).
+    // .showtoolsdetails subgroup controlled by tool checkbox.
     $('#showtooloperation').prop('checked', pulseConfig.getBool('showtool'));
     if (pulseConfig.getDefaultBool('showtool') != pulseConfig.getBool('showtool'))
       $('#showtooloperation').attr('overridden', 'true');
@@ -493,7 +613,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showtooloperation').trigger('change');
 
-    // TOOLS detail
+    // Tool label selector: populated from config array, dispatches toollabelname change event
     let toollabelname = pulseConfig.getString('toollifemachine.toollabelname');
     $('#showtoolselector').empty();
     let toollabelsselections = pulseConfig.getArray('toollifemachine.toollabelsselections');
@@ -509,7 +629,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'toollabelname' });
     });
 
-    // TOOLS remaining
+    // Remaining cycles below tool
     $('#showtoolremaining').prop('checked', pulseConfig.getBool('toollifemachine.displayremainingcyclesbelowtool'));
     if (pulseConfig.getDefaultBool('showbar') != pulseConfig.getBool('toollifemachine.displayremainingcyclesbelowtool'))
       $('#showtoolremaining').attr('overridden', 'true');
@@ -519,7 +639,9 @@ class OperationStatusPage extends pulsePage.BasePage {
       eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'displayremainingcyclesbelowtool' });
     });
 
-    // BAR
+    // Utilization bar: showbaroperation (maps to 'showbar').
+    // Sub-options: day/shift range radios, barshowalarms (CSS class on .main-table-box), barshowpercent.
+    // .showbardetails subgroup controlled by bar checkbox.
     $('#showbaroperation').prop('checked', pulseConfig.getBool('showbar'));
     if (pulseConfig.getDefaultBool('showbar') != pulseConfig.getBool('showbar'))
       $('#showbaroperation').attr('overridden', 'true');
@@ -539,6 +661,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showbaroperation').trigger('change');
 
+    // Bar period radios: day or shift
     const barPeriodMap = { day: 'barrangeisday', shift: 'displayshiftrange' };
     const barPeriod = pulseConfig.getBool('displayshiftrange') ? 'shift' : 'day';
     syncRadioGroup(barPeriod, barPeriodMap, 'day');
@@ -547,6 +670,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'displayshiftrange' });
     });
 
+    // barshowalarms: applied via CSS class on .main-table-box (before grid builds — avoids timing issues)
     $('#showbar-alarms').prop('checked', pulseConfig.getBool('barshowalarms'));
     if (pulseConfig.getDefaultBool('barshowalarms') != pulseConfig.getBool('barshowalarms')) {
       $('#showbar-alarms').attr('overridden', 'true');
@@ -559,6 +683,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       $('.main-table-box').toggleClass('barshowalarms-active', barshowalarms);
     });
 
+    // barshowpercent: shows/hides .div-percent and reloads x-datetimegraduation
     $('#showbar-percent').prop('checked', pulseConfig.getBool('barshowpercent'));
     if (pulseConfig.getDefaultBool('barshowpercent') != pulseConfig.getBool('barshowpercent')) {
       $('#showbar-percent').attr('overridden', 'true');
@@ -575,6 +700,17 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Validates and applies the production color thresholds.
+   *
+   * Error container: `.thresholdunitispart` (with null check — no fallback).
+   * Validation rules: both values must be numbers, positive, target > red, both ≤ 100.
+   * On success: writes to pulseConfig and dispatches `configChangeEvent { config: 'thresholdsupdated' }`.
+   *
+   * @param {number|string} targetValue - Target threshold (%), integer.
+   * @param {number|string} redValue    - Red threshold (%), integer.
+   * @returns {boolean} true if valid and applied, false otherwise.
+   */
   // Verify threshold values
   _verficationThresholds(targetValue, redValue) {
     let errorMessage = document.getElementById('thresholdErrorMessage');
@@ -623,6 +759,13 @@ class OperationStatusPage extends pulsePage.BasePage {
     return true;
   }
 
+  /**
+   * Resets all options to their default values.
+   *
+   * Uses standard `setDefaultChecked`, `setDefaultValue`, and `setDefaultRadioGroup` helpers.
+   * All option groups reset in the same order as initOptionValues.
+   * Layout reset only applies in live mode (rotation controls are hidden in historical mode).
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -695,16 +838,25 @@ class OperationStatusPage extends pulsePage.BasePage {
     setDefaultChecked('showbar-alarms', 'barshowalarms');
     setDefaultChecked('showbar-percent', 'barshowpercent');
 
-    // [MODIF] Reset Layout seulement si Live
+    // Layout reset only applies in live mode
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
     if (tmpContexts && tmpContexts.includes('live')) {
         setDefaultChecked('defaultlayout');
     }
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Hidden elements are skipped (handles historical mode where rotation controls are hidden).
+   * Conditional sections: production (thresholds, productionpercent only when showproduction on),
+   * current display radio only when showcurrent on, alarm sub-options, pie productionpercentinpie,
+   * tool sub-options (label, remaining), bar sub-options (period, alarms, percent).
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
-    // [MODIF] Ajout des options de rotation
     const options = [
       { id: 'showworkinfo', type: 'checkbox' },
       { id: 'showworkinfosmall', type: 'checkbox' },
@@ -720,7 +872,7 @@ class OperationStatusPage extends pulsePage.BasePage {
 
     let result = options.map(opt => {
       const el = document.getElementById(opt.id);
-      // [MODIF] Exclusion des éléments cachés (Mode Historique)
+      // Skip hidden elements (historical mode)
       if (!el || $(el).is(':hidden')) return '';
 
       const paramName = opt.param || opt.id;
@@ -731,6 +883,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       }
     }).join('');
 
+    // Production sub-options: only when showproduction is on
     if (document.getElementById('showproductionoperation')?.checked) {
       if (document.getElementById('productionpercent')?.checked) {
         result += '&productionpercent=true';
@@ -749,6 +902,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       result += '&productionpercent=false';
     }
 
+    // Current display radio: serialized as showcurrentdisplay enum value
     if (document.getElementById('showcurrenttool')?.checked) {
       result += '&showcurrentdisplay=tool';
     } else if (document.getElementById('showcurrentsequence')?.checked) {
@@ -757,6 +911,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       result += '&showcurrentdisplay=override';
     }
 
+    // Alarm + sub-options
     const showalarmEl = document.getElementById('showalarmoperation');
     result += `&showalarm=${showalarmEl?.checked}`;
     if (showalarmEl?.checked) {
@@ -764,6 +919,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       result += `&showUnknownAlarm=${document.getElementById('showUnknownAlarm')?.checked}`;
     }
 
+    // Pie + sub-options
     const showpieEl = document.getElementById('showpie');
     result += `&showpie=${showpieEl?.checked}`;
     if (showpieEl?.checked) {
@@ -779,6 +935,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     result += `&showstacklight=${document.getElementById('showstacklight')?.checked}`;
     result += `&showisofile=${document.getElementById('showisofile')?.checked}`;
 
+    // Tool + sub-options
     const showtoolEl = document.getElementById('showtooloperation');
     result += `&showtool=${showtoolEl?.checked}`;
     if (showtoolEl?.checked) {
@@ -789,6 +946,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       result += `&displayremainingcyclesbelowtool=${document.getElementById('showtoolremaining')?.checked}`;
     }
 
+    // Bar + sub-options
     const showbarEl = document.getElementById('showbaroperation');
     result += `&showbar=${showbarEl?.checked}`;
     if (showbarEl?.checked) {
@@ -800,6 +958,12 @@ class OperationStatusPage extends pulsePage.BasePage {
     return result;
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -816,6 +980,21 @@ class OperationStatusPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Applies the current configuration to all DOM components at load time.
+   *
+   * Mirrors the show/hide logic from initOptionValues change listeners, reading from pulseConfig.
+   * Handles:
+   *  - workinfo / production routing (x-workinfo vs x-currentworkinfo)
+   *  - pie / cycle progress
+   *  - stacklight
+   *  - current tool/sequence/override (reads showcurrentdisplay, falls back to individual flags)
+   *  - alarm (left vs bottom layout based on showAlarmBelowIcon)
+   *  - ISO file
+   *  - tool life
+   *  - _applyTopDisplaySizing (called once for all layout changes)
+   *  - utilization bar + barshowpercent
+   */
   buildContent() {
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     let showproduction = pulseConfig.getBool('showproduction');
@@ -852,6 +1031,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       $('x-stacklight').hide();
     }
 
+    // Current display: prefer showcurrentdisplay enum; fall back to individual boolean flags
     let showcurrent = pulseConfig.getBool('showcurrent');
     const currentDisplay = pulseConfig.getString('showcurrentdisplay');
     const hasCurrentDisplay = currentDisplay === 'tool' || currentDisplay === 'sequence' || currentDisplay === 'override';
@@ -876,6 +1056,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       $('.operationstatus-current-override-div').hide();
     }
 
+    // Alarm: left vs bottom layout based on showAlarmBelowIcon
     let showalarm = pulseConfig.getBool('showalarm');
     if (showalarm) {
       let showAlarmBelowIcon = pulseConfig.getBool('currenticoncncalarm.showAlarmBelowIcon');

@@ -23,11 +23,44 @@ require('x-fieldlegends/x-fieldlegends');
 require('x-reasonbutton/x-reasonbutton');
 require('x-tr/x-tr');
 
+/**
+ * Manager View page — list view of machines with temporal status bars.
+ *
+ * Displays a vertical list of machines (x-grouplist) with, for each machine,
+ * a stack of bars (x-barstack) covering a configurable time range:
+ * either the current shift (displayshiftrange=true) or a manually defined
+ * number of days/hours.
+ *
+ * Configurable options:
+ *  - `displayshiftrange`  : shows the active shift range (hides days/hours inputs)
+ *  - `displaydaysrange`   : number of days to display (when shift is disabled)
+ *  - `displayhoursrange`  : number of hours to display (when shift is disabled)
+ *
+ * Components: x-grouplist, x-barstack, x-machinedisplay,
+ * x-lastworkinformation, x-currentcncvalue, x-motionpercentage, x-motiontime,
+ * x-periodmanager, x-datetimegraduation, x-reasongroups, x-fieldlegends.
+ *
+ * @extends pulsePage.BasePage
+ */
 class ManagerViewPage extends pulsePage.BasePage {
   constructor() {
     super();
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Time range management:
+   *  - If `displayshiftrange` is checked → hides days/hours inputs and dispatches
+   *    `configChangeEvent { config: 'displayshiftrange' }`.
+   *  - Otherwise → shows inputs and dispatches `configChangeEvent { config: 'displaydaysrange' }`
+   *    or `displayhoursrange` on each valid change.
+   *
+   * Validation: if days=0 AND hours=0, both inputs get `.missing-config` class
+   * without persisting to pulseConfig (a zero range has no meaning).
+   *
+   * Configs read/written: `displayshiftrange`, `displaydaysrange`, `displayhoursrange`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     // Shift
@@ -115,6 +148,17 @@ class ManagerViewPage extends pulsePage.BasePage {
     $('#displayhoursrange').change(changeHours);
   }
 
+  /**
+   * Resets options to their default values (reset button).
+   *
+   * Uses local helpers `setDefaultChecked` and `setDefaultValue`
+   * (same pattern as oeeview) to reset each option and remove `overridden`.
+   *
+   * Default values applied:
+   *  - displayhoursrange → 0
+   *  - displaydaysrange  → 1
+   *  - displayshiftrange → pulseConfig default value
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -136,6 +180,20 @@ class ManagerViewPage extends pulsePage.BasePage {
     setDefaultChecked('displayshiftrangemanagerview', 'displayshiftrange');
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Uses the declarative pattern `{ id, type, param?, conditional? }`:
+   *  - `param`       : URL parameter name when different from the DOM id.
+   *  - `conditional` : guard function — if it returns false, the option is skipped.
+   *
+   * `displaydaysrange` and `displayhoursrange` are only included if:
+   *  - shift is disabled,
+   *  - the `overridden` attribute is present (user has modified the value),
+   *  - the value is a valid integer.
+   *
+   * @returns {string} Query string fragment, e.g. `&displayshiftrange=false&displaydaysrange=2`.
+   */
   // CONFIG PANEL - Function to read custom inputs
   // getOptionValues uses the unified options-list pattern:
   // { id, type, param?, conditional? } -> "&param=value" fragments.
@@ -157,6 +215,12 @@ class ManagerViewPage extends pulsePage.BasePage {
     }).join('');
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -173,6 +237,15 @@ class ManagerViewPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Applies the configuration to non-bar DOM components.
+   *
+   * Note: bars (x-barstack) read pulseConfig directly and do not need
+   * to be driven here. Only non-barstack components are managed:
+   *  - `x-lastworkinformation` : visible if `currentdisplay.displayjob` = true
+   *  - `x-fieldlegends`        : visible if `showcoloredbar.cncvalue` = true
+   *    (the CNC legend is only useful when the CNC bar is displayed)
+   */
   buildContent() {
     // allows the native page configuration (not in options) of the bars : show reason bar == always -> idem for SHOW x-reasongroups
 
@@ -194,5 +267,6 @@ class ManagerViewPage extends pulsePage.BasePage {
 }
 
 $(document).ready(function () {
+  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
   pulsePage.preparePage(new ManagerViewPage());
 });

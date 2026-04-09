@@ -18,7 +18,30 @@ require('x-zoominpagebutton/x-zoominpagebutton');
 require('x-showrunningdialogbutton/x-showrunningdialogbutton');
 require('x-tr/x-tr');
 
+/**
+ * Production Tracker page — production tracking by machine group (table view).
+ *
+ * Displays a group tree (x-groupsingroup) with, at each level,
+ * a summary table (x-productiontrackertable) and production indicators.
+ *
+ * Structural note: `column` and `row` are forced to '' in pulseConfig
+ * to disable the standard grid layout — the page uses its own hierarchical
+ * structure (groups within groups).
+ *
+ * Configurable options:
+ *  - `thresholdtargetproduction` / `thresholdredproduction` : cell color thresholds
+ *  - `showreservecapacity` : show reserve capacity column in the table
+ *
+ * Components: x-groupsingroup, x-productiontrackertable, x-periodmanager,
+ * x-ancestors, x-machinedisplay, x-zoominpagebutton, x-showrunningdialogbutton.
+ *
+ * @extends pulsePage.BasePage
+ */
 class ProductionTrackerPage extends pulsePage.BasePage {
+  /**
+   * Forces `column=''` and `row=''` to disable the standard grid layout
+   * (the page uses x-groupsingroup for its own hierarchy).
+   */
   constructor() {
     super();
 
@@ -26,6 +49,18 @@ class ProductionTrackerPage extends pulsePage.BasePage {
     pulseConfig.set('row', '');
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Threshold management: listeners are bound to both `input` AND `change`
+   * to react on every keystroke (real-time validation via `_verficationThresholds`).
+   * The `overridden` attribute is set only after successful validation.
+   *
+   * Options:
+   *  - `thresholdtargetproduction` : target threshold (%, integer)
+   *  - `thresholdredproduction`    : red threshold (%, integer)
+   *  - `showreservecapacity`       : checkbox, dispatches `configChangeEvent` on each change
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     var self = this;
@@ -75,6 +110,20 @@ class ProductionTrackerPage extends pulsePage.BasePage {
 
   }
 
+  /**
+   * Validates and applies the production table color thresholds.
+   *
+   * Same logic as oeeview._verficationThresholds and machinedashboard._verficationThresholds.
+   * Difference: the error container is `.thresholdunitispart` (no fallback).
+   * Values are integers (not floats) on this page.
+   *
+   * On success, dispatches `configChangeEvent { config: 'thresholdsupdated' }`
+   * to notify x-productiontrackertable.
+   *
+   * @param {number|string} targetValue - Target threshold (%), integer.
+   * @param {number|string} redValue    - Red threshold (%), integer.
+   * @returns {boolean} true if valid and applied, false otherwise.
+   */
   _verficationThresholds(targetValue, redValue) {
     // Find or create error message element
     let errorMessage = document.getElementById('thresholdErrorMessage');
@@ -129,6 +178,10 @@ class ProductionTrackerPage extends pulsePage.BasePage {
     return true;
   }
 
+  /**
+   * Resets options to their default values.
+   * Resets thresholds and the showreservecapacity checkbox via the standard helpers.
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -150,6 +203,14 @@ class ProductionTrackerPage extends pulsePage.BasePage {
     setDefaultChecked('showreservecapacity');
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Numeric inputs (thresholds) are only included if their value is a valid integer
+   * (filtered via `pulseUtility.isInteger`).
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   // getOptionValues uses the unified options-list pattern:
   // { id, type, param?, conditional? } -> "&param=value" fragments.
@@ -170,6 +231,12 @@ class ProductionTrackerPage extends pulsePage.BasePage {
     }).join('');
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -186,6 +253,10 @@ class ProductionTrackerPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * No components to drive at load time — x-productiontrackertable and
+   * x-groupsingroup read pulseConfig directly via their own mechanisms.
+   */
   buildContent() {
 
   }
@@ -193,5 +264,6 @@ class ProductionTrackerPage extends pulsePage.BasePage {
 }
 
 $(document).ready(function () {
+  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
   pulsePage.preparePage(new ProductionTrackerPage());
 });

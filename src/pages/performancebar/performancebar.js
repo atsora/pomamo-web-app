@@ -20,11 +20,48 @@ require('x-groupgrid/x-groupgrid');
 require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
+/**
+ * Performance Bar page — grid view of performance bars per machine.
+ *
+ * Displays a grid (x-groupgrid) with, for each machine, a performance bar
+ * (x-performancebar) and an optional motion indicator (x-motionpercentage or x-motiontime).
+ *
+ * Configurable options:
+ *  - `defaultlayout` / `machinesperpage` / `rotationdelay` : rotation (default: 16 machines/page)
+ *  - `showmotionpercentage` : show the motion indicator
+ *  - `showmotiondisplay`    : indicator type — 'percent' (x-motionpercentage) or 'time' (x-motiontime)
+ *
+ * Components: x-groupgrid, x-performancebar, x-machinedisplay,
+ * x-motionpercentage, x-motiontime, x-periodmanager, x-reasonbutton,
+ * x-machinemodelegends, x-reasongroups, x-rotationprogress.
+ *
+ * @extends pulsePage.BasePage
+ */
 class PerformanceBarPage extends pulsePage.BasePage {
   constructor() {
     super();
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Rotation layout: same pattern as oeeview (defaultlayout grays out inputs when checked),
+   * but with a default of 16 machines/page (instead of 12).
+   *
+   * Motion management (two nested levels):
+   *  1. `showmotionpercentage` (checkbox): enables/disables motion display
+   *     and shows/hides the `.showmotionpercentagedetails` option group.
+   *  2. `showmotiondisplay` (percent/time radios): switches between x-motionpercentage
+   *     and x-motiontime (mutually exclusive, via `updateMotionDisplay`).
+   *
+   * Local helpers:
+   *  - `syncRadioGroup`      : checks the radio matching a config value
+   *  - `bindRadioGroup`      : binds listeners on a radio group via a value→id map
+   *  - `updateMotionDisplay` : applies show/hide based on the selected mode
+   *
+   * Configs read/written: `defaultlayout`, `machinesperpage`, `rotationdelay`,
+   *                       `showmotionpercentage`, `showmotiondisplay`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     // Layout
@@ -112,6 +149,12 @@ class PerformanceBarPage extends pulsePage.BasePage {
     $('#showmotionpercentage').trigger('change');
   }
 
+  /**
+   * Resets all options to their default values.
+   *
+   * Layout: directly forces defaultlayout=checked, machinesperpage=16, rotationdelay=10.
+   * Motion: uses `setDefaultChecked` and `setDefaultRadioGroup` helpers.
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -145,6 +188,14 @@ class PerformanceBarPage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Hidden elements (e.g. rotation options) are skipped.
+   * `showmotiondisplay` is appended separately after the main options map.
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
     const options = [
@@ -171,6 +222,12 @@ class PerformanceBarPage extends pulsePage.BasePage {
     return result;
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -187,6 +244,13 @@ class PerformanceBarPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Applies the current configuration to DOM components.
+   *
+   * Motion indicator logic (two-level):
+   *  - If `showmotionpercentage` is false → hide both x-motionpercentage and x-motiontime.
+   *  - If true → show only the one matching `showmotiondisplay` ('percent' or 'time').
+   */
   buildContent() {
     let showMotionPercentage = pulseConfig.getBool('showmotionpercentage');
     let display = pulseConfig.getString('showmotiondisplay') || 'percent';
@@ -208,5 +272,6 @@ class PerformanceBarPage extends pulsePage.BasePage {
 }
 
 $(document).ready(function() {
+  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
   pulsePage.preparePage(new PerformanceBarPage());
 });

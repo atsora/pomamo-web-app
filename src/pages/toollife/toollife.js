@@ -14,7 +14,26 @@ require('x-machinedisplay/x-machinedisplay');
 require('x-toollifemachine/x-toollifemachine');
 require('x-tr/x-tr');
 
+/**
+ * Tool Life page — list view of machine tool life indicators.
+ *
+ * Displays a vertical list of machines (x-grouplist) with, for each machine,
+ * the tool life status (x-toollifemachine) showing remaining life per tool.
+ *
+ * Forces `column=''` to disable grid mode (list display).
+ *
+ * Configurable options:
+ *  - `toollifemachine.toollabelname`                    : tool label type to display (select)
+ *  - `toollifemachine.displayremainingcyclesbelowtool`  : show remaining cycles below each tool
+ *
+ * Components: x-grouplist, x-toollifemachine, x-machinedisplay.
+ *
+ * @extends pulsePage.BasePage
+ */
 class ToolLifePage extends pulsePage.BasePage {
+  /**
+   * Forces `column=''` to disable grid mode (x-grouplist renders as a list).
+   */
   constructor() {
     super();
 
@@ -22,6 +41,19 @@ class ToolLifePage extends pulsePage.BasePage {
     pulseConfig.set('column', '');
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Tool selector: populates a `<select>` from `toollifemachine.toollabelsselections`
+   * (array of {name, display} objects from config), sets current selection,
+   * and dispatches `configChangeEvent { config: 'toollabelname' }` on change.
+   *
+   * Remaining cycles checkbox: standard pattern (read config → check → mark overridden
+   * if differs from default → bind listener → dispatch on change).
+   *
+   * Configs read/written: `toollifemachine.toollabelname`,
+   *                       `toollifemachine.displayremainingcyclesbelowtool`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     // TOOLS detail
@@ -60,6 +92,14 @@ class ToolLifePage extends pulsePage.BasePage {
     });
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Uses the declarative pattern with `param` to map DOM id to config key
+   * (e.g. `showtoolselector` → `toollifemachine.toollabelname`).
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   // getOptionValues uses the unified options-list pattern:
   // { id, type, param?, conditional? } -> "&param=value" fragments.
@@ -79,6 +119,12 @@ class ToolLifePage extends pulsePage.BasePage {
     }).join('');
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -95,6 +141,12 @@ class ToolLifePage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Resets options to their default values.
+   *
+   * Resets the tool label selector and the remaining cycles checkbox
+   * via the standard `setDefaultValue` and `setDefaultChecked` helpers.
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -118,10 +170,14 @@ class ToolLifePage extends pulsePage.BasePage {
     setDefaultChecked('showtoolremaining', 'toollifemachine.displayremainingcyclesbelowtool');
   }
 
+  /**
+   * No components to drive at load time — x-toollifemachine reads pulseConfig directly.
+   */
   buildContent() {
   }
 }
 
 $(document).ready(function () {
+  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
   pulsePage.preparePage(new ToolLifePage());
 });

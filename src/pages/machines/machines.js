@@ -40,13 +40,39 @@ require('x-performancegauge/x-performancegauge');
 
 require('x-tr/x-tr');
 
+/**
+ * Machines page — detailed per-machine view with stacked status bars.
+ *
+ * Displays a column of machines (x-grouparray) with, for each machine,
+ * a configurable set of components driven by `componentsToDisplay`:
+ * status bars (x-barstack), performance gauge, cycle progress,
+ * serial number, operation info, etc.
+ *
+ * The list of visible components is dynamically controlled by the
+ * `componentsToDisplay` config (array of CSS selectors / component names).
+ *
+ * Components registered: x-grouparray, x-machinetab, x-barstack,
+ * x-performancebar, x-cycleprogressbar, x-reasongroups, x-fieldlegends,
+ * x-machinemodelegends, x-partproductionstatuspie, x-performancegauge, etc.
+ *
+ * @extends pulsePage.BasePage
+ */
 class MachinesPage extends pulsePage.BasePage {
+  /**
+   * No additional local state — the page delegates everything to pulseConfig.
+   */
   constructor() {
     super();
 
     // General configuration
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs () {
     let missingConfigs = [];
 
@@ -63,6 +89,20 @@ class MachinesPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Applies the `componentsToDisplay` config to show/hide components in each machine tile.
+   *
+   * Strategy: first hides ALL `.machine-component` elements, then reveals only
+   * those whose selector appears in `componentsToDisplay`.
+   *
+   * Special cases handled explicitly:
+   *  - `'coloredbar'`             : shows `.div-bar-and-percent` (without right-side %)
+   *  - `'coloredbarwithpercent'`  : shows `.div-bar-and-percent` + `.right-percent`
+   *  - `'x-reasonbutton'`         : shows the reason button inside `.tile-title`
+   *  - `'title-lastmachinestatus'`: shows the last status inside the tile title
+   *
+   * Config read: `componentsToDisplay` (Array<string>)
+   */
   buildContent () {
     // find components to display
     let componentsToDisplay = pulseConfig.getArray('componentsToDisplay', []);
@@ -94,5 +134,7 @@ class MachinesPage extends pulsePage.BasePage {
 }
 
 $(document).ready(function () {
+  // Start the page lifecycle (getMissingConfigs → buildContent).
+  // No configurable options → no initOptionValues() on this page.
   pulsePage.preparePage(new MachinesPage());
 });

@@ -22,12 +22,50 @@ require('x-groupgrid/x-groupgrid');
 require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
-
+/**
+ * Utilization Bar page — grid view of utilization bars per machine.
+ *
+ * Displays a grid (x-groupgrid) with, for each machine, a stacked utilization bar
+ * (x-barstack) and an optional clock (x-clock).
+ *
+ * Configurable options:
+ *  - `defaultlayout` / `machinesperpage` / `rotationdelay` : rotation (default: 16 machines/page)
+ *  - `showclock`                                           : show x-clock per machine
+ *  - `displaydaysrange` / `displayhoursrange`              : time range — driven by a shared
+ *    `#displaydayshours` input and `#displayisdays` / `#displayishours` radio selectors
+ *
+ * Special getMissingConfigs: also blocks rendering when `displaydaysrange` = 0
+ * AND `displayhoursrange` = 0 (min 1 hour required).
+ *
+ * Components: x-groupgrid, x-barstack, x-machinedisplay, x-motionpercentage,
+ * x-datetimegraduation, x-clock, x-periodmanager, x-machinemodelegends,
+ * x-reasongroups, x-rotationprogress.
+ *
+ * @extends pulsePage.BasePage
+ */
 class UtilizationBarPage extends pulsePage.BasePage {
   constructor() {
     super();
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Rotation layout: same pattern as other grid pages — defaultlayout grays out inputs,
+   * default 16 machines/page.
+   *
+   * Clock option: `#showclockutilization` maps to config key `showclock`. Shows/hides
+   * all `x-clock` elements immediately on change.
+   *
+   * Days/Hours range: a single `#displaydayshours` numeric input is shared between
+   * days mode and hours mode. The active mode is selected by `#displayisdays` /
+   * `#displayishours` radios. On any change, writes to either `displaydaysrange`
+   * (days mode) or `displayhoursrange` (hours mode) and zeroes the other, then
+   * dispatches `configChangeEvent { config: 'displaydaysrange' }`.
+   *
+   * Configs read/written: `defaultlayout`, `machinesperpage`, `rotationdelay`,
+   *                       `showclock`, `displaydaysrange`, `displayhoursrange`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     // Layout
@@ -70,7 +108,7 @@ class UtilizationBarPage extends pulsePage.BasePage {
       }
     });
 
-    // Days / Hours
+    // Days / Hours: load current range — if days > 0, show in days mode; otherwise hours mode
     let days = pulseConfig.getInt('displaydaysrange');
     let hours = pulseConfig.getInt('displayhoursrange');
     if (days > 0) {
@@ -102,6 +140,12 @@ class UtilizationBarPage extends pulsePage.BasePage {
     $('#displayishours').change(changeDaysHours);
   }
 
+  /**
+   * Resets all options to their default values.
+   *
+   * Days/Hours: resets to the default days range value with days mode selected.
+   * Layout: defaultlayout=true, 16/page, delay=10s.
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -126,12 +170,21 @@ class UtilizationBarPage extends pulsePage.BasePage {
     $('#displayisdays').change();
     $('#displayisdays').removeAttr('overridden');
 
-    // Layout : défaut = rotation standard (defaultlayout=true, 16 par page)
+    // Layout: default rotation (defaultlayout=true, 16 per page)
     $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
     $('#machinesperpage').val(16).removeAttr('overridden');
     $('#rotationdelay').val(10).removeAttr('overridden');
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * Days/Hours is serialized separately: writes `displaydaysrange` (and `displayhoursrange=0`)
+   * in days mode, or `displaydaysrange=0&displayhoursrange=N` in hours mode.
+   * Only written when `#displaydayshours` holds a valid integer.
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   // getOptionValues uses the unified options-list pattern:
   // { id, type, param?, conditional? } -> "&param=value" fragments.
@@ -165,6 +218,16 @@ class UtilizationBarPage extends pulsePage.BasePage {
     return optionsValues;
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   *
+   * Two conditions block rendering:
+   *  1. No machine or group selected.
+   *  2. The time range is zero (both displaydaysrange and displayhoursrange are 0) —
+   *     at least 1 hour must be configured.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -188,6 +251,10 @@ class UtilizationBarPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Applies the current configuration to DOM components at load time.
+   * Shows or hides `x-clock` based on the `showclock` config value.
+   */
   buildContent() {
     // show clock
     let showclock = pulseConfig.getBool('showclock');
