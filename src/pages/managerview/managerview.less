@@ -27,12 +27,6 @@
 @import "style.less";
 
 
-.appcontext-live {
-  .tile {
-    overflow-y: hidden;
-  }
-}
-
 .pulse-mainarea-inner {
   padding: 1.5vh 1.5vw;
   display: flex;
@@ -150,6 +144,21 @@ x-barstack {
   }
 }
 
+// Machine + current
+.machinedisplay {
+  font-weight: bold;
+}
+
+.currentcncvalue {
+  text-align: center;
+}
+
+.appcontext-live {
+  .tile {
+    overflow-y: hidden;
+  }
+}
+
 @media (max-width: 900px) and (orientation: portrait) {
   .datetimegraduation {
     margin: 0 15vw 0 38vw !important;
@@ -196,11 +205,3 @@ x-barstack {
   }
 }
 
-// Machine + current
-.machinedisplay {
-  font-weight: bold;
-}
-
-.currentcncvalue {
-  text-align: center;
-}

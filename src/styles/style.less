@@ -198,22 +198,6 @@ body {
   }
 }
 
-.appcontext-live {
-  .pulse-mainarea {
-    margin-right: 0px !important;
-  }
-
-  #navbar li {
-    justify-content: left !important;
-    margin-left: 7px !important;
-    padding: 7px 0 7px 6.5px;
-  }
-
-  @media (min-width: 686px) {
-    .adaptive-vh-vw-layout();
-  }
-}
-
 #pulse-inner {
   flex: 1 1 auto; // take remaining height below header
   min-height: 0; // required so inner scroll areas can size correctly
@@ -290,11 +274,6 @@ body {
   &.gridFullHeight {
     height: 100%;
   }
-}
-
-.appcontext-live .pulse-mainarea-inner {
-  overflow: auto;
-  height: 100%;
 }
 
 .pulse-mainarea-bottom {
@@ -435,26 +414,9 @@ body {
   }
 }
 
-.appcontext-live .pulse-mainarea {
-  overflow-y: hidden; // NO scroll for live displays
-}
-
-.appcontext-live .legend-content {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-
-  .legend-group {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
 // Layout options are only relevant in live mode
 .param-group.group-layout {
   display: none;
-}
-.appcontext-live .param-group.group-layout {
-  display: block;
 }
 
 #pulse-pagination {
@@ -1276,6 +1238,45 @@ x-motiontime {
   padding: 4px;
   border: 1px solid @color_window_border;
   z-index: 200;
+}
+
+
+// LIVE / KIOSK MODE //
+
+.appcontext-live {
+  .pulse-mainarea {
+    margin-right: 0px !important;
+    overflow-y: hidden; // no scroll for live displays
+  }
+
+  .pulse-mainarea-inner {
+    overflow: auto;
+    height: 100%;
+  }
+
+  .legend-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+
+    .legend-group {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .param-group.group-layout {
+    display: block;
+  }
+
+  #navbar li {
+    justify-content: left !important;
+    margin-left: 7px !important;
+    padding: 7px 0 7px 6.5px;
+  }
+
+  @media (min-width: 686px) {
+    .adaptive-vh-vw-layout();
+  }
 }
 
 

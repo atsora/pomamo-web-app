@@ -46,18 +46,6 @@ x-groupgrid {
   }
 }
 
-.appcontext-live x-groupgrid {
-  .groupgrid-main {
-    height: 100% !important;
-    grid-auto-rows: 1fr;
-  }
-
-  .groupgrid-item {
-    height: 100%;
-    min-height: unset;
-  }
-}
-
 .tile {
   container-type: size;
   container-name: maintile;
@@ -160,13 +148,6 @@ x-motiontime {
   stroke: @color_gray
 }
 
-// Override for mobile that sets height: auto
-@media (max-width: 685px) {
-  .tile {
-    height: 100% !important;
-  }
-}
-
 .main-table-box {
   display: flex;
   flex-direction: column;
@@ -175,3 +156,23 @@ x-motiontime {
   width: 100%;
   overflow: hidden;
 }
+
+.appcontext-live x-groupgrid {
+  .groupgrid-main {
+    height: 100% !important;
+    grid-auto-rows: 1fr;
+  }
+
+  .groupgrid-item {
+    height: 100%;
+    min-height: unset;
+  }
+}
+
+// Override for mobile that sets height: auto
+@media (max-width: 685px) {
+  .tile {
+    height: 100% !important;
+  }
+}
+
