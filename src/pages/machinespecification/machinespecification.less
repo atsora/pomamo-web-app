@@ -23,14 +23,15 @@
 @import "x-motiontime/x-motiontime.less";
 @import "x-periodmanager/x-periodmanager.less";
 @import "x-reasongroups/x-reasongroups.less";
-@import "x-fieldlegends/x-fieldlegends.less";
-@import "x-runninglegends/x-runninglegends.less";
 @import "style.less";
 
 
 .pulse-mainarea-inner {
   padding: 1.5vh 1.5vw;
-  height:100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 .pulse-mainarea{
   overflow: hidden;
@@ -197,12 +198,3 @@ x-datetimegraduation {
   }
 }
 
-
-.main-table-box {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
