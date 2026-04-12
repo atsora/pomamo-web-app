@@ -80,16 +80,11 @@
 }
 
 // Use Full screen
-.pulse-mainarea-inner,
-.main-table-box {
+.pulse-mainarea-inner {
   box-sizing: border-box;
   height: 100%;
-}
-
-.main-table-box {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
 
   .sub-title {
     display: flex;
@@ -143,11 +138,8 @@ x-groupsingroup {
   width: 100%;
   height: 100%;
 
-  .production-tracker-pie-div {
-    box-sizing: border-box;
-    padding: 4px; // To simulate margin around
-    width: 100%;
-    height: 100%;
+  x-productiontrackertable {
+    padding: 4px;
   }
 }
 

@@ -39,18 +39,14 @@
 }*/
 
 // Use Full screen
-.pulse-mainarea-inner,
-.main-table-box {
+.pulse-mainarea-inner {
   box-sizing: border-box;
   height: 100%;
-}
-
-.main-table-box {
   display: flex;
   flex-direction: column;
-  row-gap: 12px;
 
   .sub-title {
+    margin-bottom: 12px;
     display: flex;
     flex-direction: row;
 
@@ -151,7 +147,7 @@ x-groupsingroup {
 
   pointer-events: none; //TODO : TMP - to remove to allow click on pie for example - that means rework global .tile / .tile-title / .tile-content
 
-  .mit-top-div {
+  x-workinfo.mit-top-div {
     margin-top: 4px;
   }
 

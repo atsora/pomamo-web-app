@@ -20,16 +20,11 @@
 
 
 // Use Full screen
-.pulse-mainarea-inner,
-.main-table-box {
+.pulse-mainarea-inner {
   box-sizing: border-box;
   height: 100%;
-}
-
-.main-table-box {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
 
   .sub-title {
     display: flex;
@@ -81,11 +76,7 @@ x-groupsingroup {
   height: 100%;
   pointer-events: none; //TODO : TMP - to remove to allow click on pie for example - that means rework global .tile / .tile-title / .tile-content
 
-  .reservecapacity-div {
-    box-sizing: border-box;
-    height: 100%;
-    width: 100%;
-
+  x-chartreservecapacity {
     padding-top: 10px;
   }
 
