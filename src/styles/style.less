@@ -266,10 +266,8 @@ body {
   padding: 21px;
   box-sizing: border-box;
   transition: padding-bottom 0.2s ease-out;
-  overflow: visible;
-  height: auto;
-  min-height: 100%;
-
+  overflow-y: auto;
+  height: 100%;
 
   &.gridFullHeight {
     height: 100%;
@@ -392,8 +390,7 @@ body {
   flex-shrink: 1;
   box-sizing: border-box;
   min-width: 400px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   position: relative; // explicit containing block for pulse-mainarea-bottom
   z-index: 0;         // stacking context at 0 — keeps legend below nav panel (z-index: 51)
   color: @color_text_alternate;
@@ -817,7 +814,7 @@ body {
     }
 
     #pulse-panel-navigation {
-      width: 30px;
+      width: 42px;
       transition: width 0.2s;
       overflow: hidden;
     }
@@ -1247,11 +1244,6 @@ x-motiontime {
   .pulse-mainarea {
     margin-right: 0px !important;
     overflow-y: hidden; // no scroll for live displays
-  }
-
-  .pulse-mainarea-inner {
-    overflow: auto;
-    height: 100%;
   }
 
   .legend-content {
