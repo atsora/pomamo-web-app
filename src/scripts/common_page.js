@@ -189,7 +189,7 @@ var startRotationEngine = function () {
   }
 
   let isDefault = pulseConfig.getBool('defaultlayout', true);
-  let perPage = isDefault ? 12 : pulseConfig.getInt('machinesperpage', 12);
+  let perPage = isDefault ? 100 : pulseConfig.getInt('machinesperpage', 12);
   if (perPage < 1) perPage = 12;
 
   // On s'assure que le cache est propre (trim)
@@ -493,15 +493,15 @@ var showLegend = function () {
     }
   };
 
-  $('.legend-content').resize(function () {
-    updateLegendVisibility();
-  });
+  // ResizeObserver: recalcule dès que le contenu de la légende change de taille
+  // (remplace le $.resize() jQuery qui n'observe pas nativement les éléments non-window)
+  new ResizeObserver(() => updateLegendVisibility()).observe($('.legend-content')[0]);
 
   if (pulseConfig.getString('showlegend') == 'dynamic') {
     $('.legend-toggle').click(function () {
       manualClickOnToggleLegend = true;
       $('.legend-wrapper').toggleClass('legendHidden');
-      $('.legend-content').resize();
+      updateLegendVisibility();
     });
     $('.legend-content').css({ 'border-top-left-radius': '0' });
   }
