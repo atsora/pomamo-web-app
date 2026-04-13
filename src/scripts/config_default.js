@@ -405,7 +405,11 @@ PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [ // ALL
   'motionsummary', 'combinedview', 'machinestatus',
   'machinespecification',
   'managerview',
-  'plant'
+  'plant',
+  // Vue app pages
+  'vue-tasks',
+  'vue-view',
+  'vue-edit'
 ];
 
 // TOOLS

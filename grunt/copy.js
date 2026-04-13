@@ -170,12 +170,22 @@ module.exports = {
       { 'dist-es2015/lib/d3/d3.min.js': 'node_modules/d3/dist/d3.min.js' }
     ]
   },
+  vuedist: {
+    files: [
+      {
+        expand: true,
+        cwd: '../atsora-vue/dist/',
+        src: ['**/*'],
+        dest: 'dist-es2015/vue-dist/'
+      }
+    ]
+  },
   release: {
     files: [
       {
         expand: true,
         cwd: 'dist-es2015/',
-        src: ['images/**', 'lib/**', 'scripts/**', 'styles/**'],
+        src: ['images/**', 'lib/**', 'scripts/**', 'styles/**', 'vue-dist/**'],
         dest: 'dist/'
       }
     ]

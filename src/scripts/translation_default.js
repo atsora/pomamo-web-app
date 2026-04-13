@@ -222,6 +222,15 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   },
   motionsummary: {
     title: 'Motion summary'
+  },
+  'vue-tasks': {
+    title: 'Tasks'
+  },
+  'vue-execution': {
+    title: 'Execution'
+  },
+  'vue-view': {
+    title: 'View task'
   }
 };
 
@@ -440,6 +449,15 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   },
   motionsummary: {
     title: 'Statut courant'
+  },
+  'vue-tasks': {
+    title: 'Tâches'
+  },
+  'vue-execution': {
+    title: 'Exécution'
+  },
+  'vue-view': {
+    title: 'Voir la tâche'
   }
 };
 

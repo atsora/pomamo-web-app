@@ -6,6 +6,7 @@
         "browserify",
         "copy:webconfig",
         "copy:img",
+        "copy:vuedist",
         "copy:css",
         "lessThemes",
         "copy:fixedpages",

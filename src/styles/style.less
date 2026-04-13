@@ -27,46 +27,37 @@ h4,
 h5,
 h6 {
   margin: 1em 0 .5em 0;
-  /* Rapproche le titre du texte. */
   line-height: 1.2;
   font-weight: bold;
-  /* Default value. */
   font-style: normal;
 }
 
-h1 {
-  font-size: 1.65em;
-}
-
-h2 {
-  font-size: 1.4em;
-}
-
-h3 {
-  font-size: 1.15em;
-}
-
-h4 {
-  font-size: 1em;
-}
+h1 { font-size: 1.65em; }
+h2 { font-size: 1.4em; }
+h3 { font-size: 1.15em; }
+h4 { font-size: 1em; }
 
 address {
   margin: .75em 0;
   font-style: normal;
 }
 
-em {
-  font-style: italic;
-}
-
-strong {
-  font-weight: bold;
-}
+em { font-style: italic; }
+strong { font-weight: bold; }
 
 input,
 button,
 select {
   vertical-align: middle;
+}
+
+button {
+  cursor: pointer;
+}
+
+button.disabled {
+  cursor: default;
+  pointer-events: none;
 }
 
 .notransition {
@@ -89,17 +80,6 @@ svg {
 
 .good-efficiency {
   color: @good_efficiency_base !important;
-}
-
-// INPUTS
-
-button {
-  cursor: pointer;
-}
-
-button.disabled {
-  cursor: default;
-  pointer-events: none;
 }
 
 // MAIN LAYOUT
@@ -329,6 +309,7 @@ body {
       cursor: pointer;
       pointer-events: initial;
       width: 11cqw;
+      box-sizing: content-box; // parent has border-box — override to keep width = content only
 
       .legend-toggle-icon-up,
       .legend-toggle-icon-down {
@@ -381,6 +362,76 @@ body {
   }
 
   .legend-wrapper.legendHiddenNoAnimation
+}
+
+// Reset Pulse global element styles inside Vue using :where() — zero specificity (0,0,1)
+// so PrimeVue class selectors (.p-button etc.) at (0,1,0) always win
+:where(#vue-app-container, #vue-overlay-target, .vue-scoped-dialog) {
+  // Tailwind border utilities only set border-width — need border-width:0 + border-style:solid as base
+  // border-width:0 resets browser-native borders; border-style:solid enables Tailwind border classes
+  *, *::before, *::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+  }
+
+  // Reset Pulse global element styles to browser defaults
+  // :where() has zero specificity so PrimeVue class selectors (.p-button etc.) always win
+  button, input, select, textarea,
+  h1, h2, h3, h4, h5, h6,
+  a, em, strong, address {
+    all: unset;
+    box-sizing: border-box;
+  }
+
+  a, a:hover {
+    text-decoration: none;
+  }
+
+  // p tags: suppress browser default margins (normally done by Tailwind Preflight)
+  p {
+    margin: 0;
+  }
+
+}
+
+#vue-app-container {
+  flex-basis: 100%;
+  flex-shrink: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+  box-sizing: border-box;
+  border: 1px solid @color_window_border;
+  border-radius: @border_radius;
+  margin: 0 7px 7px 0;
+  // Cut CSS inheritance from Pulse body
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+
+  // Hide Vue elements that duplicate Pulse's own nav/header/layout
+  [data-vue-sidebar],
+  [data-vue-page-header] {
+    display: none !important;
+  }
+
+  // Remove padding/margin from the router wrapper — Pulse handles spacing
+  [data-vue-router-wrapper] {
+    padding: 0 !important;
+  }
+
+  // Remove border on page content — Pulse already has a container border
+  [data-vue-page-content] {
+    border: none;
+  }
+
+  #vue-app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .pulse-mainarea {
@@ -685,6 +736,7 @@ body {
   flex-direction: column;
   row-gap: 10px;
   align-items: left;
+  padding-top: 10px;
 
   &>li {
     font-weight: bold;
@@ -694,7 +746,7 @@ body {
     list-style: none;
     display: flex;
     justify-content: center;
-    padding: 5px 0;
+    padding: 4.7px 0;
     border-radius: @border_radius_small;
 
     &:has(.tooltip_disabled) {
@@ -1397,7 +1449,6 @@ x-motiontime {
     margin: 0;
 
     .legend-wrapper {
-      transform: none !important;
       display: none;
     }
 

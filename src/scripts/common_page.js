@@ -41,6 +41,58 @@ var initParameterPanel = function(){$('.param-group-title').click(function(e){le
 var openParameterPanel = exports.openParameterPanel = function(f){if($('#configpanelbtn').hasClass('disabled'))return;if(f)$('#pulse-panel-parameter').addClass('notransition');else $('#pulse-panel-parameter').removeClass('notransition');$('#pulse-inner').removeClass('pulse-panel-parameter-collapsed');$('#configpanelbtn').addClass('activated');};
 var closeParameterPanel = exports.closeParameterPanel = function(f){if(f)$('#pulse-panel-parameter').addClass('notransition');else $('#pulse-panel-parameter').removeClass('notransition');$('#pulse-inner').addClass('pulse-panel-parameter-collapsed');$('#configpanelbtn').removeClass('activated');};
 
+// --- INTÉGRATION VUE ---
+
+// Lit la sélection machine courante depuis x-machineselection (Option B)
+var getSelectedMachines = function () {
+  var el = document.querySelector('x-machineselection');
+  return el ? el.getMachinesArray() : [];
+};
+
+// Correspondance page nav → route Vue
+var vuePageRoutes = {
+  'vue-tasks': '/tasks',
+  'vue-execution': '/execution',
+};
+
+// Affiche la zone Vue et navigue vers la route donnée
+var showVuePage = function (pageName) {
+  var route = vuePageRoutes[pageName] || ('/' + pageName.replace('vue-', ''));
+  $('.pulse-mainarea').hide();
+  $('#vue-app-container').css('display', 'flex');
+  if (window.__vueSetMachines) {
+    window.__vueSetMachines(getSelectedMachines());
+  }
+  if (window.__vueRouter) {
+    window.__vueRouter.push(route);
+  }
+};
+
+// Masque la zone Vue et réaffiche le contenu Pulse
+var hideVuePage = function () {
+  $('#vue-app-container').hide();
+  $('.pulse-mainarea').show();
+};
+
+// Ouvre une page Vue dans une popup pulseCustomDialog (Option A)
+var openVuePopup = function (route, title) {
+  var container = document.createElement('div');
+  container.style.minHeight = '400px';
+  if (window.__vueMount) {
+    window.__vueMount(container, route);
+  }
+  pulseCustomDialog.openDialog($(container), {
+    title: title,
+    cancelButton: 'hidden',
+    okButton: 'hidden',
+    bigSize: true,
+    autoDelete: true,
+    onClose: function () {
+      if (window.__vueUnmount) window.__vueUnmount(container);
+    }
+  });
+};
+
 var populateNavigationPanel = function () {
   let currentPage = window.location.href.replace(/(.*\/)([^\\]*)(\.html.*)/, '$2');
   let displayedPages = pulseConfig.getArray('displayedPages');
@@ -150,11 +202,36 @@ var setNavigationLinks = function () {
     }
     $(this).click(function () {
       let attribute = $(this).attr('data');
-      if (attribute != null && attribute != '' && fullURL.indexOf('/' + attribute + '.html') == -1) {
+      if (attribute == null || attribute == '') return;
+
+      // Page Vue : navigue vers vue-tasks.html (comme une page Pulse normale)
+      // preparePage détecte le pagename au chargement et appelle showVuePage automatiquement
+      if (attribute.startsWith('vue-')) {
+        if (fullURL.indexOf('/' + attribute + '.html') == -1) {
+          let newfullURL = pulseUtility.changePageName(window.location.href, attribute);
+          window.location.href = newfullURL;
+        }
+        return;
+      }
+
+      // Page Pulse → comportement existant
+      if (fullURL.indexOf('/' + attribute + '.html') == -1) {
+        hideVuePage();
         let newfullURL = pulseUtility.changePageName(window.location.href, attribute);
         window.location.href = newfullURL;
       }
     });
+  });
+
+  // Écoute les changements de sélection machine pour mettre à jour Vue en temps réel (Option C)
+  eventBus.EventBus.addGlobalEventListener(module, 'configChangeEvent', function (event) {
+    if (!event || !event.target) return;
+    var config = event.target.config;
+    if (config === 'machine' || config === 'group') {
+      if (window.__vueSetMachines && $('#vue-app-container').is(':visible')) {
+        window.__vueSetMachines(getSelectedMachines());
+      }
+    }
   });
 };
 
@@ -436,6 +513,9 @@ var themeManager = {
     if (this._version == null || this._version == '') { this._version = $('link[rel=stylesheet][href*="style_' + oldTheme + '/' + pageName + '.css"]').attr('href').split('=')[1]; }
     $('head').append('<link rel="stylesheet" type="text/css" href="./styles/style_' + name + '/' + pageName + '.css?v=' + this._version + '">');
     if (oldTheme != name) { $('link[rel=stylesheet][href*="./styles/style_' + oldTheme + '/' + pageName + '.css"]').remove(); }
+    // Sync Vue/PrimeVue/Tailwind dark mode
+    if (name === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
   },
   current: function () { return pulseConfig.getString('theme', 'dark'); }
 };
@@ -562,6 +642,11 @@ exports.preparePage = function (currentPageMethods) {
   let title2 = pulseConfig.pulseTranslate('pages.' + pageNameFromUrl + '.title', '');
   $('head').find('title').html(title2 + (title2 != '' ? ' - ' : '') + title1);
   $('.pulse-header-title span').html((title2 != '' ? title2 : title1).toUpperCase());
+
+  // Auto-show Vue container when a vue-* page is loaded directly (e.g. vue-tasks.html)
+  if (pageNameFromUrl.startsWith('vue-')) {
+    showVuePage(pageNameFromUrl);
+  }
 
   let configOk = true;
   if (typeof currentPageMethods.getMissingConfigs === 'function') { configOk = (currentPageMethods.getMissingConfigs().length == 0); }
