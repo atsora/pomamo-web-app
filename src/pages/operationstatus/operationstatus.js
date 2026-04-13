@@ -24,6 +24,7 @@ require('x-stacklight/x-stacklight');
 require('x-toollifemachine/x-toollifemachine');
 require('x-reasonbutton/x-reasonbutton');
 require('x-lastmachinestatus/x-lastmachinestatus');
+require('x-rotationprogress/x-rotationprogress');
 
 /* For Bar display and some defaultpie */
 require('x-periodmanager/x-periodmanager');
@@ -196,7 +197,7 @@ class OperationStatusPage extends pulsePage.BasePage {
             min-height: 100% !important;
             align-content: start !important;
             /* Hauteur min par ligne adaptée pour Op Status */
-            grid-auto-rows: minmax(350px, auto) !important;
+            grid-auto-rows: minmax(200px, 1fr) !important;
             padding-bottom: 50px !important;
           }
         </style>

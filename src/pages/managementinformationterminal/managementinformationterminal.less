@@ -166,13 +166,13 @@ x-groupsingroup {
     justify-content: space-between;
     align-items: stretch;
 
-    min-height: 100px; // To see it always. Warning! Linked to .tile-content{ overflow: hidden; to hide bottom when needed
+    min-height: 0;
 
-    x-defaultpie {
-      flex-shrink: 5; // Strech
-      flex-grow: 5;
-      flex-basis: 80%;
-      //  padding: 4px; // To simulate margin around
+    x-defaultpie,
+    x-partproductionstatuspie {
+      flex: 1 1 0;
+      min-height: 0;
+      height: auto !important; // override height: 100% !important from component
     }
 
     // Long text linked to pie
