@@ -198,7 +198,6 @@ class OperationStatusPage extends pulsePage.BasePage {
             align-content: start !important;
             /* Hauteur min par ligne adaptée pour Op Status */
             grid-auto-rows: minmax(200px, 1fr) !important;
-            padding-bottom: 50px !important;
           }
         </style>
       `);
