@@ -135,8 +135,7 @@ class MachineStatusPage extends pulsePage.BasePage {
             height: auto !important;
             min-height: 100% !important;
             align-content: start !important;
-            grid-auto-rows: minmax(300px, auto) !important;
-            padding-bottom: 50px !important;
+            grid-auto-rows: minmax(200px, 1fr) !important;
           }
         </style>
       `);
