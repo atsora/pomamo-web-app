@@ -97,6 +97,11 @@ PULSE_DEFAULT_CONFIG.general.showcoloredbar = {
   ]
 };
 
+// STOP CLASSIFICATION - grouping threshold
+// Number of visual units (distinct AlwaysSecondLevel groups + flat reasons) above which all reasons are grouped
+// Advanced Options occupies 1 slot → effective grid capacity = 12 - 1 = 11
+PULSE_DEFAULT_CONFIG.general.stopclassification = { maxflat: 11 };
+
 /* ********** ********** ********** ********** */
 // Configuration per page for pulse web app
 /* ********** ********** ********** ********** */
