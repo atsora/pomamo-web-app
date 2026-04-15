@@ -133,8 +133,7 @@ class OeeViewPage extends pulsePage.BasePage {
 
             /* 3. CRITICAL: enforce a minimum row height */
             /* Without this, the grid tries to divide screen height by 100 machines */
-            grid-auto-rows: minmax(300px, auto) !important;
-            padding-bottom: 50px !important;
+            grid-auto-rows: minmax(200px, 1fr) !important;
           }
         </style>
       `);

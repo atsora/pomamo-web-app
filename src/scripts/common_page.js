@@ -189,7 +189,7 @@ var startRotationEngine = function () {
   }
 
   let isDefault = pulseConfig.getBool('defaultlayout', true);
-  let perPage = isDefault ? 12 : pulseConfig.getInt('machinesperpage', 12);
+  let perPage = isDefault ? 100 : pulseConfig.getInt('machinesperpage', 12);
   if (perPage < 1) perPage = 12;
 
   // On s'assure que le cache est propre (trim)
@@ -450,11 +450,12 @@ var showLegend = function () {
   var updateLegendVisibility = function () {
     // Heights of the legend
     let legendHeight = $('.legend-content')[0].clientHeight;
+    let legendEntryCount = $('.legend-content').children(':not(.legend-toggle)').length;
+    let legendHasEntries = legendEntryCount > 0;
 
     // Live mode: expand to 90% if grid has more than 1 row (> 2 children with 2-col grid)
     if (pulseConfig.getString('showlegend') == 'true') {
-      let childCount = $('.legend-content').children(':not(.legend-toggle)').length;
-      if (childCount > 1) {
+      if (legendEntryCount > 1) {
         $('.legend-content').css('width', '95%');
       } else {
         $('.legend-content').css('width', ''); // retour au 60% CSS
@@ -462,12 +463,13 @@ var showLegend = function () {
     }
 
     // Visibility of the button "Legend"
-    if (legendHeight > 2 && pulseConfig.getString('showlegend') == 'dynamic')
+    if (legendHasEntries && legendHeight > 2 && pulseConfig.getString('showlegend') == 'dynamic')
       $('.legend-toggle').show();
     else {
       $('.legend-toggle').hide();
     }
-    if (pulseConfig.getString('showlegend') == 'false') {
+    if (pulseConfig.getString('showlegend') == 'false' || !legendHasEntries) {
+      $('.pulse-mainarea-inner').css('padding-bottom', '');
       return;
     }
 
@@ -491,17 +493,24 @@ var showLegend = function () {
         $('.legend-wrapper').css({ 'transform': 'translateY(0)' });
       }
     }
+
+    // Push uniquement en vue live (showlegend === 'true') — les autres vues gardent l'overlay
+    if (pulseConfig.getString('showlegend') === 'true' && legendHeight > 2) {
+      $('.pulse-mainarea-inner').css('padding-bottom', (legendHeight + 2) + 'px');
+    } else {
+      $('.pulse-mainarea-inner').css('padding-bottom', '');
+    }
   };
 
-  $('.legend-content').resize(function () {
-    updateLegendVisibility();
-  });
+  // ResizeObserver: recalcule dès que le contenu de la légende change de taille
+  // (remplace le $.resize() jQuery qui n'observe pas nativement les éléments non-window)
+  new ResizeObserver(() => updateLegendVisibility()).observe($('.legend-content')[0]);
 
   if (pulseConfig.getString('showlegend') == 'dynamic') {
     $('.legend-toggle').click(function () {
       manualClickOnToggleLegend = true;
       $('.legend-wrapper').toggleClass('legendHidden');
-      $('.legend-content').resize();
+      updateLegendVisibility();
     });
     $('.legend-content').css({ 'border-top-left-radius': '0' });
   }
