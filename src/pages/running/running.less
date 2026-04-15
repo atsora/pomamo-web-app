@@ -132,7 +132,7 @@
 .datetimegraduation {
   // margin = width of side columns (.div-machine left, .div-percent right)
   // padding = cell padding (1vw) + pulse-bar-div margin (2vw) = 3vw
-  margin: 0 6cqw 0 18vw !important;
+  margin: 0 3cqw 0 9vw !important;
   padding: 0 3vw !important;
   width: auto !important;
 }
@@ -162,7 +162,7 @@ x-grouplist {
   border-radius: @border_radius_small;
   padding: 0.2cqw 0.7vw;
   box-sizing: border-box;
-  width: 18vw;
+  width: 9vw;
   min-height: fit-content;
   display: flex;
   flex-direction: column;
@@ -170,7 +170,7 @@ x-grouplist {
   overflow: hidden;
 
   x-machinedisplay {
-    font-size: 1.1cqw;
+    font-size: 0.55cqw;
   }
 
   .div-current {
@@ -185,8 +185,8 @@ x-grouplist {
     }
 
     .div-current-left {
-      height: 2.3cqw;
-      width: 2.3cqw;
+      height: 1.15cqw;
+      width: 1.15cqw;
     }
 
     .div-current-right {
@@ -195,7 +195,7 @@ x-grouplist {
       width: 80%;
       display: flex;
       flex-direction: column;
-      font-size: 0.7cqw;
+      font-size: 0.35cqw;
       height: fit-content;
 
       a {
@@ -214,7 +214,7 @@ x-barstack {
 }
 
 .div-percent {
-  width: 6cqw;
+  width: 3cqw;
 
   display: flex;
   flex-direction: column; // align children
@@ -223,8 +223,8 @@ x-barstack {
 
   x-motionpercentage,
   x-motiontime {
-    font-size: 2cqw;
-    line-height: 2cqw;
+    font-size: 1cqw;
+    line-height: 1cqw;
   }
 }
 
