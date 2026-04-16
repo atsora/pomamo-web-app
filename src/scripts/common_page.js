@@ -171,8 +171,6 @@ var animatePanels = function () {
 
 // --- MOTEUR DE ROTATION JS ---
 var startRotationEngine = function () {
-  console.log('[DEBUG] startRotationEngine: Checking configuration.');
-
   if (_rotationTimer) {
     clearTimeout(_rotationTimer);
     _rotationTimer = null;
@@ -198,13 +196,11 @@ var startRotationEngine = function () {
   }
 
   if (_allMachinesCache.length == 0) {
-    console.log('[DEBUG] startRotationEngine: No machines to display.');
     return;
   }
 
   // Cas 1 : Tout tient sur une seule page -> Pas de rotation
   if (_allMachinesCache.length <= perPage) {
-    console.log('[DEBUG] startRotationEngine: No rotation needed. Showing all.');
 
     // 1. On affiche toutes les machines
     eventBus.EventBus.dispatchToAll('updateVisibleMachines', { machines: _allMachinesCache });
@@ -220,7 +216,6 @@ var startRotationEngine = function () {
   }
 
   // Cas 2 : Rotation nécessaire
-  console.log('[DEBUG] startRotationEngine: Starting rotation loop.');
   showNextPageLoop(perPage);
 };
 
@@ -234,8 +229,6 @@ var showNextPageLoop = function(perPage) {
   // Extraction des IDs
   let machinesForPage = _allMachinesCache.slice(start, end);
   let currentPageNum = _currentRotationIndex + 1;
-
-  console.log('[DEBUG] showNextPageLoop: Page ' + currentPageNum + '/' + totalPages + '. Sending: ' + machinesForPage.join(','));
 
   // Affiche la grille
   eventBus.EventBus.dispatchToAll('updateVisibleMachines', { machines: machinesForPage });
@@ -269,9 +262,6 @@ var populateConfigPanel = function (currentPageMethods) {
       else if (event.newMachinesList) machinesStr = event.newMachinesList;
 
       if (machinesStr && machinesStr !== '') {
-        console.log('[DEBUG] Rotation: Group loaded. Resetting config.');
-
-        // On nettoie les données reçues
         _allMachinesCache = machinesStr.split(',').map(s => s.trim());
         _currentRotationIndex = 0;
 
@@ -286,7 +276,6 @@ var populateConfigPanel = function (currentPageMethods) {
 
   // --- DEMARRAGE UNE FOIS LE DOM PRET ---
   var onGridRendered = function (event) {
-    console.log('[DEBUG] Rotation: DOM Ready. Syncing cache and starting.');
 
     // SAFETY SYNC : On relit toujours la config actuelle
     let currentConfig = pulseConfig.getString('machine');
