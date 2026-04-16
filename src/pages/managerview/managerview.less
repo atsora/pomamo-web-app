@@ -48,22 +48,20 @@
   width: auto;
   flex: 1;
   min-height: 0;
-  container-type: inline-size;
   overflow-y: auto;
 }
 
 .datetimegraduation {
   // margin = width of side columns (.div-machine left, .div-percent right)
-  // padding = cell padding (1vw) + stackbar margin (2vw) = 3vw
-  margin: 0 5cqw 0 16vw !important;
-  padding: 0 3vw !important;
+  // padding = cell padding (0.8em) + stackbar margin (1.5em) = 2.3em
+  margin: 0 3em 0 13em !important;
+  padding: 0 2.3em !important;
   width: auto !important;
 }
 
 
 x-grouplist {
   .group-single {
-    container-type: inline-size;
     min-height: fit-content !important;
   }
 
@@ -75,17 +73,17 @@ x-grouplist {
 .one_machine_cell {
   display: flex;
   flex-direction: row;
-  padding: 0 1vw;
+  padding: 0 0.8em;
   height: auto;
   align-items: center;
 }
 
 .div-machine {
-  border: 0.2cqh solid #3f3f46;
+  border: 1px solid #3f3f46;
   border-radius: @border_radius_small;
-  padding: 4px 1vw;
+  padding: 0.5em 0.8em;
   box-sizing: border-box;
-  width: 16vw;
+  width: 13em;
   min-height: fit-content;
   display: flex;
   flex-direction: row;
@@ -94,8 +92,8 @@ x-grouplist {
 
   .div-machine-left {
     flex-shrink: 0;
-    height: 4cqw;
-    width: 4cqw;
+    height: 2.5em;
+    width: 2.5em;
   }
 
   .div-machine-right {
@@ -107,7 +105,7 @@ x-grouplist {
     justify-content: center;
 
     .machinedisplay-data {
-      font-size: 1.4cqw;
+      font-size: 1em;
     }
 
     .div-current {
@@ -116,7 +114,7 @@ x-grouplist {
       min-height: 0;
       display: flex;
       flex-direction: row;
-      font-size: 1.1cqw;
+      font-size: 0.9em;
     }
   }
 }
@@ -126,22 +124,17 @@ x-barstack {
   align-self: stretch;
   height: auto;
   overflow: hidden;
-  margin: 0 2vw;
+  margin: 0 1.5em;
 }
 
 .div-percent {
-  width: 5cqw;
+  width: 3em;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  x-motionpercentage,
-  x-motiontime {
-    font-size: 2cqw;
-    line-height: 2cqw;
-  }
 }
 
 // Machine + current
