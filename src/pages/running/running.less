@@ -45,7 +45,7 @@
   display: flex;
   flex-direction: row-reverse;
   margin: 5px 0 ;
-  align-items: center;  
+  align-items: center;
   flex-wrap: wrap;
   height: 45px;
   box-sizing: border-box;
@@ -91,8 +91,8 @@
     flex-wrap: nowrap;
     gap: 5px;
     height: 100%;
-    width: 18vw;
-    margin-left: 1vw;
+    width: 8em;
+    margin-left: 0.8em;
     font-weight: bold;
 
     .clock-div {
@@ -125,22 +125,20 @@
   width: auto;
   flex: 1;
   min-height: 0;
-  container-type: inline-size;
   overflow-y: auto;
 }
 
 .datetimegraduation {
   // margin = width of side columns (.div-machine left, .div-percent right)
-  // padding = cell padding (1vw) + pulse-bar-div margin (2vw) = 3vw
-  margin: 0 6cqw 0 18vw !important;
-  padding: 0 3vw !important;
+  // padding = cell padding (0.8em) + pulse-bar-div margin (1.5em) = 2.3em
+  margin: 0 3em 0 8em !important;
+  padding: 0 2.3em !important;
   width: auto !important;
 }
 
 
 x-grouplist {
   .group-single {
-    container-type: inline-size;
     min-height: fit-content !important; // grows if content exceeds flex-distributed share
   }
 
@@ -152,17 +150,17 @@ x-grouplist {
 .one_machine_cell {
   display: flex;
   flex-direction: row;
-  padding: 0 1vw;
+  padding: 0 0.8em;
   height: auto;
   align-items: center;
 }
 
 .div-machine {
-  border: 0.1cqw solid #3f3f46;
+  border: 1px solid #3f3f46;
   border-radius: @border_radius_small;
-  padding: 0.2cqw 0.7vw;
+  padding: 0.2em 0.5em;
   box-sizing: border-box;
-  width: 18vw;
+  width: 8em;
   min-height: fit-content;
   display: flex;
   flex-direction: column;
@@ -170,7 +168,7 @@ x-grouplist {
   overflow: hidden;
 
   x-machinedisplay {
-    font-size: 1.1cqw;
+    font-size: 0.7em;
   }
 
   .div-current {
@@ -185,8 +183,8 @@ x-grouplist {
     }
 
     .div-current-left {
-      height: 2.3cqw;
-      width: 2.3cqw;
+      height: 1.3em;
+      width: 1.3em;
     }
 
     .div-current-right {
@@ -195,7 +193,7 @@ x-grouplist {
       width: 80%;
       display: flex;
       flex-direction: column;
-      font-size: 0.7cqw;
+      font-size: 0.5em;
       height: fit-content;
 
       a {
@@ -210,22 +208,17 @@ x-barstack {
   align-self: stretch;
   height: auto;
   overflow: hidden;
-  margin: 0 2vw;
+  margin: 0 1.5em;
 }
 
 .div-percent {
-  width: 6cqw;
+  width: 3em;
 
   display: flex;
   flex-direction: column; // align children
   align-items: center;
   justify-content: center;
 
-  x-motionpercentage,
-  x-motiontime {
-    font-size: 2cqw;
-    line-height: 2cqw;
-  }
 }
 
 .appcontext-live {
@@ -295,7 +288,7 @@ x-barstack {
   }
 
   x-barstack {
-    margin: 0 1cqw;
+    margin: 0 1vw;
   }
 
   .running-header {

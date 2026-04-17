@@ -294,7 +294,7 @@ body {
     container-name: legend-content;
     margin: auto;
     text-align: center;
-    width: 60%; // was 54%
+    width: 60%;
     background-color: @box_color;
     color: @box_text_color;
     border-top-left-radius: 0.3cqw;
@@ -305,10 +305,13 @@ body {
     z-index: 25;
 
     box-sizing: border-box;
-    font-size: 1cqw;
     position: relative; // anchor for absolute toggle
 
     pointer-events: initial; // restore click to see tooltip
+
+    > * {
+      font-size: 1.5cqw;
+    }
 
     .legend-toggle {
       content: "Legend";
@@ -1247,6 +1250,8 @@ x-motiontime {
   }
 
   .legend-content {
+    // Cap width by viewport height so cqw-based legend sizing stays reasonable on ultra-wide screens.
+    max-width: 170vh;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 
