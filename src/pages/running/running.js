@@ -92,7 +92,8 @@ class RunningPage extends pulsePage.BasePage {
       if (showproductionbar) {
         $('x-reasongroups').hide();
         $('x-productionstatelegends').show();
-      } else {
+      }
+      else {
         $('x-reasongroups').show();
         $('x-productionstatelegends').hide();
       }
@@ -224,10 +225,12 @@ class RunningPage extends pulsePage.BasePage {
 
     // Bars are now managed by x-barstack reading pulseConfig directly.
     // Only non-bar elements need explicit show/hide here.
-    const showCncValue = pulseConfig.getBool('showcoloredbar.cncvalue', false);
+
+    const showCncValue = pulseConfig.getBool('showcoloredbar.cncvalue', true);
     if (showCncValue) {
       $('x-fieldlegends').show();
-    } else {
+    }
+    else {
       $('x-fieldlegends').hide();
     }
 
@@ -235,12 +238,11 @@ class RunningPage extends pulsePage.BasePage {
     if (showproductionbar) {
       $('x-reasongroups').hide();
       $('x-productionstatelegends').show();
-    } else {
+    }
+    else {
       $('x-reasongroups').show();
       $('x-productionstatelegends').hide();
     }
-
-    // $('x-datetimegraduation').load(); // DTG can not manage resize when hidden
   }
 }
 

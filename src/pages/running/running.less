@@ -38,13 +38,14 @@
 
 @import "style.less";
 
-
-
+.setdynamicfontsize () {
+  font-size: ~"clamp(0.6rem, 1.8vh + 0.35rem, 3rem)";
+}
 
 .running-header {
   display: flex;
   flex-direction: row-reverse;
-  margin: 5px 0 ;
+  margin-bottom: 0.5em;
   align-items: center;
   flex-wrap: wrap;
   height: 45px;
@@ -93,7 +94,16 @@
     height: 100%;
     width: 8em;
     margin-left: 0.8em;
+    .setdynamicfontsize();
     font-weight: bold;
+
+    .label-current {
+      font-size: 0.5em;
+    }
+
+    x-clock {
+      font-size: 0.7em;
+    }
 
     .clock-div {
       display: flex;
@@ -105,7 +115,6 @@
 }
 
 .pulse-mainarea-inner {
-  padding: 1.5vh 1.5vw;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -113,6 +122,7 @@
 }
 
 .tile {
+  .setdynamicfontsize();
   display: flex;
   flex-direction: column;
   border-radius: @border_radius;
@@ -130,12 +140,12 @@
 
 .datetimegraduation {
   // margin = width of side columns (.div-machine left, .div-percent right)
+  // margin-right = 2.4em corresponds to font-size: 0.8em and width: 3em of .div-percent
   // padding = cell padding (0.8em) + pulse-bar-div margin (1.5em) = 2.3em
-  margin: 0 3em 0 8em !important;
+  margin: 0 2.4em 0 8em !important;
   padding: 0 2.3em !important;
   width: auto !important;
 }
-
 
 x-grouplist {
   .group-single {
@@ -143,7 +153,7 @@ x-grouplist {
   }
 
   .group-main {
-    gap: 1vh;
+    gap: 0.5em;
   }
 }
 
@@ -213,6 +223,7 @@ x-barstack {
 
 .div-percent {
   width: 3em;
+  font-size: 0.8em;
 
   display: flex;
   flex-direction: column; // align children
@@ -226,6 +237,10 @@ x-barstack {
     box-sizing: border-box;
     overflow-y: hidden;
   }
+}
+
+.legend-content {
+  width: 100vh;
 }
 
 @media (max-width: 900px) and (orientation: portrait) {
