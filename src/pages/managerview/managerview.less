@@ -26,9 +26,11 @@
 @import "x-barstack/x-barstack.less";
 @import "style.less";
 
+.setdynamicfontsize () {
+  font-size: ~"clamp(0.6rem, 1.8vh + 0.35rem, 3rem)";
+}
 
 .pulse-mainarea-inner {
-  padding: 1.5vh 1.5vw;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -36,6 +38,7 @@
 }
 
 .tile {
+  .setdynamicfontsize();
   display: flex;
   flex-direction: column;
   border-radius: @border_radius;
