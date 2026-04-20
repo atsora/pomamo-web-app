@@ -37,7 +37,8 @@
 // Grille scrollable à hauteur fixe par ligne
 x-groupgrid {
   overflow-y: auto;
-  height: 100%;
+  flex: 1 1 0;
+  min-height: 0;
 
   .groupgrid-main {
     height: auto !important;
@@ -147,7 +148,6 @@ x-datetimegraduation {
 // CLOCK
 .clock-div {
   font-size: 4em;
-  margin-top: 30px;
   text-align: center;
 }
 
