@@ -179,6 +179,7 @@ PULSE_DEFAULT_CONFIG.pages = {
     showcoloredbar: {
       observationstate: true,
       operation: true,
+      redstacklight: true,
       // middle
       cncvalue: true,
       // click on any bar
@@ -355,6 +356,11 @@ PULSE_DEFAULT_CONFIG.pages = {
 /* ********** ********** ********** ********** */
 // roles config - for pulse web app
 /* ********** ********** ********** ********** */
+
+/* firstPage: landing page after login, per role */
+PULSE_DEFAULT_CONFIG.roles.operator.firstPage = 'machinedashboard';
+PULSE_DEFAULT_CONFIG.roles.manager.firstPage = 'running';
+PULSE_DEFAULT_CONFIG.roles.live.firstPage = 'operationstatus';
 
 /* displayedPages: array containing the pages available for the role, in the right order */
 PULSE_DEFAULT_CONFIG.roles.operator.displayedPages = [

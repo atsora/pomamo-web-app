@@ -688,14 +688,6 @@ ATSORA_LOCALE_CATALOG.de.pages = {
   }
 };
 
-// Force the locale of the catalog
-ATSORA_CATALOG = ATSORA_LOCALE_CATALOG.default;
-
-function setAtsoraLocale (locale) {
-  moment.locale(locale);
-  ATSORA_CATALOG = ATSORA_LOCALE_CATALOG[locale];
-  ATSORA_COMPONENT_CATALOG = ATSORA_LOCALE_COMPONENT_CATALOG[locale];
-    if (typeof document !== 'undefined' && document.documentElement) {
-    document.documentElement.setAttribute('lang', locale);
-  }
-}
+// setAtsoraLocale is defined in translation_component_default.js
+// Re-apply default locale to pick up app-level catalog entries added above
+setAtsoraLocale('default');

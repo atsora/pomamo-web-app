@@ -92,8 +92,8 @@ $(document).ready(function () {
     // Browse all roles
     for (let iRole = 0; iRole < roles.length; iRole++) {
       let role = roles[iRole];
-      if (pulseUtility.isNotDefined(role.noAccess) && role.display != null) {
-        let role = roles[iRole];
+      let roleConf = (PULSE_DEFAULT_CONFIG.roles && PULSE_DEFAULT_CONFIG.roles[role.role]) || {};
+      if (!roleConf.noAccess) {
         let container = $('<div></div>').addClass('select-role-div').attr('role', role.role);
         let img = $('<div></div>').addClass('select-role-image');
         let imgUrl = 'images/role-' + role.role + '.svg';
@@ -108,15 +108,20 @@ $(document).ready(function () {
         });
 
         container.append(img);
-        let text = $('<div>' + role.display + '</div>');
+        let roleLabel = (ATSORA_CATALOG && ATSORA_CATALOG.general && ATSORA_CATALOG.general.roles)
+          ? (ATSORA_CATALOG.general.roles[role.role] || role.role)
+          : role.role;
+        let text = $('<div>' + roleLabel + '</div>');
         container.append(text);
 
         container.click(function () {
-          // Set the role
-          pulseLogin.storeRole($(this).attr('role'));
+          let selectedRole = $(this).attr('role');
 
-          // Load the page HOME - with path or any additional parameters
-          window.location.href = pulseUtility.changePageName(window.location.href, 'home');
+          // Set the role
+          pulseLogin.storeRole(selectedRole);
+
+          // Redirect through shared config logic (firstPage or fallback to home).
+          pulseConfig.goToFirstPage(selectedRole);
         });
 
         sectionLoginRoles.append(container);
