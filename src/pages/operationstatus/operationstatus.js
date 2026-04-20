@@ -617,9 +617,11 @@ class OperationStatusPage extends pulsePage.BasePage {
     let toollabelname = pulseConfig.getString('toollifemachine.toollabelname');
     $('#showtoolselector').empty();
     let toollabelsselections = pulseConfig.getArray('toollifemachine.toollabelsselections');
+    let toolLabels = (typeof ATSORA_CATALOG !== 'undefined' && ATSORA_CATALOG.general && ATSORA_CATALOG.general.toolLabels) || {};
     for (let iTool = 0; iTool < toollabelsselections.length; iTool++) {
       let label = toollabelsselections[iTool];
-      $('#showtoolselector').append('<option id="tool-' + label.name + '" value="' + label.name + '">' + label.display + '</option>');
+      let displayText = toolLabels[label.name] || label.name;
+      $('#showtoolselector').append('<option id="tool-' + label.name + '" value="' + label.name + '">' + displayText + '</option>');
     }
     $('#showtoolselector').val(toollabelname);
 
