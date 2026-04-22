@@ -64,7 +64,7 @@
 }
 
 .group-single {
-  display: inline-block;
+  display: block;
   list-style: none;
 }
 
@@ -72,17 +72,22 @@ x-machinetab {
   .machinetab-machine-cell {
     background-color: @box_color;
     color: @box_text_color;
-    opacity: 0.6;
+
+    .machinetab-machine,
+    .machinetab-icons {
+      opacity: 0.6;
+    }
 
     &.active {
-      background-color: @box_color;
-      opacity: 1;
-      border: 1px solid @color_window_border;
-    }
-  }
+      background-color: @color_background_alternate;
+      border-color: @color_window_border_light;
+      border-left-width: 1.4em;
 
-  .machinetab-modecolor-undefined {
-    border-right-color: @color_text_alternate;
+      .machinetab-machine,
+      .machinetab-icons {
+        opacity: 1;
+      }
+    }
   }
 }
 

@@ -7,7 +7,6 @@ var pulseConfig = require('pulseConfig');
 var pulsePage = require('pulsePage');
 var eventBus = require('eventBus');
 
-require('x-grouparray/x-grouparray');
 require('x-machinetab/x-machinetab');
 require('x-machinedisplay/x-machinedisplay');
 require('x-lastmachinestatus/x-lastmachinestatus');

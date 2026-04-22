@@ -152,7 +152,10 @@ var setNavigationLinks = function () {
       let attribute = $(this).attr('data');
       if (attribute != null && attribute != '' && fullURL.indexOf('/' + attribute + '.html') == -1) {
         let newfullURL = pulseUtility.changePageName(window.location.href, attribute);
-        window.location.href = newfullURL;
+        // strip ancestor params: drill-down context is page-scoped, a sidebar click is a fresh navigation
+        let u = new URL(newfullURL);
+        [...u.searchParams.keys()].filter(k => k.startsWith('ancestor')).forEach(k => u.searchParams.delete(k));
+        window.location.href = u.toString();
       }
     });
   });
