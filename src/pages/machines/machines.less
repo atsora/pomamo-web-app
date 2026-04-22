@@ -72,49 +72,27 @@
       flex-grow: 10;
     }
 
-    // Format x-grouparray :
-    .group {
-      .group-main {
-        //ol
-        list-style-type: none;
-        padding: 0px;
-        margin: 0px;
-        //width: 200px; // Could be done in another way
-        width: 100%;
-        min-height: 400px; // To show error when no machine
+    x-machinetab {
+      min-height: 400px;
+      position: relative;
 
-        // For message position :
-        position: relative;
+      .machinetab-machine-cell {
+        background-color: @box_color;
+        color: @box_text_color;
 
-        .single-machine-tab {
-          width: 200px; // Could be done in another way
+        .machinetab-machine,
+        .machinetab-icons {
+          opacity: 0.6;
         }
 
-        .group-single {
-          // li
-          display: inline-block;
-          list-style: none;
-          //vertical-align: top;
-          //position: relative;
+        &.active {
+          background-color: @color_background_alternate;
+          border-color: @color_window_border_light;
+          border-left-width: 1.4em;
 
-          //.{ // == boxtoclone
-          // MACHINE TAB
-          x-machinetab {
-            .machinetab-machine-cell {
-              background-color: @box_color;
-              color: @box_text_color;
-              opacity: 0.6; // WAS @not-selected-machine-background;
-
-              &.active {
-                background-color: @box_color;
-                opacity: 1;
-                border: 1px solid @box_text_color_transparent;
-              }
-            }
-
-            .machinetab-modecolor-undefined {
-              border-right-color: @color_text_alternate;
-            }
+          .machinetab-machine,
+          .machinetab-icons {
+            opacity: 1;
           }
         }
       }
