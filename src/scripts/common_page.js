@@ -343,6 +343,12 @@ var populateConfigPanel = function (currentPageMethods) {
     pulseConfig.set('defaultlayout', true);
     pulseConfig.set('machinesperpage', 12);
     pulseConfig.set('rotationdelay', 10);
+    let defaultShowLegend = pulseConfig.getDefaultString('showlegend');
+    if (defaultShowLegend && defaultShowLegend !== 'dynamic') {
+      $('#showlegend').prop('checked', pulseConfig.getDefaultBool('showlegend')).removeAttr('overridden');
+      pulseConfig.set('showlegend', pulseConfig.getDefaultBool('showlegend'));
+      showLegend();
+    }
     _currentRotationIndex = 0;
 
     startRotationEngine();
@@ -388,6 +394,8 @@ var populateConfigPanel = function (currentPageMethods) {
 
   var getPageFullURL = function () {
     let url = window.location.href.split('?')[0]; let nextSeparator = '?';
+    let appContext = pulseUtility.getURLParameter(window.location.href, 'AppContext');
+    if (appContext) { url += nextSeparator + 'AppContext=' + appContext; nextSeparator = '&'; }
     let machineIds = pulseConfig.getArray('machine', []);
     let groupIds = pulseConfig.getArray('group', []);
     if (machineIds != 'undefined' && machineIds != null && machineIds != '' && machineIds != '-1') {
@@ -401,6 +409,8 @@ var populateConfigPanel = function (currentPageMethods) {
     let isDefault = pulseConfig.getBool('defaultlayout', true);
     if (!isDefault) { url += '&machinesperpage=' + pulseConfig.getInt('machinesperpage', 12); url += '&rotationdelay=' + pulseConfig.getInt('rotationdelay', 10); }
     url += '&defaultlayout=' + isDefault;
+    let showLegendEl = document.getElementById('showlegend');
+    if (showLegendEl && !$(showLegendEl).is(':hidden')) url += '&showlegend=' + showLegendEl.checked;
     if (typeof currentPageMethods.getOptionValues === 'function') url += currentPageMethods.getOptionValues();
     return url;
   }
@@ -570,8 +580,6 @@ exports.preparePage = function (currentPageMethods) {
   if ('home' == pageNameFromUrl) openNavigationPanel(true); else closeNavigationPanel(true);
 
   if (typeof currentPageMethods.buildContent === 'function') currentPageMethods.buildContent();
-  if (pulseConfig.getBool('canUseRowsToSetHeight')) $('.pulse-mainarea-inner').addClass('gridFullHeight');
-  else $('.pulse-mainarea-inner').removeClass('gridFullHeight');
 
   showLegend();
 
