@@ -256,41 +256,6 @@ var showNextPageLoop = function(perPage) {
 
 var populateConfigPanel = function (currentPageMethods) {
 
-  // --- RECEPTION INITIALE DU GROUPE (Via AJAX) ---
-  var onGroupReloaded = function (event) {
-    let currentGroup = pulseConfig.getString('group');
-    if (currentGroup && currentGroup !== '') {
-      let machinesStr = null;
-      if (event.target && event.target.newMachinesList) machinesStr = event.target.newMachinesList;
-      else if (event.newMachinesList) machinesStr = event.newMachinesList;
-
-      if (machinesStr && machinesStr !== '') {
-        _allMachinesCache = machinesStr.split(',').map(s => s.trim());
-        _currentRotationIndex = 0;
-
-        pulseConfig.set('group', '', true);
-        pulseConfig.set('machine', _allMachinesCache.join(','), true);
-
-        eventBus.EventBus.dispatchToAll('configChangeEvent', { config: 'machine' });
-      }
-    }
-  };
-  eventBus.EventBus.addGlobalEventListener(this, 'groupIsReloaded', onGroupReloaded);
-
-  // --- DEMARRAGE UNE FOIS LE DOM PRET ---
-  var onGridRendered = function (event) {
-
-    // SAFETY SYNC : On relit toujours la config actuelle
-    let currentConfig = pulseConfig.getString('machine');
-    if (currentConfig) {
-       _allMachinesCache = currentConfig.split(',').map(s => s.trim());
-    }
-
-    startRotationEngine();
-  };
-  eventBus.EventBus.addGlobalEventListener(this, 'groupGridRendered', onGridRendered);
-
-
   // Machine Selection
   $('#editmachines').click(function () { $('x-machineselection').get(0).changeMachineSelection(); }.bind($('x-machineselection').get(0)));
   $('#machineselectionbtn').click(function () { $('x-machineselection').get(0).changeMachineSelection(); }.bind($('x-machineselection').get(0)));
@@ -528,7 +493,7 @@ var showLegend = function () {
 
 exports.preparePage = function (currentPageMethods) {
   pulseConfig.setGlobal('machine', ''); pulseConfig.setGlobal('group', '');
-  pulseConfig.set('machine', ''); pulseConfig.set('group', ''); // clear page-specific keys left by onGroupReloaded
+  pulseConfig.set('machine', ''); pulseConfig.set('group', ''); // clear stale page-specific keys
   for (let i = 1; i <= 20; i++) { pulseConfig.set('ancestor' + i, ''); }
   const url = new URL(window.location.href); const params = new URLSearchParams(url.search);
   params.forEach((value, key) => { if (key.startsWith('ancestor')) pulseConfig.set(key, value); });
@@ -548,6 +513,16 @@ exports.preparePage = function (currentPageMethods) {
   }
 
   ['showlegend', 'thresholdtargetproduction', 'thresholdredproduction', 'machinesperpage', 'rotationdelay', 'defaultlayout'].forEach(conf => { if (params.has(conf)) pulseConfig.set(conf, params.get(conf)); });
+
+  // Single-source-of-truth listener: machineListChanged fired by x-machineselection.
+  // Registered BEFORE buildContent so component dispatches are not lost.
+  var onMachineListChanged = function (event) {
+    let ids = (event.target && event.target.ids) || event.ids || [];
+    _allMachinesCache = ids.map(s => String(s).trim()).filter(s => s !== '');
+    _currentRotationIndex = 0;
+    startRotationEngine();
+  };
+  eventBus.EventBus.addGlobalEventListener(this, 'machineListChanged', onMachineListChanged);
 
   const newParams = new URLSearchParams();
   if (params.has('AppContext')) newParams.set('AppContext', params.get('AppContext'));
