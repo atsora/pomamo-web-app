@@ -124,16 +124,12 @@ class OeeViewPage extends pulsePage.BasePage {
             display: block !important;
           }
 
-          /* 2. Inner grid grows as needed */
           x-groupgrid .groupgrid-main {
             display: grid !important;
-            height: auto !important; /* ALLOW HEIGHT TO GROW */
+            height: auto !important;
             min-height: 100% !important;
-            align-content: start !important; /* stack items from top */
-
-            /* 3. CRITICAL: enforce a minimum row height */
-            /* Without this, the grid tries to divide screen height by 100 machines */
-            grid-auto-rows: minmax(200px, 1fr) !important;
+            align-content: start !important;
+            grid-auto-rows: 30em !important;
           }
         </style>
       `);

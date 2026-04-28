@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 var pulseConfig = require('pulseConfig');
+var pulseUtility = require('pulseUtility');
 var pulsePage = require('pulsePage');
 
 require('x-reasonbutton/x-reasonbutton');
@@ -50,23 +51,52 @@ class UtilizationPiePage extends pulsePage.BasePage {
     const rotationSettings = $('.rotation-settings');
     const machinesPerPageInput = $('#machinesperpage');
 
-    defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
-    if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
-      defaultLayoutChk.attr('overridden', true);
+    let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
+    let isLive = tmpContexts && tmpContexts.includes('live');
 
-    defaultLayoutChk.change(() => {
-      let isDefault = defaultLayoutChk.is(':checked');
-      pulseConfig.set('defaultlayout', isDefault);
-      if (isDefault) {
-        rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
-        machinesPerPageInput.val(12).change();
-      } else {
-        rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
-      }
-    }).trigger('change');
-
-    machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
-    $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+    if (!isLive) {
+      defaultLayoutChk.closest('.param-row').hide();
+      defaultLayoutChk.parent().hide();
+      rotationSettings.hide();
+      pulseConfig.set('defaultlayout', false);
+      pulseConfig.set('machinesperpage', 10000);
+      defaultLayoutChk.prop('checked', false);
+      machinesPerPageInput.val(10000);
+      $('head').append(`
+        <style>
+          x-groupgrid {
+            flex: 1 1 auto !important;
+            height: 100% !important;
+            min-height: 0 !important;
+            overflow-y: auto !important;
+            display: block !important;
+          }
+          x-groupgrid .groupgrid-main {
+            display: grid !important;
+            height: auto !important;
+            min-height: 100% !important;
+            align-content: start !important;
+            grid-auto-rows: 30em !important;
+          }
+        </style>
+      `);
+    } else {
+      defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
+      if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
+        defaultLayoutChk.attr('overridden', true);
+      defaultLayoutChk.change(() => {
+        let isDefault = defaultLayoutChk.is(':checked');
+        pulseConfig.set('defaultlayout', isDefault);
+        if (isDefault) {
+          rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
+          machinesPerPageInput.val(12).change();
+        } else {
+          rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
+        }
+      }).trigger('change');
+      machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
+      $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+    }
   }
 
   /**
