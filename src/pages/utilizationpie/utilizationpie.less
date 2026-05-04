@@ -32,6 +32,7 @@
   overflow: hidden;
 }
 
+// === MODE NORMAL (desktop / wide / tablette : overflow autorisé) ===
 x-groupgrid {
   overflow-y: auto;
   height: 100%;
@@ -65,6 +66,7 @@ x-groupgrid {
   flex-direction: row;
   position: relative;
   padding: 4px 10px 4px 10px;
+  gap: 0.2em;
   background-color: @color_background_alternate;
   color: @box_header_text_color;
   white-space: nowrap;
@@ -125,6 +127,7 @@ x-groupgrid {
   }
 }
 
+// === MODE LIVE ===
 .appcontext-live x-groupgrid {
   .groupgrid-main {
     height: 100% !important;
@@ -137,7 +140,57 @@ x-groupgrid {
   }
 }
 
-// Override for mobile that sets height: auto
+// === MODE NORMAL — overrides em/rem + height = contenu (pas de min-height fixé) ===
+.pulse-content:not(.appcontext-live) {
+  x-groupgrid {
+    overflow-y: auto !important;
+    height: 100% !important;
+  }
+  x-groupgrid .groupgrid-main {
+    height: auto !important;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
+  }
+  .groupgrid-item {
+    height: fit-content !important;
+    min-height: unset !important;
+    max-height: none !important;
+    min-width: 0 !important;
+  }
+  .tile {
+    height: fit-content !important;
+    min-height: unset !important;
+    container-type: normal !important;
+  }
+  .tile-title {
+    font-size: 1em !important;
+    height: 4em;
+    align-items: center !important;
+    x-machinedisplay { font-size: 1.8em !important; }
+    x-reasonbutton {
+      width: 2.2em;
+      height: 2.2em;
+    }
+  }
+
+  .tile-content {
+    padding: 0.7em !important;
+    height: auto !important;
+    flex: 0 0 auto !important;
+
+    .utilizationpie-today {
+      font-size: 2em !important;
+    }
+
+    x-reasonslotpie {
+      height: 22em !important;
+      min-height: 0 !important;
+    }
+  }
+}
+
+// === Adaptations responsive (s'appliquent aux 2 modes) ===
 @media (max-width: 685px) {
   .tile {
     height: 100% !important;

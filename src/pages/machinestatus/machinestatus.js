@@ -121,24 +121,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       defaultLayoutChk.prop('checked', false);
       machinesPerPageInput.val(10000);
 
-      $('head').append(`
-        <style>
-          x-groupgrid {
-            flex: 1 1 auto !important;
-            height: 100% !important;
-            min-height: 0 !important;
-            overflow-y: auto !important;
-            display: block !important;
-          }
-          x-groupgrid .groupgrid-main {
-            display: grid !important;
-            height: auto !important;
-            min-height: 100% !important;
-            align-content: start !important;
-            grid-auto-rows: 30em !important;
-          }
-        </style>
-      `);
+      // Scroll & grid sizing handled by .pulse-content:not(.appcontext-live) overrides in machinestatus.less
     } else {
       // Live mode: standard rotation layout
       defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
@@ -294,6 +277,12 @@ class MachineStatusPage extends pulsePage.BasePage {
       else {
         // Visibility of subgroups
         $('.showcurrentdetails').show();
+
+        // Default: auto-check tool if neither tool nor sequence is checked
+        if (!$('#showcurrenttool').is(':checked') && !$('#showcurrentsequence').is(':checked')) {
+          $('#showcurrenttool').prop('checked', true);
+          pulseConfig.set('showcurrenttool', true);
+        }
 
         $('#showcurrenttool').change();
         $('#showcurrentsequence').change();

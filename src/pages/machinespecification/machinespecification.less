@@ -29,37 +29,35 @@
 @import "style.less";
 
 
+// === MODE NORMAL (defaut, em/rem) ===
+
 .pulse-mainarea-inner {
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
-.pulse-mainarea{
+.pulse-mainarea {
   overflow: hidden;
 }
 
 x-groupgrid {
   height: 100%;
+  overflow-y: auto !important;
+
   .groupgrid-main {
-    overflow-y: auto;
-    grid-template-columns: repeat(1,1fr) !important;
+    height: auto !important;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
+    grid-template-columns: repeat(1, 1fr) !important;
+    min-width: 0 !important;
   }
   .groupgrid-item {
-    height: 100vh;
-  }
-}
-
-.appcontext-live {
-  x-groupgrid {
-
-    .groupgrid-main {
-      overflow-y: unset;
-      grid-template-columns: unset !important;
-    }
-    .groupgrid-item {
-      height: unset;
-    }
+    height: fit-content !important;
+    min-height: unset !important;
+    max-height: none !important;
+    min-width: 0 !important;
   }
 }
 
@@ -68,15 +66,14 @@ x-machinedisplay {
 }
 
 .tile {
-  container-type: size;
-  container-name: maintile;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 100%;
   overflow: hidden;
+  height: fit-content !important;
+  container-type: normal !important;
 }
 
 .tile-title {
@@ -88,20 +85,29 @@ x-machinedisplay {
   background-color: @color_background_alternate;
   color: @box_header_text_color;
   white-space: nowrap;
-  font-size: 8cqh !important;
+  font-size: 1.2em !important;
+  height: 4em;
+  align-items: center !important;
+
+  x-machinedisplay {
+    font-size: 1.6em !important;
+  }
 }
 
 .tile-content {
   background-color: @color_background;
   color: @box_text_color;
   box-sizing: border-box;
-  padding: 1.5cqh 1.5cqw;
+  padding: 2em 1em !important;
   display: flex;
   flex-direction: column;
+  flex: 0 0 auto !important;
   flex-grow: 1;
   flex-shrink: 1;
   min-height: 0;
   justify-content: space-around;
+  height: auto !important;
+  gap: 3em !important;
 
   .machinespecification-line {
     display: flex;
@@ -111,12 +117,12 @@ x-machinedisplay {
 
 
     .machinespecification-period-div {
-      width: 12cqw;
       flex-shrink: 0;
       text-align: right;
+      width: 8em;
 
       .machinespecification-period-span {
-        font-size: 2cqw !important;
+        font-size: 1.3em !important;
         font-weight: bold;
         white-space: nowrap;
       }
@@ -128,19 +134,16 @@ x-machinedisplay {
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: clamp(2px, 0.5cqh, 6px);
+      gap: 0.3em;
       height: 100%;
 
-      @bar-height: clamp(56px, 12cqh, 130px);
-
       x-barstack {
-        margin: 0 clamp(8px, 2cqw, 5vw);
+        margin: 0 0.8em;
         width: auto;
-        height: @bar-height;
         flex: 0.75 1 auto;
         min-height: 0;
+        height: 6em;
 
-        // Override global ratios: reasonslotbar(70) + cncvaluebar(25)
         > x-reasonslotbar,
         > .barstack-reason-group {
           flex: 70 1 0;
@@ -153,27 +156,27 @@ x-machinedisplay {
 
       > x-datetimegraduation {
         flex: 0.25 0 auto;
-        height: clamp(14px, 4cqh, 48px);
+        height: 1.4em;
         .datetimegraduation{
-          padding: 0 clamp(8px, 2cqw, 5vw);
+          padding: 0 0.8em;
         }
 
         .datetimegraduation-axis text {
-          font-size: 2cqh !important;
+          font-size: 0.85em !important;
         }
       }
     }
 
     .machinespecification-motion {
-      width: 7cqw;
       flex-shrink: 0;
-      margin-left: 0.5cqw;
+      margin-left: 0.4em;
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
+      width: 5.5em;
 
       x-motionpercentage, x-motiontime {
-        font-size: 3cqw !important;
+        font-size: 1.5em !important;
         font-weight: bold;
       }
     }
@@ -181,14 +184,6 @@ x-machinedisplay {
 }
 
 x-datetimegraduation {
-  height: clamp(14px, 3cqh, 32px);
-
-  .datetimegraduation,
-  .datetimegraduation-content,
-  .datetimegraduation-svg {
-    height: 100% !important;
-  }
-
   .datetimegraduation-axis {
     text {
       font-size: clamp(8px, 1.2cqh, 14px) !important;
@@ -200,3 +195,83 @@ x-datetimegraduation {
   }
 }
 
+
+// === MODE LIVE (.appcontext-live, cqh/cqw) ===
+
+.appcontext-live {
+  x-groupgrid {
+    .groupgrid-main {
+      overflow-y: unset !important;
+      grid-template-columns: unset !important;
+      height: 100% !important;
+      align-content: stretch !important;
+    }
+    .groupgrid-item {
+      height: unset !important;
+      min-width: auto !important;
+    }
+  }
+
+  .tile {
+    container-type: size !important;
+    container-name: maintile;
+    height: 100% !important;
+  }
+
+  .tile-title {
+    font-size: 8cqh !important;
+    height: auto !important;
+    align-items: center !important;
+    padding: 4px 10px 4px 10px;
+
+    x-machinedisplay {
+      font-size: 1em !important;
+    }
+  }
+
+  .tile-content {
+    padding: 1.5cqh 1.5cqw !important;
+    flex: 1 1 auto !important;
+    height: auto !important;
+    gap: 0 !important;
+
+    .machinespecification-line {
+      .machinespecification-period-div {
+        width: 12cqw !important;
+
+        .machinespecification-period-span {
+          font-size: 2cqw !important;
+        }
+      }
+
+      .machinespecification-bar {
+        gap: clamp(2px, 0.5cqh, 6px) !important;
+
+        x-barstack {
+          margin: 0 clamp(8px, 2cqw, 5vw) !important;
+          height: clamp(56px, 12cqh, 130px) !important;
+        }
+
+        > x-datetimegraduation {
+          height: clamp(14px, 4cqh, 48px) !important;
+          .datetimegraduation {
+            padding: 0 clamp(8px, 2cqw, 5vw) !important;
+          }
+
+          .datetimegraduation-axis text {
+            font-size: 2cqh !important;
+          }
+        }
+      }
+
+      .machinespecification-motion {
+        width: 7cqw !important;
+        margin-left: 0.5cqw !important;
+
+        x-motionpercentage, x-motiontime {
+          font-size: 3cqw !important;
+        }
+      }
+    }
+  }
+}

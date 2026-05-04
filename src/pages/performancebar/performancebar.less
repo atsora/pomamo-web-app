@@ -26,6 +26,8 @@
 @import "style.less";
 
 
+// === MODE NORMAL (defaut, em/rem) ===
+
 .pulse-mainarea-inner {
   display: flex;
   flex-direction: column;
@@ -33,30 +35,35 @@
   overflow: hidden;
 }
 
-// Grille scrollable à hauteur fixe par ligne
 x-groupgrid {
   overflow-y: auto;
   height: 100%;
 
   .groupgrid-main {
     height: auto !important;
-    min-height: 100%;
-    align-content: start;
-    grid-auto-rows: minmax(120px, 140px) !important;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
+  }
+
+  .groupgrid-item {
+    height: auto !important;
+    min-height: unset !important;
+    max-height: none !important;
+    min-width: 0 !important;
   }
 }
 
 .tile {
-  container-type: size;
-  container-name: maintile;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
   overflow: hidden;
+  height: auto;
+  container-type: normal;
 }
 
 .tile-title {
@@ -70,17 +77,18 @@ x-groupgrid {
   justify-content: center;
   align-items: center;
   column-gap: 6px;
-  font-size: 18cqh !important;
+  font-size: 1em !important;
 
   x-reasonbutton {
     margin: 0;
-    width: 18cqh;
-    height: 18cqh;
+    width: 2.2em;
+    height: 2.2em;
   }
 
   x-machinedisplay {
     flex-grow: unset;
     flex-shrink: unset;
+    font-size: 1.8em !important;
 
     .machinedisplay-data {
       text-align: center;
@@ -96,14 +104,22 @@ x-groupgrid {
   background-color: @color_background;
   color: @box_text_color;
   box-sizing: border-box;
-    padding: 1.5cqh 1.5cqw;
+  padding: 0.7em;
   display: flex;
   flex-direction: row;
   align-items: center;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   min-height: 0;
+  height: auto;
 
+  .performancebar-bar-border {
+    flex: 1 1 auto;
+    height: 5em;
+    padding-top: 0.85em;
+  }
   x-performancebar {
+    flex: 1 1 auto;
+    height: 5em;
     flex-grow: 1;
     flex-shrink: 1;
     min-width: 0;
@@ -113,9 +129,69 @@ x-groupgrid {
   x-motionpercentage,
   x-motiontime {
     flex-shrink: 0;
-    font-size: 15cqh !important;
+    font-size: 1.5em !important;
     font-weight: bold;
     padding-left: 6px;
     padding-bottom: 3%;
+    margin-bottom: 1.3em;
+  }
+}
+
+
+// === MODE LIVE (.appcontext-live, cqh/cqw) ===
+
+.appcontext-live {
+  x-groupgrid {
+    .groupgrid-main {
+      height: auto !important;
+      min-height: 100%;
+      align-content: start;
+      grid-auto-rows: minmax(120px, 140px) !important;
+      overflow: hidden !important;
+    }
+    .groupgrid-item {
+      height: auto !important;
+      max-height: 60vh !important;
+      min-width: auto !important;
+    }
+  }
+
+  .tile {
+    container-type: size !important;
+    container-name: maintile;
+    height: 100% !important;
+  }
+
+  .tile-title {
+    font-size: 18cqh !important;
+
+    x-reasonbutton {
+      width: 18cqh !important;
+      height: 18cqh !important;
+    }
+    x-machinedisplay {
+      font-size: 1em !important;
+    }
+  }
+
+  .tile-content {
+    padding: 1.5cqh 1.5cqw !important;
+    flex: 1 1 auto !important;
+    height: auto !important;
+
+    .performancebar-bar-border {
+      flex: 1 1 auto !important;
+      height: auto !important;
+      padding-top: 0 !important;
+    }
+    x-performancebar {
+      flex: 1 1 auto !important;
+      height: auto !important;
+    }
+    x-motionpercentage,
+    x-motiontime {
+      font-size: 15cqh !important;
+      margin-bottom: 0 !important;
+    }
   }
 }

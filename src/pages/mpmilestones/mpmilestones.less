@@ -9,8 +9,6 @@
 @import "pulse.customdialog.less";
 
 @import "pulse.exports.light.less"; // Global import
-// @import "x-checkcurrenttime/x-checkcurrenttime.less";
-// @import "x-message/x-message.less";
 
 @import "x-machineselection/x-machineselection.less";
 
@@ -23,6 +21,8 @@
 @import "style.less";
 
 
+// === MODE NORMAL (defaut, em/rem) ===
+
 .pulse-mainarea-inner {
   height: 100%;
   box-sizing: border-box;
@@ -31,61 +31,53 @@
   overflow: hidden;
 }
 
-// Grille scrollable
 x-groupgrid {
-  overflow-y: auto;
-  height: 100%;
+  overflow-y: auto !important;
+  height: 100% !important;
 
   .groupgrid-main {
     height: auto !important;
-    align-content: start;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
   }
 
   .groupgrid-item {
-    height: auto;
-    min-height: 40vh;
-  }
-}
-
-.appcontext-live x-groupgrid {
-  .groupgrid-main {
-    height: 100% !important;
-    grid-auto-rows: 1fr;
-  }
-
-  .groupgrid-item {
-    height: 100%;
-    min-height: unset;
+    height: fit-content !important;
+    min-height: unset !important;
+    max-height: none !important;
+    min-width: 0 !important;
   }
 }
 
 .tile {
-  container-type: size;
-  container-name: maintile;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 100%;
   overflow: hidden;
+  height: fit-content !important;
+  min-height: unset !important;
+  container-type: normal !important;
 }
 
 .tile-title {
   display: flex;
   flex-direction: row;
   position: relative;
-  padding: 4px 10px 4px 10px;
+  padding: 0.2em 0.5em;
+  gap: 0.2em;
   background-color: @color_background_alternate;
   color: @box_header_text_color;
   white-space: nowrap;
-  font-size: 5cqh !important;
+  font-size: 1em !important;
 
   x-machinedisplay {
     text-align: center;
 
     .machinedisplay-data {
-      font-size: 5cqh !important;
+      font-size: 1.4em !important;
       font-weight: bold;
       white-space: nowrap;
       overflow: hidden;
@@ -102,11 +94,11 @@ x-groupgrid {
   background-color: @color_background;
   color: @box_text_color;
   box-sizing: border-box;
-  padding: 1.5cqh 1.5cqw;
+  padding: 0.5em 0.7em !important;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  flex-shrink: 1;
+  flex: 0 0 auto !important;
+  height: auto !important;
   min-height: 0;
   overflow: hidden;
 
@@ -119,7 +111,7 @@ x-groupgrid {
 
     x-milestonesmanager {
       flex-grow: 1;
-      min-height: 0;
+      min-height: 12em;
     }
   }
 }
@@ -127,4 +119,46 @@ x-groupgrid {
 // No legend
 .legend-content {
   display: none !important;
+}
+
+
+// === MODE LIVE (.appcontext-live, cqh/cqw) ===
+
+.appcontext-live {
+  x-groupgrid {
+    .groupgrid-main {
+      height: 100% !important;
+      grid-auto-rows: 1fr !important;
+      overflow: hidden !important;
+    }
+    .groupgrid-item {
+      height: 100% !important;
+      max-height: 60vh !important;
+      min-width: auto !important;
+    }
+  }
+
+  .tile {
+    container-type: size !important;
+    container-name: maintile;
+    height: 100% !important;
+  }
+
+  .tile-title {
+    padding: 4px 10px 4px 10px;
+    font-size: 5cqh !important;
+
+    x-machinedisplay .machinedisplay-data {
+      font-size: 5cqh !important;
+    }
+  }
+
+  .tile-content {
+    padding: 1.5cqh 1.5cqw !important;
+    flex: 1 1 auto !important;
+  }
+
+  .mpmilestones-main-div x-milestonesmanager {
+    min-height: 0 !important;
+  }
 }

@@ -12,7 +12,7 @@ require('x-periodmanager/x-periodmanager');
 require('x-groupgrid/x-groupgrid');
 require('x-machinedisplay/x-machinedisplay');
 require('x-reasonbutton/x-reasonbutton');
-//require('x-lastmachinestatus/x-lastmachinestatus');
+require('x-lastmachinestatus/x-lastmachinestatus');
 require('x-rotationprogress/x-rotationprogress');
 require('x-production/x-production');
 require('x-productionshiftgoal/x-productionshiftgoal');
@@ -111,28 +111,7 @@ class OeeViewPage extends pulsePage.BasePage {
       defaultLayoutChk.prop('checked', false);
       machinesPerPageInput.val(10000);
 
-      // 3. Enable vertical scroll via CSS injection
-      // Force the grid container to scroll vertically
-      $('head').append(`
-        <style>
-          /* 1. x-groupgrid becomes the scroll area */
-          x-groupgrid {
-            flex: 1 1 auto !important; /* takes available space */
-            height: 100% !important;   /* stays anchored to parent */
-            min-height: 0 !important;  /* prevents flex overflow */
-            overflow-y: auto !important; /* THIS IS WHERE SCROLL APPEARS */
-            display: block !important;
-          }
-
-          x-groupgrid .groupgrid-main {
-            display: grid !important;
-            height: auto !important;
-            min-height: 100% !important;
-            align-content: start !important;
-            grid-auto-rows: 30em !important;
-          }
-        </style>
-      `);
+      // Scroll & grid sizing handled by .pulse-content:not(.appcontext-live) overrides in oeeview.less
 
     } else {
       // LIVE MODE: standard behavior (rotation)

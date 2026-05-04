@@ -98,22 +98,17 @@ class OperationStatusPage extends pulsePage.BasePage {
   }
 
   /**
-   * Applies the workinfo font size to all `.operationstatus-top-div` elements
-   * using a container-query-aware clamp value.
-   *
-   * Big mode: `clamp(10px, 7cqh, 5vh)` — larger text.
-   * Small mode: `clamp(10px, 5cqh, 5vh)` — more compact text.
+   * Toggles the workinfo size class on all `.operationstatus-top-div` elements.
+   * Font sizing is defined in operationstatus.less (cqh in live mode, em in normal mode).
    *
    * Called after any layout change that affects the top div dimensions
    * (workinfo size radios, alarm, pie, stacklight toggles).
    */
   _applyTopDisplaySizing() {
-    let size = this._isWorkInfoBig()
-      ? 'clamp(10px, 7cqh, 5vh)'
-      : 'clamp(10px, 5cqh, 5vh)';
-    $('.operationstatus-top-div').each(function () {
-      this.style.setProperty('font-size', size, 'important');
-    });
+    const isBig = this._isWorkInfoBig();
+    $('.operationstatus-top-div')
+      .toggleClass('workinfo-big', isBig)
+      .toggleClass('workinfo-small', !isBig);
   }
 
   /**
@@ -181,25 +176,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       defaultLayoutChk.prop('checked', false);
       machinesPerPageInput.val(10000);
 
-      // Inject CSS for scroll
-      $('head').append(`
-        <style>
-          x-groupgrid {
-            flex: 1 1 auto !important;
-            height: 100% !important;
-            min-height: 0 !important;
-            overflow-y: auto !important; /* Scroll activé */
-            display: block !important;
-          }
-          x-groupgrid .groupgrid-main {
-            display: grid !important;
-            height: auto !important;
-            min-height: 100% !important;
-            align-content: start !important;
-            grid-auto-rows: 30em !important;
-          }
-        </style>
-      `);
+      // Scroll & grid sizing handled by .pulse-content:not(.appcontext-live) overrides in operationstatus.less
     } else {
       // Live mode: standard rotation layout
       defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));

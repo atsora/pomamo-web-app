@@ -82,24 +82,7 @@ class CombinedViewPage extends pulsePage.BasePage {
       pulseConfig.set('machinesperpage', 10000);
       defaultLayoutChk.prop('checked', false);
       machinesPerPageInput.val(10000);
-      $('head').append(`
-        <style>
-          x-groupgrid {
-            flex: 1 1 auto !important;
-            height: 100% !important;
-            min-height: 0 !important;
-            overflow-y: auto !important;
-            display: block !important;
-          }
-          x-groupgrid .groupgrid-main {
-            display: grid !important;
-            height: auto !important;
-            min-height: 100% !important;
-            align-content: start !important;
-            grid-auto-rows: 30em !important;
-          }
-        </style>
-      `);
+      // Scroll & grid sizing handled by .pulse-content:not(.appcontext-live) overrides in combinedview.less
     } else {
       defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
       if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
