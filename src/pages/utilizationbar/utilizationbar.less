@@ -29,6 +29,7 @@
 @import "style.less";
 
 
+// === MODE NORMAL (defaut, em/rem) ===
 
 // Config
 #displaydayshours {
@@ -37,7 +38,6 @@
   margin-right: 10px;
 }
 
-// Grille scrollable à hauteur fixe par ligne
 x-groupgrid {
   overflow-y: auto;
   flex: 1 1 0;
@@ -45,23 +45,28 @@ x-groupgrid {
 
   .groupgrid-main {
     height: auto !important;
-    min-height: 100%;
-    align-content: start;
-    grid-auto-rows: minmax(120px, 160px) !important;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
+  }
+  .groupgrid-item {
+    height: auto !important;
+    min-height: unset !important;
+    max-height: none !important;
+    min-width: 0 !important;
   }
 }
 
 .tile {
-  container-type: size;
-  container-name: maintile;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
   overflow: hidden;
+  height: auto;
+  container-type: normal;
 }
 
 .tile-title {
@@ -74,13 +79,13 @@ x-groupgrid {
   white-space: nowrap;
   align-items: center;
   justify-content: center;
-  font-size: 18cqh !important;
-  gap: 1cqw;
+  font-size: 1em !important;
+  gap: 0.4em;
 
   x-reasonbutton {
     margin: 0;
-    width: 18cqh;
-    height: 18cqh;
+    width: 2.2em;
+    height: 2.2em;
   }
 
   .machinedisplay-position {
@@ -88,6 +93,7 @@ x-groupgrid {
     flex-shrink: unset;
 
     x-machinedisplay {
+      font-size: 1.8em !important;
 
       .machinedisplay-data {
         text-align: center;
@@ -100,28 +106,32 @@ x-groupgrid {
   }
 }
 
-// MAIN display
 .tile-content {
   background-color: @color_background;
   color: @box_text_color;
   box-sizing: border-box;
-    padding: 1.5cqh 1.5cqw;
+  padding: 0.7em;
   display: flex;
   flex-direction: row;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   min-height: 0;
+  height: auto;
 
   .machineutilizationbar-bar-box {
+    flex: 1 1 auto;
     flex-grow: 1;
     flex-shrink: 99999;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    height: 6em;
+    padding-top: 0.5em;
 
     x-barstack {
-      flex: 0 0 60px;
+      flex: 0 0 auto;
       width: auto;
+      height: 4.3em;
       margin-left: @margin_graduation;
       margin-right: @margin_graduation;
     }
@@ -133,8 +143,8 @@ x-groupgrid {
     justify-content: space-evenly;
 
     x-motionpercentage {
-      padding-bottom: 24px; // == graduation height
-      font-size: 15cqh !important;
+      padding-bottom: 1.7em;
+      font-size: 1.5em !important;
       font-weight: bold;
     }
   }
@@ -168,4 +178,68 @@ x-datetimegraduation {
   height: 100%;
   width: 100%;
   overflow: hidden;
+}
+
+
+// === MODE LIVE (.appcontext-live, cqh/cqw) ===
+
+.appcontext-live {
+  x-groupgrid {
+    .groupgrid-main {
+      height: auto !important;
+      min-height: 100%;
+      align-content: start;
+      grid-auto-rows: minmax(120px, 160px) !important;
+      overflow: hidden !important;
+    }
+    .groupgrid-item {
+      height: auto !important;
+      max-height: 60vh !important;
+      min-width: auto !important;
+    }
+  }
+
+  .tile {
+    container-type: size !important;
+    container-name: maintile;
+    height: 100% !important;
+  }
+
+  .tile-title {
+    font-size: 18cqh !important;
+    gap: 1cqw !important;
+
+    x-reasonbutton {
+      width: 18cqh !important;
+      height: 18cqh !important;
+    }
+
+    .machinedisplay-position x-machinedisplay {
+      font-size: 1em !important;
+    }
+  }
+
+  .tile-content {
+    padding: 1.5cqh 1.5cqw !important;
+    flex: 1 1 auto !important;
+    height: auto !important;
+
+    .machineutilizationbar-bar-box {
+      flex: 1 1 auto !important;
+      flex-grow: 1;
+      flex-shrink: 99999;
+      height: auto !important;
+      padding-top: 0 !important;
+
+      x-barstack {
+        flex: 0 0 60px !important;
+        height: auto !important;
+      }
+    }
+
+    .utilizationbar-percent-position x-motionpercentage {
+      padding-bottom: 24px !important;
+      font-size: 15cqh !important;
+    }
+  }
 }

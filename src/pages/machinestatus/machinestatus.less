@@ -8,12 +8,6 @@
 @import "pulse.customdialog.less";
 
 @import "pulse.exports.light.less"; // Global import
-// @import "x-checkcurrenttime/x-checkcurrenttime.less";
-// @import "x-checkpath/x-checkpath.less";
-// @import "x-checkversion/x-checkversion.less";
-// @import "x-checkconfigupdate/x-checkconfigupdate.less";
-// @import "x-checklogin/x-checklogin.less";
-// @import "x-message/x-message.less";
 
 @import "x-machineselection/x-machineselection.less";
 
@@ -43,6 +37,8 @@
 @import "style.less";
 
 
+// === MODE NORMAL (defaut, em/rem) ===
+
 .pulse-mainarea-inner {
   display: flex;
   flex-direction: column;
@@ -50,19 +46,35 @@
   overflow: hidden;
 }
 
+x-groupgrid {
+  overflow-y: auto !important;
+  height: 100% !important;
+
+  .groupgrid-main {
+    height: auto !important;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
+  }
+  .groupgrid-item {
+    height: fit-content !important;
+    min-height: unset !important;
+    max-height: none !important;
+    min-width: 0 !important;
+  }
+}
 
 .tile {
-  container-type: size;
-  container-name: maintile;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
-  min-height: 200px;
   overflow: hidden;
+  height: fit-content !important;
+  min-height: unset !important;
+  container-type: normal !important;
 }
 
 .tile-title {
@@ -71,15 +83,18 @@
   justify-content: center;
   position: relative;
   padding: 4px 10px 4px 10px;
+  gap: 0.2em;
   background-color: @color_background_alternate;
   color: @box_header_text_color;
   white-space: nowrap;
   border-top-left-radius: @border_radius;
   border-top-right-radius: @border_radius;
-  font-size: clamp(11px, 6cqh, 1000px) !important;
+  font-size: 1em !important;
+  height: 3em;
+  align-items: center !important;
 
   x-machinedisplay {
-    font-size: 1em !important;
+    font-size: 1.4em !important;
     text-align: center;
 
     span {
@@ -102,38 +117,37 @@
   border-bottom-left-radius: @border_radius;
   border-bottom-right-radius: @border_radius;
   display: flex;
-  flex-direction: column; // align children
-  overflow-y: auto; // Allow vertical scrolling
+  flex-direction: column;
+  overflow-y: auto;
   overflow-x: hidden;
-  flex-grow: 1; // Grow to fill available space
-  flex-shrink: 1; // Can shrink if needed
-  min-height: 0; // Allow flex children to shrink below content size
-  padding: 1cqh 4cqw;
-  gap: 1cqh;
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0;
+  padding: 0.7em !important;
+  gap: 0.5em !important;
 
   .machinestatus-top-div {
-    // currentworkinfo
-    flex-shrink: 0; // Don't shrink
+    flex-shrink: 0;
     flex-basis: auto;
   }
 
   .machinestatus-info {
     display: flex;
-    flex-direction: row; // align children
+    flex-direction: row;
     justify-content: space-between;
 
     width: 100%;
 
     .machinestatus-today-or-shift-or-week {
-      flex-grow: 1; // Strech
+      flex-grow: 1;
       font-weight: bold;
-      font-size: clamp(10px, 3.5cqh, 1000px);
+      font-size: 1.1em;
       line-height: 1.2;
 
       x-freetext {
         span {
-          text-transform: capitalize; // 1st letter = MAJ
-          word-spacing: -100%; // To remove space on the left
+          text-transform: capitalize;
+          word-spacing: -100%;
 
           &::before {
             content: '(';
@@ -146,31 +160,29 @@
       }
 
       x-freetext {
-        display: inline-block; // To display Utilization on the same line
+        display: inline-block;
       }
     }
 
     .machinestatus-actual {
-      //float: right;
-      margin-left: 1cqw;
+      margin-left: 0.5em;
 
       x-motionpercentage {
-        flex-grow: 1; // Strech
+        flex-grow: 1;
         text-align: right;
-        font-size: clamp(12px, 10cqh, 1000px);
+        font-size: 2em;
       }
 
       x-motiontime {
-        display: none; // default
-        flex-grow: 1; // Strech
+        display: none;
+        flex-grow: 1;
         text-align: right;
-        font-size: clamp(12px, 10cqh, 1000px);
+        font-size: 2em;
       }
     }
 
     .machinestatus-target {
-      //float: right;
-      margin-left: 1cqw;
+      margin-left: 0.5em;
 
       x-performancetarget {
         font-weight: bold;
@@ -178,11 +190,10 @@
         .performancetarget-span {
           display: block;
           text-align: center;
-          font-size: clamp(10px, 7cqh, 1000px);
+          font-size: 1.4em;
           line-height: 1.1;
 
           &::before {
-            //content: "target"; == default
             display: block;
             font-size: 0.45em;
             font-weight: normal;
@@ -193,30 +204,26 @@
   }
 
   .machinestatus-alarm-pie-stacklight {
-    flex-grow: 2; // To strech
-    flex-shrink: 1; // Can shrink but not too much
-    min-height: 0;
+    flex: 0 0 auto !important;
+    height: fit-content !important;
 
     display: flex;
-    flex-direction: row; // align children
-    align-items: stretch; // = Vertical center
-    justify-content: space-between; // Keep pie in the middle
+    flex-direction: row;
+    align-items: center !important;
+    justify-content: space-between;
 
     min-height: 50px;
-
-    //position: relative;
 
     .machinestatus-light-div,
     .machinestatus-tool-and-alarm-div {
       display: inline-block;
-      //width: 15%;
-      flex-basis: 15%;
+      flex: 1 1 0 !important;
 
       position: relative;
-      padding: 0.5cqmin;
+      padding: 0.4em;
 
-      min-height: 50px; // height in % not working
-      //box-sizing: border-box;
+      min-height: unset;
+      height: 10em !important;
 
       x-stacklight {
         position: relative;
@@ -228,7 +235,6 @@
       }
     }
 
-    // Current tool
     .machinestatus-current-tool-div,
     .machinestatus-current-sequence-div {
       position: absolute;
@@ -246,18 +252,15 @@
       }
     }
 
-    // Alarm
     .machinestatus-alarm-div {
       box-sizing: border-box;
       height: 40%;
-      // Vertical align
       position: absolute;
       width: 100%;
       transform: translateY(-50%);
       top: 50%;
 
       x-currenticoncncalarm {
-        // Make it smaller and centered
         box-sizing: border-box;
         position: absolute;
         height: 80%;
@@ -278,15 +281,14 @@
     }
 
     .machinestatus-reasonslotpie {
-      flex-grow: 2; // To strech
-      flex-shrink: 1; // Can shrink but less aggressively
-      min-height: 0; // Allow flex to shrink
+      flex: 2 1 0 !important;
 
       display: inline-block;
-      position: relative; // For machinestatus-reasonbutton-position's position
+      position: relative;
 
-      padding: 0.5cqmin;
+      padding: 0.4em;
       box-sizing: border-box;
+      height: 15em !important;
 
       x-reasonslotpie {
         .time-in-pie {
@@ -298,27 +300,25 @@
         position: absolute;
         width: 14%;
         height: 20%;
-        // Horizontal center + Vertical align (centered)
-        left: 43%; // 50 - width/2
-        top: 30%; // = 40 - height/2 = Not in the middle, but above (to se text too)
-
+        left: 43%;
+        top: 30%;
       }
     }
   }
 
-  // BOTTOM DISPLAY
   .machinestatus-weekly-info {
-    flex-shrink: 0; // Don't shrink
+    flex-shrink: 0;
     flex-basis: auto;
   }
 
   .machinestatus-weekly-bar-position {
-    flex-shrink: 0; // Don't shrink
+    flex: 0 0 auto !important;
+    height: fit-content !important;
     flex-basis: auto;
 
     x-barstack {
-      height: 30px;   // matches original height=24 (reasonslot) + height=6 (cncvalue)
-      width: auto;    // prevent margin overflow
+      height: 2em !important;
+      width: auto;
       margin-left: @margin_graduation;
       margin-right: @margin_graduation;
     }
@@ -333,18 +333,111 @@
   }
 }
 
-// Top display
 x-currentworkinfo {
   display: block;
   text-align: center;
   color: @color_text;
-  font-size: clamp(10px, 3.5cqh, 1000px);
-  min-height: 1.5em; // To force height even if no data - ONE LINE
-  padding: 0.5cqh 0 0 0; // For Edge top padding....
-  font-weight: bold;  // Bottom display .machinestatus-weekly-info { text-align: center; color: @color_text; font-size: 1.2em; min-height: 1.5em; // To force height even if no data - ONE LINE padding: 2px 0 0 0; // For Edge top padding.... font-weight: bold;
+  font-size: 1em;
+  min-height: 1.5em;
+  padding: 0.2em 0 0 0;
+  font-weight: bold;
   box-sizing: border-box;
-  overflow: hidden; // For Chrome, small display = avoid 2 lines
+  overflow: hidden;
   margin-bottom: 0;
+}
 
-  overflow: hidden; // For Chrome, small display = avoid 2 lines
+
+// === MODE LIVE (.appcontext-live, cqh/cqw) ===
+
+.appcontext-live {
+  x-groupgrid {
+    .groupgrid-main {
+      height: 100% !important;
+      grid-auto-rows: 1fr !important;
+      overflow: hidden !important;
+    }
+    .groupgrid-item {
+      height: 100% !important;
+      max-height: 60vh !important;
+      min-width: auto !important;
+    }
+  }
+
+  .tile {
+    container-type: size !important;
+    container-name: maintile;
+    height: 100% !important;
+    min-height: 200px;
+  }
+
+  .tile-title {
+    font-size: clamp(11px, 6cqh, 1000px) !important;
+    height: auto !important;
+    align-items: stretch !important;
+
+    x-machinedisplay {
+      font-size: 1em !important;
+    }
+  }
+
+  .tile-content {
+    padding: 1cqh 4cqw !important;
+    gap: 1cqh !important;
+    flex: 1 1 auto !important;
+    height: auto !important;
+
+    .machinestatus-info {
+      .machinestatus-today-or-shift-or-week {
+        font-size: clamp(10px, 3.5cqh, 1000px);
+      }
+      .machinestatus-actual {
+        margin-left: 1cqw;
+        x-motionpercentage,
+        x-motiontime { font-size: clamp(12px, 10cqh, 1000px); }
+      }
+      .machinestatus-target {
+        margin-left: 1cqw;
+        x-performancetarget .performancetarget-span { font-size: clamp(10px, 7cqh, 1000px); }
+      }
+    }
+
+    .machinestatus-alarm-pie-stacklight {
+      flex: 2 1 0 !important;
+      flex-grow: 2;
+      flex-shrink: 1;
+      min-height: 0;
+      align-items: stretch !important;
+      height: auto !important;
+
+      .machinestatus-light-div,
+      .machinestatus-tool-and-alarm-div {
+        flex: unset !important;
+        flex-basis: 15% !important;
+        padding: 0.5cqmin !important;
+        min-height: 50px !important;
+        height: auto !important;
+      }
+      .machinestatus-reasonslotpie {
+        flex-grow: 2;
+        flex-shrink: 1;
+        min-height: 0;
+        padding: 0.5cqmin !important;
+        height: auto !important;
+      }
+    }
+
+    .machinestatus-weekly-bar-position {
+      flex: 0 0 auto !important;
+      height: auto !important;
+
+      x-barstack {
+        height: 30px !important;
+      }
+    }
+  }
+
+  x-currentworkinfo {
+    font-size: clamp(10px, 3.5cqh, 1000px);
+    padding: 0.5cqh 0 0 0;
+  }
 }

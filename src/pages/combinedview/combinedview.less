@@ -9,12 +9,7 @@
 @import "pulse.customdialog.less";
 
 @import "pulse.exports.light.less"; // Global import
-//// @import "x-checkcurrenttime/x-checkcurrenttime.less";
-// @import "x-checkpath/x-checkpath.less";
-// @import "x-checkversion/x-checkversion.less";
-// @import "x-checkconfigupdate/x-checkconfigupdate.less";
-// @import "x-checklogin/x-checklogin.less";
-// @import "x-message/x-message.less";
+
 @import "x-machineselection/x-machineselection.less";
 
 // Local
@@ -38,6 +33,8 @@
 @import "style.less";
 
 
+// === MODE NORMAL (defaut, em/rem) ===
+
 .pulse-mainarea-inner {
   height: 100%;
   display: flex;
@@ -45,44 +42,41 @@
   overflow: hidden;
 }
 
-// ==========================================
-// 1. MAIN WRAPPERS & GRID
-// ==========================================
-
 x-groupgrid {
-  overflow-y: auto;
-  height: 100%;
+  overflow-y: auto !important;
+  height: 100% !important;
 
   .groupgrid-main {
     height: auto !important;
-    min-height: 100%;
-    align-content: start;
-    grid-auto-rows: minmax(280px, 1fr);
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
+  }
+  .groupgrid-item {
+    height: fit-content !important;
+    min-height: unset !important;
+    max-height: none !important;
+    min-width: 0 !important;
   }
 }
 
-// ==========================================
-// 2. TILE CONTAINER (Individual Machine)
-// ==========================================
 .tile {
-  container-type: size;
-  container-name: maintile;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 100%;
   overflow: hidden;
+  height: fit-content !important;
+  min-height: unset !important;
+  container-type: normal !important;
 }
 
-// ==========================================
-// 3. TILE HEADER
-// ==========================================
 .tile-title {
   flex-direction: row;
   position: relative;
   padding: 4px 10px 4px 10px;
+  gap: 0.2em;
   background-color: @color_background_alternate;
   color: @box_header_text_color;
   white-space: nowrap;
@@ -90,7 +84,8 @@ x-groupgrid {
   border-top-right-radius: @border_radius;
   align-items: center;
   display: flex;
-  font-size: 5cqh !important;
+  font-size: 1em !important;
+  height: 4em;
   justify-content: space-between;
 
   .combinedview-title-left {
@@ -98,11 +93,13 @@ x-groupgrid {
     column-gap: 6px;
     align-items: center;
     max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 
     x-runningbutton {
       margin: 0;
-      width: 10cqh;
-      height: 10cqh;
+      width: 2.2em;
+      height: 2.2em;
     }
 
     .machinedisplay-position {
@@ -110,7 +107,7 @@ x-groupgrid {
       flex-shrink: unset;
 
       x-machinedisplay .machinedisplay-data {
-        font-size: 5cqh !important;
+        font-size: 1.8em !important;
         font-weight: bold;
         white-space: nowrap;
         overflow: hidden;
@@ -128,7 +125,7 @@ x-groupgrid {
 
       .performancetarget-content .performancetarget-span {
         font-weight: bold;
-        font-size: 5cqh !important;
+        font-size: 1.5em !important;
 
         &::before {
           font-size: 0.5em;
@@ -138,54 +135,52 @@ x-groupgrid {
   }
 }
 
-// ==========================================
-// 4. TILE CONTENT (Body)
-// ==========================================
 .tile-content {
   background-color: @color_background;
   color: @box_text_color;
   box-sizing: border-box;
-  padding: 1.5cqh 1.5cqw;
+  padding: 0.7em !important;
   border-bottom-left-radius: @border_radius;
   border-bottom-right-radius: @border_radius;
   display: flex;
   flex-direction: column;
-  gap: 1cqh;
+  gap: 0.4em !important;
   overflow: hidden;
-  flex-grow: 1;
-  flex-shrink: 1;
+  flex: 0 0 auto !important;
+  height: auto !important;
   min-height: 0;
 }
 
-// --- 4.1 Middle Section (Pie & Side Displays) ---
 .combinedview-middle-div {
-  flex-grow: 1;
+  flex: 0 0 auto !important;
   display: flex;
   flex-direction: row;
   min-height: 0;
   position: relative;
   width: 100%;
   box-sizing: border-box;
+  height: fit-content !important;
+  align-items: center !important;
 
   .combinedview-leftdisplay,
   .combinedview-rightdisplay {
     display: inline-block;
     min-width: 15%;
     max-width: 25%;
-    flex-grow: 1;
+    flex: 1 1 0 !important;
+    height: 12em !important;
   }
 
   .combinedview-leftdisplay {
     position: relative;
     box-sizing: border-box;
-    height: 100%;
 
     .combinedview-today {
       position: absolute;
       top: 0;
       left: 0;
       font-weight: bold;
-      font-size: 5cqh !important;
+      font-size: 1.5em !important;
     }
 
     .combinedview-alarm-div {
@@ -214,24 +209,23 @@ x-groupgrid {
   }
 
   .combinedview-runningslotpie {
-    flex-grow: 2;
+    flex: 2 1 0 !important;
     position: relative;
     min-width: 0;
+    height: 19em !important;
   }
 
   .combinedview-rightdisplay {
-    height: 100%;
     box-sizing: border-box;
-    padding: clamp(8px, 3cqh, 24px);
+    padding: 0.6em;
   }
 }
 
-// --- 4.2 Bottom Section (Barstack & Motion) ---
 .combinedview-bottombar {
   display: flex;
   flex-direction: row;
-  flex-shrink: 0;
-  height: clamp(60px, 18cqh, 100px);
+  flex: 0 0 auto !important;
+  height: fit-content !important;
   box-sizing: border-box;
 
   .combinedview-bottomleftbar {
@@ -246,22 +240,17 @@ x-groupgrid {
       min-height: 0;
       width: auto;
       overflow: hidden;
+      height: 2em !important;
       margin-left: @margin_graduation;
       margin-right: @margin_graduation;
     }
 
     x-datetimegraduation {
       flex-shrink: 0;
-      height: clamp(25px, 4cqh, 40px);
-
-      .datetimegraduation,
-      .datetimegraduation-content {
-        height: 100% !important;
-      }
 
       .datetimegraduation-axis {
         text {
-          font-size: clamp(8px, 1.5cqh, 14px) !important;
+          font-size: 0.85em !important;
         }
 
         .domain {
@@ -272,15 +261,111 @@ x-groupgrid {
   }
 
   .combinedview-motionpercentage {
-    margin-bottom: clamp(14px, 3.5cqh, 32px);
+    margin-bottom: 1.5em;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    min-width: 4em;
 
     x-motionpercentage {
       font-weight: bold;
+      font-size: 2.2em !important;
+    }
+  }
+}
+
+
+// === MODE LIVE (.appcontext-live, cqh/cqw) ===
+
+.appcontext-live {
+  x-groupgrid {
+    .groupgrid-main {
+      height: auto !important;
+      min-height: 100%;
+      align-content: start;
+      grid-auto-rows: minmax(280px, 1fr) !important;
+      overflow: hidden !important;
+    }
+    .groupgrid-item {
+      height: auto !important;
+      max-height: 60vh !important;
+      min-width: auto !important;
+    }
+  }
+
+  .tile {
+    container-type: size !important;
+    container-name: maintile;
+    height: 100% !important;
+  }
+
+  .tile-title {
+    font-size: 5cqh !important;
+    height: auto !important;
+
+    .combinedview-title-left {
+      x-runningbutton {
+        width: 10cqh !important;
+        height: 10cqh !important;
+      }
+      .machinedisplay-position x-machinedisplay .machinedisplay-data {
+        font-size: 5cqh !important;
+      }
+    }
+
+    .combinedview-title-right x-performancetarget .performancetarget-content .performancetarget-span {
       font-size: 5cqh !important;
+    }
+  }
+
+  .tile-content {
+    padding: 1.5cqh 1.5cqw !important;
+    gap: 1cqh !important;
+    flex: 1 1 auto !important;
+    height: auto !important;
+  }
+
+  .combinedview-middle-div {
+    flex: 1 1 auto !important;
+    align-items: stretch !important;
+    height: auto !important;
+
+    .combinedview-leftdisplay,
+    .combinedview-rightdisplay {
+      flex: unset !important;
+      flex-grow: 1;
+      height: 100% !important;
+    }
+    .combinedview-runningslotpie {
+      flex-grow: 2;
+      height: auto !important;
+    }
+    .combinedview-leftdisplay .combinedview-today {
+      font-size: 5cqh !important;
+    }
+    .combinedview-rightdisplay {
+      padding: clamp(8px, 3cqh, 24px) !important;
+    }
+  }
+
+  .combinedview-bottombar {
+    flex: 0 0 auto !important;
+    height: clamp(60px, 18cqh, 100px) !important;
+
+    .combinedview-bottomleftbar {
+      x-barstack { height: auto !important; }
+      x-datetimegraduation {
+        .datetimegraduation-axis text {
+          font-size: clamp(10px, 2cqh, 14px) !important;
+        }
+      }
+    }
+    .combinedview-motionpercentage {
+      margin-bottom: clamp(14px, 3.5cqh, 32px) !important;
+      x-motionpercentage {
+        font-size: 5cqh !important;
+      }
     }
   }
 }

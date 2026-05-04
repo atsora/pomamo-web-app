@@ -35,10 +35,28 @@
 @import "style.less";
 
 
+// === MODE NORMAL (defaut, em/rem) ===
+
 // Sécurité visibilité pour le framework Pulse
 x-groupgrid {
   display: flex !important;
   min-height: 100px;
+  overflow-y: auto !important;
+  height: 100% !important;
+
+  .groupgrid-main {
+    height: auto !important;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
+  }
+
+  .groupgrid-item {
+    height: fit-content !important;
+    min-height: unset !important;
+    max-height: none !important;
+    min-width: 0 !important;
+  }
 }
 
 // --- 1. LA TUILE (LE CONTENEUR MAÎTRE) ---
@@ -49,26 +67,25 @@ x-groupgrid {
   display: flex;
   flex-direction: column;
 
-  height: 100%;
   width: 100%;
-  min-height: 200px; // Évite le collapse à 0 qui bloque les data
 
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
 
-  /* Context pour les Container Queries */
-  container-type: size;
-  container-name: maintile;
+  height: fit-content !important;
+  min-height: unset !important;
+  container-type: normal !important;
 }
 
-// --- 2. EN-TÊTE (identique à oeeview) ---
+// --- 2. EN-TÊTE ---
 .tile-title {
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   position: relative;
   padding: 4px 10px 4px 10px;
+  gap: 0.2em;
   background-color: @color_background_alternate;
   color: @box_header_text_color;
   max-height: 25%;
@@ -79,8 +96,7 @@ x-groupgrid {
     justify-content: center;
     width: 100%;
 
-    // Identique à oeeview
-    font-size: clamp(14px, 6cqh, 1000px) !important;
+    font-size: 1.4em !important;
     line-height: 1.1;
 
     x-machinedisplay {
@@ -131,7 +147,7 @@ x-groupgrid {
     display: flex;
     justify-content: center;
     width: 100%;
-    font-size: clamp(10px, 4cqh, 18px);
+    font-size: 1em !important;
 
     x-lastmachinestatus {
       display: flex !important;
@@ -140,11 +156,11 @@ x-groupgrid {
     }
 
     .pulse-cellbar-main, .pulse-cellbar-current-data {
-      background: none !important;
       border: none !important;
       color: inherit !important;
       height: auto !important;
       width: auto !important;
+      border-radius: 4px;
     }
     .pulse-cellbar-between, .pulse-cellbar-past-data, i, svg { display: none !important; }
     .lastmachinestatus-reason-label { display: none !important; }
@@ -157,19 +173,16 @@ x-groupgrid {
   color: @box_text_color;
   display: flex;
   flex-direction: column;
-  flex: 1 1 0px;
+  flex: 0 0 auto !important;
   width: 100%;
-  height: 100%;
-  padding: 1cqmin;
+  height: auto !important;
+  padding: 0.4em !important;
   box-sizing: border-box;
   min-height: 0;
   overflow: hidden;
-  gap: 1cqh; // Espace entre les grandes sections (top / middle / bottom)
+  gap: 0.4em !important;
 
-  // ========================================
-  // --- ZONE HAUTE (Info / Production) ---
-  // Pas de height fixé : la font-size clampée pilote la taille
-  // ========================================
+  // ZONE HAUTE
   .operationstatus-top-div {
     flex: 0 0 auto;
     display: flex;
@@ -178,9 +191,8 @@ x-groupgrid {
     justify-content: center;
     width: 100%;
     overflow: hidden;
-    // font-size clampé en cqh/vh pour que la hauteur soit responsive
-    // Valeur par défaut — surchargée par _applyTopDisplaySizing() via inline style
-    font-size: clamp(10px, 5cqh, 5vh);
+    font-size: 1em !important;
+    &.workinfo-big { font-size: 1.5em !important; }
 
     x-currentworkinfo, x-workinfo {
       text-align: center;
@@ -209,7 +221,6 @@ x-groupgrid {
         flex-wrap: nowrap;
       }
 
-      // Masquer l'horloge "at HH:MM:" mais garder les labels Actual/Target
       .production-clock-content {
         display: none !important;
       }
@@ -235,37 +246,34 @@ x-groupgrid {
     }
   }
 
-  // ========================================
-  // --- ZONE MILIEU (Tools / Pie / Stacklight) ---
-  // flex: 1 1 auto → prend TOUT l'espace restant
-  // ========================================
+  // ZONE MILIEU
   .operationstatus-middle-div {
-    flex: 1 1 auto;
+    flex: 0 0 auto !important;
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: center !important;
     width: 100%;
-    height: 100%;
+    height: fit-content !important;
+    min-width: 0 !important;
     min-height: 0;
-    overflow: hidden;
+    overflow: hidden !important;
 
-    // Colonne Gauche (Données techniques)
     .operationstatus-tool-and-alarm-div {
-      flex: 1;
+      flex: 1 1 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      width: 100%;
-      height: 100%;
+      height: 5em !important;
       min-width: 0;
       min-height: 0;
       overflow: hidden;
 
       x-currenttool, x-currentsequence, x-currentcncvalue {
         width: 100%;
+        min-width: 0;
         text-align: center;
-        font-size: clamp(9px, 2.5cqw, 1000px) !important;
+        font-size: 1.5em !important;
         font-weight: bold;
         white-space: nowrap;
         overflow: hidden;
@@ -304,8 +312,8 @@ x-groupgrid {
         overflow: hidden;
 
         x-currenticoncncalarm {
-          height: 10cqw;
-          width: 10cqw;
+          height: 2.5em !important;
+          width: 2.5em !important;
           max-height: 100%;
           max-width: 100%;
 
@@ -318,15 +326,13 @@ x-groupgrid {
       }
     }
 
-    // Colonne Centrale (Cycle Progress Pie)
     .operationstatus-cycleprogress {
-      flex: 2;
+      flex: 2 1 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      width: 100%;
-      height: 100%;
+      height: 15em !important;
       min-width: 0;
       min-height: 0;
       position: relative;
@@ -342,20 +348,18 @@ x-groupgrid {
         position: absolute;
         top: 50%; left: 50%;
         transform: translate(-50%, -50%);
-        font-size: clamp(10px, 4cqw, 1000px) !important;
+        font-size: 1em !important;
         font-weight: bold;
         pointer-events: none;
       }
     }
 
-    // Colonne Droite (Stacklight)
     .operationstatus-light-div {
-      flex: 1;
+      flex: 1 1 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 100%;
-      height: 100%;
+      height: 10em !important;
       min-width: 0;
       min-height: 0;
       overflow: hidden;
@@ -368,20 +372,15 @@ x-groupgrid {
     }
   }
 
-  // ========================================
-  // --- ZONE BASSE (ISO / Tools / Barres) ---
-  // info-row : font-size clampé (contenu texte)
-  // bar-row  : height clampé (contenu graphique)
-  // ========================================
+  // ZONE BASSE
   .operationstatus-bottom-div {
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     width: 100%;
     overflow: hidden;
-    gap: 0.5cqh; // Espace entre sous-sections (alarm / info / bar)
+    gap: 0.2em !important;
 
-    // Alarme : ligne propre au-dessus de info-row, pleine largeur
     .operationstatus-alarm-bottom-div {
       flex: 0 0 auto;
       display: flex;
@@ -390,7 +389,7 @@ x-groupgrid {
       width: 100%;
       padding: 0 6px;
       box-sizing: border-box;
-      font-size: clamp(8px, 4cqh, 4vh) !important;
+      font-size: 1em !important;
       font-weight: bold;
       white-space: nowrap;
       overflow: hidden;
@@ -431,28 +430,25 @@ x-groupgrid {
       }
     }
 
-    // Ligne texte (isofile + toollife) : la font-size pilote la hauteur
     .operationstatus-info-row {
       flex: 0 0 auto;
       display: flex;
       justify-content: space-between;
-      margin-bottom: 1cqh;
-      padding: 0 1cqw;
+      margin-bottom: 0.4em !important;
+      padding: 0 0.4em !important;
       align-items: center;
       width: 100%;
-      font-size: clamp(8px, 4cqh, 4vh) !important;
+      font-size: 1em !important;
       font-weight: bold;
       white-space: nowrap;
       box-sizing: border-box;
 
-      // Wrapper divs pour show/hide via JS
       .operationstatus-isofile-div {
         flex: 0 1 auto;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      // Toollife : aligné à droite, font-size réduit pour adapter les em internes
       .operationstatus-tool-div {
         flex: 0 1 auto;
         display: flex;
@@ -465,24 +461,24 @@ x-groupgrid {
       }
     }
 
-    // Ligne barre (reason bar + percent) : height fixe clampé
     .operationstatus-bar-row {
       flex: 0 0 auto;
       display: flex;
       flex-direction: row;
       align-items: center;
       width: 100%;
-      height: clamp(14px, 15cqh, 6vh);
+      height: fit-content !important;
 
       .div-bar {
         flex: 1;
-        height: 100%;
+        height: auto !important;
         display: flex;
         flex-direction: column;
         overflow: hidden;
 
         x-barstack {
-          flex: 1 1 0;
+          flex: unset !important;
+          height: 2em !important;
           min-height: 0;
           width: auto;
           margin: 0 24px;
@@ -491,7 +487,7 @@ x-groupgrid {
 
 
       .div-percent {
-        font-size: clamp(9px, 4cqh, 4vh) !important;
+        font-size: 1em !important;
         font-weight: bold;
         display: flex;
         margin-top: 1%;
@@ -501,8 +497,7 @@ x-groupgrid {
     }
   }
 
-  // --- x-toollifemachine compact dans operationstatus ---
-  // Masquer l'opération à gauche et le séparateur, ne garder que les outils
+  // x-toollifemachine compact
   x-toollifemachine {
     .pulse-cellbar-current-data { display: none !important; }
     .pulse-cellbar-between { display: none !important; }
@@ -510,16 +505,16 @@ x-groupgrid {
     .pulse-cellbar-main,
     .pulse-cellbar-past-data,
     .pulse-cellbar-last {
-      font-size: clamp(11px, 4cqh, 4vh) !important;
+      font-size: 1em !important;
     }
 
     .toollifemachine-soon-title {
-      font-size: clamp(11px, 4cqh, 4vh) !important;
+      font-size: 1em !important;
       height: 100%;
     }
 
     .toollifemachine-soon-title-svg-text {
-      font-size: clamp(0px, 2.8cqh, 1.5vh) !important;
+      font-size: 0.7em !important;
     }
   }
 }
@@ -536,3 +531,123 @@ x-groupgrid {
 // redstacklight: hidden by default, revealed via class set in initOptionValues before grid builds
 x-redstacklightbar { display: none !important; }
 .barshowalarms-active x-redstacklightbar { display: block !important; }
+
+
+// === MODE LIVE (.appcontext-live, cqh/cqw) ===
+
+.appcontext-live {
+  x-groupgrid {
+    .groupgrid-main {
+      height: 100% !important;
+      grid-auto-rows: 1fr !important;
+      overflow: hidden !important;
+    }
+    .groupgrid-item {
+      height: 100% !important;
+      max-height: 60vh !important;
+      min-width: auto !important;
+    }
+  }
+
+  .tile {
+    container-type: size !important;
+    container-name: maintile;
+    height: 100% !important;
+    min-height: 200px;
+  }
+
+  .tile-title .oeeview-top-title {
+    font-size: clamp(14px, 6cqh, 1000px) !important;
+  }
+  .tile-title .lastmachinestatus-current-reason-only {
+    font-size: clamp(10px, 4cqh, 18px) !important;
+  }
+
+  .tile-content {
+    flex: 1 1 0px !important;
+    height: 100% !important;
+    padding: 1cqmin !important;
+    gap: 1cqh !important;
+
+    .operationstatus-top-div {
+      font-size: clamp(10px, 5cqh, 5vh) !important;
+      &.workinfo-big { font-size: clamp(10px, 7cqh, 5vh) !important; }
+    }
+
+    .operationstatus-middle-div {
+      flex: 1 1 auto !important;
+      align-items: stretch !important;
+      height: 100% !important;
+      min-width: 0 !important;
+      overflow: hidden !important;
+
+      .operationstatus-tool-and-alarm-div {
+        height: 100% !important;
+
+        x-currenttool, x-currentsequence, x-currentcncvalue {
+          font-size: clamp(9px, 2.5cqw, 1000px) !important;
+        }
+        .operationstatus-alarm-left-div x-currenticoncncalarm {
+          height: 10cqw !important;
+          width: 10cqw !important;
+        }
+      }
+
+      .operationstatus-cycleprogress {
+        height: 100% !important;
+        x-freetext {
+          font-size: clamp(10px, 4cqw, 1000px) !important;
+        }
+      }
+
+      .operationstatus-light-div {
+        height: 100% !important;
+      }
+    }
+
+    .operationstatus-bottom-div {
+      gap: 0.5cqh !important;
+
+      .operationstatus-alarm-bottom-div {
+        font-size: clamp(8px, 4cqh, 4vh) !important;
+      }
+
+      .operationstatus-info-row {
+        margin-bottom: 1cqh !important;
+        padding: 0 1cqw !important;
+        font-size: clamp(8px, 4cqh, 4vh) !important;
+      }
+
+      .operationstatus-bar-row {
+        height: clamp(14px, 15cqh, 6vh) !important;
+
+        .div-bar {
+          height: 100% !important;
+
+          x-barstack {
+            flex: 1 1 0 !important;
+            height: auto !important;
+          }
+        }
+
+        .div-percent {
+          font-size: clamp(9px, 4cqh, 4vh) !important;
+        }
+      }
+    }
+
+    x-toollifemachine {
+      .pulse-cellbar-main,
+      .pulse-cellbar-past-data,
+      .pulse-cellbar-last {
+        font-size: clamp(11px, 4cqh, 4vh) !important;
+      }
+      .toollifemachine-soon-title {
+        font-size: clamp(11px, 4cqh, 4vh) !important;
+      }
+      .toollifemachine-soon-title-svg-text {
+        font-size: clamp(0px, 2.8cqh, 1.5vh) !important;
+      }
+    }
+  }
+}

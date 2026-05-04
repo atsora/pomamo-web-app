@@ -21,10 +21,8 @@
 @import "x-stopclassification/x-stopclassification.less";
 @import "x-rotationprogress/x-rotationprogress.less";
 
-// Masquage temporaire du backend buggé
-x-lastmachinestatus {
-  display: none !important;
-}
+
+// === MODE NORMAL (defaut, em/rem) ===
 
 .pulse-mainarea-inner {
   display: flex;
@@ -33,36 +31,50 @@ x-lastmachinestatus {
   overflow: hidden;
 }
 
+x-groupgrid {
+  overflow-y: auto !important;
+  height: 100% !important;
+
+  .groupgrid-main {
+    height: auto !important;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
+  }
+
+  .groupgrid-item {
+    height: fit-content !important;
+    min-height: unset !important;
+    max-height: none !important;
+    min-width: 0 !important;
+  }
+}
+
 // --- 1. LA TUILE (LE CONTENEUR MAÎTRE) ---
 .tile {
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
-  /* Flexbox Vertical classique */
   display: flex;
   flex-direction: column;
-  /* Prend toute la place offerte par la grille parente */
-  height: 100%;
   width: 100%;
-  /* Sécurité absolue : Rien ne doit sortir */
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
-  /* On définit le contexte de taille ici */
-  container-type: size;
-  container-name: maintile;
+  height: fit-content !important;
+  min-height: unset !important;
+  container-type: normal !important;
 }
 
 // --- 2. EN-TÊTE ---
 .tile-title {
-  /* Flex rigide : ne grandit pas, ne rétrécit pas */
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   position: relative;
   padding: 4px 10px 4px 10px;
+  gap: 0.2em;
   background-color: @color_background_alternate;
   color: @box_header_text_color;
-  /* Sécurité Hauteur Max */
   max-height: 25%;
 
   .oeeview-top-title {
@@ -70,10 +82,7 @@ x-lastmachinestatus {
     align-items: center;
     justify-content: center;
     width: 100%;
-
-    // [MODIF] Augmentation police titre
-    // Avant: 10px, 6cqh, 22px
-    font-size: 8cqh !important;
+    font-size: 1.4em !important;
     line-height: 1.1;
 
     x-machinedisplay {
@@ -113,6 +122,30 @@ x-lastmachinestatus {
       }
     }
   }
+
+  // Sous-titre Statut (Current Reason)
+  .lastmachinestatus-current-reason-only {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-size: 1em !important;
+
+    x-lastmachinestatus {
+      display: flex !important;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .pulse-cellbar-main, .pulse-cellbar-current-data {
+      border: none !important;
+      color: inherit !important;
+      height: auto !important;
+      width: auto !important;
+      border-radius: 4px;
+    }
+    .pulse-cellbar-between, .pulse-cellbar-past-data, i, svg { display: none !important; }
+    .lastmachinestatus-reason-label { display: none !important; }
+  }
 }
 
 // --- 3. CONTENU PRINCIPAL ---
@@ -122,13 +155,13 @@ x-lastmachinestatus {
   display: flex;
   flex-direction: column;
 
-  /* Prend tout l'espace restant */
-  flex: 1 1 0px;
+  flex: 0 0 auto !important;
 
   width: 100%;
-  padding: 2.5cqmin;
+  padding: 0.6em !important;
   box-sizing: border-box;
-  min-height: 0; /* CRUCIAL pour empêcher le débordement */
+  min-height: 0;
+  height: auto !important;
 
   // Section Info (Equipe/Opérateur)
   x-workinfo {
@@ -136,18 +169,15 @@ x-lastmachinestatus {
     flex-shrink: 0;
     max-width: 100%;
     min-height: 0;
-
-    // [MODIF] Augmentation police info
-    // Avant: 9px, 4cqh, 14px
-    font-size: 5cqh;
+    font-size: 1em !important;
   }
 
   // Section Basse (Chiffres + Jauge)
   .oee-bottom {
     display: flex;
     flex-direction: row;
-    /* Prend l'espace restant */
-    flex: 1 1 0px;
+    flex: 0 0 auto !important;
+    height: 14em !important;
 
     width: 100%;
     overflow: hidden;
@@ -161,8 +191,7 @@ x-lastmachinestatus {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 50%;
-    flex: 1;
+    flex: 1 1 0;
     gap: 0;
     min-width: 0;
     min-height: 0;
@@ -185,7 +214,6 @@ x-lastmachinestatus {
         justify-content: center;
         width: 100%;
         min-width: 0;
-        // On s'assure que le contenu interne ne force pas la taille
         flex: 1 1 0px;
         .production-actual-separator,
         .production-target-separator {
@@ -197,8 +225,7 @@ x-lastmachinestatus {
 
   // Colonne de Droite (Jauge)
   .oee-gauge {
-    width: 50%;
-    flex: 1;
+    flex: 1 1 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -227,7 +254,7 @@ x-lastmachinestatus {
     }
   }
 
-  // --- TYPOGRAPHIE RESPONSIVE (AJUSTÉE) ---
+  // --- TYPOGRAPHIE ---
 
   span, div {
     font-weight: bold;
@@ -236,9 +263,7 @@ x-lastmachinestatus {
   // Textes descriptifs (Target, Actual...)
   .productionshiftgoal-content,
   .production-content {
-    // [MODIF] Augmentation labels
-    // Avant: 9px, 4cqh, 16px
-    font-size: 4cqw;
+    font-size: 1em !important;
     line-height: 1;
     white-space: nowrap;
     max-width: 100%;
@@ -250,19 +275,14 @@ x-lastmachinestatus {
   .production-number-actual,
   .production-number-target,
   .productionshiftgoal-data {
-    // [MODIF] Augmentation gros chiffres
-    // Avant: 12px, 10cqh, 45px
-    // On passe à 15cqh pour que ça remplisse bien
-    font-size: 15cqh;
+    font-size: 3em !important;
     line-height: 1;
     white-space: nowrap;
   }
 
   // Texte dans la jauge
   .productiongauge-text {
-    // [MODIF] Augmentation texte jauge
-    // Avant: 10px, 5cqh, 25px
-    font-size: 8cqh;
+    font-size: 1.6em !important;
     line-height: 1;
   }
 }
@@ -286,3 +306,63 @@ x-periodtoolbar {
 }
 
 
+// === MODE LIVE (.appcontext-live, cqh/cqw) ===
+
+.appcontext-live {
+  x-groupgrid {
+    .groupgrid-main {
+      height: 100% !important;
+      grid-auto-rows: 1fr !important;
+      overflow: hidden !important;
+    }
+    .groupgrid-item {
+      height: 100% !important;
+      max-height: 60vh !important;
+      min-width: auto !important;
+    }
+  }
+
+  .tile {
+    container-type: size !important;
+    container-name: maintile;
+    height: 100% !important;
+  }
+
+  .tile-title .oeeview-top-title {
+    font-size: 8cqh !important;
+  }
+
+  .tile-title .lastmachinestatus-current-reason-only {
+    font-size: clamp(10px, 4cqh, 18px) !important;
+  }
+
+  .tile-content {
+    padding: 2.5cqmin !important;
+    flex: 1 1 0px !important;
+    height: auto !important;
+
+    x-workinfo {
+      font-size: 5cqh !important;
+    }
+
+    .productionshiftgoal-content,
+    .production-content {
+      font-size: 4cqw !important;
+    }
+
+    .production-number-actual,
+    .production-number-target,
+    .productionshiftgoal-data {
+      font-size: 15cqh !important;
+    }
+
+    .productiongauge-text {
+      font-size: 8cqh !important;
+    }
+
+    .oee-bottom {
+      flex: 1 1 0px !important;
+      height: auto !important;
+    }
+  }
+}

@@ -25,6 +25,8 @@
 @import "style.less";
 
 
+// === MODE NORMAL (defaut, em/rem) ===
+
 .pulse-mainarea-inner {
   height: 100%;
   box-sizing: border-box;
@@ -34,31 +36,33 @@
 }
 
 x-groupgrid {
-  overflow-y: auto;
-  height: 100%;
+  overflow-y: auto !important;
+  height: 100% !important;
 
   .groupgrid-main {
     height: auto !important;
-    align-content: start;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
   }
-
   .groupgrid-item {
-    height: auto;
-    min-height: 40vh;
+    height: fit-content !important;
+    min-height: unset !important;
+    max-height: none !important;
+    min-width: 0 !important;
   }
 }
 
 .tile {
-  container-type: size;
-  container-name: maintile;
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  min-height: 0;
   overflow: hidden;
+  height: fit-content !important;
+  min-height: unset !important;
+  container-type: normal !important;
 }
 
 .tile-title {
@@ -66,18 +70,20 @@ x-groupgrid {
   flex-direction: row;
   position: relative;
   padding: 4px 10px 4px 10px;
+  gap: 0.2em;
   background-color: @color_background_alternate;
   color: @box_header_text_color;
   white-space: nowrap;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  font-size: 6cqh !important;
+  font-size: 1em !important;
+  height: 4em;
 
   x-reasonbutton {
     margin: 0;
-    width: 9cqh;
-    height: 9cqh;
+    width: 2.2em;
+    height: 2.2em;
   }
 
   .machinedisplay-position {
@@ -85,7 +91,7 @@ x-groupgrid {
     flex-shrink: unset;
 
     x-machinedisplay {
-      font-size: 1em !important;
+      font-size: 1.8em !important;
       .machinedisplay-data {
         text-align: center;
         white-space: nowrap;
@@ -101,42 +107,35 @@ x-groupgrid {
   background-color: @color_background;
   color: @box_text_color;
   box-sizing: border-box;
-  padding: 1.5cqh 1.5cqw;
+  padding: 0.7em !important;
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
-  height: 100%;
+  flex: 0 0 auto !important;
   width: 100%;
   overflow: hidden;
   position: relative;
+  height: auto !important;
 
   x-performancegauge {
     display: block;
     text-align: center;
-    flex: 1 1 auto;
+    flex: 0 0 auto !important;
     width: 100%;
     box-sizing: border-box;
-    padding-top: 2cqh;
+    padding-top: 0.85em;
     overflow: hidden;
     min-height: 0;
+    height: 20em !important;
   }
 }
 
-x-motionpercentage {
-  position: absolute;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 10cqh !important;
-  line-height: 1em;
-}
-
+x-motionpercentage,
 x-motiontime {
   position: absolute;
   bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 10cqh !important;
+  font-size: 2em !important;
   line-height: 1em;
 }
 
@@ -150,15 +149,64 @@ x-motiontime {
   stroke: @color_gray
 }
 
-.appcontext-live x-groupgrid {
-  .groupgrid-main {
+
+// === MODE LIVE (.appcontext-live, cqh/cqw) ===
+
+.appcontext-live {
+  x-groupgrid {
     height: 100% !important;
-    grid-auto-rows: 1fr;
+    overflow-y: auto;
+
+    .groupgrid-main {
+      height: 100% !important;
+      grid-auto-rows: 1fr !important;
+      overflow: hidden !important;
+      align-content: stretch !important;
+    }
+    .groupgrid-item {
+      height: 100% !important;
+      min-height: 40vh !important;
+      max-height: 60vh !important;
+      min-width: auto !important;
+    }
   }
 
-  .groupgrid-item {
-    height: 100%;
-    min-height: unset;
+  .tile {
+    container-type: size !important;
+    container-name: maintile;
+    height: 100% !important;
+    min-height: 0;
+  }
+
+  .tile-title {
+    font-size: 6cqh !important;
+    height: auto !important;
+
+    x-reasonbutton {
+      width: 9cqh !important;
+      height: 9cqh !important;
+    }
+
+    .machinedisplay-position x-machinedisplay {
+      font-size: 1em !important;
+    }
+  }
+
+  .tile-content {
+    padding: 1.5cqh 1.5cqw !important;
+    flex: 1 1 auto !important;
+    height: 100% !important;
+
+    x-performancegauge {
+      flex: 1 1 auto !important;
+      padding-top: 2cqh !important;
+      height: auto !important;
+    }
+  }
+
+  x-motionpercentage,
+  x-motiontime {
+    font-size: 10cqh !important;
   }
 }
 
@@ -168,4 +216,3 @@ x-motiontime {
     height: 100% !important;
   }
 }
-
