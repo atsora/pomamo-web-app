@@ -31,7 +31,6 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <div class="tile-content">
     <div class="stats-content">
       <div class="stats-perf-wrapper">
         <div class="performance-stats-container">
@@ -77,32 +76,34 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <div class="chronology-content">
-      <div class="title-number-content">
-        <x-tr class="text" key="content.state" default="State"></x-tr>
-      </div>
-      <div class="chart-chronology">
-        <x-datetimegraduation period-context="machinedashboard"></x-datetimegraduation>
-        <x-barstack period-context="machinedashboard" motion-context="PulseWebApp" machine-context="PulseWebApp"
-          main-bar="reason"></x-barstack>
-      </div>
-    </div>
-    </div>
-    <div class="dashboard-footer">
-      <div class="stops-content text-box btn">
-        <x-unansweredreasonnumber period-context="machinedashboard" machine-context="PulseWebApp"
-          status-context="PulseWebApp"></x-unansweredreasonnumber>
+    <div class="tile-content">
+      <div class="chronology-content">
+        <div class="title-number-content">
+          <x-tr class="text" key="content.state" default="State"></x-tr>
+        </div>
+        <div class="chart-chronology">
+          <x-datetimegraduation period-context="machinedashboard"></x-datetimegraduation>
+          <x-barstack period-context="machinedashboard" motion-context="PulseWebApp" machine-context="PulseWebApp"
+            main-bar="reason"></x-barstack>
+        </div>
       </div>
 
-      <div class="period-content">
-        <x-periodtoolbar period-context="machinedashboard" displayshiftrange=true></x-periodtoolbar>
-      </div>
+      <div class="dashboard-footer">
+        <div class="stops-content text-box btn">
+          <x-unansweredreasonnumber period-context="machinedashboard" machine-context="PulseWebApp"
+            status-context="PulseWebApp"></x-unansweredreasonnumber>
+        </div>
 
-      <div class="dailydate-content">
-        <x-clock display-date=true></x-clock>
-      </div>
-      <div class="hour-content">
-        <x-clock display-seconds=false></x-clock>
+        <div class="period-content">
+          <x-periodtoolbar period-context="machinedashboard" displayshiftrange=true></x-periodtoolbar>
+        </div>
+
+        <div class="dailydate-content">
+          <x-clock display-date=true></x-clock>
+        </div>
+        <div class="hour-content">
+          <x-clock display-seconds=false></x-clock>
+        </div>
       </div>
     </div>
   </div>
