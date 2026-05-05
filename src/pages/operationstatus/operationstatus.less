@@ -260,34 +260,37 @@ x-groupgrid {
 
     .operationstatus-tool-and-alarm-div {
       flex: 1 1 0;
+      align-self: stretch;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 5em !important;
+      min-height: 10em;
       min-width: 0;
-      min-height: 0;
       overflow: hidden;
 
       x-currenttool, x-currentsequence, x-currentcncvalue {
         width: 100%;
         min-width: 0;
-        text-align: center;
-        font-size: 1.5em !important;
+        font-size: 1em !important;
         font-weight: bold;
-        white-space: nowrap;
+        white-space: normal;
+        text-wrap: wrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      .operationstatus-current-override-div {
+      > .operationstatus-current-tool-div,
+      > .operationstatus-current-sequence-div,
+      > .operationstatus-current-override-div {
+        min-height: 0;
+        flex-shrink: 1;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
         width: 100%;
 
         x-currentcncvalue {
-          white-space: normal;
-          text-wrap: wrap;
           overflow: visible;
 
           .currentcncvalue-data {
@@ -302,14 +305,17 @@ x-groupgrid {
       }
 
       .operationstatus-alarm-left-div {
-        flex: 1;
-        max-height: 40%;
+        flex: 0 0 2.5em;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 0;
         overflow: hidden;
+
+        &:not(:has(.pulse-icon-cncalarm)) {
+          flex: 0 0 0;
+          display: none;
+        }
 
         x-currenticoncncalarm {
           height: 2.5em !important;
@@ -345,9 +351,6 @@ x-groupgrid {
       }
 
       x-freetext {
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
         font-size: 1em !important;
         font-weight: bold;
         pointer-events: none;
