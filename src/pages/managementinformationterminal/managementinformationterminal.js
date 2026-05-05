@@ -5,9 +5,7 @@
 var pulseUtility = require('pulseUtility');
 var pulseConfig = require('pulseConfig');
 var pulsePage = require('pulsePage');
-var pulseSvg = require('pulseSvg');
 var eventBus = require('eventBus');
-var pulseDetailsPopup = require('pulsecomponent-detailspopup');
 
 require('x-groupsingroup/x-groupsingroup');
 
@@ -48,22 +46,6 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
       }
       else {
         $('x-workinfo').hide();
-      }
-    });
-
-    // Pie    $('#showpie').prop('checked', pulseConfig.getBool('showpie'));
-    if (pulseConfig.getDefaultBool('showpie') != pulseConfig.getBool('showpie'))
-      $('#showpie').attr('overridden', 'true');
-    $('#showpie').change(function () {
-      let showpie = $('#showpie').is(':checked');
-      // Store
-      pulseConfig.set('showpie', showpie);
-      // Display
-      if (showpie) {
-        $('.operationstatus-cycleprogress').show();
-      }
-      else {
-        $('.operationstatus-cycleprogress').hide();
       }
     });
 
@@ -310,44 +292,6 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
   }
 
   buildContent() {
-    // TITLE
-    // Color buttons
-    pulseSvg.inlineBackgroundSvg($('.mit-zoom-btn'));
-    // Running button display (display according to config)
-    if (pulseConfig.getBool('showRunningButton')) {
-      $('.mit-show-running').show();
-      // Color buttons
-      pulseSvg.inlineBackgroundSvg($('.mit-show-running-btn'));
-
-      // Click
-      $('.mit-show-running-btn').click(
-        function () {
-          let groupId;
-          if (this.hasAttribute('group')) {
-            groupId = this.getAttribute('group');
-          }
-          else {
-            if (this.hasAttribute('machine-id'))
-              groupId = this.getAttribute('machine-id');
-            else
-              return; // Oups ! Should never happen
-          }
-          pulseDetailsPopup.openRunningDialog(groupId);
-        });
-    }
-    else {
-      $('.mit-show-running').hide();
-    }
-
-    let showpie = pulseConfig.getBool('showpie');
-    if (showpie) {
-      $('.operationstatus-cycleprogress').show();
-    }
-    else {
-      $('.operationstatus-cycleprogress').hide();
-    }
-
-    //showworkinfo
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     if (showworkinfo) {
       $('x-workinfo').show();
