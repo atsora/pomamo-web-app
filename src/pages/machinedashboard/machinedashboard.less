@@ -618,7 +618,9 @@ x-machinetab {
   font-weight: 500;
 }
 
-.tile .period-content .periodtoolbar .periodtoolbar-li-text .periodtoolbar-display {
+// Targets the embedded x-datetimerange's display zone (replaces the legacy
+// .periodtoolbar-display selector that is no longer in the DOM).
+.tile .period-content .periodtoolbar .periodtoolbar-li-text .datetimerange-display {
   display: flex;
   align-items: center;
   justify-content: center;
