@@ -27,7 +27,7 @@ h4,
 h5,
 h6 {
   margin: 1em 0 .5em 0;
-  /* Rapproche le titre du texte. */
+  /* Brings the title closer to the text. */
   line-height: 1.2;
   font-weight: bold;
   /* Default value. */
@@ -151,7 +151,7 @@ body {
   min-height: 0; // allow children to shrink inside flex column
 }
 
-// Mixin : restaure les dimensions vh/vw pour live et écrans tactiles
+// Mixin: restores vh/vw dimensions for live and touch screens
 .adaptive-vh-vw-layout() {
   .pulse-header {
     height: 5vh;
@@ -1446,12 +1446,6 @@ x-motiontime {
   // Hide pagination
   #pulse-pagination {
     display: none;
-  }
-}
-
-@media (max-width: 1000px) {
-  .pulse-mainarea {
-    overflow: auto;
   }
 }
 

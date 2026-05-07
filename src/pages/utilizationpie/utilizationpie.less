@@ -32,7 +32,7 @@
   overflow: hidden;
 }
 
-// === MODE NORMAL (desktop / wide / tablette : overflow autorisé) ===
+// === NORMAL MODE (desktop / wide / tablet: overflow allowed) ===
 x-groupgrid {
   overflow-y: auto;
   height: 100%;
@@ -140,7 +140,7 @@ x-groupgrid {
   }
 }
 
-// === MODE NORMAL — overrides em/rem + height = contenu (pas de min-height fixé) ===
+// === NORMAL MODE — overrides em/rem + height = content (no fixed min-height) ===
 .pulse-content:not(.appcontext-live) {
   x-groupgrid {
     overflow-y: auto !important;
@@ -184,13 +184,17 @@ x-groupgrid {
     }
 
     x-reasonslotpie {
-      height: 22em !important;
+      height: auto !important;
+      width: auto !important;
+      aspect-ratio: 1 / 1;
+      max-height: 22em !important;
+      max-width: 100%;
       min-height: 0 !important;
     }
   }
 }
 
-// === Adaptations responsive (s'appliquent aux 2 modes) ===
+// === Responsive adaptations (apply to both modes) ===
 @media (max-width: 685px) {
   .tile {
     height: 100% !important;

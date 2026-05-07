@@ -7,10 +7,10 @@ SPDX-License-Identifier: Apache-2.0
 <div class="main-content">
   <x-periodmanager period-context="machinedashboard" displayshiftrange="true" displaydaysrange="0" displayhoursrange="0"
     exclude-now="false"></x-periodmanager>
-  <div class="machinetab-list grouparray-dependant" id="grouparray">
+  <div class="machinetab-list" id="machine-tabs-panel">
     <x-machinetab machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machinedashboard"></x-machinetab>
   </div>
-  <div class="tile grouparray-dependant">
+  <div class="tile">
     <div class="tile-header">
       <div class="tile-title">
         <div class="machine-name">
@@ -52,7 +52,7 @@ SPDX-License-Identifier: Apache-2.0
 
           <div class="perf-tool-container">
             <div class="title-number-content" id="performance-container">
-              <!-- <x-tr class="text" key="content.performance" default="Performance"></x-tr> possibilité d'afficher le title performance-->
+              <!-- <x-tr class="text" key="content.performance" default="Performance"></x-tr> option to display the performance title -->
               <div class="performancebar-bar-border">
                 <x-productionbar machine-context='PulseWebApp' motion-context='PulseWebApp'
                   period-context="machinedashboard"></x-productionbar>
@@ -84,7 +84,7 @@ SPDX-License-Identifier: Apache-2.0
         <div class="chart-chronology">
           <x-datetimegraduation period-context="machinedashboard"></x-datetimegraduation>
           <x-barstack period-context="machinedashboard" motion-context="PulseWebApp" machine-context="PulseWebApp"
-            main-bar="reason"></x-barstack>
+            main-bar="reason" auto-min-height></x-barstack>
         </div>
       </div>
 

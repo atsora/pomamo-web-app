@@ -144,7 +144,7 @@ x-groupgrid {
   border-bottom-right-radius: @border_radius;
   display: flex;
   flex-direction: column;
-  gap: 0.4em !important;
+  gap: 1em !important;
   overflow: hidden;
   flex: 0 0 auto !important;
   height: auto !important;
@@ -212,7 +212,8 @@ x-groupgrid {
     flex: 2 1 0 !important;
     position: relative;
     min-width: 0;
-    height: 19em !important;
+    aspect-ratio: 1 / 1;
+    max-height: 19em;
   }
 
   .combinedview-rightdisplay {
@@ -237,10 +238,8 @@ x-groupgrid {
 
     x-barstack {
       flex: 1 1 auto;
-      min-height: 0;
       width: auto;
       overflow: hidden;
-      height: 2em !important;
       margin-left: @margin_graduation;
       margin-right: @margin_graduation;
     }
@@ -261,7 +260,7 @@ x-groupgrid {
   }
 
   .combinedview-motionpercentage {
-    margin-bottom: 1.5em;
+    align-self: flex-start;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -354,7 +353,11 @@ x-groupgrid {
     height: clamp(60px, 18cqh, 100px) !important;
 
     .combinedview-bottomleftbar {
-      x-barstack { height: auto !important; }
+      x-barstack {
+        height: auto !important;
+        min-height: 0 !important;
+        > * { min-height: 0 !important; }
+      }
       x-datetimegraduation {
         .datetimegraduation-axis text {
           font-size: clamp(10px, 2cqh, 14px) !important;

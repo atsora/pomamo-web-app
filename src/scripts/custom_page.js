@@ -47,7 +47,6 @@ require('x-detailedshiftat/x-detailedshiftat');
 require('x-detailedworkinfoat/x-detailedworkinfoat');
 require('x-fieldlegends/x-fieldlegends');
 require('x-freetext/x-freetext');
-require('x-grouparray/x-grouparray');
 require('x-highlightperiodsbar/x-highlightperiodsbar');
 require('x-isofileslotbar/x-isofileslotbar');
 require('x-lastmachinestatetemplate/x-lastmachinestatetemplate');

@@ -12,7 +12,6 @@
 @import "x-machineselection/x-machineselection.less";
 
 // Local
-@import "x-grouparray/x-grouparray.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-machinetab/x-machinetab.less";
 @import "x-lastserialnumber/x-lastserialnumber.less";
@@ -68,10 +67,6 @@
     flex-basis: 200px;
     flex-shrink: 0;
     flex-grow: 0;
-
-    &.grouparray-in-error {
-      flex-grow: 10;
-    }
 
     x-machinetab {
       min-height: 400px;
@@ -138,10 +133,6 @@
         border-radius: @border_radius_small;
         background-color: @color_background_alternate;
       }
-    }
-
-    &.grouparray-in-error {
-      display: none;
     }
 
     overflow: hidden; // To avoid too wide display width scrollbar

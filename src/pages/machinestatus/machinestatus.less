@@ -223,7 +223,8 @@ x-groupgrid {
       padding: 0.4em;
 
       min-height: unset;
-      height: 10em !important;
+      aspect-ratio: 1 / 1;
+      max-height: 10em;
 
       x-stacklight {
         position: relative;
@@ -288,7 +289,8 @@ x-groupgrid {
 
       padding: 0.4em;
       box-sizing: border-box;
-      height: 15em !important;
+      aspect-ratio: 1 / 1;
+      max-height: 15em;
 
       x-reasonslotpie {
         .time-in-pie {
@@ -317,7 +319,6 @@ x-groupgrid {
     flex-basis: auto;
 
     x-barstack {
-      height: 2em !important;
       width: auto;
       margin-left: @margin_graduation;
       margin-right: @margin_graduation;
@@ -432,6 +433,8 @@ x-currentworkinfo {
 
       x-barstack {
         height: 30px !important;
+        min-height: 0 !important;
+        > * { min-height: 0 !important; }
       }
     }
   }

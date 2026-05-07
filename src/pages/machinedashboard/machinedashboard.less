@@ -8,7 +8,6 @@
 @import "pulse.exports.light.less"; // Global import
 
 // Components
-@import "x-grouparray/x-grouparray.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-machinetab/x-machinetab.less";
 @import "x-lastmachinestatus/x-lastmachinestatus.less";
@@ -55,10 +54,6 @@
   flex-grow: 0;
 }
 
-&.grouparray-in-error {
-  flex-grow: 10;
-}
-
 .single-machine-tab {
   width: 200px;
 }
@@ -95,7 +90,7 @@ x-machinetab {
 .tile {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
   padding: 10px 10px;
   flex-shrink: 1;
@@ -106,6 +101,17 @@ x-machinetab {
   border-radius: @border_radius;
   width: 100%;
   height: 100%;
+  max-height: 100%;
+
+  // Direct children keep their natural height — no shrinking to fit the
+  // available space. When their total exceeds the tile height, the tile scrolls.
+  > * {
+    flex-shrink: 0;
+  }
+}
+
+.groupgrid-item {
+  height: 100% !important;
 }
 
 // ==========================================
@@ -156,8 +162,8 @@ x-machinetab {
 
     x-reasonbutton {
       margin-left: unset;
-      width: 22px;
-      height: 22px;
+      width: 2.5vh;
+      height: 2.5vh;
     }
   }
 
@@ -178,7 +184,7 @@ x-machinetab {
       justify-content: center;
       padding-left: 24px;
       padding-right: 24px;
-      font-size: 16px;
+      font-size: 2vh;
       font-family: inherit;
       font-weight: 500;
       border-radius: @border_radius_small;
@@ -244,6 +250,11 @@ x-machinetab {
   column-gap: 0.5em;
 }
 
+// Top-right info-box: font-size variable (vh) instead of the default em.
+.tile .text-box.info-box {
+  font-size: 2.5vh;
+}
+
 .tile .text-box x-workinfo {
   width: 100%;
 }
@@ -256,7 +267,7 @@ x-machinetab {
 }
 
 .tile .text-box .text {
-  font-size: 15px;
+  font-size: 1.8vh;
   font-family: inherit;
   font-weight: 500;
   font-weight: normal;
@@ -345,9 +356,17 @@ x-machinetab {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 7vh;
-  font-weight: bold;
   margin-bottom: 10px;
+}
+
+// Shared sizing for the big numeric outputs (production current/target,
+// gauge label, bar label) — same font-size everywhere, all viewports.
+.tile .specificnumber-content x-production .production-actual-value,
+.tile .specificnumber-content x-production .production-target-value,
+.tile x-productionbar .productionbar-text,
+.tile x-productiongauge .productiongauge-text {
+  font-size: 5vh;
+  font-weight: bold;
 }
 
 .tile .specificnumber-content x-production .production-content-text-actual,
@@ -474,7 +493,6 @@ x-machinetab {
 // 6. CHRONOLOGY SECTION
 // ==========================================
 .tile .chronology-content {
-  height: 85px;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -629,7 +647,7 @@ x-machinetab {
 
 .tile .dailydate-content,
 .tile .hour-content {
-  height: 100%; /* Ajout de Height 100% pour remplir l'espace des 50px */
+  height: 100%; /* Set to 100% to fill the 50px space */
   width: 100px;
   font-weight: bold;
   display: flex;
@@ -685,7 +703,29 @@ x-machinetab {
   }
 }
 
+
+
+@media (min-width: 686px) and (max-width: 1000px) {
+  .tile-content {
+    height: unset;
+    gap: 0.5em;
+  }
+  .tile .chronology-content {
+    min-height: unset;
+    margin: unset;
+  }
+  x-productiontrackergraph .productiontrackergraph-content {
+    align-items: unset;
+  }
+  .tile .dashboard-footer {
+    margin-bottom: unset;
+  }
+}
+
 @media (max-width: 685px) {
+  .tile-content {
+    min-height: 15em;
+  }
   .tile-header {
     flex-wrap: wrap;
     justify-content: center;

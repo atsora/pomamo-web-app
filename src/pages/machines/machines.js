@@ -42,7 +42,7 @@ require('x-tr/x-tr');
 /**
  * Machines page — detailed per-machine view with stacked status bars.
  *
- * Displays a column of machines (x-grouparray) with, for each machine,
+ * Displays a list of machines (x-machinetab) with, for each selected machine,
  * a configurable set of components driven by `componentsToDisplay`:
  * status bars (x-barstack), performance gauge, cycle progress,
  * serial number, operation info, etc.
@@ -50,7 +50,7 @@ require('x-tr/x-tr');
  * The list of visible components is dynamically controlled by the
  * `componentsToDisplay` config (array of CSS selectors / component names).
  *
- * Components registered: x-grouparray, x-machinetab, x-barstack,
+ * Components registered: x-machinetab, x-barstack,
  * x-performancebar, x-cycleprogressbar, x-reasongroups, x-fieldlegends,
  * x-machinemodelegends, x-partproductionstatuspie, x-performancegauge, etc.
  *

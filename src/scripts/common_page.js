@@ -34,7 +34,7 @@ exports.BasePage = class BasePage {
   }
 }
 
-// ... (Fonctions Panel inchangées) ...
+// ... (Panel Functions unchanged) ...
 var openNavigationPanel = function(f){$('.menuicon').addClass('tooltip_disabled');if($('#navigationpanelbtn').hasClass('disabled'))return;if(f)$('#pulse-panel-navigation').addClass('notransition');else $('#pulse-panel-navigation').removeClass('notransition');$('#pulse-inner').removeClass('pulse-panel-navigation-collapsed');$('#navigationpanelbtn').addClass('activated');};
 var closeNavigationPanel = function(f){$('.menuicon').removeClass('tooltip_disabled');if(f)$('#pulse-panel-navigation').addClass('notransition');else $('#pulse-panel-navigation').removeClass('notransition');$('#pulse-inner').addClass('pulse-panel-navigation-collapsed');$('#navigationpanelbtn').removeClass('activated');};
 var initParameterPanel = function(){$('.param-group-title').click(function(e){let g=$(this).parents('.param-group');let c=$(g).find('.param-group-content').first();if(c.is(':visible')){c.hide();}else{c.css('display','flex');}$(g).removeClass('opened');});}
@@ -193,7 +193,7 @@ var startRotationEngine = function () {
   let perPage = isDefault ? 100 : pulseConfig.getInt('machinesperpage', 12);
   if (perPage < 1) perPage = 12;
 
-  // On s'assure que le cache est propre (trim)
+  // Ensure the cache is clean (trim)
   if (_allMachinesCache.length > 0) {
     _allMachinesCache = _allMachinesCache.map(s => s.trim()).filter(s => s !== '');
   }
@@ -202,13 +202,13 @@ var startRotationEngine = function () {
     return;
   }
 
-  // Cas 1 : Tout tient sur une seule page -> Pas de rotation
+  // Case 1: Everything fits on a single page -> No rotation
   if (_allMachinesCache.length <= perPage) {
 
-    // 1. On affiche toutes les machines
+    // 1. Display all machines
     eventBus.EventBus.dispatchToAll('updateVisibleMachines', { machines: _allMachinesCache });
 
-    // 2. [CORRECTION] On dit explicitement à la barre de progression de se cacher (Total=1, Delay=0)
+    // 2. [FIX] Explicitly tell the progress bar to hide (Total=1, Delay=0)
     eventBus.EventBus.dispatchToAll('rotationPageUpdate', {
       page: 1,
       total: 1,
@@ -218,35 +218,35 @@ var startRotationEngine = function () {
     return;
   }
 
-  // Cas 2 : Rotation nécessaire
+  // Case 2: Rotation needed
   showNextPageLoop(perPage);
 };
 
 var showNextPageLoop = function(perPage) {
   let totalPages = Math.ceil(_allMachinesCache.length / perPage);
 
-  // Calcul des indices
+  // Calculate indices
   let start = _currentRotationIndex * perPage;
   let end = start + perPage;
 
-  // Extraction des IDs
+  // Extract IDs
   let machinesForPage = _allMachinesCache.slice(start, end);
   let currentPageNum = _currentRotationIndex + 1;
 
-  // Affiche la grille
+  // Display the grid
   eventBus.EventBus.dispatchToAll('updateVisibleMachines', { machines: machinesForPage });
 
   let delay = pulseConfig.getInt('rotationdelay', 10) * 1000;
   if (delay < 3000) delay = 3000;
 
-  // Met à jour la barre de progression
+  // Update progress bar
   eventBus.EventBus.dispatchToAll('rotationPageUpdate', {
     page: currentPageNum,
     total: totalPages,
     delay: delay
   });
 
-  // Préparation index suivant
+  // Prepare next index
   _currentRotationIndex++;
   if (_currentRotationIndex >= totalPages) _currentRotationIndex = 0;
 
@@ -461,7 +461,7 @@ var showLegend = function () {
       }
     }
 
-    // Push uniquement en vue live (showlegend === 'true') — les autres vues gardent l'overlay
+    // Push only in live view (showlegend === 'true') — other views keep the overlay
     if (pulseConfig.getString('showlegend') === 'true' && legendHeight > 2) {
       $('.pulse-mainarea-inner').css('padding-bottom', (legendHeight + 2) + 'px');
     } else {
@@ -469,8 +469,8 @@ var showLegend = function () {
     }
   };
 
-  // ResizeObserver: recalcule dès que le contenu de la légende change de taille
-  // (remplace le $.resize() jQuery qui n'observe pas nativement les éléments non-window)
+  // ResizeObserver: recalculates whenever legend content size changes
+  // (replaces jQuery $.resize() which does not natively observe non-window elements)
   new ResizeObserver(() => updateLegendVisibility()).observe($('.legend-content')[0]);
 
   if (pulseConfig.getString('showlegend') == 'dynamic') {
@@ -505,7 +505,7 @@ exports.preparePage = function (currentPageMethods) {
   if (machineValues.length > 0) {
     const valMachine = machineValues.filter(v => v !== "").join(',');
     pulseConfig.set('machine', valMachine, true);
-    // [CORRECTION IMPORTANTE] On nettoie les IDs ici aussi
+    // [IMPORTANT FIX] Clean IDs here too
     _allMachinesCache = valMachine.split(',').map(s => s.trim());
   } else {
     let cfgMachines = pulseConfig.getArray('machine');
