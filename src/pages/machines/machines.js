@@ -9,7 +9,7 @@ var pulsePage = require('pulsePage');
 require('x-machinetab/x-machinetab');
 require('x-machinedisplay/x-machinedisplay');
 require('x-lastserialnumber/x-lastserialnumber');
-require('x-lastworkinformation/x-lastworkinformation');
+require('x-lastworkinformationbar/x-lastworkinformationbar');
 require('x-lastmachinestatetemplate/x-lastmachinestatetemplate');
 require('x-lastmachinestatus/x-lastmachinestatus');
 require('x-unansweredreasonnumber/x-unansweredreasonnumber');

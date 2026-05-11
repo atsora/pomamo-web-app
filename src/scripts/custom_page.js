@@ -54,6 +54,7 @@ require('x-lastmachinestatus/x-lastmachinestatus');
 require('x-lastserialnumber/x-lastserialnumber');
 require('x-lastshift/x-lastshift');
 require('x-lastworkinformation/x-lastworkinformation');
+require('x-lastworkinformationbar/x-lastworkinformationbar');
 require('x-machinedisplay/x-machinedisplay');
 require('x-machinemodecolorlegends/x-machinemodecolorlegends');
 require('x-machinemodelegends/x-machinemodelegends');
