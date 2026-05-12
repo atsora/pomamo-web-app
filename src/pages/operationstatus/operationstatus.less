@@ -265,7 +265,6 @@ x-groupgrid {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 10em;
       min-width: 0;
       overflow: hidden;
 
@@ -339,7 +338,7 @@ x-groupgrid {
       justify-content: center;
       align-items: center;
       aspect-ratio: 1 / 1;
-      max-height: 15em;
+      max-height: 60vh;
       min-width: 0;
       min-height: 0;
       position: relative;
@@ -360,18 +359,32 @@ x-groupgrid {
 
     .operationstatus-light-div {
       flex: 1 1 0;
+      align-self: stretch;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 6em !important;
+      position: relative;
       min-width: 0;
       min-height: 0;
       overflow: hidden;
 
+      // Absolute positioning prevents the stacklight SVG (intrinsic viewBox ratio 1:2.8 vertical)
+      // from dictating the row height — the box follows its siblings instead.
       x-stacklight {
-        height: 100%; width: 100%;
+        position: absolute;
+        inset: 0;
         display: flex; justify-content: center; align-items: center;
-        svg, .stacklight-container { max-height: 100%; max-width: 100%; }
+
+        // Inner wrapper must also flex-center, otherwise the SVG (block-level child) sits top-left.
+        .stacklight {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+        }
+
+        svg, .stacklight-container { max-height: 75%; max-width: 75%; }
       }
     }
   }
@@ -546,7 +559,6 @@ x-redstacklightbar { display: none !important; }
     }
     .groupgrid-item {
       height: 100% !important;
-      max-height: 60vh !important;
       min-width: auto !important;
     }
   }
@@ -597,6 +609,7 @@ x-redstacklightbar { display: none !important; }
 
       .operationstatus-cycleprogress {
         height: 100% !important;
+        max-height: none !important;
         x-freetext {
           font-size: clamp(10px, 4cqw, 1000px) !important;
         }

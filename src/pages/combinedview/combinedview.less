@@ -168,7 +168,6 @@ x-groupgrid {
     min-width: 15%;
     max-width: 25%;
     flex: 1 1 0 !important;
-    height: 12em !important;
   }
 
   .combinedview-leftdisplay {
@@ -213,12 +212,36 @@ x-groupgrid {
     position: relative;
     min-width: 0;
     aspect-ratio: 1 / 1;
-    max-height: 19em;
+    max-height: 60vh;
   }
 
   .combinedview-rightdisplay {
     box-sizing: border-box;
     padding: 0.6em;
+    align-self: stretch;
+    position: relative;
+    overflow: hidden;
+
+    // Absolute positioning prevents the stacklight SVG (intrinsic viewBox ratio 1:2.8 vertical)
+    // from dictating the row height — the box follows its siblings instead.
+    x-stacklight {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      // Inner wrapper must also flex-center, otherwise the SVG (block-level child) sits top-left.
+      .stacklight {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      svg, .stacklight-container { max-height: 75%; max-width: 75%; }
+    }
   }
 }
 
@@ -288,7 +311,6 @@ x-groupgrid {
     }
     .groupgrid-item {
       height: auto !important;
-      max-height: 60vh !important;
       min-width: auto !important;
     }
   }
@@ -339,6 +361,7 @@ x-groupgrid {
     .combinedview-runningslotpie {
       flex-grow: 2;
       height: auto !important;
+      max-height: none !important;
     }
     .combinedview-leftdisplay .combinedview-today {
       font-size: 5cqh !important;
