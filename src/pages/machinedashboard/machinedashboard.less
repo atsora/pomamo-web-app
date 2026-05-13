@@ -437,6 +437,14 @@ x-machinetab .machinetab-machine-cell {
     font-size: 4vh;
     font-weight: bold;
   }
+
+  // Override the component's fixed width: 80px so the text scales with font-size
+  // (4vh can render text wider than 80px on tall viewports → would overflow into
+  // the sibling .changedtools-content). Letting the flex layout handle sizing:
+  // SVG (flex: 1, min-width: 0) absorbs the remaining space.
+  x-productionbar .productionbar-text {
+    width: auto;
+  }
 }
 
 
@@ -491,9 +499,10 @@ x-machinetab .machinetab-machine-cell {
   // no tools to show. The operation label is hidden on the dashboard
   // (.pulse-cellbar-current-data is display:none above), so an empty tools
   // list = nothing to display — the wrapper, label and perf-tool gap
-  // shouldn't reserve space. Uses :has() + :empty to react reactively to
-  // refresh() repopulating .toollifemachine-tools.
-  .changedtools-content:has(.toollifemachine-tools:empty) {
+  // shouldn't reserve space. Gated on :not(.pulse-component-loading) so the
+  // rule doesn't fire during initial load when .toollifemachine-tools is
+  // briefly empty before refresh() populates it.
+  .changedtools-content:has(x-toollifemachine:not(.pulse-component-loading) .toollifemachine-tools:empty) {
     display: none !important;
   }
 }
@@ -714,28 +723,7 @@ x-machinetab .machinetab-machine-cell {
   }
 }
 
-// Mid-range — landscape phones / small tablets. Keep the desktop semantics
-// (planchers, marges, heights) but compress them so the tile fits without
-// excessive whitespace. We don't fully reset to mobile mode here.
-@media (min-width: 686px) and (max-width: 1000px) {
-  .tile-content {
-    height: unset;                       // let the tile flex/scroll instead of capping at 20em
-    gap: 0.5em;
-  }
-  .tile {
-    .chronology-content {
-      margin: 0.5em 0 0.25em 0.5em;      // ⅓ of desktop's 1.5em 0 0.5em 1em
-    }
-    .dashboard-footer {
-      margin-bottom: 0.5em;              // ¼ of desktop's 2em
-    }
-  }
-  x-productiontrackergraph .productiontrackergraph-content {
-    align-items: unset;
-  }
-}
-
-@media (max-width: 685px) {
+@media @all-phones-media {
   .tile-content {
     height: unset;
   }
