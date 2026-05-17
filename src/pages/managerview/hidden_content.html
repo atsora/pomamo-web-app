@@ -13,11 +13,11 @@ SPDX-License-Identifier: Apache-2.0
       <x-machinedisplay></x-machinedisplay>
       <div class="div-current">
         <x-currentcncvalue></x-currentcncvalue>
-        <x-lastworkinformation cancel-bar-style='true'> </x-lastworkinformation>
+        <x-lastworkinformation></x-lastworkinformation>
       </div>
     </div>
   </div>
-  <x-barstack period-context="managerview" motion-context="motion_machine"></x-barstack>
+  <x-barstack period-context="managerview" motion-context="motion_machine" auto-min-height></x-barstack>
   <div class="div-percent">
     <x-motionpercentage motion-context="motion_machine" period-context="managerview"></x-motionpercentage>
     <x-motiontime motion-context="motion_machine" period-context="managerview"></x-motiontime>

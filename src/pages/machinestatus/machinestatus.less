@@ -59,7 +59,6 @@ x-groupgrid {
   .groupgrid-item {
     height: fit-content !important;
     min-height: unset !important;
-    max-height: none !important;
     min-width: 0 !important;
   }
 }
@@ -223,7 +222,8 @@ x-groupgrid {
       padding: 0.4em;
 
       min-height: unset;
-      height: 10em !important;
+      aspect-ratio: 1 / 1;
+      max-height: 40vh;
 
       x-stacklight {
         position: relative;
@@ -288,7 +288,8 @@ x-groupgrid {
 
       padding: 0.4em;
       box-sizing: border-box;
-      height: 15em !important;
+      aspect-ratio: 1 / 1;
+      max-height: 60vh;
 
       x-reasonslotpie {
         .time-in-pie {
@@ -317,7 +318,6 @@ x-groupgrid {
     flex-basis: auto;
 
     x-barstack {
-      height: 2em !important;
       width: auto;
       margin-left: @margin_graduation;
       margin-right: @margin_graduation;
@@ -358,7 +358,6 @@ x-currentworkinfo {
     }
     .groupgrid-item {
       height: 100% !important;
-      max-height: 60vh !important;
       min-width: auto !important;
     }
   }
@@ -416,6 +415,7 @@ x-currentworkinfo {
         padding: 0.5cqmin !important;
         min-height: 50px !important;
         height: auto !important;
+        max-height: none !important;
       }
       .machinestatus-reasonslotpie {
         flex-grow: 2;
@@ -423,6 +423,7 @@ x-currentworkinfo {
         min-height: 0;
         padding: 0.5cqmin !important;
         height: auto !important;
+        max-height: none !important;
       }
     }
 
@@ -432,6 +433,8 @@ x-currentworkinfo {
 
       x-barstack {
         height: 30px !important;
+        min-height: 0 !important;
+        > * { min-height: 0 !important; }
       }
     }
   }

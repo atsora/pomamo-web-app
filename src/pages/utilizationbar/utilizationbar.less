@@ -52,7 +52,6 @@ x-groupgrid {
   .groupgrid-item {
     height: auto !important;
     min-height: unset !important;
-    max-height: none !important;
     min-width: 0 !important;
   }
 }
@@ -164,7 +163,7 @@ x-datetimegraduation {
   text-align: center;
 }
 
-@media (max-width: 685px) {
+@media @all-phones-media {
   .clock-div {
     height: auto;
     margin-top: 0;
@@ -194,7 +193,6 @@ x-datetimegraduation {
     }
     .groupgrid-item {
       height: auto !important;
-      max-height: 60vh !important;
       min-width: auto !important;
     }
   }
@@ -234,6 +232,8 @@ x-datetimegraduation {
       x-barstack {
         flex: 0 0 60px !important;
         height: auto !important;
+        min-height: 0 !important;
+        > * { min-height: 0 !important; }
       }
     }
 

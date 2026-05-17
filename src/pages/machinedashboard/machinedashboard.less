@@ -5,10 +5,10 @@
 
 // Global
 @import "pulse.customdialog.less";
-@import "pulse.exports.light.less"; // Global import
+@import "pulse.exports.light.less";
+@import "style.less";
 
 // Components
-@import "x-grouparray/x-grouparray.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-machinetab/x-machinetab.less";
 @import "x-lastmachinestatus/x-lastmachinestatus.less";
@@ -20,7 +20,6 @@
 @import "x-motionpercentage/x-motionpercentage.less";
 @import "x-toollifemachine/x-toollifemachine.less";
 @import "x-productiontrackergraph/x-productiontrackergraph.less";
-@import "x-motionpercentage/x-motionpercentage.less";
 @import "x-datetimegraduation/x-datetimegraduation.less";
 @import "x-workinfo/x-workinfo.less";
 @import "x-production/x-production.less";
@@ -28,7 +27,6 @@
 @import "x-defaultpie/x-defaultpie.less";
 @import "x-scrapstatus/x-scrapstatus.less";
 @import "x-periodmanager/x-periodmanager.less";
-@import "style.less";
 @import "x-productionbar/x-productionbar.less";
 @import "x-productiongauge/x-productiongauge.less";
 
@@ -42,6 +40,8 @@
   height: 100%;
 }
 
+.specificnumber-content x-production .production-actual-value,
+.specificnumber-content x-production .production-target-value,
 .productionshiftgoal-data {
   font-weight: bold;
   font-size: 7vh;
@@ -55,10 +55,6 @@
   flex-grow: 0;
 }
 
-&.grouparray-in-error {
-  flex-grow: 10;
-}
-
 .single-machine-tab {
   width: 200px;
 }
@@ -68,26 +64,25 @@
   list-style: none;
 }
 
-x-machinetab {
-  .machinetab-machine-cell {
-    background-color: @box_color;
-    color: @box_text_color;
+x-machinetab .machinetab-machine-cell {
+  background-color: @box_color;
+  color: @box_text_color;
+
+  .machinetab-machine,
+  .machinetab-icons {
+    opacity: 0.6;
+  }
+
+  &.active {
+    background-color: @color_background_alternate;
 
     .machinetab-machine,
     .machinetab-icons {
-      opacity: 0.6;
-    }
-
-    &.active {
-      background-color: @color_background_alternate;
-
-      .machinetab-machine,
-      .machinetab-icons {
-        opacity: 1;
-      }
+      opacity: 1;
     }
   }
 }
+
 
 // ==========================================
 // 2. DASHBOARD MAIN CONTAINER
@@ -95,18 +90,29 @@ x-machinetab {
 .tile {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
-  padding: 10px 10px;
+  padding: 10px;
   flex-shrink: 1;
   width: 100%;
   justify-content: space-between;
   background-color: @color_background;
   color: @box_text_color;
   border-radius: @border_radius;
-  width: 100%;
   height: 100%;
+  max-height: 100%;
+
+  // Direct children keep their natural height — no shrinking to fit the
+  // available space. When their total exceeds the tile height, the tile scrolls.
+  > * {
+    flex-shrink: 0;
+  }
 }
+
+.groupgrid-item {
+  height: 100% !important;
+}
+
 
 // ==========================================
 // 3. TILE HEADER + NAV CONTENT
@@ -126,7 +132,6 @@ x-machinetab {
   align-items: center;
   flex: 1;
   height: 100%;
-
 }
 
 .tile-title {
@@ -135,7 +140,7 @@ x-machinetab {
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: 4px 10px 4px 10px;
+  padding: 4px 10px;
   width: 50%;
   color: @box_header_text_color;
   border: 1px solid @color_window_border;
@@ -156,8 +161,8 @@ x-machinetab {
 
     x-reasonbutton {
       margin-left: unset;
-      width: 22px;
-      height: 22px;
+      width: 2.5vh;
+      height: 2.5vh;
     }
   }
 
@@ -178,7 +183,7 @@ x-machinetab {
       justify-content: center;
       padding-left: 24px;
       padding-right: 24px;
-      font-size: 16px;
+      font-size: 2vh;
       font-family: inherit;
       font-weight: 500;
       border-radius: @border_radius_small;
@@ -242,412 +247,447 @@ x-machinetab {
   text-align: center;
   height: 100%;
   column-gap: 0.5em;
+
+  // Top-right info-box: font-size variable (vh) instead of the default em.
+  &.info-box {
+    font-size: 2.5vh;
+  }
+
+  x-workinfo {
+    width: 100%;
+
+    .workinfo-singledata {
+      white-space: nowrap;
+      width: 100%;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+  }
+
+  .text {
+    font-size: 1.8vh;
+    font-family: inherit;
+    font-weight: normal;
+  }
+
+  .divider {
+    margin-right: 35px;
+    margin-left: 35px;
+  }
+
+  .info-subtext {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+    .todo {
+      margin-right: 13px;
+    }
+  }
 }
 
-.tile .text-box x-workinfo {
-  width: 100%;
-}
-
-.tile .text-box x-workinfo .workinfo-singledata {
-  white-space: nowrap;
-  width: 100%;
-  padding: 0 10px;
-  box-sizing: border-box;
-}
-
-.tile .text-box .text {
-  font-size: 15px;
-  font-family: inherit;
-  font-weight: 500;
-  font-weight: normal;
-}
-
-.tile .text-box .divider {
-  margin-right: 35px;
-  margin-left: 35px;
-}
-
-.tile .text-box .info-subtext {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-}
-
-.tile .text-box .info-subtext .todo {
-  margin-right: 13px;
-}
 
 // ==========================================
 // 4. STATS CONTENT (Middle Section)
 // ==========================================
-.tile .stats-content {
-  display: flex;
-  flex-direction: column;
-  margin-left: 2em;
-  margin-top: 1em;
-  height: fit-content;
-  gap: 1em;
+.tile {
+  .stats-content {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2em;
+    margin-top: 1em;
+    height: fit-content;
+    gap: 1em;
+
+    x-defaultpie,
+    x-productiongauge {
+      display: block;
+      height: 100%;
+      width: 40% !important;
+    }
+
+    x-productiontrackergraph {
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+      width: 0;
+      height: auto;
+      align-self: stretch;
+      align-items: center;
+    }
+  }
+
+  .stats-perf-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    align-items: stretch;
+    justify-content: space-evenly;
+  }
+
+  .performance-stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    flex: 0 0 auto;
+    max-width: 50%;
+    width: 50%;
+    justify-content: center;
+  }
+
+  .performance-display-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .numbers-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+    justify-content: center;
+  }
+
+  .specificnumber-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    row-gap: 0.2em;
+
+    x-production {
+      display: flex;
+      flex-direction: column;
+
+      .production-actual-value,
+      .production-target-value {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .production-content-text-actual,
+      .production-content-text-target {
+        font-size: 1.8vh;
+      }
+
+      .production-actual-separator,
+      .production-target-separator {
+        display: none;
+      }
+    }
+
+    x-motionpercentage {
+      line-height: 2em;
+      margin-top: -2em;
+
+      .motionpercentage {
+        display: flex;
+        justify-content: center;
+
+        span {
+          font-size: 1.8vh;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .title-number-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 0.5em;
+
+    .clock-div {
+      height: unset;
+      line-height: unset;
+      font-weight: bold;
+
+      .clock-text {
+        vertical-align: unset;
+        font-size: 1.8vh;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .scrap-content {
+    margin-top: 25px;
+
+    .scrap-button {
+      display: flex;
+      align-items: center;
+      column-gap: 0.5em;
+    }
+  }
+
+  // Big numeric outputs (production current/target, gauge label, bar label)
+  // share the same font-size across all viewports.
+  x-productionbar .productionbar-text,
+  x-productiongauge .productiongauge-text {
+    font-size: 4vh;
+    font-weight: bold;
+  }
+
+  // Override the component's fixed width: 80px so the text scales with font-size
+  // (4vh can render text wider than 80px on tall viewports → would overflow into
+  // the sibling .changedtools-content). Letting the flex layout handle sizing:
+  // SVG (flex: 1, min-width: 0) absorbs the remaining space.
+  x-productionbar .productionbar-text {
+    width: auto;
+  }
 }
 
-.tile .stats-perf-wrapper {
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  align-items: stretch;
-  justify-content: space-evenly;
-}
-
-.tile .performance-stats-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  flex: 0 0 auto;
-  max-width: 50%;
-  width: 50%;
-  justify-content: center;
-}
-
-.tile .performance-display-wrapper {
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 100%;
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-.tile .numbers-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: fit-content;
-  justify-content: center;
-}
-
-.tile .specificnumber-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;
-  row-gap: 0.2em;
-}
-
-.tile .specificnumber-content x-production {
-  display: flex;
-  flex-direction: column;
-}
-
-.tile .specificnumber-content x-production .production-actual-value,
-.tile .specificnumber-content x-production .production-target-value {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 7vh;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.tile .specificnumber-content x-production .production-content-text-actual,
-.tile .specificnumber-content x-production .production-content-text-target {
-  font-size: 1.8vh;
-}
-
-.tile .specificnumber-content x-production .production-actual-separator,
-.tile .specificnumber-content x-production .production-target-separator {
-  display: none;
-}
-
-.tile .title-number-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 0.5em;
-}
-
-.tile .title-number-content .clock-div {
-  height: unset;
-  line-height: unset;
-  font-weight: bold;
-}
-
-.tile .title-number-content .clock-div .clock-text {
-  vertical-align: unset;
-  font-size: 1.8vh;
-  font-weight: bold;
-}
-
-.tile .specificnumber-content x-motionpercentage {
-  line-height: 2em;
-  margin-top: -2em;
-}
-
-.tile .specificnumber-content x-motionpercentage .motionpercentage {
-  display: flex;
-  justify-content: center;
-}
-
-.tile .specificnumber-content x-motionpercentage .motionpercentage span {
-  font-size: 1.8vh;
-  font-weight: bold;
-}
-
-.tile .scrap-content {
-  margin-top: 25px;
-}
-
-.tile .scrap-content .scrap-button {
-  display: flex;
-  align-items: center;
-  column-gap: 0.5em;
-}
-
-.tile .stats-content x-defaultpie {
-  display: block;
-  height: 100% ;
-  width: 40% !important;
-}
-
-.tile .stats-content x-productiongauge {
-  display: block;
-  height: 100%;
-  width: 40% !important;
-}
-
-.tile .stats-content x-productiontrackergraph {
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: 0;
-  width: 0;
-  height: auto;
-  align-self: stretch;
-  align-items: center;
-}
 
 // ==========================================
 // 5. TOOL LIFE & PERFORMANCE
 // ==========================================
-.tile .perf-tool-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 5px;
-  width: fit-content;
+.tile {
+  .perf-tool-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    width: fit-content;
+  }
+
+  x-productionbar {
+    width: 22em !important;
+    height: auto;
+
+    .productionbar-svg {
+      margin-top: 0.75em;
+    }
+
+    .changedtools-content {
+      align-items: center;
+    }
+  }
+
+  .changedtools-content {
+    display: flex;
+  }
+
+  .toollifemachine-content x-toollifemachine {
+    .pulse-cellbar-main {
+      justify-content: flex-end;
+      flex-flow: row-reverse nowrap !important;
+      overflow: hidden;
+    }
+
+    .pulse-cellbar-between,
+    .pulse-cellbar-current-data {
+      display: none !important;
+    }
+
+    .toollifemachine-tools {
+      flex-direction: row;
+      column-gap: 0.5em;
+    }
+  }
+
+  // Collapse the whole "change of tools" block when x-toollifemachine has
+  // no tools to show. The operation label is hidden on the dashboard
+  // (.pulse-cellbar-current-data is display:none above), so an empty tools
+  // list = nothing to display — the wrapper, label and perf-tool gap
+  // shouldn't reserve space. Gated on :not(.pulse-component-loading) so the
+  // rule doesn't fire during initial load when .toollifemachine-tools is
+  // briefly empty before refresh() populates it.
+  .changedtools-content:has(x-toollifemachine:not(.pulse-component-loading) .toollifemachine-tools:empty) {
+    display: none !important;
+  }
 }
 
-.tile x-productionbar {
-  width: 22em !important;
-  height: auto;
-}
-
-.tile x-productionbar .productionbar-svg {
-  margin-top: 0.75em;
-}
-
-.tile x-productionbar .changedtools-content {
-  align-items: center;
-}
-
-.tile .changedtools-content {
-  display: flex;
-}
-
-.tile .toollifemachine-content x-toollifemachine .pulse-cellbar-main {
-  justify-content: flex-end;
-  flex-flow: row-reverse nowrap !important;
-  overflow: hidden;
-}
-
-.tile .toollifemachine-content x-toollifemachine .pulse-cellbar-between,
-.tile .toollifemachine-content x-toollifemachine .pulse-cellbar-current-data {
-  display: none !important;
-}
-
-.tile .toollifemachine-content x-toollifemachine .toollifemachine-tools {
-  flex-direction: row;
-  column-gap: 0.5em;
-}
 
 // ==========================================
 // 6. CHRONOLOGY SECTION
 // ==========================================
-.tile .chronology-content {
-  height: 85px;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  row-gap: 8px;
-  column-gap: 1em;
-  margin: 1.5em 0em 0.5em 1em;
+.tile {
+  .chronology-content {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    row-gap: 8px;
+    column-gap: 1em;
+    margin: 1.5em 0 0.5em 1em;
+    min-height: 85px;
+  }
+
+  .chart-chronology {
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+    padding: 10px 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: @color_background_alternate;
+    border-radius: @border_radius_small;
+
+    x-datetimegraduation {
+      flex: 0 0 auto;
+    }
+
+    x-barstack {
+      flex: 1;
+      min-height: 0;
+      width: auto;
+      margin-right: @margin_graduation;
+      margin-left: @margin_graduation;
+
+      .barstack-reason-group > x-cncalarmbar {
+        display: none !important;
+      }
+    }
+  }
 }
 
-.tile .chart-chronology {
-  flex: 1;
-  height: 100%;
-  overflow: hidden;
-  padding: 10px 0;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  background-color: @color_background_alternate;
-  border-radius: @border_radius_small;
-}
-
-.tile .chart-chronology x-datetimegraduation {
-  flex: 0 0 auto;
-}
-
-.tile .chart-chronology x-barstack {
-  flex: 1;
-  min-height: 0;
-  width: auto;
-  margin-right: @margin_graduation;
-  margin-left: @margin_graduation;
-}
-
-.tile .chart-chronology x-barstack .barstack-reason-group > x-cncalarmbar {
-  display: none !important;
-}
 
 // ==========================================
 // 7. DASHBOARD FOOTER (Toolbar & Stops)
 // ==========================================
-.tile .dashboard-footer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  height: 50px;
-  overflow: hidden;
-  flex-wrap: wrap;
-  margin-bottom: 2em;
+.tile {
+  .dashboard-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 50px;
+    overflow: hidden;
+    flex-wrap: wrap;
+    margin-bottom: 2em;
+  }
+
+  .stops-content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    .pulse-lastbar {
+      height: 100%;
+      min-height: 0;
+      line-height: normal;
+    }
+
+    .pulse-cellbar-main {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: opacity(100%);
+    }
+
+    .pulse-cellbar-current-data {
+      display: none;
+    }
+
+    .pulse-cellbar-past-data {
+      padding: 0 8px;
+      box-sizing: border-box;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      column-gap: 5px;
+      border: 1px solid @color_window_border;
+      border-radius: @border_radius_small;
+
+      .pulse-missing-data {
+        display: none;
+      }
+    }
+
+    .pulse-cellbar-cell-missing {
+      color: #101521;
+      background-color: #FF7C35;
+      border: none !important;
+
+      &:hover {
+        background-color: #FCA975 !important;
+        border: none;
+        color: #101521 !important;
+      }
+    }
+  }
+
+  .period-content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+
+    .periodtoolbar {
+      margin: unset;
+      display: flex;
+      border: 1px solid @color_window_border;
+      height: 100%;
+      border-radius: @border_radius_small;
+
+      .content-period-buttons {
+        flex-wrap: wrap;
+
+        .periodtoolbar-li-btn {
+          display: none;
+
+          &:has(.periodtoolbar-home),
+          &:has(.periodtoolbar-day),
+          &:has(.periodtoolbar-shift) {
+            display: flex;
+          }
+        }
+      }
+
+      .content-zoom-buttons {
+        display: none;
+      }
+
+      .periodtoolbar-li-text {
+        margin: 4px 0;
+        height: 24px;
+        display: flex;
+        justify-content: center;
+        font-size: 1.3em;
+        font-weight: 500;
+
+        // Targets the embedded x-datetimerange's display zone (replaces the
+        // legacy .periodtoolbar-display selector that is no longer in the DOM).
+        .datetimerange-display {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 4px;
+        }
+      }
+    }
+  }
+
+  .dailydate-content,
+  .hour-content {
+    height: 100%;
+    width: 100px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+
+    .clock-div {
+      height: unset;
+      font-size: 1.2em;
+    }
+  }
 }
 
-.tile .stops-content {
-  display: flex;
-  align-items: center;
-  height: 100%; /* Height 100% au lieu de align-self stretch */
-}
-
-.tile .stops-content .pulse-lastbar {
-  height: 100%;
-  min-height: 0;
-  line-height: normal;
-}
-
-.tile .stops-content .pulse-cellbar-main {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  filter: opacity(100%);
-}
-
-.tile .stops-content .pulse-cellbar-current-data {
-  display: none;
-}
-
-.tile .stops-content .pulse-cellbar-past-data {
-  padding: 0px 8px;
-  box-sizing: border-box;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: 5px;
-  border: 1px solid @color_window_border;
-  border-radius: @border_radius_small;
-}
-
-.tile .stops-content .pulse-cellbar-past-data .pulse-missing-data {
-  display: none;
-}
-
-.tile .stops-content .pulse-cellbar-cell-missing {
-  color: #101521;
-  background-color: #FF7C35;
-  border: none !important;
-}
-
-.tile .stops-content .pulse-cellbar-cell-missing:hover {
-  background-color: #FCA975 !important;
-  border: none;
-  color: #101521 !important;
-}
-
-.tile .period-content {
-  height: 100%; /* Height 100% au lieu de align-self stretch */
-  display: flex;
-  align-items: center;
-  width: fit-content;
-}
-
-.tile .period-content .periodtoolbar {
-  margin: unset;
-  display: flex;
-  border: 1px solid @color_window_border;
-  height: 100%;
-  border-radius: @border_radius_small;
-}
-
-.tile .period-content .periodtoolbar .content-period-buttons {
-  flex-wrap: wrap;
-}
-
-.tile .period-content .periodtoolbar .content-period-buttons .periodtoolbar-li-btn {
-  display: none;
-}
-
-.tile .period-content .periodtoolbar .content-period-buttons .periodtoolbar-li-btn:has(.periodtoolbar-home),
-.tile .period-content .periodtoolbar .content-period-buttons .periodtoolbar-li-btn:has(.periodtoolbar-day),
-.tile .period-content .periodtoolbar .content-period-buttons .periodtoolbar-li-btn:has(.periodtoolbar-shift) {
-  display: flex;
-}
-
-.tile .period-content .periodtoolbar .content-zoom-buttons {
-  display: none;
-}
-
-.tile .period-content .periodtoolbar .periodtoolbar-li-text {
-  margin: 4px 0px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  font-size: 1.3em;
-  font-weight: 500;
-}
-
-.tile .period-content .periodtoolbar .periodtoolbar-li-text .periodtoolbar-display {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4px;
-}
-
-.tile .dailydate-content,
-.tile .hour-content {
-  height: 100%; /* Ajout de Height 100% pour remplir l'espace des 50px */
-  width: 100px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-}
-
-.tile .dailydate-content .clock-div,
-.tile .hour-content .clock-div {
-  height: unset;
-  font-size: 1.2em;
-}
 
 // ==========================================
-// 8. MISCELLANEOUS & OVERRIDES
+// 8. GENERIC HELPERS
 // ==========================================
-.customeDialog-stopclassification {
-  overflow: auto;
-}
-
-
 .text {
   font-weight: bolder;
   font-size: 1.8vh;
@@ -665,17 +705,17 @@ x-machinetab {
   color: @color_window;
   transition: 0.1s;
   cursor: pointer;
+
+  &:hover {
+    border: none;
+    background-color: #FCA975;
+  }
 }
 
-.body-btn:hover {
-  border: none;
-  background-color: #FCA975;
-}
 
 // ==========================================
 // 9. RESPONSIVE DESIGN (MEDIA QUERIES)
 // ==========================================
-
 
 @media (min-width: 1560px) and (max-height: 842px) {
   .tile .stats-content x-productiontrackergraph .productiontrackergraph-content {
@@ -683,43 +723,21 @@ x-machinetab {
   }
 }
 
-@media (max-width: 685px) {
+@media @all-phones-media {
+  .tile-content {
+    height: unset;
+  }
   .tile-header {
     flex-wrap: wrap;
     justify-content: center;
     gap: 5px;
     flex-shrink: 0;
   }
-  .tile .nav-content {
-    flex: 0 0 auto;
-    height: auto;
-  }
-  .tile .info-content,
-  .tile .info-box {
-    height: auto;
-  }
-  .stats-perf-wrapper {
-    flex-direction: column !important;
-  }
   .tile-title {
     min-width: fit-content;
   }
-  .tile .stats-content {
-    margin-left: 0;
-    margin-top: 0;
-  }
-  .tile .stats-content x-productiontrackergraph {
-    width: 100%;
-  }
-  .tile .performance-stats-container {
-    width: 100%;
-    max-width: 100%;
-  }
-  .tile .performance-display-wrapper {
-    height: 200px;
-  }
-  .tile .perf-tool-container {
-    flex-wrap: wrap;
+  .stats-perf-wrapper {
+    flex-direction: column !important;
   }
   .title-number-content {
     display: none !important;
@@ -730,9 +748,39 @@ x-machinetab {
   .productionshiftgoal-data {
     font-size: 5vh;
   }
-  .tile .specificnumber-content x-production .production-actual-value,
-  .tile .specificnumber-content x-production .production-target-value {
-    font-size: 5vh;
-    margin-bottom: 5px;
+  .tile {
+    .nav-content {
+      flex: 0 0 auto;
+      height: auto;
+    }
+    .info-content,
+    .info-box {
+      height: auto;
+    }
+    .stats-content {
+      margin-left: 0;
+      margin-top: 0;
+
+      x-productiontrackergraph {
+        width: 100%;
+      }
+    }
+    .performance-stats-container {
+      width: 100%;
+      max-width: 100%;
+    }
+    .performance-display-wrapper {
+      height: 200px;
+    }
+    .perf-tool-container {
+      flex-wrap: wrap;
+    }
+    .specificnumber-content x-production {
+      .production-actual-value,
+      .production-target-value {
+        font-size: 5vh;
+        margin-bottom: 5px;
+      }
+    }
   }
 }

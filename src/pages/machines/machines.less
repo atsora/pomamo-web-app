@@ -12,11 +12,10 @@
 @import "x-machineselection/x-machineselection.less";
 
 // Local
-@import "x-grouparray/x-grouparray.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-machinetab/x-machinetab.less";
 @import "x-lastserialnumber/x-lastserialnumber.less";
-@import "x-lastworkinformation/x-lastworkinformation.less";
+@import "x-lastworkinformationbar/x-lastworkinformationbar.less";
 @import "x-lastmachinestatetemplate/x-lastmachinestatetemplate.less";
 @import "x-setupmachine/x-setupmachine.less";
 @import "x-lastmachinestatus/x-lastmachinestatus.less";
@@ -69,10 +68,6 @@
     flex-shrink: 0;
     flex-grow: 0;
 
-    &.grouparray-in-error {
-      flex-grow: 10;
-    }
-
     x-machinetab {
       min-height: 400px;
       position: relative;
@@ -117,7 +112,7 @@
       }
     }
 
-    x-lastworkinformation {
+    x-lastworkinformationbar {
       .pulse-cellbar-main {
         background-color: @color_background_alternate;
         border-radius: @border_radius_small;
@@ -133,15 +128,16 @@
       }
     }
 
+    // Collapse the bar wrapper when the component signals "no operation tracked".
+    .pulse-bar-div:has(> x-lastworkinformationbar.lwi-no-operation) {
+      display: none;
+    }
+
     x-lastserialnumber {
       .pulse-cellbar-main {
         border-radius: @border_radius_small;
         background-color: @color_background_alternate;
       }
-    }
-
-    &.grouparray-in-error {
-      display: none;
     }
 
     overflow: hidden; // To avoid too wide display width scrollbar
@@ -330,7 +326,7 @@
 }
 
 
-@media (max-width: 685px) {
+@media @all-phones-media {
   .machines-main .tile{
     padding: 10px 5px;
   }

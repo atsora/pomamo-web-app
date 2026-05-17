@@ -37,7 +37,7 @@
 
 // === MODE NORMAL (defaut, em/rem) ===
 
-// Sécurité visibilité pour le framework Pulse
+// Visibility safety for Pulse framework
 x-groupgrid {
   display: flex !important;
   min-height: 100px;
@@ -54,7 +54,6 @@ x-groupgrid {
   .groupgrid-item {
     height: fit-content !important;
     min-height: unset !important;
-    max-height: none !important;
     min-width: 0 !important;
   }
 }
@@ -265,7 +264,6 @@ x-groupgrid {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 10em;
       min-width: 0;
       overflow: hidden;
 
@@ -338,7 +336,8 @@ x-groupgrid {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 15em !important;
+      aspect-ratio: 1 / 1;
+      max-height: 60vh;
       min-width: 0;
       min-height: 0;
       position: relative;
@@ -359,18 +358,32 @@ x-groupgrid {
 
     .operationstatus-light-div {
       flex: 1 1 0;
+      align-self: stretch;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 10em !important;
+      position: relative;
       min-width: 0;
       min-height: 0;
       overflow: hidden;
 
+      // Absolute positioning prevents the stacklight SVG (intrinsic viewBox ratio 1:2.8 vertical)
+      // from dictating the row height — the box follows its siblings instead.
       x-stacklight {
-        height: 100%; width: 100%;
+        position: absolute;
+        inset: 0;
         display: flex; justify-content: center; align-items: center;
-        svg, .stacklight-container { max-height: 100%; max-width: 100%; }
+
+        // Inner wrapper must also flex-center, otherwise the SVG (block-level child) sits top-left.
+        .stacklight {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+        }
+
+        svg, .stacklight-container { max-height: 75%; max-width: 75%; }
       }
     }
   }
@@ -481,8 +494,6 @@ x-groupgrid {
 
         x-barstack {
           flex: unset !important;
-          height: 2em !important;
-          min-height: 0;
           width: auto;
           margin: 0 24px;
         }
@@ -493,7 +504,6 @@ x-groupgrid {
         font-size: 1em !important;
         font-weight: bold;
         display: flex;
-        margin-top: 1%;
         align-self: flex-start;
         justify-content: flex-end;
       }
@@ -547,7 +557,6 @@ x-redstacklightbar { display: none !important; }
     }
     .groupgrid-item {
       height: 100% !important;
-      max-height: 60vh !important;
       min-width: auto !important;
     }
   }
@@ -598,6 +607,7 @@ x-redstacklightbar { display: none !important; }
 
       .operationstatus-cycleprogress {
         height: 100% !important;
+        max-height: none !important;
         x-freetext {
           font-size: clamp(10px, 4cqw, 1000px) !important;
         }
@@ -630,6 +640,8 @@ x-redstacklightbar { display: none !important; }
           x-barstack {
             flex: 1 1 0 !important;
             height: auto !important;
+            min-height: 0 !important;
+            > * { min-height: 0 !important; }
           }
         }
 

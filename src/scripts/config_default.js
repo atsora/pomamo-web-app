@@ -1,6 +1,11 @@
+// Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2025 Atsora Solutions
+//
+// SPDX-License-Identifier: Apache-2.0
+
 var PULSE_DEFAULT_CONFIG = PULSE_DEFAULT_CONFIG || {};
 
-/*
+/* 
  * ** Please keep this comment ** *
  * Global configuration : each next line overload previous ones
  * PULSE_DEFAULT_CONFIG.general -> def in PWC
@@ -11,7 +16,7 @@ var PULSE_DEFAULT_CONFIG = PULSE_DEFAULT_CONFIG || {};
  */
 
 /* ********** ********** ********** ********** ********** ********** */
-// general : Specific pulse web app - prepare use lem* module
+// general : Specific web app - prepare use lem* module
 /* ********** ********** ********** ********** ********** ********** */
 var LEM_CONFIG_DEFAULT = LEM_CONFIG_DEFAULT || {};
 LEM_CONFIG_DEFAULT.appName = "PulseWebApp";
@@ -29,8 +34,6 @@ PULSE_DEFAULT_CONFIG.general.showlegend = 'dynamic'; // Can be 'true', 'false', 
 PULSE_DEFAULT_CONFIG.general.enableGroups = false; // Can be 'true' to display machines by groups (including dynamic groups)
 PULSE_DEFAULT_CONFIG.general.allowpagerotation = false;
 PULSE_DEFAULT_CONFIG.general.allowproductionbar = false; // Default
-PULSE_DEFAULT_CONFIG.general.thresholdtargetproduction = 80;
-PULSE_DEFAULT_CONFIG.general.thresholdredproduction = 60;
 
 /* menuType: can be overload by role
 * - 'fullOrIcon': icon + text or just icon, factorization per title NOT possible
@@ -44,7 +47,7 @@ PULSE_DEFAULT_CONFIG.general.menuType = 'fullOrIcon';
 */
 PULSE_DEFAULT_CONFIG.general.customTitle = false;
 
-PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarmsat and currenticoncncalarm == default
+PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarmsat and currenticoncncalarm == default 
 
 // Default range for all pages :
 PULSE_DEFAULT_CONFIG.general.displayshiftrange = false;
@@ -56,51 +59,22 @@ PULSE_DEFAULT_CONFIG.general.showcoloredbar = {
   // top
   shift: false,
   machinestate: false,
-  observationstate: false,
+  observationstate: true,
   // middle
-  operation: false,
+  operation: true,
   isofile: false,
   cncalarm: false,
-  redstacklight: false,
+  redstacklight: true,
   cncvalue: false,
   // click on any bar
   click: {
     allbars: 'none' // each bar can be overloaded. Possible values: none, change, popup, details
   },
-  showdetails: [ //clickDisplayedDetails: [
-    'x-detailedreasonat',
-    //'x-detailedmachinestateat', // Keep comment to know what can be added
-    'x-detailedobservationstateat', // Keep comment to know what can be added
-    //'x-detailedshiftat', // Keep comment to know what can be added
-    'x-detailedworkinfoat', // Keep comment to know what can be added
-    //'x-detailedisofileat', // Keep comment to know what can be added
-    //'x-detailedpartsat', // Keep comment to know what can be added
-    //'x-detailedoperationcycleat', // Keep comment to know what can be added
-    'x-detailedsequenceat', // Keep comment to know what can be added
-    'x-detailedcncvaluesat',
-    'x-detailedalarmsat',
-    //'x-cncalarmbar', // Removed because too slow (cf NR-2019-05)
-    'x-redstacklightbar'
+  showdetails: [ 
   ],
-  showpopup: [ //clickDisplayedPopup: [
-    'x-detailedreasonat',
-    //'x-detailedmachinestateat', // Keep comment to know what can be added
-    //'x-detailedobservationstateat', // Keep comment to know what can be added
-    //'x-detailedshiftat', // Keep comment to know what can be added
-    'x-detailedworkinfoat',
-    //'x-detailedisofileat', // Keep comment to know what can be added
-    //'x-detailedpartsat', // Keep comment to know what can be added
-    //'x-detailedoperationcycleat', // Keep comment to know what can be added
-    'x-detailedsequenceat', // Keep comment to know what can be added
-    'x-detailedcncvaluesat',
-    'x-detailedalarmsat'
+  showpopup: [ 
   ]
 };
-
-// STOP CLASSIFICATION - grouping threshold
-// Number of visual units (distinct AlwaysSecondLevel groups + flat reasons) above which all reasons are grouped
-// Advanced Options occupies 1 slot → effective grid capacity = 12 - 1 = 11
-PULSE_DEFAULT_CONFIG.general.stopclassification = { maxflat: 11 };
 
 /* ********** ********** ********** ********** */
 // Configuration per page for pulse web app
@@ -114,27 +88,10 @@ PULSE_DEFAULT_CONFIG.pages = {
   },
   machines: {
     enableGroups: true, // BUT static ! Re-load is disabled
-    //showOverwriteRequired: true, // == default tagConfig
     displayshiftrange: true,
     componentsToDisplay: [
-      //'coloredbar',
-      'coloredbarwithpercent',
-      //'x-performancebar',                           // to remove in 6.0
-      //'x-lastserialnumber', -> hidden
-      'x-lastmachinestatus',
-      //'x-lastworkinformation',
-      //'x-sequencebar',                              // to remove in 6.0
-      'x-toollifemachine', // prod only -> remove for MOLD file
-      'x-cycleprogressbar', // prod only -> remove for MOLD file
-      //,'x-lastmachinestatetemplate'                  // + setup
-      'x-unansweredreasonnumber',
-      'x-reasonbutton',
-      'title-lastmachinestatus'
     ],
     showcoloredbar: {
-      observationstate: true,
-      operation: true,
-      redstacklight: true,
       // middle
       cncvalue: true,
       // click on any bar
@@ -146,10 +103,7 @@ PULSE_DEFAULT_CONFIG.pages = {
   machinespecification: {
     enableGroups: true,
     row: 1,
-    column: 1,
-    showcoloredbar: {
-      cncvalue: true
-    }
+    column: 1
   },
   machinestatus: {
     enableGroups: true,
@@ -163,7 +117,6 @@ PULSE_DEFAULT_CONFIG.pages = {
     weeklyshowcurrentweek: false, // = last 7 days
     displayshiftrange: false,
     displaymotiontime: false
-    //,displayCNCValueBar: true -> possible for S&N only
   },
   managerview: {
     enableGroups: true,
@@ -177,15 +130,12 @@ PULSE_DEFAULT_CONFIG.pages = {
       displayjob: false
     },
     showcoloredbar: {
-      observationstate: true,
-      operation: true,
-      redstacklight: true,
       // middle
       cncvalue: true,
       // click on any bar
-      click: {
-        allbars: 'details' // each bar can be overloaded. Possible values: none, change, popup, details
-      },
+      /*click: {
+        allbars: 'none' // each bar can be overloaded. Possible values: none, change, popup, details
+      },*/
     }
   },
   motionsummary: {
@@ -208,21 +158,12 @@ PULSE_DEFAULT_CONFIG.pages = {
   mpmilestones: {
     enableGroups: true,
   },
-  oeeview: {
-    enableGroups: true,
-    showpercent: true,
-    showworkinfo: true,
-  },
   operationstatus: {
     enableGroups: true,
     showworkinfo: true,
-    showworkinfosmall: true,
-    showcurrent: false,
-    showcurrentdisplay: 'tool',
-    showcurrentmachinestatuslogo: true,
-    showcurrentmachinestatusletter: false,
+    showworkinfobig: false,
     showproduction: true,
-    productionpercent: 'actualtarget',
+    productionpercent: 'actualtarget', // 'true' or 'actualonly' or 'actualtarget'
     productionpercentinpie: 'true',    // 'true' or 'actualonly' or 'actualtarget'
     showpie: true,
     showstacklight: true,
@@ -233,45 +174,15 @@ PULSE_DEFAULT_CONFIG.pages = {
     showalarm: false,
     showtool: true,
     showbar: true,
-    barshowalarms: false,
     barshowpercent: false,
     displayshiftrange: true,
-    //showOverwriteRequired: false, // == defined IN tagConfig OR LIVE
     showcoloredbar: {
       // middle
       cncalarm: false, //true, // Removed because too slow (cf NR-2019-05)
-      redstacklight: true, // always in DOM — visibility driven by barshowalarms option at runtime
-      cncvalue: true,
       // click on any bar
       /*click: {
         allbars: 'none' // each bar can be overloaded. Possible values: none, change, popup, details
       },*/
-    }
-  },
-  machinedashboard: {
-    showChangedTools: true,
-    showproductionbar: true,
-    openStopClassification: true, // Enable automatic opening of stop classification dialog
-    stopClassificationReopenDelay: 7, // Delay in seconds before reopening stop classification dialog after close
-    enableGroups: true,
-    displayshiftrange: true,
-    lastmachinestatus: 'stopclassification',
-    componentsToDisplay: [
-      'x-lastmachinestatus',
-    ],
-
-    showpercent: true,
-    showproductiondisplay: true, // Show/hide production display section
-    showproductiongauge: true, // true: show gauge, false: show pie
-
-    showproductiontrackergraph: true,
-
-    showcoloredbar: {
-      cncvalue: true,
-      click: {
-        allbars: 'change',
-        reason: 'stopclassification'
-      },
     }
   },
   plant: {
@@ -286,14 +197,10 @@ PULSE_DEFAULT_CONFIG.pages = {
     showreservecapacity: false
   },
   performancebar: {
-    enableGroups: true,
-    showmotionpercentage: true,
-    showmotiondisplay: 'percent'
+    enableGroups: true
   },
   performancegauge: {
-    enableGroups: true,
-    showmotionpercentage: true,
-    showmotiondisplay: 'percent'
+    enableGroups: true
   },
   reservecapacity: {
     enableGroups: true,
@@ -309,25 +216,7 @@ PULSE_DEFAULT_CONFIG.pages = {
       displayjob: false,
       displayshift: false,
       displaycncvalue: true
-    },
-    showcoloredbar: {
-      observationstate: true,
-      operation: true,
-      redstacklight: true,
-      cncvalue: true,
-      click: {
-        allbars: 'details' // Possible values: none, change, popup, details, stopclassification
-      }
     }
-    //,showOverwriteRequired: true, // == default tagConfig
-    /*showcoloredbar_bars: { // Removed
-      // middle
-      cycle: true,
-      operationslot: true,
-      cncalarm: false, //true, // Removed because too slow (cf NR-2019-05)
-      redstacklight: true,
-      cncvalue: true
-    }*/
   },
   scheduledstatus: {
     enableGroups: true,
@@ -337,7 +226,6 @@ PULSE_DEFAULT_CONFIG.pages = {
   },
   toollife: {
     enableGroups: true,
-    // mandatorygroupgroup: 'ET' ???
   },
   utilizationbar: {
     enableGroups: true,
@@ -357,66 +245,16 @@ PULSE_DEFAULT_CONFIG.pages = {
 // roles config - for pulse web app
 /* ********** ********** ********** ********** */
 
-/* firstPage: landing page after login, per role */
-PULSE_DEFAULT_CONFIG.roles.operator.firstPage = 'machinedashboard';
-PULSE_DEFAULT_CONFIG.roles.manager.firstPage = 'running';
-PULSE_DEFAULT_CONFIG.roles.live.firstPage = 'operationstatus';
-
 /* displayedPages: array containing the pages available for the role, in the right order */
 PULSE_DEFAULT_CONFIG.roles.operator.displayedPages = [
-  'machinedashboard',
-  'running',
-  //'productionmachining',
-  //scheduledstatus',
-  //'toollife',
-  'machines',
-  'operationstatus',
-
 ];
 PULSE_DEFAULT_CONFIG.roles.manager.displayedPages = [
-  'running',
-  'productionmachining',
-  //'scheduledstatus',
-  'toollife',
-  //'machines',
-  'operationstatus',
-  'managementinformationterminal',
-  'machinestatus'
 ];
 PULSE_DEFAULT_CONFIG.roles.support.displayedPages = [
-  'running',
-  'productionmachining',
-  //'scheduledstatus',
-  'toollife',
-  'machines',
-  'operationstatus',
-  'managementinformationterminal',
-  'machinestatus'
 ];
 PULSE_DEFAULT_CONFIG.roles.live.displayedPages = [
-  'utilizationbar', 'utilizationpie',
-  'performancebar', 'performancegauge',
-  'motionsummary',
-  //'combinedview',
-  'machinestatus',
-  //'machinespecification',
-  'operationstatus',
-  'managementinformationterminal',
-  'managerview'
 ];
-PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [ // ALL
-  'running', 'productionmachining',
-  'scheduledstatus',
-  'toollife', 'machines', 'machinedashboard',
-  'operationstatus',
-  'managementinformationterminal',
-  'utilizationbar', 'utilizationpie',
-  'performancebar', 'performancegauge',
-  'productiontracker', 'mpmilestones', 'reservecapacity',
-  'motionsummary', 'combinedview', 'machinestatus',
-  'machinespecification',
-  'managerview',
-  'plant'
+PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [
 ];
 
 // TOOLS
@@ -437,7 +275,7 @@ PULSE_DEFAULT_CONFIG.roles.live.showlegend = 'true';
 PULSE_DEFAULT_CONFIG.roles.live.menuType = 'textOrNothing';
 PULSE_DEFAULT_CONFIG.roles.live.allowpagerotation = true;
 PULSE_DEFAULT_CONFIG.roles.live.customTitle = true;
-PULSE_DEFAULT_CONFIG.roles.live.showoverwriterequired = 'true';
+PULSE_DEFAULT_CONFIG.roles.live.showoverwriterequired = 'false';
 
 // Special for Support
 PULSE_DEFAULT_CONFIG.roles.support.cancelHorizontalSplitInBar = 'false';
@@ -455,36 +293,11 @@ PULSE_DEFAULT_CONFIG.roles.dev.showIgnoredAlarm = true; // used in x-detailedala
 PULSE_DEFAULT_CONFIG.roles.operator.showcoloredbar = {
   click: {
     allbars: 'change',
-    cncvalue: 'popup',
-    reason: 'stopclassification'
+    cncvalue: 'popup'
   },
-  showdetails: [ //clickDisplayedDetails: [  == same as default - mandatory to allow single change
-    'x-detailedreasonat',
-    //'x-detailedmachinestateat', // Keep comment to know what can be added
-    'x-detailedobservationstateat', // Keep comment to know what can be added
-    //'x-detailedshiftat', // Keep comment to know what can be added
-    'x-detailedworkinfoat', // Keep comment to know what can be added
-    //'x-detailedisofileat', // Keep comment to know what can be added
-    //'x-detailedpartsat', // Keep comment to know what can be added
-    //'x-detailedoperationcycleat', // Keep comment to know what can be added
-    'x-detailedsequenceat', // Keep comment to know what can be added
-    'x-detailedcncvaluesat',
-    'x-detailedalarmsat',
-    //'x-cncalarmbar', // Removed because too slow (cf NR-2019-05)
-    'x-redstacklightbar'
+  showdetails: [
   ],
-  showpopup: [ //clickDisplayedPopup: [  == same as default - mandatory to allow single change
-    'x-detailedreasonat',
-    //'x-detailedmachinestateat', // Keep comment to know what can be added
-    //'x-detailedobservationstateat', // Keep comment to know what can be added
-    //'x-detailedshiftat', // Keep comment to know what can be added
-    'x-detailedworkinfoat',
-    //'x-detailedisofileat', // Keep comment to know what can be added
-    //'x-detailedpartsat', // Keep comment to know what can be added
-    //'x-detailedoperationcycleat', // Keep comment to know what can be added
-    'x-detailedsequenceat', // Keep comment to know what can be added
-    'x-detailedcncvaluesat',
-    'x-detailedalarmsat',
+  showpopup: [
   ]
 };
 PULSE_DEFAULT_CONFIG.roles.manager.showcoloredbar = {
@@ -492,33 +305,8 @@ PULSE_DEFAULT_CONFIG.roles.manager.showcoloredbar = {
     allbars: 'details'
   },
   showdetails: [ // == general + detailedproductionstateat
-    'x-detailedreasonat',
-    'x-detailedproductionstateat',
-    //'x-detailedmachinestateat', // Keep comment to know what can be added
-    'x-detailedobservationstateat', // Keep comment to know what can be added
-    //'x-detailedshiftat', // Keep comment to know what can be added
-    'x-detailedworkinfoat', // Keep comment to know what can be added
-    //'x-detailedisofileat', // Keep comment to know what can be added
-    //'x-detailedpartsat', // Keep comment to know what can be added
-    //'x-detailedoperationcycleat', // Keep comment to know what can be added
-    'x-detailedsequenceat', // Keep comment to know what can be added
-    'x-detailedcncvaluesat',
-    'x-detailedalarmsat',
-    //'x-cncalarmbar', // Removed because too slow (cf NR-2019-05)
-    'x-redstacklightbar'
   ],
   showpopup: [ //clickDisplayedPopup: [  == same as default - mandatory to allow single change
-    'x-detailedreasonat',
-    //'x-detailedmachinestateat', // Keep comment to know what can be added
-    //'x-detailedobservationstateat', // Keep comment to know what can be added
-    //'x-detailedshiftat', // Keep comment to know what can be added
-    'x-detailedworkinfoat',
-    //'x-detailedisofileat', // Keep comment to know what can be added
-    //'x-detailedpartsat', // Keep comment to know what can be added
-    //'x-detailedoperationcycleat', // Keep comment to know what can be added
-    'x-detailedsequenceat', // Keep comment to know what can be added
-    'x-detailedcncvaluesat',
-    'x-detailedalarmsat'
   ]
 };
 
@@ -540,35 +328,9 @@ PULSE_DEFAULT_CONFIG.roles.dev.showcoloredbar = {
     reason: 'change',
     cncvalue: 'popup'
   },
-  showdetails: [ //clickDisplayedDetails: [
-    'x-detailedreasonat',
-    'x-detailedproductionstateat',
-    'x-detailedmachinestateat', // Keep comment to know what can be added
-    'x-detailedobservationstateat', // Keep comment to know what can be added
-    'x-detailedshiftat', // Keep comment to know what can be added
-    'x-detailedworkinfoat', // Keep comment to know what can be added
-    'x-detailedisofileat', // Keep comment to know what can be added
-    //'x-detailedpartsat', // Keep comment to know what can be added - in prod
-    //'x-detailedoperationcycleat', // Keep comment to know what can be added - in prod
-    'x-detailedsequenceat', // Keep comment to know what can be added
-    'x-detailedcncvaluesat',
-    'x-detailedalarmsat',
-    //'x-cncalarmbar', // Removed because too slow (cf NR-2019-05)
-    'x-redstacklightbar'
+  showdetails: [
   ],
-  showpopup: [ //clickDisplayedPopup: [
-    'x-detailedreasonat',
-    'x-detailedproductionstateat',
-    'x-detailedmachinestateat', // Keep comment to know what can be added
-    'x-detailedobservationstateat', // Keep comment to know what can be added
-    'x-detailedshiftat', // Keep comment to know what can be added
-    'x-detailedworkinfoat',
-    'x-detailedisofileat', // Keep comment to know what can be added
-    //'x-detailedpartsat', // Keep comment to know what can be added - in prod
-    //'x-detailedoperationcycleat', // Keep comment to know what can be added - in prod
-    'x-detailedsequenceat', // Keep comment to know what can be added
-    'x-detailedcncvaluesat',
-    'x-detailedalarmsat'
+  showpopup: [
   ]
 };
 
@@ -577,34 +339,9 @@ PULSE_DEFAULT_CONFIG.roles.support.showcoloredbar = {
   click: {
     allbars: 'details'
   },
-  showdetails: [ //clickDisplayedDetails: [
-    'x-detailedreasonat',
-    'x-detailedproductionstateat',
-    'x-detailedmachinestateat', // Keep comment to know what can be added
-    'x-detailedobservationstateat', // Keep comment to know what can be added
-    //'x-detailedshiftat', // Keep comment to know what can be added
-    'x-detailedworkinfoat', // Keep comment to know what can be added
-    //'x-detailedisofileat', // Keep comment to know what can be added
-    //'x-detailedpartsat', // Keep comment to know what can be added
-    //'x-detailedoperationcycleat', // Keep comment to know what can be added
-    'x-detailedsequenceat', // Keep comment to know what can be added
-    'x-detailedcncvaluesat',
-    'x-detailedalarmsat',
-    //'x-cncalarmbar', // Removed because too slow (cf NR-2019-05)
-    'x-redstacklightbar'
+  showdetails: [
   ],
-  showpopup: [ //clickDisplayedPopup: [  == same as default - mandatory to allow single change
-    'x-detailedreasonat',
-    //'x-detailedmachinestateat', // Keep comment to know what can be added
-    //'x-detailedobservationstateat', // Keep comment to know what can be added
-    //'x-detailedshiftat', // Keep comment to know what can be added
-    'x-detailedworkinfoat',
-    //'x-detailedisofileat', // Keep comment to know what can be added
-    //'x-detailedpartsat', // Keep comment to know what can be added
-    //'x-detailedoperationcycleat', // Keep comment to know what can be added
-    'x-detailedsequenceat', // Keep comment to know what can be added
-    'x-detailedcncvaluesat',
-    'x-detailedalarmsat'
+  showpopup: [
   ]
 };
 
@@ -613,7 +350,7 @@ PULSE_DEFAULT_CONFIG.roles.support.showcoloredbar = {
 // CAN be overload in custom config
 /* ********** ********** ********** ********** */
 PULSE_DEFAULT_CONFIG.rolespages = {
-  // EVERYTHING CAN BE OVERLOADED here in CUSTOM file !
+  // EVERYTHING CAN BE OVERLOADED here in CUSTOM file !  
   live: {
     operationstatus: {
       canUseRowsToSetHeight: true
@@ -632,15 +369,11 @@ PULSE_DEFAULT_CONFIG.rolespages = {
     },
     machinespecification: {
       showoverwriterequired: false // Define default to allow overload
-    },
-    oeeview: {
-      canUseRowsToSetHeight: true
     }
   },
   manager: {
     machines: {
       componentsToDisplay: [
-        'x-lastmachinestatetemplate'
       ]
     },
     machinespecification: {
@@ -661,7 +394,6 @@ PULSE_DEFAULT_CONFIG.rolespages = {
   support: {
     machines: {
       componentsToDisplay: [
-        'x-lastmachinestatetemplate'
       ]
     },
     machinespecification: {
@@ -687,9 +419,6 @@ PULSE_DEFAULT_CONFIG.rolespages = {
     machines: {
       // Yes. Keep it empty to allow modifications
     },
-    machinedashboard: {
-      // Yes. Keep it empty to allow modifications
-    },
     running: {
       // Yes. Keep it empty to allow modifications
     },
@@ -700,17 +429,7 @@ PULSE_DEFAULT_CONFIG.rolespages = {
   dev: {
     machines: {
       componentsToDisplay: [
-        'coloredbarwithpercent',
-        'x-lastserialnumber',
-        'x-lastmachinestatus',
-        'x-lastworkinformation',
-        'x-toollifemachine',
-        'x-cycleprogressbar',
-        'x-lastmachinestatetemplate' // + setup
       ],
-      showIgnoredAlarm: true // used in x-detailedalarmsat and currenticoncncalarm
-    },
-    machinedashboard: {
       showIgnoredAlarm: true // used in x-detailedalarmsat and currenticoncncalarm
     },
     managementinformationterminal: {

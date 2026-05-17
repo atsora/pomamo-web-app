@@ -8,11 +8,11 @@ SPDX-License-Identifier: Apache-2.0
 <x-periodmanager exclude-now="false" period-context="machines"></x-periodmanager>
 
 <div class="machines-main">
-  <div class="machinetab-list grouparray-dependant" id="grouparray">
+  <div class="machinetab-list" id="machine-tabs-panel">
     <x-machinetab machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machines"></x-machinetab>
   </div>
 
-  <div class="tile grouparray-dependant">
+  <div class="tile">
     <div class="tile-title">
       <div class="machine-name">
         <x-machinedisplay machine-context="PulseWebApp"></x-machinedisplay>
@@ -26,7 +26,7 @@ SPDX-License-Identifier: Apache-2.0
         <div class="div-bar-and-percent">
           <div class="div-bar">
             <x-datetimegraduation period-context="machines"></x-datetimegraduation>
-            <x-barstack period-context="machines" motion-context="PulseWebApp" machine-context="PulseWebApp"></x-barstack>
+            <x-barstack period-context="machines" motion-context="PulseWebApp" machine-context="PulseWebApp" auto-min-height></x-barstack>
           </div>
           <div class="right-percent">
             <x-motionpercentage motion-context="PulseWebApp" machine-context="PulseWebApp" period-context="machines">
@@ -55,8 +55,8 @@ SPDX-License-Identifier: Apache-2.0
     </div>
     <div class="machine-component" id='LWI'>
       <div class="pulse-bar-div">
-        <x-lastworkinformation machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machines">
-        </x-lastworkinformation>
+        <x-lastworkinformationbar machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machines">
+        </x-lastworkinformationbar>
       </div>
     </div>
     <div class="machine-component" id='seq'>

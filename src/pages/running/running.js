@@ -191,8 +191,6 @@ class RunningPage extends pulsePage.BasePage {
    * Note: bars (x-barstack) read pulseConfig directly — no need to drive them here.
    */
   buildContent () {
-
-    //Link between these displays are removed - In case of bad config, job can be displayed twice (ex: dev)
     let addProductionMachining = pulseConfig.getBool('currentdisplay.displayjobshiftpartcount', false);
     let displayJob = pulseConfig.getBool('currentdisplay.displayjob', true);
     let displayShift = pulseConfig.getBool('currentdisplay.displayshift', true);
@@ -204,7 +202,7 @@ class RunningPage extends pulsePage.BasePage {
     else {
       $('x-productionmachiningstatus').hide();
     }
-    if (displayJob) { // == LastWorkinformation
+    if (displayJob) {
       $('x-lastworkinformation').show();
     }
     else {

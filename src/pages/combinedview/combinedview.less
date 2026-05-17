@@ -55,7 +55,6 @@ x-groupgrid {
   .groupgrid-item {
     height: fit-content !important;
     min-height: unset !important;
-    max-height: none !important;
     min-width: 0 !important;
   }
 }
@@ -144,7 +143,7 @@ x-groupgrid {
   border-bottom-right-radius: @border_radius;
   display: flex;
   flex-direction: column;
-  gap: 0.4em !important;
+  gap: 1em !important;
   overflow: hidden;
   flex: 0 0 auto !important;
   height: auto !important;
@@ -168,7 +167,6 @@ x-groupgrid {
     min-width: 15%;
     max-width: 25%;
     flex: 1 1 0 !important;
-    height: 12em !important;
   }
 
   .combinedview-leftdisplay {
@@ -212,12 +210,37 @@ x-groupgrid {
     flex: 2 1 0 !important;
     position: relative;
     min-width: 0;
-    height: 19em !important;
+    aspect-ratio: 1 / 1;
+    max-height: 60vh;
   }
 
   .combinedview-rightdisplay {
     box-sizing: border-box;
     padding: 0.6em;
+    align-self: stretch;
+    position: relative;
+    overflow: hidden;
+
+    // Absolute positioning prevents the stacklight SVG (intrinsic viewBox ratio 1:2.8 vertical)
+    // from dictating the row height — the box follows its siblings instead.
+    x-stacklight {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      // Inner wrapper must also flex-center, otherwise the SVG (block-level child) sits top-left.
+      .stacklight {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      svg, .stacklight-container { max-height: 75%; max-width: 75%; }
+    }
   }
 }
 
@@ -237,10 +260,8 @@ x-groupgrid {
 
     x-barstack {
       flex: 1 1 auto;
-      min-height: 0;
       width: auto;
       overflow: hidden;
-      height: 2em !important;
       margin-left: @margin_graduation;
       margin-right: @margin_graduation;
     }
@@ -261,7 +282,7 @@ x-groupgrid {
   }
 
   .combinedview-motionpercentage {
-    margin-bottom: 1.5em;
+    align-self: flex-start;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -289,7 +310,6 @@ x-groupgrid {
     }
     .groupgrid-item {
       height: auto !important;
-      max-height: 60vh !important;
       min-width: auto !important;
     }
   }
@@ -340,6 +360,7 @@ x-groupgrid {
     .combinedview-runningslotpie {
       flex-grow: 2;
       height: auto !important;
+      max-height: none !important;
     }
     .combinedview-leftdisplay .combinedview-today {
       font-size: 5cqh !important;
@@ -354,7 +375,11 @@ x-groupgrid {
     height: clamp(60px, 18cqh, 100px) !important;
 
     .combinedview-bottomleftbar {
-      x-barstack { height: auto !important; }
+      x-barstack {
+        height: auto !important;
+        min-height: 0 !important;
+        > * { min-height: 0 !important; }
+      }
       x-datetimegraduation {
         .datetimegraduation-axis text {
           font-size: clamp(10px, 2cqh, 14px) !important;

@@ -48,7 +48,6 @@ x-groupgrid {
   .groupgrid-item {
     height: fit-content !important;
     min-height: unset !important;
-    max-height: none !important;
     min-width: 0 !important;
   }
 }
@@ -125,7 +124,8 @@ x-groupgrid {
     padding-top: 0.85em;
     overflow: hidden;
     min-height: 0;
-    height: 20em !important;
+    aspect-ratio: 2 / 1;
+    max-height: 60vh;
   }
 }
 
@@ -166,7 +166,6 @@ x-motiontime {
     .groupgrid-item {
       height: 100% !important;
       min-height: 40vh !important;
-      max-height: 60vh !important;
       min-width: auto !important;
     }
   }
@@ -201,6 +200,7 @@ x-motiontime {
       flex: 1 1 auto !important;
       padding-top: 2cqh !important;
       height: auto !important;
+      max-height: none !important;
     }
   }
 
@@ -211,7 +211,7 @@ x-motiontime {
 }
 
 // Override for mobile that sets height: auto
-@media (max-width: 685px) {
+@media @all-phones-media {
   .tile {
     height: 100% !important;
   }

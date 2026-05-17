@@ -33,7 +33,7 @@ require('x-productiongauge/x-productiongauge');
 /**
  * Machine Dashboard page — detailed per-machine dashboard.
  *
- * Displays a horizontal grid of machines (x-grouparray) with, for each machine,
+ * Displays a horizontal grid of machines (x-machinetab) with, for each machine,
  * a rich set of configurable components: status bars (x-barstack),
  * production tracking graph (x-productiontrackergraph), production gauge or pie chart
  * (x-productiongauge / x-defaultpie), production bar (x-productionbar),
@@ -622,8 +622,8 @@ class machinedashboardPage extends pulsePage.BasePage {
    * Applies the current configuration to DOM components.
    *
    * Called after option initialization to sync the visual state with
-   * URL params / localStorage. Also handles clones created by x-grouparray
-   * that do not yet exist when initOptionValues runs.
+   * URL params / localStorage. Also handles per-machine clones that
+   * do not yet exist when initOptionValues runs.
    *
    * Components driven:
    *  - `showproductiondisplay` + `showproductiongauge` → x-productiongauge / x-defaultpie

@@ -14,6 +14,7 @@
 // Local
 @import "x-grouplist/x-grouplist.less";
 @import "x-currentcncvalue/x-currentcncvalue.less";
+@import "x-lastworkinformation/x-lastworkinformation.less";
 @import "x-machinedisplay/x-machinedisplay.less";
 @import "x-datetimegraduation/x-datetimegraduation.less";
 @import "x-motionpercentage/x-motionpercentage.less";
@@ -157,7 +158,7 @@ x-barstack {
   }
 }
 
-@media (max-width: 900px) and (orientation: portrait) {
+@media @all-phones-media {
   .datetimegraduation {
     margin: 0 15vw 0 38vw !important;
     padding: 0 3.2vw !important;

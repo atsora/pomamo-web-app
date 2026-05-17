@@ -17,6 +17,7 @@
 @import "x-machinedisplay/x-machinedisplay.less";
 
 @import "x-productionmachiningstatus/x-productionmachiningstatus.less";
+@import "x-lastworkinformation/x-lastworkinformation.less";
 @import "x-currentcncvalue/x-currentcncvalue.less";
 @import "x-lastshift/x-lastshift.less";
 
@@ -242,7 +243,14 @@ x-barstack {
 }
 
 
-@media (max-width: 900px) and (orientation: portrait) {
+@media @all-phones-media {
+  x-grouplist {
+
+    .group-main {
+      padding: 0;
+    }
+  }
+
   .datetimegraduation {
     margin: 0 50px 0 38vw !important;
     padding: 0 3.2vw !important;
@@ -251,6 +259,7 @@ x-barstack {
   .one_machine_cell {
     min-height: 70px;
     align-items: stretch;
+    padding: 0 2vw;
   }
 
   .div-machine {
@@ -285,24 +294,6 @@ x-barstack {
 
   x-barstack {
     margin: 0 1.2vw !important;
-  }
-}
-
-@media (max-width: 685px) {
-  x-grouplist {
-
-    .group-main {
-      padding: 0;
-    }
-  }
-
-  .one_machine_cell {
-    align-items: stretch; // let children fill the row height instead of centering
-    padding: 0 2vw;
-  }
-
-  x-barstack {
-    margin: 0 1vw;
   }
 
   .running-header {
