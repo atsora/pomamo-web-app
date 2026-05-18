@@ -5,6 +5,7 @@
  */
 
 // Global :
+@import "x-signalbanner/x-signalbanner.less";
 @import "pulse.customdialog.less";
 
 @import "pulse.exports.light.less"; // Global import
@@ -327,10 +328,26 @@
 
 
 @media @all-phones-media {
-  .machines-main .tile{
-    padding: 10px 5px;
+  .machines-main {
+    flex-direction: column;
+
+    .machinetab-list {
+      margin-top: 0;
+      min-width: 0;
+      flex-basis: auto;
+      width: 100%;
+      padding: 0;
+    }
+
+    x-machinetab .machinetab-machine-cell.active {
+      background-color: @box_color;
+    }
+
+    .tile {
+      padding: 10px 5px;
+    }
   }
-  .right-percent{
+  .right-percent {
     width: auto;
   }
 }

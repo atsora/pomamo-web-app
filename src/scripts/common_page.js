@@ -10,6 +10,7 @@ var pulseCustomDialog = require('pulseCustomDialog');
 
 // Global imports
 require('x-message/x-message');
+require('x-signalbanner/x-signalbanner');
 require('x-checkcurrenttime/x-checkcurrenttime');
 require('x-checkserveraccess/x-checkserveraccess');
 require('x-checkpath/x-checkpath');
