@@ -19,18 +19,47 @@
 
 @import "style.less";
 
-x-grouplist {
-  height: auto;
-  border-radius: @border_radius;
-  background-color: @color_background;
+.setdynamicfontsize () {
+  font-size: ~"clamp(0.6rem, 1.8vh + 0.35rem, 3rem)";
+}
 
+.pulse-mainarea-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.tile {
+  .setdynamicfontsize();
+  display: flex;
+  flex-direction: column;
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+  box-sizing: border-box;
+  background-color: @color_background;
+  color: @box_text_color;
+  padding: 5px 0;
+  gap: 2px;
+  width: auto;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.appcontext-live {
+  .tile {
+    overflow-y: hidden;
+  }
+}
+
+x-grouplist {
   .group-main {
-    height: auto;
     padding: 0.7rem;
     gap: 0.5em;
 
     .group-single {
-      height: 3em;
+      min-height: fit-content !important;
       box-sizing: border-box;
       border-radius: @border_radius_small;
     }
@@ -72,7 +101,6 @@ x-grouplist {
     &.pulse-lastbar .toollifemachine-soon-title-svg .toollifemachine-soon-title-svg-text {
       font-size: 0.6em; // 0,3,2 > component's 0,2,1
       font-weight: bolder;
-      fill: currentColor;
     }
 
     &.pulse-lastbar .pulse-cellbar-main {

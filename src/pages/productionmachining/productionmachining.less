@@ -18,6 +18,39 @@
 @import "x-datetimegraduation/x-datetimegraduation.less";
 @import "style.less";
 
+.setdynamicfontsize () {
+  font-size: ~"clamp(0.6rem, 1.8vh + 0.35rem, 3rem)";
+}
+
+.pulse-mainarea-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.tile {
+  .setdynamicfontsize();
+  display: flex;
+  flex-direction: column;
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+  box-sizing: border-box;
+  background-color: @color_background;
+  color: @box_text_color;
+  padding: 5px 0;
+  gap: 2px;
+  width: auto;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.appcontext-live {
+  .tile {
+    overflow-y: hidden;
+  }
+}
 
 x-grouplist {
 
@@ -26,12 +59,11 @@ x-grouplist {
     flex-direction: column;
     row-gap: 12px;
     padding: 16px 24px;
-    border-radius: @border_radius;
-    background-color: @color_background;
 
     .group-single {
       order: 999999; // default = bottom
       border-radius: @border_radius_small;
+      min-height: fit-content !important;
     }
   }
 

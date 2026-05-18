@@ -18,6 +18,40 @@
 
 @import "style.less";
 
+.setdynamicfontsize () {
+  font-size: ~"clamp(0.6rem, 1.8vh + 0.35rem, 3rem)";
+}
+
+.pulse-mainarea-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.tile {
+  .setdynamicfontsize();
+  display: flex;
+  flex-direction: column;
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+  box-sizing: border-box;
+  background-color: @color_background;
+  color: @box_text_color;
+  padding: 5px 0;
+  gap: 2px;
+  width: auto;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.appcontext-live {
+  .tile {
+    overflow-y: hidden;
+  }
+}
+
 x-grouplist {
 
   .group-main {
@@ -25,11 +59,10 @@ x-grouplist {
     flex-direction: column;
     padding: 16px 24px;
     row-gap: 16px;
-    background-color: @color_background;
-    border-radius: @border_radius;
 
     .group-single {
       order: 999999999; // default = bottom = more than 2 years in minutes
+      min-height: fit-content !important;
     }
   }
 

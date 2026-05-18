@@ -647,6 +647,14 @@ x-redstacklightbar { display: none !important; }
 
         .div-percent {
           font-size: clamp(9px, 4cqh, 4vh) !important;
+
+          // Direct rule needed — the global `x-motionpercentage { font-size: 1.5em }`
+          // sets the property on the element itself, which wins over any inherited
+          // value (even when the parent uses !important), so an inherited cqh from
+          // .div-percent never reaches x-motionpercentage.
+          x-motionpercentage {
+            font-size: clamp(9px, 6cqh, 3vh) !important;
+          }
         }
       }
     }

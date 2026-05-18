@@ -216,7 +216,9 @@ x-grouplist {
   }
 }
 
-x-barstack {
+// Scoped to the per-machine cell layout — must not leak to popups
+// (x-detailsatdialog, x-reasonslotlist, etc.) that may be opened from this page.
+.one_machine_cell > x-barstack {
   flex: 1;
   align-self: stretch;
   height: auto;
