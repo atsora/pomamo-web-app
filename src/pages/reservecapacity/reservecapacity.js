@@ -7,7 +7,13 @@ var pulseUtility = require('pulseUtility');
 var pulsePage = require('pulsePage');
 var eventBus = require('eventBus');
 
+require('x-periodmanager/x-periodmanager');
+require('x-ancestors/x-ancestors');
+require('x-machinedisplay/x-machinedisplay');
 require('x-groupsingroup/x-groupsingroup');
+require('x-zoominpagebutton/x-zoominpagebutton');
+require('x-showrunningdialogbutton/x-showrunningdialogbutton');
+require('x-tr/x-tr');
 
 require('x-chartreservecapacity/x-chartreservecapacity');
 

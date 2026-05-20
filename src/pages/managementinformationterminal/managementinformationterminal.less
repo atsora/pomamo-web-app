@@ -31,8 +31,7 @@
 @import "style.less";
 
 
-// For running dialog
-@import "../running/running.less";
+// For running dialog (x-runningdialog.less is already pulled in via pulse.customdialog.less)
 @import "pulsecomponent-detailspopup.less";
 
 /*a {
@@ -47,7 +46,7 @@
   flex-direction: column;
 
   .sub-title {
-    margin-bottom: 12px;
+    margin-bottom: 0.75em;
     display: flex;
     flex-direction: row;
 
@@ -57,11 +56,11 @@
 
       .ancestors-content {
         display: inline-flex;
-        margin-left: 4px;
+        margin-left: 0.25em;
         background-color: @color_background;
         border-radius: @border_radius_small;
         border: 1px solid @color_window_border;
-        padding: 6px 12px;
+        padding: 0.375em 0.75em;
 
         a:hover {
           color: @color_text;
@@ -82,6 +81,12 @@ x-groupsingroup {
   box-sizing: border-box;
   max-height: 95%;
   flex-grow: 9999;
+  min-height: 0; // allow flex shrink below grid min-content; inner overflow-y handles its own scroll
+
+  .groupsingroup-main {
+    grid-auto-rows: max-content; // rows sized to subgroup content (push by pie); not 1fr-distributed
+    align-content: start;
+  }
 
   .groupsingroup-subgroup {
     padding-top: 0 !important;
@@ -92,25 +97,24 @@ x-groupsingroup {
   border-radius: @border_radius;
   border: 1px solid @color_window_border;
   box-sizing: border-box;
-  padding-top: 0;
-  margin-top: 0 !important;
   display: flex;
   flex-direction: column;
-  height: 100%; // Take full available height
   overflow: hidden;
+  height: 100%; // fills subgroup (which is content-driven, capped at 60vh) — prevents tile overflow
 }
 
 .tile-title {
+  box-sizing: border-box;
+  flex: 0 0 auto;
   flex-direction: row;
   position: relative;
-  padding: 4px 10px 4px 10px;
+  padding: 0.25em 0.625em;
   background-color: @color_background_alternate;
   color: @box_header_text_color;
   white-space: nowrap;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  min-height: 50px;
 
   .machinedisplay-position {
     position: absolute;
@@ -120,8 +124,6 @@ x-groupsingroup {
 
     x-machinedisplay {
       text-align: center;
-      font-size: 1.8em ;
-
 
       span {
         width: auto;
@@ -138,42 +140,39 @@ x-groupsingroup {
 .tile-content {
   background-color: @color_background;
   color: @box_text_color;
-  padding: 1.5cqh 1.5cqw;
+  padding: 1em 1em;
   display: flex;
   flex-direction: column; // align children
   overflow: hidden; // Hide bottom displays when to small
-  flex-grow: 1; // Grow to fill available space
-  flex-shrink: 1; // Can shrink if needed
-  min-height: 0; // Allow flex children to shrink below content size
-
-  pointer-events: none; //TODO : TMP - to remove to allow click on pie for example - that means rework global .tile / .tile-title / .tile-content
+  flex-grow: 1;       // fill remaining tile height after title — propagates tile's 24em down
+  flex-shrink: 1;
+  min-height: 0;
 
   x-workinfo.mit-top-div {
-    margin-top: 4px;
+    margin-top: 0.25em;
+    flex: 0 0 auto;   // workinfo keeps its natural height (1.5em)
   }
 
   .mit-pie-div {
-    flex-grow: 2; // Strech to available space
-    flex-shrink: 2;
-
     box-sizing: border-box;
-    padding: 4px; // To simulate margin around
-    //width: 100%;
-    //height: 100%;
+    padding: 0.25em; // To simulate margin around
 
     display: flex;
     flex-direction: column; // align children
     overflow: hidden; // Hide bottom displays when to small
     justify-content: space-between;
-    align-items: stretch;
+    align-items: center;
 
+    width: 100%;            // intrinsic size from grid column width — aspect-ratio derives height
+    aspect-ratio: 1 / 1;
+    max-height: 100%;       // shrink to fit tile-content (which is bounded by subgroup 60vh cap)
     min-height: 0;
 
     x-defaultpie,
     x-partproductionstatuspie {
-      flex: 1 1 0;
+      width: 100% !important;   // fills the square wrapper
+      height: 100% !important;
       min-height: 0;
-      height: auto !important; // override height: 100% !important from component
     }
 
     // Long text linked to pie
@@ -194,15 +193,116 @@ x-workinfo {
   text-align: center;
   color: @color_text;
   min-height: 1.5em; // To force height even if no data - ONE LINE
-  padding: 2px 0 0 0; // For Edge top padding....
   box-sizing: border-box;
   overflow: hidden; // For Chrome, small display = avoid 2 lines
-  margin-bottom: 6px;
+  margin-bottom: 0.375em;
 
   .workinfo-singledata {
-    font-size: 22px;
+    font-size: 1.375em;
   }
 
+}
+
+// === LIVE MODE — leaves stretch / size in cqh, cqw, % ===
+.appcontext-live {
+  .tile {
+    container-type: size;  // enables cqh/cqw on descendants relative to tile (cell) dimensions
+    height: 100%;
+  }
+
+  .tile-title {
+    font-size: clamp(14px, 6cqh, 1000px) !important;   // mirrors operationstatus title scaling
+    max-height: 25%;
+    min-height: max-content !important;   // force flex parent to honor natural content height (no shrink-below)
+    justify-content: center !important;   // center machinedisplay via flex (was justify-content: flex-end with absolute machinedisplay)
+    padding: 1cqh 1.5cqw !important;
+
+    // Machine name now participates in flex flow → its line-height drives title height (no more collapse when button shrinks)
+    .machinedisplay-position {
+      position: static !important;
+      left: auto !important;
+      top: auto !important;
+      transform: none !important;
+    }
+
+    // Buttons float absolute on the right so they don't push the centered machinedisplay off-center
+    .btn-title-div {
+      position: absolute !important;
+      right: 1cqw;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    // Buttons sized in cqh so they shrink with the cell instead of overflowing at 22px fixed
+    .zoom-in-page,
+    .show-running-btn {
+      height: 4cqh !important;
+      width: 4cqh !important;
+      padding: 1cqh !important;
+      margin: 0.5cqh !important;
+
+      svg {
+        display: block;   // inline default → baseline shift made the SVG overflow the button box
+      }
+    }
+  }
+
+  .tile-content {
+    padding: 1.5cqh 1.5cqw !important;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+
+    x-workinfo.mit-top-div {
+      margin-top: 0.5cqh !important;
+    }
+
+    .mit-pie-div {
+      padding: 0.5cqh 0.5cqw !important;
+      height: auto;
+      max-height: unset;
+      flex-grow: 2;
+      flex-shrink: 2;
+      align-items: stretch;
+
+      x-defaultpie,
+      x-partproductionstatuspie {
+        flex: 1 1 0;
+        aspect-ratio: unset;
+        width: auto !important;
+        max-height: unset;
+      }
+
+      x-freetext .freetext-content {
+        font-size: clamp(10px, 4cqh, 30px) !important;
+      }
+    }
+  }
+
+  x-workinfo {
+    min-height: 3cqh !important;
+    margin-bottom: 1cqh !important;
+    font-size: clamp(10px, 4cqh, 30px) !important;
+
+    .workinfo-singledata {
+      font-size: clamp(11px, 4.5cqh, 32px) !important;
+    }
+  }
+
+  x-groupsingroup {
+    overflow: hidden;
+
+    .groupsingroup-main {
+      grid-auto-rows: 1fr;
+      align-content: stretch;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .groupsingroup-subgroup {
+      height: 100%;
+    }
+  }
 }
 
 .legend-content {

@@ -32,21 +32,21 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100%; // Take full available height
+  height: 100%; // fills subgroup (which is content-driven, capped at 60vh) — prevents tile overflow
 }
 
 .tile-title {
+  box-sizing: border-box;
+  flex: 0 0 auto;
   flex-direction: row;
   position: relative;
-  padding: 4px 10px 4px 10px;
+  padding: 0.25em 0.625em;
   background-color: @color_background_alternate;
   color: @box_header_text_color;
   white-space: nowrap;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  min-height: 50px;
-  font-size: 1.8em;
   .machinedisplay-position {
     position: absolute;
     left: 50%;
@@ -72,13 +72,22 @@
   background-color: @color_background;
   color: @box_text_color;
   box-sizing: border-box;
-  padding: 1.5cqh 1.5cqw;
+  padding: 1em 1em;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  flex-grow: 1; // Grow to fill available space
-  flex-shrink: 1; // Can shrink if needed
-  min-height: 0; // Allow flex children to shrink below content size
+  flex-grow: 1;       // fill remaining tile height when tile is capped at 60vh, no-op when tile is auto
+  flex-shrink: 1  ;
+  min-height: 0;
+
+  x-productiontrackertable {
+    // Table fills width; height grows with table natural size (scroll-y mode via _resize auto-detect).
+    // Bounded by tile-content (which is bounded by subgroup max-height: 60vh) → inner .productiontrackertable-content scrolls on overflow.
+    width: 100%;
+    max-height: 100%;
+    min-height: 0;
+    overflow: hidden;   // hides the scrollbars of the wrapper; the inner .productiontrackertable-content handles the actual scroll
+  }
 }
 
 // Use Full screen
@@ -89,6 +98,7 @@
   flex-direction: column;
 
   .sub-title {
+    margin-bottom: 0.75em;
     display: flex;
     flex-direction: row;
 
@@ -98,11 +108,11 @@
 
       .ancestors-content {
         display: inline-flex;
-        margin-left: 4px;
+        margin-left: 0.25em;
         background-color: @color_background;
         border-radius: @border_radius_small;
         border: 1px solid @color_window_border;
-        padding: 6px 12px;
+        padding: 0.375em 0.75em;
 
         a:hover {
           color: @color_text;
@@ -124,24 +134,87 @@ x-groupsingroup {
   box-sizing: border-box;
   max-height: 95%;
   flex-grow: 9999;
+  min-height: 0; // allow flex shrink below grid min-content
 
-  .groupsingroup-subgroup {
-    padding-top: 8px !important;
+  .groupsingroup-main {
+    grid-auto-rows: max-content; // rows sized to subgroup content; not 1fr-distributed
+    align-content: start;
   }
 }
 
-// tile-content
-.tile-content {
-  background-color: @color_background;
-  color: @box_text_color;
-  padding: 1.5cqh 1.5cqw;
+// === LIVE MODE — leaves stretch / size in cqh, cqw, % ===
+.appcontext-live {
+  .tile {
+    container-type: size;  // enables cqh on descendants
+    height: 100%;
+  }
 
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
+  .tile-title {
+    font-size: clamp(14px, 6cqh, 1000px) !important;   // mirrors operationstatus title scaling
+    max-height: 25%;
+    min-height: max-content !important;   // force flex parent to honor natural content height (no shrink-below)
+    justify-content: center !important;   // center machinedisplay via flex (was justify-content: flex-end with absolute machinedisplay)
+    padding: 1cqh 1.5cqw !important;
 
-  x-productiontrackertable {
-    padding: 4px;
+    // Machine name now participates in flex flow → its line-height drives title height (no more collapse when button shrinks)
+    .machinedisplay-position {
+      position: static !important;
+      left: auto !important;
+      top: auto !important;
+      transform: none !important;
+    }
+
+    // Buttons float absolute on the right so they don't push the centered machinedisplay off-center
+    .btn-title-div {
+      position: absolute !important;
+      right: 1cqw;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    // Buttons sized in cqh so they shrink with the cell instead of overflowing at 22px fixed
+    .zoom-in-page,
+    .show-running-btn {
+      height: 4cqh !important;
+      width: 4cqh !important;
+      padding: 1cqh !important;
+      margin: 0.5cqh !important;
+
+      svg {
+        display: block;   // inline default → baseline shift made the SVG overflow the button box
+      }
+    }
+  }
+
+  .tile-content {
+    padding: 1.5cqh 1.5cqw !important;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+
+    x-productiontrackertable {
+      width: 100%;
+      height: 100%;
+      flex: 1 1 0;
+      min-height: 0;
+    }
+  }
+  // Table row sizing is handled by _resize() via font-size scaling (SVG-like).
+  // No need to override min-height/padding/line-height: the component's natural layout follows the scaled font.
+
+  x-groupsingroup {
+    overflow: hidden;
+
+    .groupsingroup-main {
+      grid-auto-rows: 1fr;
+      align-content: stretch;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .groupsingroup-subgroup {
+      height: 100%;
+    }
   }
 }
 
