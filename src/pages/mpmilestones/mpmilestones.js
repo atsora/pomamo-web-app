@@ -13,12 +13,37 @@ require('x-groupgrid/x-groupgrid');
 require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
+/**
+ * Milestones page — grid view of per-machine milestone managers.
+ *
+ * Displays a grid of machines (`x-groupgrid`) where each tile hosts an
+ * `x-milestonesmanager` (machine label + milestones table + add button).
+ * The grid cycles through machines according to the rotation settings.
+ *
+ * Configurable options:
+ *  - `defaultlayout` / `machinesperpage` / `rotationdelay` : rotation (default: 12 machines/page)
+ *
+ * Components: x-groupgrid, x-milestonesmanager, x-machinedisplay,
+ * x-rotationprogress.
+ *
+ * @extends pulsePage.BasePage
+ */
 class MilestonesPage extends pulsePage.BasePage {
   constructor() {
     super();
     this.showMachineselection = true;
   }
 
+  /**
+   * Initializes the options panel and binds rotation listeners.
+   *
+   * When `defaultlayout` is checked, the manual `machinesperpage` /
+   * `rotationdelay` inputs are disabled and `machinesperpage` is forced
+   * to 12; otherwise both inputs become editable and reflect the saved
+   * values.
+   *
+   * Configs read/written: `defaultlayout`, `machinesperpage`, `rotationdelay`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     const defaultLayoutChk = $('#defaultlayout');
@@ -44,6 +69,10 @@ class MilestonesPage extends pulsePage.BasePage {
     $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
   }
 
+  /**
+   * Resets the rotation options to their hardcoded defaults
+   * (`defaultlayout=true`, `machinesperpage=12`, `rotationdelay=10`).
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
@@ -51,6 +80,11 @@ class MilestonesPage extends pulsePage.BasePage {
     $('#rotationdelay').val(10).removeAttr('overridden');
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
     const options = [
@@ -67,6 +101,12 @@ class MilestonesPage extends pulsePage.BasePage {
     }).join('');
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs () {
     let missingConfigs = [];
 
@@ -83,14 +123,15 @@ class MilestonesPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
-  // This method is run only if missing config (cf getMissingConfigs)
+  /**
+   * No additional content to build — the grid and the milestones
+   * manager pull pulseConfig directly.
+   */
   buildContent () {
-    // Remove config from displayed URL and store them
   }
 
 }
 
 $(document).ready(function () {
-  // Prepare the page globally
   pulsePage.preparePage(new MilestonesPage());
 });

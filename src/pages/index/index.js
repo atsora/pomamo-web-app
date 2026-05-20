@@ -10,38 +10,51 @@ require('x-tr/x-tr');
 
 //require('x-loginconnection/x-loginconnection');
 
+/**
+ * Index page — bootstrap redirector.
+ *
+ * Has no UI of its own: on load it rewrites the URL toward `home.html`
+ * (which `pulseUtility.changePageName` redirects to `login.html` when no
+ * role is set), and disables the configuration panel. No options, no
+ * machine selection required.
+ *
+ * Components: x-tr.
+ *
+ * @extends pulsePage.BasePage
+ */
 class IndexPage extends pulsePage.BasePage {
   constructor() {
     super();
   }
 
+  /**
+   * No required configuration — the index page only redirects.
+   *
+   * @returns {Array<{selector: string, message: string}>} Empty list.
+   */
   getMissingConfigs () {
     let missingConfigs = [];
     return missingConfigs;
   }
 
-  // This method is run only if missing config (cf getMissingConfigs)
-  /*buildContent () {
-  }*/
-
 }
 
 $(document).ready(function () {
-  // if index.html does not exists -> load it
+  // If the URL didn't include `index.html`, append `home.html` instead.
   if (-1 == window.location.href.indexOf('index.html')) {
     window.open(window.location.href + 'home.html', '_self');
     return;
   }
 
-  // Go to login or home :
+  // Redirect to `home.html` (which `changePageName` rewrites to `login.html`
+  // when no role is set yet).
   let pageToDisplay = window.location.href;
-  pageToDisplay = pulseUtility.changePageName(pageToDisplay, 'home'); // will move to 'login' if role = undefined
+  pageToDisplay = pulseUtility.changePageName(pageToDisplay, 'home');
   window.open(pageToDisplay, '_self');
 
   // Configuration panel disabled
   $('#configpanelbtn').addClass('disabled');
   $('#pulse-panel-parameter').hide();
 
-  // Prepare the page globally
   pulsePage.preparePage(new IndexPage());
 });

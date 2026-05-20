@@ -19,7 +19,31 @@ require('x-zoominpagebutton/x-zoominpagebutton');
 require('x-showrunningdialogbutton/x-showrunningdialogbutton');
 require('x-tr/x-tr');
 
+/**
+ * Management Information Terminal page — hierarchical view with default
+ * pies and operation info.
+ *
+ * Displays a group tree (`x-groupsingroup`) with, at each level, an
+ * `x-defaultpie` summary, optional operation info (`x-workinfo`) and a
+ * `x-zoominpagebutton` to drill down. Constructor forces `column=''`,
+ * `row=''` to disable the standard grid layout (the page uses its own
+ * hierarchical structure).
+ *
+ * Configurable options:
+ *  - `showworkinfo`                                    : show `x-workinfo`
+ *  - `productionpercentinpie`                          : pie text mode (`'true'` = percent, `'actualonly'`, `'actualtarget'`)
+ *  - `thresholdtargetproduction` / `thresholdredproduction` : pie color thresholds
+ *
+ * Components: x-groupsingroup, x-defaultpie, x-workinfo, x-freetext,
+ * x-machinedisplay, x-zoominpagebutton, x-showrunningdialogbutton,
+ * x-periodmanager, x-ancestors.
+ *
+ * @extends pulsePage.BasePage
+ */
 class ManagementInformationTerminalPage extends pulsePage.BasePage {
+  /**
+   * Forces `column=''`, `row=''` to opt out of the shared grid layout.
+   */
   constructor() {
     super();
 
@@ -27,6 +51,20 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
     pulseConfig.set('row', '');
   }
 
+  /**
+   * Initializes the options panel and binds all listeners.
+   *
+   * Sections:
+   *  1. `showworkinfo` — toggle `x-workinfo` visibility.
+   *  2. Pie text mode — three exclusive radios (`#productionpercentinpie`,
+   *     `#productionactualonlyinpie`, `#productionactualtargetinpie`)
+   *     write to the `productionpercentinpie` config and dispatch
+   *     `configChangeEvent`.
+   *  3. Thresholds — `#thresholdtargetproduction` / `#thresholdredproduction`
+   *     bound on `input` AND `change` for real-time validation via
+   *     `_verficationThresholds`; on success dispatches
+   *     `configChangeEvent { config: 'thresholdsupdated' }`.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
     var self = this;
@@ -134,7 +172,16 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
 
   }
 
-  // Verification of thresholds
+  /**
+   * Validates and applies the pie color thresholds (integer percentages).
+   *
+   * On success, dispatches `configChangeEvent { config: 'thresholdsupdated' }`
+   * so that x-defaultpie picks up the new colors.
+   *
+   * @param {number|string} targetValue Target threshold (%).
+   * @param {number|string} redValue    Red threshold (%).
+   * @returns {boolean} `true` when valid and applied, `false` otherwise.
+   */
   _verficationThresholds(targetValue, redValue) {
     // Find or create error message element
     let errorMessage = document.getElementById('thresholdErrorMessage');
@@ -190,6 +237,10 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
     return true;
   }
 
+  /**
+   * Resets options to their defaults: `showworkinfo`,
+   * `productionpercentinpie` (radio group), and the two thresholds.
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
@@ -232,10 +283,15 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
     setDefaultValue('thresholdredproduction', pulseConfig.getDefaultInt('thresholdredproduction'));
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   * The pie text mode is emitted as a single `productionpercentinpie`
+   * key driven by which of the three radios is checked. Thresholds are
+   * only emitted when their input holds a valid integer.
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
-  // getOptionValues uses the unified options-list pattern:
-  // { id, type, param?, conditional? } -> "&param=value" fragments.
-  // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues() {
     let optionsValues = '';
 
@@ -275,6 +331,12 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
     return optionsValues;
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -291,6 +353,9 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * Applies the `showworkinfo` config to drive `x-workinfo` visibility.
+   */
   buildContent() {
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     if (showworkinfo) {

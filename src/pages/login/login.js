@@ -10,11 +10,32 @@ var pulsePage = require('pulsePage');
 var pulseSvg = require('pulseSvg');
 require('x-tr/x-tr');
 
+/**
+ * Login page — role / authentication entry point.
+ *
+ * Layout: a panel with `x-loginconnection` (shown when `useLogin` is
+ * true) plus a grid of role tiles (`.login-roles`) populated from the
+ * `roles` config — each tile uses `images/role-<role>.svg` (with a
+ * fallback to `role-default.svg`) and stores the picked role via
+ * `pulseLogin.storeRole` before navigating with
+ * `pulseConfig.goToFirstPage`. When a role is already set on load, the
+ * page redirects immediately. Auto-removes any `AppContext` URL
+ * parameter on load (forces a reload when present).
+ *
+ * Components: x-loginconnection (conditional), x-tr.
+ *
+ * @extends pulsePage.BasePage
+ */
 class LoginPage extends pulsePage.BasePage {
   constructor() {
     super();
   }
 
+  /**
+   * No required configuration — the login page is always renderable.
+   *
+   * @returns {Array<{selector: string, message: string}>} Empty list.
+   */
   getMissingConfigs () {
     let missingConfigs = [];
     return missingConfigs;

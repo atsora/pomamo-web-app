@@ -11,39 +11,63 @@ require('x-machinedisplay/x-machinedisplay');
 require('x-reasonbutton/x-reasonbutton');
 require('x-tr/x-tr');
 
+/**
+ * Plant page — SVG floor-plan view with embedded reason buttons.
+ *
+ * Inlines the `.svg-plant-display` background SVG and, for every
+ * `.machine` element carrying an `atsora:machine-id` attribute,
+ * inserts a `<foreignObject>` containing an `x-reasonbutton` bound to
+ * that machine. No options, no machine selection required.
+ *
+ * Components: x-reasonbutton, x-machinedisplay, x-tr.
+ *
+ * @extends pulsePage.BasePage
+ */
 class PlantPage extends pulsePage.BasePage {
   constructor() {
     super();
-
-    // General configuration
   }
 
+  /** No configurable options. */
   // CONFIG PANEL - Init
   initOptionValues () {
   }
 
+  /** No configurable options. */
   // CONFIG PANEL - Default values
   setDefaultOptionValues () {
   }
 
+  /** No configurable options. */
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues () {
     return '';
   }
 
+  /**
+   * No required configuration — the plant page is always renderable.
+   *
+   * @returns {Array<{selector: string, message: string}>} Empty list.
+   */
   getMissingConfigs () {
     let missingConfigs = [];
     return missingConfigs;
   }
 
+  /**
+   * Inlines the floor-plan SVG and hands it to {@link PlantPage.fillSVG}
+   * to inject one `x-reasonbutton` per tagged machine.
+   */
   buildContent () {
-    // Add SVG to display
     pulseSvg.inlineBackgroundSvg('.svg-plant-display', PlantPage.fillSVG);
   }
 
+  /**
+   * For every `.machine` node carrying `atsora:machine-id`, drops a
+   * `<foreignObject>` containing a `x-reasonbutton` bound to that id
+   * (sized and positioned to match the source rect).
+   */
   static fillSVG () {
-    // Search for class machine and added parameters in SVG
-    // pulse-machine-id
     let divToFill = $('.svg-plant-display').find('.machine');
     for (let i = 0; i < divToFill.length; i++) {
       if (divToFill[i].hasAttribute('atsora:machine-id')) {

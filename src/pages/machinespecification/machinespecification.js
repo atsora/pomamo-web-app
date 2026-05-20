@@ -21,28 +21,67 @@ require('x-groupgrid/x-groupgrid');
 require('x-rotationprogress/x-rotationprogress');
 require('x-tr/x-tr');
 
+/**
+ * Machine Specification page — single-machine detailed view with rotation.
+ *
+ * Displays one machine at a time through an `x-groupgrid` paginated to
+ * `machinesperpage = 1`, with a stack of bars (`x-barstack`), current
+ * CNC value, motion indicators and legends. Cycles through the selected
+ * machines every `rotationdelay` seconds.
+ *
+ * Constructor forces `defaultlayout=false`, `column=''`, `row=''` to
+ * disable the standard grid layout while the single-machine layout
+ * settles.
+ *
+ * Configurable options:
+ *  - `rotationdelay`   : seconds between two machines (default 10)
+ *  - `machinesperpage` : forced to 1 by `initOptionValues`
+ *
+ * Components: x-groupgrid, x-rotationprogress, x-barstack, x-machinedisplay,
+ * x-currentcncvalue, x-motionpercentage, x-motiontime, x-periodmanager,
+ * x-reasongroups, x-fieldlegends.
+ *
+ * @extends pulsePage.BasePage
+ */
 class MachineSpecificationPage extends pulsePage.BasePage {
+  /**
+   * Forces `defaultlayout=false`, `column=''`, `row=''` to opt out of
+   * the shared grid layout.
+   */
   constructor() {
     super();
 
-    // because many row/col is not ready (fixed height) -> //TODO
     pulseConfig.set('defaultlayout', false);
     pulseConfig.set('column', '');
     pulseConfig.set('row', '');
   }
 
+  /**
+   * Initializes the options panel: locks `machinesperpage` to 1 and
+   * reads `rotationdelay` from pulseConfig.
+   */
   // CONFIG PANEL - Init
   initOptionValues() {
-    // Always 1 machine per page
     $('#machinesperpage').val(1).change();
     $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
   }
 
+  /**
+   * Resets `rotationdelay` to its default (10 s); `machinesperpage`
+   * stays locked at 1.
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     $('#rotationdelay').val(10).removeAttr('overridden');
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   * `machinesperpage` is always emitted as 1; `rotationdelay` is
+   * appended only when the input is visible.
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
     const delay = document.getElementById('rotationdelay');
@@ -50,6 +89,12 @@ class MachineSpecificationPage extends pulsePage.BasePage {
     return `&machinesperpage=1${result}`;
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs() {
     let missingConfigs = [];
 
@@ -66,6 +111,10 @@ class MachineSpecificationPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * No additional content to build — the grid and child components
+   * pick up pulseConfig directly.
+   */
   buildContent() {
   }
 }

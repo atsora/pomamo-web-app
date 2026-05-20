@@ -17,7 +17,30 @@ require('x-tr/x-tr');
 
 require('x-chartreservecapacity/x-chartreservecapacity');
 
+/**
+ * Reserve Capacity page — hierarchical reserve-capacity chart view.
+ *
+ * Displays a group tree (`x-groupsingroup`) with, at each level, an
+ * `x-chartreservecapacity` plot bounded by optional Y-axis min/max
+ * values. Constructor forces `column=''`, `row=''` to disable the
+ * standard grid layout (the page uses its own hierarchical structure).
+ *
+ * Configurable options:
+ *  - `minchartvalue` : Y-axis minimum (checkbox `#minchartcheck` enables
+ *    the bound; empty string disables it, default −70)
+ *  - `maxchartvalue` : Y-axis maximum (checkbox `#maxchartcheck` enables
+ *    the bound; empty string disables it, default 30)
+ *
+ * Components: x-groupsingroup, x-chartreservecapacity, x-periodmanager,
+ * x-ancestors, x-machinedisplay, x-zoominpagebutton,
+ * x-showrunningdialogbutton.
+ *
+ * @extends pulsePage.BasePage
+ */
 class ReserveCapacityPage extends pulsePage.BasePage {
+  /**
+   * Forces `column=''`, `row=''` to opt out of the shared grid layout.
+   */
   constructor() {
     super();
 
@@ -25,6 +48,17 @@ class ReserveCapacityPage extends pulsePage.BasePage {
     pulseConfig.set('row', '');
   }
 
+  /**
+   * Initializes the options panel and binds the two checkbox/value pairs.
+   *
+   * Each axis bound (`minchartvalue` / `maxchartvalue`) follows the same
+   * pattern: a checkbox toggles the value input (and stores `''` when
+   * unchecked, the saved value otherwise); the value input is bound on
+   * `input` and `change` to dispatch `configChangeEvent` for live
+   * updates of `x-chartreservecapacity`.
+   *
+   * Configs read/written: `minchartvalue`, `maxchartvalue`.
+   */
   // CONFIG PANEL - Init
   initOptionValues () {
     // Check - minchart
@@ -131,6 +165,12 @@ class ReserveCapacityPage extends pulsePage.BasePage {
     $('#maxchartvalue').change(changeMax);
   }
 
+  /**
+   * Resets the two checkbox/value pairs to their defaults
+   * (`pulseConfig.getDefault('minchartvalue' / 'maxchartvalue')`).
+   * An empty default leaves the checkbox unchecked; otherwise the
+   * default value is written to the input.
+   */
   // CONFIG PANEL - Default values
   setDefaultOptionValues () {
     const setDefaultCheckedValue = (id, checked, { trigger = true, clearOverride = true } = {}) => {
@@ -170,10 +210,15 @@ class ReserveCapacityPage extends pulsePage.BasePage {
     }
   }
 
+  /**
+   * Serializes active options as URL query string parameters.
+   * Emits `minchartvalue=` / `maxchartvalue=` (empty) when the
+   * corresponding checkbox is unchecked or the input does not hold a
+   * valid integer.
+   *
+   * @returns {string} Query string fragment.
+   */
   // CONFIG PANEL - Function to read custom inputs
-  // getOptionValues uses the unified options-list pattern:
-  // { id, type, param?, conditional? } -> "&param=value" fragments.
-  // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues () {
     let result = '';
 
@@ -204,6 +249,12 @@ class ReserveCapacityPage extends pulsePage.BasePage {
     return result;
   }
 
+  /**
+   * Checks that the minimum required configuration is present before rendering.
+   * Blocks rendering if no machine or group is selected.
+   *
+   * @returns {Array<{selector: string, message: string}>} List of missing configs.
+   */
   getMissingConfigs () {
     let missingConfigs = [];
 
@@ -220,6 +271,10 @@ class ReserveCapacityPage extends pulsePage.BasePage {
     return missingConfigs;
   }
 
+  /**
+   * No additional content to build — the group tree and chart read
+   * pulseConfig directly.
+   */
   buildContent () {
   }
 
