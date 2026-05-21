@@ -21,7 +21,6 @@ require('x-motionpercentage/x-motionpercentage');
 require('x-motiontime/x-motiontime');
 
 require('x-savemachinestatetemplate/x-savemachinestatetemplate');
-require('x-sequencebar/x-sequencebar'); // to remove 6.0
 require('x-cycleprogressbar/x-cycleprogressbar');
 require('x-performancebar/x-performancebar');
 require('x-productionmachiningstatus/x-productionmachiningstatus');

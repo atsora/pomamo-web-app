@@ -89,7 +89,6 @@ require('x-runningslotpie/x-runningslotpie');
 require('x-savemachinestatetemplate/x-savemachinestatetemplate');
 require('x-savereason/x-savereason');
 require('x-saveserialnumber/x-saveserialnumber');
-require('x-sequencebar/x-sequencebar');
 require('x-setupmachine/x-setupmachine');
 require('x-shiftslotbar/x-shiftslotbar');
 require('x-stacklight/x-stacklight');
