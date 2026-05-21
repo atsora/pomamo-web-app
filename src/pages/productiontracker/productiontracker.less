@@ -45,13 +45,13 @@
   color: @box_header_text_color;
   white-space: nowrap;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  // No justify-content: auto margins on machinedisplay-position center it; buttons stay at the end (right)
+
+  // Machine name participates in flex flow → its line-height drives the title height (no collapse when buttons are hidden by .subgroup-single-machine)
   .machinedisplay-position {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    margin: 0 auto;   // approximately center the machine name; buttons stay flush right
+    position: relative;
 
     x-machinedisplay {
       text-align: center;
@@ -152,25 +152,10 @@ x-groupsingroup {
   .tile-title {
     font-size: clamp(14px, 6cqh, 1000px) !important;   // mirrors operationstatus title scaling
     max-height: 25%;
-    min-height: max-content !important;   // force flex parent to honor natural content height (no shrink-below)
-    justify-content: center !important;   // center machinedisplay via flex (was justify-content: flex-end with absolute machinedisplay)
+    height: max-content !important;   // dynamic height = content (text/buttons); flex parent can't squash it
     padding: 1cqh 1.5cqw !important;
 
-    // Machine name now participates in flex flow → its line-height drives title height (no more collapse when button shrinks)
-    .machinedisplay-position {
-      position: static !important;
-      left: auto !important;
-      top: auto !important;
-      transform: none !important;
-    }
-
-    // Buttons float absolute on the right so they don't push the centered machinedisplay off-center
-    .btn-title-div {
-      position: absolute !important;
-      right: 1cqw;
-      top: 50%;
-      transform: translateY(-50%);
-    }
+    // Machine name + buttons all in normal flex flow (relative) — base rule already does this; kept here for clarity
 
     // Buttons sized in cqh so they shrink with the cell instead of overflowing at 22px fixed
     .zoom-in-page,
