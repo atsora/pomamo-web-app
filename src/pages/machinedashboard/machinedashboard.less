@@ -735,8 +735,11 @@ x-machinetab .machinetab-machine-cell {
     width: 100%;
     padding: 0;
   }
+  // Mobile: the wrapper x-machinetab provides the box bg/border.
+  // Cells stay transparent so the wrapper is the only visible "section".
+  x-machinetab .machinetab-machine-cell,
   x-machinetab .machinetab-machine-cell.active {
-    background-color: @box_color;
+    background-color: transparent;
   }
   .tile-content {
     height: unset;

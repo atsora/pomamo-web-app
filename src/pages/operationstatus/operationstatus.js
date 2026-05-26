@@ -59,8 +59,8 @@ require('x-tr/x-tr');
  *  - `showcurrent`                          : parent for current display sub-options
  *  - `showcurrentdisplay`                   : 3-way radio (tool/sequence/override) — mutually exclusive;
  *                                             drives `updateCurrentDisplays`
- *  - `showalarm`                            : show alarm icon; sub-options: showAlarmBelowIcon (layout),
- *                                             showUnknownAlarm
+ *  - `showalarm`                            : show alarm icon (left); sub-options: showAlarmBelowIcon
+ *                                             (adds the bottom alarm+details below), showUnknownAlarm
  *  - `showpie`                              : show `.operationstatus-cycleprogress`;
  *                                             sub-option: productionpercentinpie radios
  *  - `showstacklight`                       : show x-stacklight
@@ -134,7 +134,7 @@ class OperationStatusPage extends pulsePage.BasePage {
    *  6. Production percent radios (true/actualonly/actualtarget)
    *  7. Thresholds (target, red) validated via `_verficationThresholds`
    *  8. Current display: showcurrent parent + 3-way radio (tool/sequence/override)
-   *  9. Alarm: showalarmoperation + showAlarmBelowIcon (left/bottom layout) + showUnknownAlarm
+   *  9. Alarm: showalarmoperation (left icon) + showAlarmBelowIcon (adds bottom icon+details) + showUnknownAlarm
    * 10. Pie: showpie + productionpercentinpie radios
    * 11. Stacklight
    * 12. ISO file
@@ -440,8 +440,8 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showcurrent').trigger('change');
 
-    // Alarm: showalarmoperation (maps to 'showalarm').
-    // Sub-options: showAlarmBelowIcon (bottom vs left layout), showUnknownAlarm.
+    // Alarm: showalarmoperation (maps to 'showalarm') shows the left icon.
+    // Sub-options: showAlarmBelowIcon (adds the bottom div with icon+details), showUnknownAlarm.
     // .showalarmdetails subgroup controlled by alarm checkbox.
     // _applyTopDisplaySizing called on any alarm layout change.
     $('#showalarmoperation').prop('checked', pulseConfig.getBool('showalarm'));
@@ -452,13 +452,8 @@ class OperationStatusPage extends pulsePage.BasePage {
       pulseConfig.set('showalarm', showalarm);
       if (showalarm) {
         let showAlarmBelowIcon = pulseConfig.getBool('currenticoncncalarm.showAlarmBelowIcon');
-        if (showAlarmBelowIcon) {
-          $('.operationstatus-alarm-bottom-div').show();
-          $('.operationstatus-alarm-left-div').hide();
-        } else {
-          $('.operationstatus-alarm-left-div').show();
-          $('.operationstatus-alarm-bottom-div').hide();
-        }
+        $('.operationstatus-alarm-left-div').show();
+        $('.operationstatus-alarm-bottom-div').toggle(showAlarmBelowIcon);
       } else {
         $('.operationstatus-alarm-left-div').hide();
         $('.operationstatus-alarm-bottom-div').hide();
@@ -472,7 +467,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     });
     $('#showalarmoperation').trigger('change');
 
-    // Alarm position: below icon (bottom div) vs beside icon (left div)
+    // Alarm details (bottom div with icon+text) shown in addition to the left icon
     $('#showAlarmBelowIcon').prop('checked', pulseConfig.getBool('currenticoncncalarm.showAlarmBelowIcon'));
     if (pulseConfig.getDefaultBool('currenticoncncalarm.showAlarmBelowIcon') != pulseConfig.getBool('currenticoncncalarm.showAlarmBelowIcon'))
       $('#showAlarmBelowIcon').attr('overridden', 'true');
@@ -480,13 +475,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     $('#showAlarmBelowIcon').change(function () {
       let showAlarmBelowIcon = $('#showAlarmBelowIcon').is(':checked');
       pulseConfig.set('currenticoncncalarm.showAlarmBelowIcon', showAlarmBelowIcon);
-      if (showAlarmBelowIcon) {
-        $('.operationstatus-alarm-bottom-div').show();
-        $('.operationstatus-alarm-left-div').hide();
-      } else {
-        $('.operationstatus-alarm-left-div').show();
-        $('.operationstatus-alarm-bottom-div').hide();
-      }
+      $('.operationstatus-alarm-bottom-div').toggle(showAlarmBelowIcon);
       eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'showAlarmBelowIcon' });
     });
 
@@ -1034,17 +1023,12 @@ class OperationStatusPage extends pulsePage.BasePage {
       $('.operationstatus-current-override-div').hide();
     }
 
-    // Alarm: left vs bottom layout based on showAlarmBelowIcon
+    // Alarm: left icon always shown, bottom (with details) shown additionally when showAlarmBelowIcon
     let showalarm = pulseConfig.getBool('showalarm');
     if (showalarm) {
       let showAlarmBelowIcon = pulseConfig.getBool('currenticoncncalarm.showAlarmBelowIcon');
-      if (showAlarmBelowIcon) {
-        $('.operationstatus-alarm-bottom-div').show();
-        $('.operationstatus-alarm-left-div').hide();
-      } else {
-        $('.operationstatus-alarm-left-div').show();
-        $('.operationstatus-alarm-bottom-div').hide();
-      }
+      $('.operationstatus-alarm-left-div').show();
+      $('.operationstatus-alarm-bottom-div').toggle(showAlarmBelowIcon);
     } else {
       $('.operationstatus-alarm-left-div').hide();
       $('.operationstatus-alarm-bottom-div').hide();

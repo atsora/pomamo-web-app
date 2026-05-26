@@ -173,6 +173,11 @@ x-groupgrid {
   .combinedview-leftdisplay {
     position: relative;
     box-sizing: border-box;
+    // Stretch to row height (like .combinedview-rightdisplay below). Without
+    // this the column collapses to 0 (all children are position: absolute) and
+    // `.combinedview-today { top: 0 }` ends up at the vertical centre of the
+    // row instead of the top — the parent has align-items: center.
+    align-self: stretch;
 
     .combinedview-today {
       position: absolute;

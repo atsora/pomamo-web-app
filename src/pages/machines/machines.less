@@ -69,7 +69,6 @@
     flex-grow: 0;
 
     x-machinetab {
-      min-height: 400px;
       position: relative;
 
       .machinetab-machine-cell {
@@ -338,8 +337,13 @@
       padding: 0;
     }
 
-    x-machinetab .machinetab-machine-cell.active {
-      background-color: @box_color;
+    // Mobile: the wrapper x-machinetab provides the box bg/border.
+    // Cells stay transparent so the wrapper is the only visible "section".
+    // Selector mirrors the desktop rule above (`.machinetab-list x-machinetab .machinetab-machine-cell.active`)
+    // to win specificity inside the media query.
+    .machinetab-list x-machinetab .machinetab-machine-cell,
+    .machinetab-list x-machinetab .machinetab-machine-cell.active {
+      background-color: transparent;
     }
 
     .tile {

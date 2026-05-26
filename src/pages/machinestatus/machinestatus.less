@@ -417,11 +417,20 @@ x-currentworkinfo {
         min-height: 50px !important;
         height: auto !important;
         max-height: none !important;
+        // Drop the square aspect-ratio from base style: combined with the
+        // parent's align-items:stretch it forced these flex items to be
+        // height×height squares, blowing past their flex-basis and pushing
+        // the centre pie (and itself) past the tile's right edge with 3+
+        // machines per row. Width is now driven by flex-basis only.
+        aspect-ratio: auto !important;
+        max-width: 15% !important;
+        min-width: 0 !important;
       }
       .machinestatus-reasonslotpie {
         flex-grow: 2;
         flex-shrink: 1;
         min-height: 0;
+        min-width: 0;
         padding: 0.5cqmin !important;
         height: auto !important;
         max-height: none !important;
