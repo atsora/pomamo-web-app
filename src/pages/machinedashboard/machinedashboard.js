@@ -8,6 +8,7 @@ var pulsePage = require('pulsePage');
 var eventBus = require('eventBus');
 
 require('x-machinetab/x-machinetab');
+require('x-machinetabnav/x-machinetabnav');
 require('x-machinedisplay/x-machinedisplay');
 require('x-lastmachinestatus/x-lastmachinestatus');
 require('x-unansweredreasonnumber/x-unansweredreasonnumber');

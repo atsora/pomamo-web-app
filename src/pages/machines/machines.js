@@ -7,6 +7,7 @@ var pulseConfig = require('pulseConfig');
 var pulsePage = require('pulsePage');
 
 require('x-machinetab/x-machinetab');
+require('x-machinetabnav/x-machinetabnav');
 require('x-machinedisplay/x-machinedisplay');
 require('x-lastserialnumber/x-lastserialnumber');
 require('x-lastworkinformationbar/x-lastworkinformationbar');

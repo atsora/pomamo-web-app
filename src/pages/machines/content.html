@@ -11,7 +11,12 @@ SPDX-License-Identifier: Apache-2.0
 
 <div class="machines-main">
   <div class="machinetab-list" id="machine-tabs-panel">
-    <x-machinetab machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machines"></x-machinetab>
+    <div class="hidden-content">
+      <div id="machines-boxtoclone">
+        <x-machinetab machine-id="" machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machines"></x-machinetab>
+      </div>
+    </div>
+    <x-machinetabnav templateid="machines-boxtoclone" machine-context="PulseWebApp"></x-machinetabnav>
   </div>
 
   <div class="tile">
