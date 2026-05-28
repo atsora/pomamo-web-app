@@ -30,6 +30,7 @@ ATSORA_LOCALE_CATALOG.fr.options = {
   showAlarms: 'Afficher les alarmes',
   showBar: 'Afficher la barre',
   showChangedTools: 'Afficher les informations d\'outils',
+  showCncAlarmIcon: 'Afficher l\'icône d\'alarme CNC',
   showClock: "Afficher l'horloge",
   showCurrentAlarm: "Afficher l'alarme courante",
   showcurrentmachinestatuslogo: "Afficher le logo de l'état machine",

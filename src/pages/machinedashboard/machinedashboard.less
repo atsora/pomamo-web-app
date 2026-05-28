@@ -31,6 +31,7 @@
 @import "x-periodmanager/x-periodmanager.less";
 @import "x-productionbar/x-productionbar.less";
 @import "x-productiongauge/x-productiongauge.less";
+@import "x-currenticoncncalarm/x-currenticoncncalarm.less";
 
 
 // ==========================================
@@ -55,6 +56,12 @@
   flex-basis: 200px;
   flex-shrink: 0;
   flex-grow: 0;
+}
+
+// Collapse the picker when the selection only contains one machine —
+// x-machinetabnav stamps `.single-machine` on itself after _buildItems.
+.machinetab-list:has(x-machinetabnav.single-machine) {
+  display: none;
 }
 
 .single-machine-tab {
@@ -479,6 +486,61 @@ x-machinetab .machinetab-machine-cell {
     display: flex;
   }
 
+  // Stack the production bar and the CNC alarm icon vertically inside the
+  // performance container; .title-number-content is row by default elsewhere.
+  #performance-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cncalarmicon-content {
+    display: flex;
+    justify-content: center;
+
+    x-currenticoncncalarm {
+      width: 100%;
+      height: auto;
+
+      // Lay out the icon and its label on the same row (the default LESS
+      // positions the text absolutely on top of the icon — overrides that).
+      .pulse-icon-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        column-gap: 0.5em;
+      }
+
+      .pulse-icon-cncalarm {
+        width: 1.8em;
+        height: 1.8em;
+        flex: 0 0 auto;
+      }
+
+      .currenticoncncalarm-text {
+        position: static;
+        max-height: none;
+        width: auto;
+        font-size: 1.6vh;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  // While no alarm icon (.pulse-icon-cncalarm) has been rendered yet, collapse
+  // the icon to 0 height (but keep its width) so the wrapper doesn't reserve
+  // vertical space. The non-zero width keeps `offsetWidth > 0`, which is what
+  // jQuery `:visible` checks — and the component only triggers its Ajax
+  // request when `isVisible` is true. Using `display:none` on the wrapper
+  // would deadlock the loading.
+  .cncalarmicon-content:not(:has(x-currenticoncncalarm .pulse-icon-cncalarm)) {
+    x-currenticoncncalarm {
+      height: 0;
+    }
+  }
+
   .toollifemachine-content x-toollifemachine {
     .pulse-cellbar-main {
       justify-content: flex-end;
@@ -520,7 +582,7 @@ x-machinetab .machinetab-machine-cell {
     align-items: stretch;
     row-gap: 8px;
     column-gap: 1em;
-    margin: 1.5em 0 0.5em 1em;
+    margin: 0.5em 0 0.5em 1em;
     min-height: 85px;
   }
 

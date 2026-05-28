@@ -30,6 +30,7 @@ require('x-motionpercentage/x-motionpercentage');
 require('x-periodmanager/x-periodmanager');
 require('x-productionbar/x-productionbar');
 require('x-productiongauge/x-productiongauge');
+require('x-currenticoncncalarm/x-currenticoncncalarm');
 
 /**
  * Machine Dashboard page — detailed per-machine dashboard.
@@ -263,11 +264,23 @@ class machinedashboardPage extends pulsePage.BasePage {
     thresholdTarget.addEventListener('change', () => this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true));
     thresholdRedInput.addEventListener('change', () => this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true));
 
+    // --- 9. SHOW CNC ALARM ICON ---
+    $('#showcncalarmicon').prop('checked', pulseConfig.getBool('showcncalarmicon'));
+    if (pulseConfig.getDefaultBool('showcncalarmicon') != pulseConfig.getBool('showcncalarmicon'))
+      $('#showcncalarmicon').attr('overridden', 'true');
+    $('#showcncalarmicon').change(function () {
+      let show = $('#showcncalarmicon').is(':checked');
+      pulseConfig.set('showcncalarmicon', show);
+      if (show) $('.cncalarmicon-content').css('display', 'flex');
+      else $('.cncalarmicon-content').hide();
+    });
+
     // Initial triggers to sync the UI state
     $('#showChangedTools').trigger('change');
     $('#openStopClassification').trigger('change');
     $('#showproductionbar').trigger('change');
     $('#showproductiondisplay').trigger('change');
+    $('#showcncalarmicon').trigger('change');
   }
 
   /**
@@ -580,6 +593,9 @@ class machinedashboardPage extends pulsePage.BasePage {
     setDefaultValue('thresholdtargetproductionbar', pulseConfig.getDefaultFloat('thresholdtargetproduction'));
     setDefaultValue('thresholdredproductionbar', pulseConfig.getDefaultFloat('thresholdredproduction'));
 
+    // CNC alarm icon
+    setDefaultChecked('showcncalarmicon');
+
   }
 
   /**
@@ -602,7 +618,8 @@ class machinedashboardPage extends pulsePage.BasePage {
       { id: 'showproductiondisplay', type: 'checkbox' },
       { id: 'productiongauge', type: 'radio', param: 'showproductiongauge' },
       { id: 'thresholdtargetproductionbar', type: 'value', param: 'thresholdtargetproduction' },
-      { id: 'thresholdredproductionbar', type: 'value', param: 'thresholdredproduction' }
+      { id: 'thresholdredproductionbar', type: 'value', param: 'thresholdredproduction' },
+      { id: 'showcncalarmicon', type: 'checkbox' }
     ];
 
     return options.map(opt => {
@@ -672,6 +689,13 @@ class machinedashboardPage extends pulsePage.BasePage {
       $('.changedtools-content').css('display', 'flex');
     } else {
       $('.changedtools-content').hide();
+    }
+
+    let showCncAlarmIcon = pulseConfig.getBool('showcncalarmicon');
+    if (showCncAlarmIcon) {
+      $('.cncalarmicon-content').css('display', 'flex');
+    } else {
+      $('.cncalarmicon-content').hide();
     }
 
     // Apply display mode (percent/ratio) to freshly created clones
