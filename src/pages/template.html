@@ -265,9 +265,15 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
   </div>
-  <!-- Vue app bundle (built from atsora-vue via pnpm build; hashes patched by patch-pulse-template) -->
+  <!-- Vue app bundle (built from atsora-vue via pnpm build; hashes patched by patch-pulse-template).
+       The JS is imported only on vue-* pages: when the Vue app mounts, PrimeVue injects global
+       <style> tags (svg, button, * resets) that would otherwise leak into regular Pulse pages.
+       The CSS link is scoped to #vue-app, so loading it everywhere is harmless. -->
   <link rel="stylesheet" href="./vue-dist/static/index.css">
-  <script type="module" src="./vue-dist/static/index.js"></script>
+  <script type="module">
+    if (/(^|\/)vue-[^/]*\.html$/.test(location.pathname))
+      import('./vue-dist/static/index.js');
+  </script>
 </body>
 
 </html>
