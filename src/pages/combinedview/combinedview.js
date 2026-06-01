@@ -67,90 +67,115 @@ class CombinedViewPage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Init
   initOptionValues() {
-    const defaultLayoutChk = $('#defaultlayout');
-    const rotationSettings = $('.rotation-settings');
-    const machinesPerPageInput = $('#machinesperpage');
+    const defaultLayoutChk = document.getElementById('defaultlayout');
+    const rotationSettings = document.querySelector('.rotation-settings');
+    const machinesPerPageInput = document.getElementById('machinesperpage');
 
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
     let isLive = tmpContexts && tmpContexts.includes('live');
 
     if (!isLive) {
-      defaultLayoutChk.closest('.param-row').hide();
-      defaultLayoutChk.parent().hide();
-      rotationSettings.hide();
+      if (defaultLayoutChk) {
+        const paramRow = defaultLayoutChk.closest('.param-row');
+        if (paramRow) paramRow.style.display = 'none';
+        if (defaultLayoutChk.parentElement) defaultLayoutChk.parentElement.style.display = 'none';
+        defaultLayoutChk.checked = false;
+      }
+      if (rotationSettings) rotationSettings.style.display = 'none';
       pulseConfig.set('defaultlayout', false);
       pulseConfig.set('machinesperpage', 10000);
-      defaultLayoutChk.prop('checked', false);
-      machinesPerPageInput.val(10000);
+      if (machinesPerPageInput) machinesPerPageInput.value = 10000;
       // Scroll & grid sizing handled by .pulse-content:not(.appcontext-live) overrides in combinedview.less
     } else {
-      defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
-      if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
-        defaultLayoutChk.attr('overridden', true);
-      defaultLayoutChk.change(() => {
-        let isDefault = defaultLayoutChk.is(':checked');
-        pulseConfig.set('defaultlayout', isDefault);
-        if (isDefault) {
-          rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
-          machinesPerPageInput.val(12).change();
-        } else {
-          rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
+      if (defaultLayoutChk) {
+        defaultLayoutChk.checked = pulseConfig.getBool('defaultlayout', true);
+        if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
+          defaultLayoutChk.setAttribute('overridden', true);
+        defaultLayoutChk.addEventListener('change', () => {
+          let isDefault = defaultLayoutChk.checked;
+          pulseConfig.set('defaultlayout', isDefault);
+          if (isDefault) {
+            if (rotationSettings) {
+              rotationSettings.style.opacity = '0.5';
+              rotationSettings.querySelectorAll('input').forEach(input => input.disabled = true);
+            }
+            if (machinesPerPageInput) {
+              machinesPerPageInput.value = 12;
+              machinesPerPageInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          } else {
+            if (rotationSettings) {
+              rotationSettings.style.opacity = '1';
+              rotationSettings.querySelectorAll('input').forEach(input => input.disabled = false);
+            }
+          }
+        });
+        defaultLayoutChk.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      if (machinesPerPageInput) machinesPerPageInput.value = pulseConfig.getInt('machinesperpage', 12);
+      let rotationDelayInput = document.getElementById('rotationdelay');
+      if (rotationDelayInput) rotationDelayInput.value = pulseConfig.getInt('rotationdelay', 10);
+    }
+
+    const showTargetChk = document.getElementById('showtarget');
+    if (showTargetChk) {
+      showTargetChk.checked = pulseConfig.getBool('showtarget');
+      if (pulseConfig.getDefaultBool('showtarget') != pulseConfig.getBool('showtarget')) {
+        showTargetChk.setAttribute('overridden', 'true');
+      }
+      showTargetChk.addEventListener('change', function () {
+        let showtarget = showTargetChk.checked;
+        // Store
+        pulseConfig.set('showtarget', showtarget);
+        // Display
+        if (showtarget) {
+          document.querySelectorAll('x-performancetarget').forEach(el => el.style.display = '');
         }
-      }).trigger('change');
-      machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
-      $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+        else {
+          document.querySelectorAll('x-performancetarget').forEach(el => el.style.display = 'none');
+        }
+      });
     }
 
-    $('#showtarget').prop('checked', pulseConfig.getBool('showtarget'));
-    if (pulseConfig.getDefaultBool('showtarget') != pulseConfig.getBool('showtarget')) {
-      $('#showtarget').attr('overridden', 'true');
+    const showAlarmChk = document.getElementById('showalarm');
+    if (showAlarmChk) {
+      showAlarmChk.checked = pulseConfig.getBool('showalarm');
+      if (pulseConfig.getDefaultBool('showalarm') != pulseConfig.getBool('showalarm')) {
+        showAlarmChk.setAttribute('overridden', 'true');
+      }
+      showAlarmChk.addEventListener('change', function () {
+        let showalarm = showAlarmChk.checked;
+        // Store
+        pulseConfig.set('showalarm', showalarm);
+        // Display
+        if (showalarm) {
+          document.querySelectorAll('x-currenticoncncalarm').forEach(el => el.style.display = '');
+        }
+        else {
+          document.querySelectorAll('x-currenticoncncalarm').forEach(el => el.style.display = 'none');
+        }
+      });
     }
-    $('#showtarget').change(function () {
-      let showtarget = $('#showtarget').is(':checked');
-      // Store
-      pulseConfig.set('showtarget', showtarget);
-      // Display
-      if (showtarget) {
-        $('x-performancetarget').show();
-      }
-      else {
-        $('x-performancetarget').hide();
-      }
-    });
 
-    $('#showalarm').prop('checked', pulseConfig.getBool('showalarm'));
-    if (pulseConfig.getDefaultBool('showalarm') != pulseConfig.getBool('showalarm')) {
-      $('#showalarm').attr('overridden', 'true');
+    const showStacklightChk = document.getElementById('showstacklight');
+    if (showStacklightChk) {
+      showStacklightChk.checked = pulseConfig.getBool('showstacklight');
+      if (pulseConfig.getDefaultBool('showstacklight') != pulseConfig.getBool('showstacklight')) {
+        showStacklightChk.setAttribute('overridden', 'true');
+      }
+      showStacklightChk.addEventListener('change', function () {
+        let showstacklight = showStacklightChk.checked;
+        // Store
+        pulseConfig.set('showstacklight', showstacklight);
+        // Display
+        if (showstacklight) {
+          document.querySelectorAll('x-stacklight').forEach(el => el.style.display = '');
+        }
+        else {
+          document.querySelectorAll('x-stacklight').forEach(el => el.style.display = 'none');
+        }
+      });
     }
-    $('#showalarm').change(function () {
-      let showalarm = $('#showalarm').is(':checked');
-      // Store
-      pulseConfig.set('showalarm', showalarm);
-      // Display
-      if (showalarm) {
-        $('x-currenticoncncalarm').show();
-      }
-      else {
-        $('x-currenticoncncalarm').hide();
-      }
-    });
-
-    $('#showstacklight').prop('checked', pulseConfig.getBool('showstacklight'));
-    if (pulseConfig.getDefaultBool('showstacklight') != pulseConfig.getBool('showstacklight')) {
-      $('#showstacklight').attr('overridden', 'true');
-    }
-    $('#showstacklight').change(function () {
-      let showstacklight = $('#showstacklight').is(':checked');
-      // Store
-      pulseConfig.set('showstacklight', showstacklight);
-      // Display
-      if (showstacklight) {
-        $('x-stacklight').show();
-      }
-      else {
-        $('x-stacklight').hide();
-      }
-    });
   }
 
   /**
@@ -165,16 +190,29 @@ class CombinedViewPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     // Layout
-    $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
-    $('#machinesperpage').val(12).removeAttr('overridden');
-    $('#rotationdelay').val(10).removeAttr('overridden');
+    const defaultLayoutEl = document.getElementById('defaultlayout');
+    if (defaultLayoutEl) {
+      defaultLayoutEl.checked = true;
+      defaultLayoutEl.dispatchEvent(new Event('change', { bubbles: true }));
+      defaultLayoutEl.removeAttribute('overridden');
+    }
+    const machinesPerPageEl = document.getElementById('machinesperpage');
+    if (machinesPerPageEl) {
+      machinesPerPageEl.value = 12;
+      machinesPerPageEl.removeAttribute('overridden');
+    }
+    const rotationDelayEl = document.getElementById('rotationdelay');
+    if (rotationDelayEl) {
+      rotationDelayEl.value = 10;
+      rotationDelayEl.removeAttribute('overridden');
+    }
 
     setDefaultChecked('showtarget');
     setDefaultChecked('showalarm');
@@ -245,29 +283,35 @@ class CombinedViewPage extends pulsePage.BasePage {
   buildContent() {
     let showtarget = pulseConfig.getBool('showtarget');
     if (showtarget) {
-      $('x-performancetarget').show();
+      document.querySelectorAll('x-performancetarget').forEach(el => el.style.display = '');
     }
     else {
-      $('x-performancetarget').hide();
+      document.querySelectorAll('x-performancetarget').forEach(el => el.style.display = 'none');
     }
     let showstacklight = pulseConfig.getBool('showstacklight');
     if (showstacklight) {
-      $('x-stacklight').show();
+      document.querySelectorAll('x-stacklight').forEach(el => el.style.display = '');
     }
     else {
-      $('x-stacklight').hide();
+      document.querySelectorAll('x-stacklight').forEach(el => el.style.display = 'none');
     }
     let showalarm = pulseConfig.getBool('showalarm');
     if (showalarm) {
-      $('x-currenticoncncalarm').show();
+      document.querySelectorAll('x-currenticoncncalarm').forEach(el => el.style.display = '');
     }
     else {
-      $('x-currenticoncncalarm').hide();
+      document.querySelectorAll('x-currenticoncncalarm').forEach(el => el.style.display = 'none');
     }
   }
 }
 
-$(document).ready(function () {
+if (document.readyState !== 'loading') {
+  initCombinedViewPage();
+} else {
+  document.addEventListener('DOMContentLoaded', initCombinedViewPage);
+}
+
+function initCombinedViewPage() {
   // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
   pulsePage.preparePage(new CombinedViewPage());
-});
+}

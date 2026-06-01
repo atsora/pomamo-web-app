@@ -65,40 +65,56 @@ class PerformanceBarPage extends pulsePage.BasePage {
   // CONFIG PANEL - Init
   initOptionValues() {
     // Layout
-    const defaultLayoutChk = $('#defaultlayout');
-    const rotationSettings = $('.rotation-settings');
-    const machinesPerPageInput = $('#machinesperpage');
+    const defaultLayoutChk = document.getElementById('defaultlayout');
+    const rotationSettings = document.querySelector('.rotation-settings');
+    const machinesPerPageInput = document.getElementById('machinesperpage');
 
-    defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
-    if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
-      defaultLayoutChk.attr('overridden', true);
+    if (defaultLayoutChk) {
+      defaultLayoutChk.checked = pulseConfig.getBool('defaultlayout', true);
+      if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
+        defaultLayoutChk.setAttribute('overridden', 'true');
 
-    defaultLayoutChk.change(() => {
-      let isDefault = defaultLayoutChk.is(':checked');
-      pulseConfig.set('defaultlayout', isDefault);
-      if (isDefault) {
-        rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
-        machinesPerPageInput.val(16).change();
-      } else {
-        rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
-      }
-    }).trigger('change');
+      defaultLayoutChk.addEventListener('change', () => {
+        let isDefault = defaultLayoutChk.checked;
+        pulseConfig.set('defaultlayout', isDefault);
+        if (isDefault) {
+          if (rotationSettings) {
+            rotationSettings.style.opacity = '0.5';
+            rotationSettings.querySelectorAll('input').forEach(inp => inp.disabled = true);
+          }
+          if (machinesPerPageInput) {
+            machinesPerPageInput.value = 16;
+            machinesPerPageInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        } else {
+          if (rotationSettings) {
+            rotationSettings.style.opacity = '1';
+            rotationSettings.querySelectorAll('input').forEach(inp => inp.disabled = false);
+          }
+        }
+      });
+      defaultLayoutChk.dispatchEvent(new Event('change', { bubbles: true }));
+    }
 
-    machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 16));
-    $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+    if (machinesPerPageInput) machinesPerPageInput.value = pulseConfig.getInt('machinesperpage', 16);
+    let rotationDelayInput = document.getElementById('rotationdelay');
+    if (rotationDelayInput) rotationDelayInput.value = pulseConfig.getInt('rotationdelay', 10);
 
     // Show percent
     const syncRadioGroup = (value, valueToIdMap, fallbackValue) => {
       const targetId = valueToIdMap[value] || valueToIdMap[fallbackValue];
       if (targetId) {
-        $('#' + targetId).prop('checked', true);
+        const el = document.getElementById(targetId);
+        if (el) el.checked = true;
       }
     };
 
     const bindRadioGroup = (valueToIdMap, onSelect) => {
       Object.entries(valueToIdMap).forEach(([value, id]) => {
-        $('#' + id).change(function () {
-          if ($(this).is(':checked')) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('change', function () {
+          if (this.checked) {
             onSelect(value);
           }
         });
@@ -108,32 +124,35 @@ class PerformanceBarPage extends pulsePage.BasePage {
     const updateMotionDisplay = (display) => {
       const showPercent = display === 'percent';
       if (showPercent) {
-        $('x-motionpercentage').show();
-        $('x-motiontime').hide();
+        document.querySelectorAll('x-motionpercentage').forEach(el => el.style.display = '');
+        document.querySelectorAll('x-motiontime').forEach(el => el.style.display = 'none');
       }
       else {
-        $('x-motionpercentage').hide();
-        $('x-motiontime').show();
+        document.querySelectorAll('x-motionpercentage').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('x-motiontime').forEach(el => el.style.display = '');
       }
     };
 
-    $('#showmotionpercentage').prop('checked', pulseConfig.getBool('showmotionpercentage'));
-    if (pulseConfig.getDefaultBool('showmotionpercentage') != pulseConfig.getBool('showmotionpercentage')) {
-      $('#showmotionpercentage').attr('overridden', 'true');
+    const showMotionPercentageChk = document.getElementById('showmotionpercentage');
+    if (showMotionPercentageChk) {
+      showMotionPercentageChk.checked = pulseConfig.getBool('showmotionpercentage');
+      if (pulseConfig.getDefaultBool('showmotionpercentage') != pulseConfig.getBool('showmotionpercentage')) {
+        showMotionPercentageChk.setAttribute('overridden', 'true');
+      }
+      showMotionPercentageChk.addEventListener('change', function () {
+        const showMotionPercentage = showMotionPercentageChk.checked;
+        pulseConfig.set('showmotionpercentage', showMotionPercentage);
+        if (showMotionPercentage) {
+          document.querySelectorAll('x-motionpercentage, x-motiontime').forEach(el => el.style.display = '');
+          document.querySelectorAll('.showmotionpercentagedetails').forEach(el => el.style.display = '');
+          updateMotionDisplay(pulseConfig.getString('showmotiondisplay') || 'percent');
+        }
+        else {
+          document.querySelectorAll('x-motionpercentage, x-motiontime').forEach(el => el.style.display = 'none');
+          document.querySelectorAll('.showmotionpercentagedetails').forEach(el => el.style.display = 'none');
+        }
+      });
     }
-    $('#showmotionpercentage').change(function () {
-      const showMotionPercentage = $('#showmotionpercentage').is(':checked');
-      pulseConfig.set('showmotionpercentage', showMotionPercentage);
-      if (showMotionPercentage) {
-        $('x-motionpercentage, x-motiontime').show();
-        $('.showmotionpercentagedetails').show();
-        updateMotionDisplay(pulseConfig.getString('showmotiondisplay') || 'percent');
-      }
-      else {
-        $('x-motionpercentage, x-motiontime').hide();
-        $('.showmotionpercentagedetails').hide();
-      }
-    });
 
     const motionDisplayMap = {
       percent: 'motiondisplaypercent',
@@ -146,7 +165,7 @@ class PerformanceBarPage extends pulsePage.BasePage {
     });
 
     updateMotionDisplay(pulseConfig.getString('showmotiondisplay') || 'percent');
-    $('#showmotionpercentage').trigger('change');
+    if (showMotionPercentageChk) showMotionPercentageChk.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   /**
@@ -158,28 +177,46 @@ class PerformanceBarPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultRadioGroup = (value, valueToIdMap, { trigger = true } = {}) => {
       Object.values(valueToIdMap).forEach((id) => {
-        $('#' + id).removeAttr('overridden');
+        const el = document.getElementById(id);
+        if (el) el.removeAttribute('overridden');
       });
       const targetId = valueToIdMap[value];
       if (targetId) {
-        const element = $('#' + targetId);
-        element.prop('checked', true);
-        if (trigger) element.change();
+        const element = document.getElementById(targetId);
+        if (!element) return;
+        element.checked = true;
+        if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
       }
     };
 
+    const setIfPresent = (id, mutator) => {
+      const el = document.getElementById(id);
+      if (el) mutator(el);
+    };
+
     // Layout
-    $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
-    $('#machinesperpage').val(16).removeAttr('overridden');
-    $('#rotationdelay').val(10).removeAttr('overridden');
+    setIfPresent('defaultlayout', el => {
+      el.checked = true;
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+      el.removeAttribute('overridden');
+    });
+    setIfPresent('machinesperpage', el => {
+      el.value = 16;
+      el.removeAttribute('overridden');
+    });
+    setIfPresent('rotationdelay', el => {
+      el.value = 10;
+      el.removeAttribute('overridden');
+    });
 
     setDefaultChecked('showmotionpercentage');
     setDefaultRadioGroup(pulseConfig.getDefaultString('showmotiondisplay'), {
@@ -207,7 +244,7 @@ class PerformanceBarPage extends pulsePage.BasePage {
 
     let result = options.map(opt => {
       const el = document.getElementById(opt.id);
-      if (!el || $(el).is(':hidden')) return '';
+      if (!el || el.style.display === 'none') return '';
       const paramName = opt.param || opt.id;
       if (opt.type === 'value') return `&${paramName}=${el.value}`;
       return `&${paramName}=${el.checked}`;
@@ -258,20 +295,23 @@ class PerformanceBarPage extends pulsePage.BasePage {
 
     if (showMotionPercentage) {
       if (showPercent) {
-        $('x-motionpercentage').show();
-        $('x-motiontime').hide();
+        document.querySelectorAll('x-motionpercentage').forEach(el => el.style.display = '');
+        document.querySelectorAll('x-motiontime').forEach(el => el.style.display = 'none');
       } else {
-        $('x-motionpercentage').hide();
-        $('x-motiontime').show();
+        document.querySelectorAll('x-motionpercentage').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('x-motiontime').forEach(el => el.style.display = '');
       }
     } else {
-      $('x-motionpercentage').hide();
-      $('x-motiontime').hide();
+      document.querySelectorAll('x-motionpercentage').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('x-motiontime').forEach(el => el.style.display = 'none');
     }
   }
 }
 
-$(document).ready(function() {
-  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new PerformanceBarPage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function() {
+    pulsePage.preparePage(new PerformanceBarPage());
+  });
+}

@@ -86,6 +86,14 @@ x-groupsingroup {
   .groupsingroup-main {
     grid-auto-rows: max-content; // rows sized to subgroup content (push by pie); not 1fr-distributed
     align-content: start;
+
+    // Single-machine layout: the tile fills the whole page so the same em-based
+    // typography that fits a grid cell looks tiny. Boost the tile's font-size
+    // so every em-based descendant (.tile-title, x-workinfo, .workinfo-singledata,
+    // .freetext-content, etc.) scales up proportionally.
+    &[data-count="1"] .tile {
+      font-size: 1.6em;
+    }
   }
 
   .groupsingroup-subgroup {

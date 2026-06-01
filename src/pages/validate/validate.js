@@ -64,6 +64,10 @@ class ValidatePage extends pulsePage.BasePage {
   }
 }
 
-$(document).ready(function () {
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new ValidatePage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new ValidatePage());
+  });
+}

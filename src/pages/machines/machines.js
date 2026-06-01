@@ -108,32 +108,54 @@ class MachinesPage extends pulsePage.BasePage {
     let componentsString = componentsToDisplay.join(',');
     console.log('Components to display: ' + componentsString);
 
-    $('.machine-component').hide(); // Hide all - Not possible in css :(
-    $('.tile-title x-reasonbutton').hide();
-    $('.title-lastmachinestatus').hide();
+    let machineComponents = document.querySelectorAll('.machine-component');
+    machineComponents.forEach(el => el.style.display = 'none');
+
+    let reasonButtons = document.querySelectorAll('.tile-title x-reasonbutton');
+    reasonButtons.forEach(el => el.style.display = 'none');
+
+    let lastStatusElements = document.querySelectorAll('.title-lastmachinestatus');
+    lastStatusElements.forEach(el => el.style.display = 'none');
 
     for (let i = 0; i < componentsToDisplay.length; i++) {
-      $(componentsToDisplay[i]).parents('.machine-component').show();
+      let component = document.querySelector(componentsToDisplay[i]);
+      if (component) {
+        let parent = component.closest('.machine-component');
+        if (parent) parent.style.display = '';
+      }
 
       if (componentsToDisplay[i] == 'coloredbar') {
-        $('.div-bar-and-percent').parents('.machine-component').show();
+        let bars = document.querySelectorAll('.div-bar-and-percent');
+        bars.forEach(bar => {
+          let parent = bar.closest('.machine-component');
+          if (parent) parent.style.display = '';
+        });
       }
       if (componentsToDisplay[i] == 'coloredbarwithpercent') {
-        $('.div-bar-and-percent').parents('.machine-component').show();
-        $('.right-percent').show();
+        let bars = document.querySelectorAll('.div-bar-and-percent');
+        bars.forEach(bar => {
+          let parent = bar.closest('.machine-component');
+          if (parent) parent.style.display = '';
+        });
+        let percents = document.querySelectorAll('.right-percent');
+        percents.forEach(el => el.style.display = '');
       }
       if (componentsToDisplay[i] == 'x-reasonbutton') {
-        $('.tile-title x-reasonbutton').show();
+        let buttons = document.querySelectorAll('.tile-title x-reasonbutton');
+        buttons.forEach(el => el.style.display = '');
       }
       if (componentsToDisplay[i] == 'title-lastmachinestatus') {
-        $('.title-lastmachinestatus').show();
+        let statuses = document.querySelectorAll('.title-lastmachinestatus');
+        statuses.forEach(el => el.style.display = '');
       }
     }
   }
 }
 
-$(document).ready(function () {
-  // Start the page lifecycle (getMissingConfigs → buildContent).
-  // No configurable options → no initOptionValues() on this page.
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new MachinesPage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new MachinesPage());
+  });
+}

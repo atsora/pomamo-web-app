@@ -56,6 +56,12 @@
   flex-basis: 200px;
   flex-shrink: 0;
   flex-grow: 0;
+
+  // ≤ 1 machine: x-machinetabnav signals `data-single-machine="true"` and
+  // collapses itself; the wrapper also collapses so the dashboard fills the row.
+  &:has(x-machinetabnav[data-single-machine="true"]) {
+    display: none;
+  }
 }
 
 // Collapse the picker when the selection only contains one machine —

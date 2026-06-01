@@ -56,39 +56,37 @@ class ToolLifePage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Init
   initOptionValues() {
-    // TOOLS detail
     let toollabelname = pulseConfig.getString('toollifemachine.toollabelname');
-    $('#showtoolselector').empty();
+    const showtoolselectorEl = document.getElementById('showtoolselector');
+    showtoolselectorEl.replaceChildren();
     let toollabelsselections = pulseConfig.getArray('toollifemachine.toollabelsselections');
     let toolLabels = (typeof ATSORA_CATALOG !== 'undefined' && ATSORA_CATALOG.general && ATSORA_CATALOG.general.toolLabels) || {};
     for (let iTool = 0; iTool < toollabelsselections.length; iTool++) {
       let label = toollabelsselections[iTool];
       let displayText = toolLabels[label.name] || label.name;
-      $('#showtoolselector').append('<option id="tool-' + label.name + '" value="' + label.name + '">' + displayText + '</option>');
+      const option = document.createElement('option');
+      option.id = 'tool-' + label.name;
+      option.value = label.name;
+      option.textContent = displayText;
+      showtoolselectorEl.appendChild(option);
     }
-    // Set selection
-    $('#showtoolselector').val(toollabelname);
+    showtoolselectorEl.value = toollabelname;
 
-    $('#showtoolselector').change(function () {
-      let toollabelname = $('#showtoolselector').val();
-      // Store
+    showtoolselectorEl.addEventListener('change', function () {
+      let toollabelname = this.value;
       pulseConfig.set('toollifemachine.toollabelname', String(toollabelname));
-      // Display = dispatch message
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'toollabelname' });
     });
 
-    // TOOLS remaining
-    $('#showtoolremaining').prop('checked',
-      pulseConfig.getBool('toollifemachine.displayremainingcyclesbelowtool'));
+    const showtoolremainingEl = document.getElementById('showtoolremaining');
+    showtoolremainingEl.checked = pulseConfig.getBool('toollifemachine.displayremainingcyclesbelowtool');
     if (pulseConfig.getDefaultBool('toollifemachine.displayremainingcyclesbelowtool')
       != pulseConfig.getBool('toollifemachine.displayremainingcyclesbelowtool'))
-      $('#showtoolremaining').attr('overridden', 'true');
-    $('#showtoolremaining').change(function () {
-      let showtoolremaining = $('#showtoolremaining').is(':checked');
-      // Store
+      showtoolremainingEl.setAttribute('overridden', 'true');
+    showtoolremainingEl.addEventListener('change', function () {
+      let showtoolremaining = this.checked;
       pulseConfig.set('toollifemachine.displayremainingcyclesbelowtool', showtoolremaining);
-      // Display / Dispatch
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'displayremainingcyclesbelowtool' });
     });
@@ -152,34 +150,31 @@ class ToolLifePage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.val(value);
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.value = value;
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
-    // expiring tools
     setDefaultValue('showtoolselector', pulseConfig.getDefaultString('toollifemachine.toollabelname'));
-
-    // remaining cycles
     setDefaultChecked('showtoolremaining', 'toollifemachine.displayremainingcyclesbelowtool');
   }
 
-  /**
-   * No components to drive at load time — x-toollifemachine reads pulseConfig directly.
-   */
   buildContent() {
   }
 }
 
-$(document).ready(function () {
-  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new ToolLifePage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new ToolLifePage());
+  });
+}

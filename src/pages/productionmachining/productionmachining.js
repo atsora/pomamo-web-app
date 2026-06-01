@@ -45,38 +45,35 @@ class ProductionMachiningPage extends pulsePage.BasePage {
    */
   initOptionValues() {
     var self = this;
-    // Prepare custom inputs / Visibilities
 
-    $('#thresholdtargetproduction').val(pulseConfig.getInt('thresholdtargetproduction'));
+    const thresholdTargetEl = document.getElementById('thresholdtargetproduction');
+    const thresholdRedEl = document.getElementById('thresholdredproduction');
+
+    thresholdTargetEl.value = pulseConfig.getInt('thresholdtargetproduction');
     var changetarget = function () {
-      if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
-        $(this).attr('overridden', true);
-        // Store
-        if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
-          // Display / Dispatch
+      if (self._verficationThresholds(thresholdTargetEl.value, thresholdRedEl.value)) {
+        thresholdTargetEl.setAttribute('overridden', true);
+        if (pulseUtility.isInteger(thresholdTargetEl.value)) {
           eventBus.EventBus.dispatchToAll('configChangeEvent',
             { 'config': 'thresholdtargetproduction' });
         }
       }
     };
-    $('#thresholdtargetproduction').bind('input', changetarget);
-    $('#thresholdtargetproduction').change(changetarget);
+    thresholdTargetEl.addEventListener('input', changetarget);
+    thresholdTargetEl.addEventListener('change', changetarget);
 
-    $('#thresholdredproduction').val(pulseConfig.getInt('thresholdredproduction'));
+    thresholdRedEl.value = pulseConfig.getInt('thresholdredproduction');
     var changeRed = function () {
-      if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
-        $(this).attr('overridden', true);
-        // Store
-        if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
-          // Display / Dispatch
+      if (self._verficationThresholds(thresholdTargetEl.value, thresholdRedEl.value)) {
+        thresholdRedEl.setAttribute('overridden', true);
+        if (pulseUtility.isInteger(thresholdRedEl.value)) {
           eventBus.EventBus.dispatchToAll('configChangeEvent',
             { 'config': 'thresholdredproduction' });
         }
       }
     };
-    $('#thresholdredproduction').bind('input', changeRed);
-    $('#thresholdredproduction').change(changeRed);
-
+    thresholdRedEl.addEventListener('input', changeRed);
+    thresholdRedEl.addEventListener('change', changeRed);
   }
 
   /**
@@ -153,10 +150,10 @@ class ProductionMachiningPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.val(value);
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.value = value;
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     setDefaultValue('thresholdtargetproduction', pulseConfig.getDefaultInt('thresholdtargetproduction'));
@@ -218,7 +215,10 @@ class ProductionMachiningPage extends pulsePage.BasePage {
 
 }
 
-$(document).ready(function () {
-  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new ProductionMachiningPage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new ProductionMachiningPage());
+  });
+}

@@ -80,7 +80,10 @@ class ScheduledStatusPage extends pulsePage.BasePage {
   }
 }
 
-$(document).ready(function () {
-  // Start the page lifecycle (getMissingConfigs → buildContent).
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new ScheduledStatusPage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new ScheduledStatusPage());
+  });
+}

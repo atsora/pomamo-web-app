@@ -105,6 +105,10 @@ class CustomPage extends pulsePage.BasePage {
   }
 }
 
-$(document).ready(function () {
+function _onReady (fn) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+  else fn();
+}
+_onReady(function () {
   pulsePage.preparePage(new CustomPage());
 });

@@ -68,108 +68,79 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
   // CONFIG PANEL - Init
   initOptionValues() {
     var self = this;
-    // Prepare custom inputs / Visibilities
 
-    // showworkinfo = Show Operation
-    $('#showworkinfo').prop('checked', pulseConfig.getBool('showworkinfo'));
+    const showworkinfoEl = document.getElementById('showworkinfo');
+    showworkinfoEl.checked = pulseConfig.getBool('showworkinfo');
     if (pulseConfig.getDefaultBool('showworkinfo') != pulseConfig.getBool('showworkinfo')) {
-      $('#showworkinfo').attr('overridden', 'true');
+      showworkinfoEl.setAttribute('overridden', 'true');
     }
-    $('#showworkinfo').change(function () {
-      pulseConfig.set('showworkinfo', $('#showworkinfo').is(':checked'));
+    showworkinfoEl.addEventListener('change', function () {
+      pulseConfig.set('showworkinfo', this.checked);
 
       let showworkinfo = pulseConfig.getBool('showworkinfo');
       if (showworkinfo) {
-        $('x-workinfo').show();
+        document.querySelectorAll('x-workinfo').forEach(el => el.style.display = '');
       }
       else {
-        $('x-workinfo').hide();
+        document.querySelectorAll('x-workinfo').forEach(el => el.style.display = 'none');
       }
     });
 
-    // Inside pie
-    $('#productionpercentinpie').prop('checked', 'true' == pulseConfig.getString('productionpercentinpie'));
-    //if (pulseConfig.getDefaultString('productionpercentinpie') != pulseConfig.getString('productionpercentinpie'))
-    //$('#productionpercentinpie').attr('overridden', 'true');
-    $('#productionactualonlyinpie').prop('checked', 'actualonly' == pulseConfig.getString('productionpercentinpie'));
-    $('#productionactualtargetinpie').prop('checked',
-      ('true' != pulseConfig.getString('productionpercentinpie')
-        && ('actualonly' != pulseConfig.getString('productionpercentinpie'))));
+    const productionpercentinpieEl = document.getElementById('productionpercentinpie');
+    const productionactualonlyinpieEl = document.getElementById('productionactualonlyinpie');
+    const productionactualtargetinpieEl = document.getElementById('productionactualtargetinpie');
 
-    $('#productionpercentinpie').change(function () {
-      if ($('#productionpercentinpie').is(':checked')) {
+    productionpercentinpieEl.checked = 'true' == pulseConfig.getString('productionpercentinpie');
+    productionactualonlyinpieEl.checked = 'actualonly' == pulseConfig.getString('productionpercentinpie');
+    productionactualtargetinpieEl.checked = ('true' != pulseConfig.getString('productionpercentinpie')
+      && ('actualonly' != pulseConfig.getString('productionpercentinpie')));
+
+    const handleProductionPercentChange = function () {
+      if (productionpercentinpieEl.checked) {
         pulseConfig.set('productionpercentinpie', 'true');
       }
-      if ($('#productionactualonlyinpie').is(':checked')) {
+      if (productionactualonlyinpieEl.checked) {
         pulseConfig.set('productionpercentinpie', 'actualonly');
       }
-      if ($('#productionactualtargetinpie').is(':checked')) {
+      if (productionactualtargetinpieEl.checked) {
         pulseConfig.set('productionpercentinpie', 'actualtarget');
       }
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'productionpercentinpie' });
-    });
+    };
 
-    $('#productionactualtargetinpie').change(function () {
-      if ($('#productionpercentinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'true');
-      }
-      if ($('#productionactualonlyinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'actualonly');
-      }
-      if ($('#productionactualtargetinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'actualtarget');
-      }
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'productionpercentinpie' });
-    });
+    productionpercentinpieEl.addEventListener('change', handleProductionPercentChange);
+    productionactualonlyinpieEl.addEventListener('change', handleProductionPercentChange);
+    productionactualtargetinpieEl.addEventListener('change', handleProductionPercentChange);
 
-    $('#productionactualonlyinpie').change(function () {
-      if ($('#productionpercentinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'true');
-      }
-      if ($('#productionactualonlyinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'actualonly');
-      }
-      if ($('#productionactualtargetinpie').is(':checked')) {
-        pulseConfig.set('productionpercentinpie', 'actualtarget');
-      }
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'productionpercentinpie' });
-    });
+    const thresholdTargetEl = document.getElementById('thresholdtargetproduction');
+    const thresholdRedEl = document.getElementById('thresholdredproduction');
 
-    $('#thresholdtargetproduction').val(pulseConfig.getInt('thresholdtargetproduction'));
+    thresholdTargetEl.value = pulseConfig.getInt('thresholdtargetproduction');
     var changetarget = function () {
-      // Verify thresholds
-      if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
-        $(this).attr('overridden', true);
-        // Store
-        if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
-          // Display / Dispatch
+      if (self._verficationThresholds(thresholdTargetEl.value, thresholdRedEl.value)) {
+        thresholdTargetEl.setAttribute('overridden', true);
+        if (pulseUtility.isInteger(thresholdTargetEl.value)) {
           eventBus.EventBus.dispatchToAll('configChangeEvent',
             { 'config': 'thresholdtargetproduction' });
         }
       }
     };
-    $('#thresholdtargetproduction').bind('input', changetarget);
-    $('#thresholdtargetproduction').change(changetarget);
+    thresholdTargetEl.addEventListener('input', changetarget);
+    thresholdTargetEl.addEventListener('change', changetarget);
 
-    $('#thresholdredproduction').val(pulseConfig.getInt('thresholdredproduction'));
+    thresholdRedEl.value = pulseConfig.getInt('thresholdredproduction');
     var changeRed = function () {
-      // verify thresholds
-      if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
-        $(this).attr('overridden', true);
-        // Store
-        if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
-          // Display / Dispatch
+      if (self._verficationThresholds(thresholdTargetEl.value, thresholdRedEl.value)) {
+        thresholdRedEl.setAttribute('overridden', true);
+        if (pulseUtility.isInteger(thresholdRedEl.value)) {
           eventBus.EventBus.dispatchToAll('configChangeEvent',
             { 'config': 'thresholdredproduction' });
         }
       }
     };
-    $('#thresholdredproduction').bind('input', changeRed);
-    $('#thresholdredproduction').change(changeRed);
-
+    thresholdRedEl.addEventListener('input', changeRed);
+    thresholdRedEl.addEventListener('change', changeRed);
   }
 
   /**
@@ -244,35 +215,33 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.val(value);
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.value = value;
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultRadioGroup = (value, valueToIdMap, { trigger = true } = {}) => {
       Object.values(valueToIdMap).forEach((id) => {
-        $('#' + id).removeAttr('overridden');
+        document.getElementById(id).removeAttribute('overridden');
       });
       const targetId = valueToIdMap[value];
       if (targetId) {
-        const element = $('#' + targetId);
-        element.prop('checked', true);
-        if (trigger) element.change();
+        const element = document.getElementById(targetId);
+        element.checked = true;
+        if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
       }
     };
 
-    // showworkinfo
     setDefaultChecked('showworkinfo');
 
-    // Pie
     setDefaultRadioGroup(pulseConfig.getDefaultString('productionpercentinpie'), {
       true: 'productionpercentinpie',
       actualonly: 'productionactualonlyinpie',
@@ -359,14 +328,18 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
   buildContent() {
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     if (showworkinfo) {
-      $('x-workinfo').show();
+      document.querySelectorAll('x-workinfo').forEach(el => el.style.display = '');
     }
     else {
-      $('x-workinfo').hide();
+      document.querySelectorAll('x-workinfo').forEach(el => el.style.display = 'none');
     }
   }
 }
 
-$(document).ready(function () {
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new ManagementInformationTerminalPage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new ManagementInformationTerminalPage());
+  });
+}

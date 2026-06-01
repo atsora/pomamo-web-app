@@ -32,6 +32,14 @@ require('x-productionbar/x-productionbar');
 require('x-productiongauge/x-productiongauge');
 require('x-currenticoncncalarm/x-currenticoncncalarm');
 
+// Vanilla helpers — keep call sites compact while still null-guarding.
+function _setEach(selector, mutator) {
+  document.querySelectorAll(selector).forEach(mutator);
+}
+function _setDisplayAll(selector, value) {
+  _setEach(selector, el => { el.style.display = value; });
+}
+
 /**
  * Machine Dashboard page — detailed per-machine dashboard.
  *
@@ -51,6 +59,7 @@ require('x-currenticoncncalarm/x-currenticoncncalarm');
  *  - `showproductiondisplay`         : show production gauge/pie
  *  - `showproductiongauge`           : gauge (true) or pie chart (false)
  *  - `thresholdtargetproduction` / `thresholdredproduction` : color thresholds
+ *  - `showcncalarmicon`              : show the per-machine CNC alarm icon
  *
  * @extends pulsePage.BasePage
  */
@@ -94,9 +103,9 @@ class machinedashboardPage extends pulsePage.BasePage {
    * @param {Function} functionCheck   - Callback when the checkbox is checked.
    * @param {Function} functionUncheck - Callback when the checkbox is unchecked.
    */
-  // Initialize an option checkbox
   _showOption(option, functionCheck, functionUncheck) {
     const checkbox = document.getElementById(option);
+    if (!checkbox) return;
     checkbox.checked = pulseConfig.getBool(option);
     if (pulseConfig.getDefaultBool(option) !== pulseConfig.getBool(option)) {
       checkbox.setAttribute('overridden', 'true');
@@ -110,14 +119,14 @@ class machinedashboardPage extends pulsePage.BasePage {
       else if (functionUncheck) {
         functionUncheck();
       }
-    })
+    });
     checkbox.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   /**
    * Initializes the options panel and binds all UI listeners.
    *
-   * Initialization sequence (8 blocks):
+   * Initialization sequence (9 blocks):
    *  1. showChangedTools       — display changed tools (`.changedtools-content`)
    *  2. openStopClassification — dynamically create/destroy x-openstopclassificationlistener
    *  3. stopClassificationReopenDelay — numeric delay input
@@ -126,161 +135,182 @@ class machinedashboardPage extends pulsePage.BasePage {
    *  6. showpercent            — % vs ratio radios (x-productionbar + x-productiongauge)
    *  7. showproductiondisplay + showproductiongauge — gauge vs pie (nested)
    *  8. thresholds             — color thresholds (validated via `_verficationThresholds`)
+   *  9. showcncalarmicon       — CNC alarm icon visibility
    *
    * Final triggers: manually fires key option listeners to sync visual state
    * as soon as the panel opens.
    */
   initOptionValues() {
     // --- 1. SHOW CHANGED TOOLS ---
-    $('#showChangedTools').prop('checked', pulseConfig.getBool('showChangedTools'));
-    if (pulseConfig.getDefaultBool('showChangedTools') != pulseConfig.getBool('showChangedTools'))
-      $('#showChangedTools').attr('overridden', 'true');
-    $('#showChangedTools').change(function () {
-      let show = $('#showChangedTools').is(':checked');
-      pulseConfig.set('showChangedTools', show);
-      if (show) $('.changedtools-content').css('display', 'flex');
-      else $('.changedtools-content').hide();
-    });
+    const showChangedToolsCB = document.getElementById('showChangedTools');
+    if (showChangedToolsCB) {
+      showChangedToolsCB.checked = pulseConfig.getBool('showChangedTools');
+      if (pulseConfig.getDefaultBool('showChangedTools') != pulseConfig.getBool('showChangedTools'))
+        showChangedToolsCB.setAttribute('overridden', 'true');
+      showChangedToolsCB.addEventListener('change', function () {
+        let show = showChangedToolsCB.checked;
+        pulseConfig.set('showChangedTools', show);
+        _setDisplayAll('.changedtools-content', show ? 'flex' : 'none');
+      });
+    }
 
     // --- 2. OPEN STOP CLASSIFICATION ---
-    $('#openStopClassification').prop('checked', pulseConfig.getBool('openStopClassification'));
-    if (pulseConfig.getDefaultBool('openStopClassification') != pulseConfig.getBool('openStopClassification'))
-      $('#openStopClassification').attr('overridden', 'true');
-    $('#openStopClassification').change(() => {
-      let show = $('#openStopClassification').is(':checked');
-      pulseConfig.set('openStopClassification', show);
-      if (show) this._createOpenStopClassificationListener();
-      else this._deleteOpenStopClassificationListener();
-    });
+    const openStopCB = document.getElementById('openStopClassification');
+    if (openStopCB) {
+      openStopCB.checked = pulseConfig.getBool('openStopClassification');
+      if (pulseConfig.getDefaultBool('openStopClassification') != pulseConfig.getBool('openStopClassification'))
+        openStopCB.setAttribute('overridden', 'true');
+      openStopCB.addEventListener('change', () => {
+        let show = openStopCB.checked;
+        pulseConfig.set('openStopClassification', show);
+        if (show) this._createOpenStopClassificationListener();
+        else this._deleteOpenStopClassificationListener();
+      });
+    }
 
     // --- 3. REOPEN DELAY ---
     this._reopenStopClassificationDelay();
 
     // --- 4. SHOW PRODUCTION TRACKER GRAPH ---
-    $('#showproductiontrackergraph').prop('checked', pulseConfig.getBool('showproductiontrackergraph'));
-    if (pulseConfig.getDefaultBool('showproductiontrackergraph') != pulseConfig.getBool('showproductiontrackergraph'))
-      $('#showproductiontrackergraph').attr('overridden', 'true');
-    $('#showproductiontrackergraph').change(function () {
-      let show = $('#showproductiontrackergraph').is(':checked');
-      pulseConfig.set('showproductiontrackergraph', show);
-      if (show) $('x-productiontrackergraph').show();
-      else $('x-productiontrackergraph').hide();
-    });
+    const showTrackerGraphCB = document.getElementById('showproductiontrackergraph');
+    if (showTrackerGraphCB) {
+      showTrackerGraphCB.checked = pulseConfig.getBool('showproductiontrackergraph');
+      if (pulseConfig.getDefaultBool('showproductiontrackergraph') != pulseConfig.getBool('showproductiontrackergraph'))
+        showTrackerGraphCB.setAttribute('overridden', 'true');
+      showTrackerGraphCB.addEventListener('change', function () {
+        let show = showTrackerGraphCB.checked;
+        pulseConfig.set('showproductiontrackergraph', show);
+        _setDisplayAll('x-productiontrackergraph', show ? '' : 'none');
+      });
+    }
 
     // --- 5. SHOW PRODUCTION BAR ---
-    $('#showproductionbar').prop('checked', pulseConfig.getBool('showproductionbar'));
-    if (pulseConfig.getDefaultBool('showproductionbar') != pulseConfig.getBool('showproductionbar'))
-      $('#showproductionbar').attr('overridden', 'true');
-    $('#showproductionbar').change(function () {
-      let show = $('#showproductionbar').is(':checked');
-      pulseConfig.set('showproductionbar', show);
-      if (show) {
-        $('x-productionbar').show();
-        $('.performancebar-bar-border').show();
-      } else {
-        $('x-productionbar').hide();
-        $('.performancebar-bar-border').hide();
-      }
-    });
+    const showBarCB = document.getElementById('showproductionbar');
+    if (showBarCB) {
+      showBarCB.checked = pulseConfig.getBool('showproductionbar');
+      if (pulseConfig.getDefaultBool('showproductionbar') != pulseConfig.getBool('showproductionbar'))
+        showBarCB.setAttribute('overridden', 'true');
+      showBarCB.addEventListener('change', function () {
+        let show = showBarCB.checked;
+        pulseConfig.set('showproductionbar', show);
+        _setDisplayAll('x-productionbar', show ? '' : 'none');
+        _setDisplayAll('.performancebar-bar-border', show ? '' : 'none');
+      });
+    }
 
     // --- 6. PERCENT VS RATIO ---
-    if (pulseConfig.getBool('showpercent')) {
-      $('#productionbarpercent').prop('checked', true);
-    } else {
-      $('#productionbarratio').prop('checked', true);
+    const productionBarPercent = document.getElementById('productionbarpercent');
+    const productionBarRatio = document.getElementById('productionbarratio');
+    if (productionBarPercent && productionBarRatio) {
+      if (pulseConfig.getBool('showpercent')) {
+        productionBarPercent.checked = true;
+      } else {
+        productionBarRatio.checked = true;
+      }
+      if (pulseConfig.getDefaultBool('showpercent') !== pulseConfig.getBool('showpercent')) {
+        productionBarPercent.setAttribute('overridden', 'true');
+        productionBarRatio.setAttribute('overridden', 'true');
+      }
+      const onPercentRatioChange = function () {
+        let isPercent = productionBarPercent.checked;
+        pulseConfig.set('showpercent', isPercent);
+        let mode = isPercent ? 'percent' : 'ratio';
+        // Applies to existing elements; buildContent() will handle future clones
+        _setEach('x-productionbar', el => el.setAttribute('display-mode', mode));
+        _setEach('x-productiongauge', el => el.setAttribute('display-mode', mode));
+      };
+      productionBarPercent.addEventListener('change', onPercentRatioChange);
+      productionBarRatio.addEventListener('change', onPercentRatioChange);
     }
-    if (pulseConfig.getDefaultBool('showpercent') !== pulseConfig.getBool('showpercent')) {
-      $('#productionbarpercent').attr('overridden', 'true');
-      $('#productionbarratio').attr('overridden', 'true');
-    }
-    $('#productionbarpercent, #productionbarratio').change(function () {
-      let isPercent = $('#productionbarpercent').is(':checked');
-      pulseConfig.set('showpercent', isPercent);
-      let mode = isPercent ? 'percent' : 'ratio';
-      // Applies to existing elements; buildContent() will handle future clones
-      $('x-productionbar').attr('display-mode', mode);
-      $('x-productiongauge').attr('display-mode', mode);
-    });
 
     // --- 7. SHOW PRODUCTION DISPLAY (main toggle) ---
-    $('#showproductiondisplay').prop('checked', pulseConfig.getBool('showproductiondisplay'));
-    if (pulseConfig.getDefaultBool('showproductiondisplay') != pulseConfig.getBool('showproductiondisplay'))
-      $('#showproductiondisplay').attr('overridden', 'true');
-    $('#showproductiondisplay').change(function () {
-      let show = $('#showproductiondisplay').is(':checked');
-      pulseConfig.set('showproductiondisplay', show);
-      if (show) {
-        $('.showproductiondisplaydetails').show();
-        let isGauge = $('#productiongauge').is(':checked');
-        if (isGauge) {
-          $('x-productiongauge').show();
-          $('x-defaultpie').hide();
+    const showProdDisplayCB = document.getElementById('showproductiondisplay');
+    if (showProdDisplayCB) {
+      showProdDisplayCB.checked = pulseConfig.getBool('showproductiondisplay');
+      if (pulseConfig.getDefaultBool('showproductiondisplay') != pulseConfig.getBool('showproductiondisplay'))
+        showProdDisplayCB.setAttribute('overridden', 'true');
+      showProdDisplayCB.addEventListener('change', function () {
+        let show = showProdDisplayCB.checked;
+        pulseConfig.set('showproductiondisplay', show);
+        if (show) {
+          _setDisplayAll('.showproductiondisplaydetails', '');
+          let gaugeRadio = document.getElementById('productiongauge');
+          let isGauge = gaugeRadio ? gaugeRadio.checked : true;
+          _setDisplayAll('x-productiongauge', isGauge ? '' : 'none');
+          _setDisplayAll('x-defaultpie', isGauge ? 'none' : '');
         } else {
-          $('x-productiongauge').hide();
-          $('x-defaultpie').show();
+          _setDisplayAll('.showproductiondisplaydetails', 'none');
+          _setDisplayAll('x-productiongauge', 'none');
+          _setDisplayAll('x-defaultpie', 'none');
         }
-      } else {
-        $('.showproductiondisplaydetails').hide();
-        $('x-productiongauge').hide();
-        $('x-defaultpie').hide();
-      }
-    });
+      });
+    }
 
     // --- 7. GAUGE VS PIE ---
-    if (pulseConfig.getBool('showproductiongauge')) {
-      $('#productiongauge').prop('checked', true);
-    } else {
-      $('#productionpie').prop('checked', true);
-    }
-    if (pulseConfig.getDefaultBool('showproductiongauge') !== pulseConfig.getBool('showproductiongauge')) {
-      $('#productiongauge').attr('overridden', 'true');
-      $('#productionpie').attr('overridden', 'true');
-    }
-    $('#productiongauge, #productionpie').change(function () {
-      let isGauge = $('#productiongauge').is(':checked');
-      pulseConfig.set('showproductiongauge', isGauge);
-      if ($('#showproductiondisplay').is(':checked')) {
-        if (isGauge) {
-          $('x-productiongauge').show();
-          $('x-defaultpie').hide();
-        } else {
-          $('x-productiongauge').hide();
-          $('x-defaultpie').show();
-        }
+    const productionGaugeRadio = document.getElementById('productiongauge');
+    const productionPieRadio = document.getElementById('productionpie');
+    if (productionGaugeRadio && productionPieRadio) {
+      if (pulseConfig.getBool('showproductiongauge')) {
+        productionGaugeRadio.checked = true;
+      } else {
+        productionPieRadio.checked = true;
       }
-    });
+      if (pulseConfig.getDefaultBool('showproductiongauge') !== pulseConfig.getBool('showproductiongauge')) {
+        productionGaugeRadio.setAttribute('overridden', 'true');
+        productionPieRadio.setAttribute('overridden', 'true');
+      }
+      const onGaugePieChange = function () {
+        let isGauge = productionGaugeRadio.checked;
+        pulseConfig.set('showproductiongauge', isGauge);
+        let productionDisplayCB = document.getElementById('showproductiondisplay');
+        if (productionDisplayCB && productionDisplayCB.checked) {
+          _setDisplayAll('x-productiongauge', isGauge ? '' : 'none');
+          _setDisplayAll('x-defaultpie', isGauge ? 'none' : '');
+        }
+      };
+      productionGaugeRadio.addEventListener('change', onGaugePieChange);
+      productionPieRadio.addEventListener('change', onGaugePieChange);
+    }
 
     // --- 8. THRESHOLDS ---
     const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
     const thresholdRedInput = document.getElementById('thresholdredproductionbar');
-    thresholdTarget.value = pulseConfig.getFloat('thresholdtargetproduction', 80);
-    thresholdRedInput.value = pulseConfig.getFloat('thresholdredproduction', 60);
-    if (pulseConfig.getDefaultFloat('thresholdtargetproduction', 80) !== pulseConfig.getFloat('thresholdtargetproduction', 80)) {
-      thresholdTarget.setAttribute('overridden', 'true');
+    if (thresholdTarget) {
+      thresholdTarget.value = pulseConfig.getFloat('thresholdtargetproduction', 80);
+      if (pulseConfig.getDefaultFloat('thresholdtargetproduction', 80) !== pulseConfig.getFloat('thresholdtargetproduction', 80)) {
+        thresholdTarget.setAttribute('overridden', 'true');
+      }
+      thresholdTarget.addEventListener('change',
+        () => this._verficationThresholds(thresholdTarget.value, thresholdRedInput ? thresholdRedInput.value : '', true));
     }
-    if (pulseConfig.getDefaultFloat('thresholdredproduction', 60) !== pulseConfig.getFloat('thresholdredproduction', 60)) {
-      thresholdRedInput.setAttribute('overridden', 'true');
+    if (thresholdRedInput) {
+      thresholdRedInput.value = pulseConfig.getFloat('thresholdredproduction', 60);
+      if (pulseConfig.getDefaultFloat('thresholdredproduction', 60) !== pulseConfig.getFloat('thresholdredproduction', 60)) {
+        thresholdRedInput.setAttribute('overridden', 'true');
+      }
+      thresholdRedInput.addEventListener('change',
+        () => this._verficationThresholds(thresholdTarget ? thresholdTarget.value : '', thresholdRedInput.value, true));
     }
-    thresholdTarget.addEventListener('change', () => this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true));
-    thresholdRedInput.addEventListener('change', () => this._verficationThresholds(thresholdTarget.value, thresholdRedInput.value, true));
 
     // --- 9. SHOW CNC ALARM ICON ---
-    $('#showcncalarmicon').prop('checked', pulseConfig.getBool('showcncalarmicon'));
-    if (pulseConfig.getDefaultBool('showcncalarmicon') != pulseConfig.getBool('showcncalarmicon'))
-      $('#showcncalarmicon').attr('overridden', 'true');
-    $('#showcncalarmicon').change(function () {
-      let show = $('#showcncalarmicon').is(':checked');
-      pulseConfig.set('showcncalarmicon', show);
-      if (show) $('.cncalarmicon-content').css('display', 'flex');
-      else $('.cncalarmicon-content').hide();
-    });
+    const showCncAlarmIconCB = document.getElementById('showcncalarmicon');
+    if (showCncAlarmIconCB) {
+      showCncAlarmIconCB.checked = pulseConfig.getBool('showcncalarmicon');
+      if (pulseConfig.getDefaultBool('showcncalarmicon') != pulseConfig.getBool('showcncalarmicon'))
+        showCncAlarmIconCB.setAttribute('overridden', 'true');
+      showCncAlarmIconCB.addEventListener('change', function () {
+        let show = showCncAlarmIconCB.checked;
+        pulseConfig.set('showcncalarmicon', show);
+        _setDisplayAll('.cncalarmicon-content', show ? 'flex' : 'none');
+      });
+    }
 
     // Initial triggers to sync the UI state
-    $('#showChangedTools').trigger('change');
-    $('#openStopClassification').trigger('change');
-    $('#showproductionbar').trigger('change');
-    $('#showproductiondisplay').trigger('change');
-    $('#showcncalarmicon').trigger('change');
+    if (showChangedToolsCB) showChangedToolsCB.dispatchEvent(new Event('change', { bubbles: true }));
+    if (openStopCB) openStopCB.dispatchEvent(new Event('change', { bubbles: true }));
+    if (showBarCB) showBarCB.dispatchEvent(new Event('change', { bubbles: true }));
+    if (showProdDisplayCB) showProdDisplayCB.dispatchEvent(new Event('change', { bubbles: true }));
+    if (showCncAlarmIconCB) showCncAlarmIconCB.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   /**
@@ -293,9 +323,9 @@ class machinedashboardPage extends pulsePage.BasePage {
    * Attributes injected: machine-context="PulseWebApp", period-context="machinedashboard",
    *                      status-context="PulseWebApp".
    */
-  // Create the open stop classification listener element
   _createOpenStopClassificationListener() {
-    document.querySelector('.openStopClassificationDetails').style.display = 'block';
+    let details = document.querySelector('.openStopClassificationDetails');
+    if (details) details.style.display = 'block';
     const container = document.body || document.documentElement;
     let existing = container.querySelector('x-openstopclassificationlistener');
     if (!existing) {
@@ -311,9 +341,9 @@ class machinedashboardPage extends pulsePage.BasePage {
    * Removes the x-openstopclassificationlistener element from the DOM and hides its UI.
    * Inverse operation of `_createOpenStopClassificationListener()`.
    */
-  // Delete the open stop classification listener element
   _deleteOpenStopClassificationListener() {
-    document.querySelector('.openStopClassificationDetails').style.display = 'none';
+    let details = document.querySelector('.openStopClassificationDetails');
+    if (details) details.style.display = 'none';
     const container = document.body || document.documentElement;
     let existing = container.querySelector('x-openstopclassificationlistener');
     if (existing) {
@@ -327,9 +357,9 @@ class machinedashboardPage extends pulsePage.BasePage {
    * Reads `stopClassificationReopenDelay` (default: 5s), marks `overridden` if modified,
    * and persists to pulseConfig on each valid change (integer >= 0).
    */
-  // Initialize the reopen stop classification delay input
   _reopenStopClassificationDelay() {
     const stopClassificationReopenDelayInput = document.getElementById('stopClassificationReopenDelay');
+    if (!stopClassificationReopenDelayInput) return;
     stopClassificationReopenDelayInput.value = pulseConfig.getInt('stopClassificationReopenDelay', 5);
     if (pulseConfig.getDefaultInt('stopClassificationReopenDelay') !== pulseConfig.getInt('stopClassificationReopenDelay')) {
       stopClassificationReopenDelayInput.setAttribute('overridden', 'true');
@@ -340,120 +370,6 @@ class machinedashboardPage extends pulsePage.BasePage {
         pulseConfig.set('stopClassificationReopenDelay', value);
       }
     });
-  }
-
-  /**
-   * Initializes the production bar display mode radios (% or ratio).
-   *
-   * Note: this method is not called from initOptionValues — the equivalent logic
-   * is inlined in block 6. It remains available as a refactored alternative.
-   * Simultaneously affects x-productionbar and x-productiongauge via `setAttribute('display-mode')`.
-   */
-  // Initialize the production bar display mode radios
-  _productionBarDisplayMode() {
-    const showPercentRadio = document.getElementById('productionbarpercent');
-    const showRatioRadio = document.getElementById('productionbarratio');
-
-    if (pulseConfig.getBool('showpercent')) {
-      showPercentRadio.checked = true;
-    } else {
-      showRatioRadio.checked = true;
-    }
-
-    if (pulseConfig.getDefaultBool('showpercent') !== pulseConfig.getBool('showpercent')) {
-      showPercentRadio.setAttribute('overridden', 'true');
-      showRatioRadio.setAttribute('overridden', 'true');
-    }
-
-    showPercentRadio.addEventListener('change', function () {
-      if (showPercentRadio.checked) {
-        pulseConfig.set('showpercent', true);
-        document.querySelectorAll('x-productionbar').forEach(el => {
-          el.setAttribute('display-mode', 'percent');
-        });
-        document.querySelectorAll('x-productiongauge').forEach(el => {
-          el.setAttribute('display-mode', 'percent');
-        });
-      }
-    });
-
-    showRatioRadio.addEventListener('change', function () {
-      if (showRatioRadio.checked) {
-        pulseConfig.set('showpercent', false);
-        document.querySelectorAll('x-productionbar').forEach(el => {
-          el.setAttribute('display-mode', 'ratio');
-        });
-        document.querySelectorAll('x-productiongauge').forEach(el => {
-          el.setAttribute('display-mode', 'ratio');
-        });
-      }
-    });
-  }
-
-  /**
-   * Initializes the production display type radios (gauge vs pie chart).
-   *
-   * Note: this method is not called from initOptionValues — the equivalent logic
-   * is inlined in block 7. It remains available as a refactored alternative.
-   * Show/hide depends on `showproductiondisplay`: if production is not displayed,
-   * both components are hidden regardless of the gauge/pie choice.
-   */
-  // Initialize the production display type radios (gauge vs pie)
-  _productionDisplayType() {
-    const showGaugeRadio = document.getElementById('productiongauge');
-    const showPieRadio = document.getElementById('productionpie');
-
-    if (pulseConfig.getBool('showproductiongauge')) {
-      showGaugeRadio.checked = true;
-    } else {
-      showPieRadio.checked = true;
-    }
-
-    if (pulseConfig.getDefaultBool('showproductiongauge') !== pulseConfig.getBool('showproductiongauge')) {
-      showGaugeRadio.setAttribute('overridden', 'true');
-      showPieRadio.setAttribute('overridden', 'true');
-    }
-
-    showGaugeRadio.addEventListener('change', function () {
-      if (showGaugeRadio.checked) {
-        pulseConfig.set('showproductiongauge', true);
-        document.querySelectorAll('x-productiongauge').forEach(el => {
-          el.style.display = 'block';
-        });
-        document.querySelectorAll('x-defaultpie').forEach(el => {
-          el.style.display = 'none';
-        });
-      }
-    });
-
-    showPieRadio.addEventListener('change', function () {
-      if (showPieRadio.checked) {
-        pulseConfig.set('showproductiongauge', false);
-        document.querySelectorAll('x-productiongauge').forEach(el => {
-          el.style.display = 'none';
-        });
-        document.querySelectorAll('x-defaultpie').forEach(el => {
-          el.style.display = 'block';
-        });
-      }
-    });
-
-    // Apply initial state based on options
-    const showProductionDisplayCheckbox = document.getElementById('showproductiondisplay');
-    if (showProductionDisplayCheckbox && showProductionDisplayCheckbox.checked) {
-      if (showGaugeRadio.checked) {
-        showGaugeRadio.dispatchEvent(new Event('change', { bubbles: true }));
-      } else {
-        showPieRadio.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    } else {
-      document.querySelectorAll('x-productiongauge').forEach(el => {
-        el.style.display = 'none';
-      });
-      document.querySelectorAll('x-defaultpie').forEach(el => {
-        el.style.display = 'none';
-      });
-    }
   }
 
   /**
@@ -470,7 +386,6 @@ class machinedashboardPage extends pulsePage.BasePage {
    * @param {number|string} redValue    - Critical threshold (orange → red), in %.
    * @returns {boolean} true if valid and applied, false otherwise.
    */
-  // Verify threshold values
   _verficationThresholds(targetValue, redValue) {
     // Find or create error message element
     let errorMessage = document.getElementById('thresholdErrorMessage');
@@ -493,7 +408,6 @@ class machinedashboardPage extends pulsePage.BasePage {
       errorMessage.style.display = 'block';
       return false;
     }
-
 
     // values between 0 and 100
     if (redValue < 0 || targetValue <= 0) {
@@ -538,32 +452,36 @@ class machinedashboardPage extends pulsePage.BasePage {
    * setDefaultRadioGroup) to cover all input types in the panel.
    *
    * Reset order: changed tools → stop classification → delay → production graph
-   *   → production bar + %/ratio mode → production display → gauge/pie → thresholds.
+   *   → production bar + %/ratio mode → production display → gauge/pie → thresholds → cnc alarm icon.
    */
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.val(value);
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.value = value;
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultRadioGroup = (value, valueToIdMap, { trigger = true } = {}) => {
       Object.values(valueToIdMap).forEach((id) => {
-        $('#' + id).removeAttr('overridden');
+        const el = document.getElementById(id);
+        if (el) el.removeAttribute('overridden');
       });
       const targetId = valueToIdMap[value];
       if (targetId) {
-        const element = $('#' + targetId);
-        element.prop('checked', true);
-        if (trigger) element.change();
+        const element = document.getElementById(targetId);
+        if (!element) return;
+        element.checked = true;
+        if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
       }
     };
 
@@ -595,7 +513,6 @@ class machinedashboardPage extends pulsePage.BasePage {
 
     // CNC alarm icon
     setDefaultChecked('showcncalarmicon');
-
   }
 
   /**
@@ -649,6 +566,7 @@ class machinedashboardPage extends pulsePage.BasePage {
    *  - `showproductionbar`                             → x-productionbar + `.performancebar-bar-border`
    *  - `showChangedTools`                              → `.changedtools-content`
    *  - `showpercent`                                   → `display-mode` attribute on x-productionbar + x-productiongauge
+   *  - `showcncalarmicon`                              → `.cncalarmicon-content`
    *
    * Note: bars (x-barstack) read pulseConfig directly — no need to drive them here.
    */
@@ -659,55 +577,40 @@ class machinedashboardPage extends pulsePage.BasePage {
     let showproductiondisplay = pulseConfig.getBool('showproductiondisplay');
     let showproductiongauge = pulseConfig.getBool('showproductiongauge');
     if (showproductiondisplay) {
-      if (showproductiongauge) {
-        $('x-productiongauge').show();
-        $('x-defaultpie').hide();
-      } else {
-        $('x-productiongauge').hide();
-        $('x-defaultpie').show();
-      }
+      _setDisplayAll('x-productiongauge', showproductiongauge ? '' : 'none');
+      _setDisplayAll('x-defaultpie', showproductiongauge ? 'none' : '');
     } else {
-      $('x-productiongauge').hide();
-      $('x-defaultpie').hide();
+      _setDisplayAll('x-productiongauge', 'none');
+      _setDisplayAll('x-defaultpie', 'none');
     }
 
     let showproductiontrackergraph = pulseConfig.getBool('showproductiontrackergraph');
-    if (showproductiontrackergraph) $('x-productiontrackergraph').show();
-    else $('x-productiontrackergraph').hide();
+    _setDisplayAll('x-productiontrackergraph', showproductiontrackergraph ? '' : 'none');
 
     let showproductionbar = pulseConfig.getBool('showproductionbar');
-    if (showproductionbar) {
-      $('x-productionbar').show();
-      $('.performancebar-bar-border').show();
-    } else {
-      $('x-productionbar').hide();
-      $('.performancebar-bar-border').hide();
-    }
+    _setDisplayAll('x-productionbar', showproductionbar ? '' : 'none');
+    _setDisplayAll('.performancebar-bar-border', showproductionbar ? '' : 'none');
 
     let showChangedTools = pulseConfig.getBool('showChangedTools');
-    if (showChangedTools) {
-      $('.changedtools-content').css('display', 'flex');
-    } else {
-      $('.changedtools-content').hide();
-    }
+    _setDisplayAll('.changedtools-content', showChangedTools ? 'flex' : 'none');
 
     let showCncAlarmIcon = pulseConfig.getBool('showcncalarmicon');
-    if (showCncAlarmIcon) {
-      $('.cncalarmicon-content').css('display', 'flex');
-    } else {
-      $('.cncalarmicon-content').hide();
-    }
+    _setDisplayAll('.cncalarmicon-content', showCncAlarmIcon ? 'flex' : 'none');
 
     // Apply display mode (percent/ratio) to freshly created clones
     let showPercent = pulseConfig.getBool('showpercent');
     let displayMode = showPercent ? 'percent' : 'ratio';
-    $('x-productionbar').attr('display-mode', displayMode);
-    $('x-productiongauge').attr('display-mode', displayMode);
+    _setEach('x-productionbar', el => el.setAttribute('display-mode', displayMode));
+    _setEach('x-productiongauge', el => el.setAttribute('display-mode', displayMode));
   }
 
 }
 
-$(document).ready(function () {
-  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
+// Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new machinedashboardPage());
+  });
+} else {
   pulsePage.preparePage(new machinedashboardPage());
-});
+}

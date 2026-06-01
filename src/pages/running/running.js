@@ -77,33 +77,35 @@ class RunningPage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Init
   initOptionValues () {
-    // Allow choose production bar display
     let allowproductionbar = pulseConfig.getBool('allowproductionbar');
     if (!allowproductionbar) {
-      $('.group-options').hide();
+      document.querySelector('.group-options').style.display = 'none';
     }
 
-    // BAR : day / shift
-    $('#showproductionbar').prop('checked',
-      pulseConfig.getBool('showproductionbar'));
+    const showproductionbarEl = document.getElementById('showproductionbar');
+    showproductionbarEl.checked = pulseConfig.getBool('showproductionbar');
     const applyBarChoice = (showproductionbar) => {
       pulseConfig.set('showproductionbar', showproductionbar);
-      document.querySelectorAll('x-barstack').forEach(el => el._applySwitch());
+      document.querySelectorAll('x-barstack').forEach(el => {
+        if (el._applySwitch) el._applySwitch();
+      });
       if (showproductionbar) {
-        $('x-reasongroups').hide();
-        $('x-productionstatelegends').show();
+        document.querySelectorAll('x-reasongroups').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('x-productionstatelegends').forEach(el => el.style.display = '');
       }
       else {
-        $('x-reasongroups').show();
-        $('x-productionstatelegends').hide();
+        document.querySelectorAll('x-reasongroups').forEach(el => el.style.display = '');
+        document.querySelectorAll('x-productionstatelegends').forEach(el => el.style.display = 'none');
       }
     };
-    $('#showproductionbar').change(function () {
-      applyBarChoice($('#showproductionbar').is(':checked'));
+    showproductionbarEl.addEventListener('change', function () {
+      applyBarChoice(this.checked);
     });
-    $('#showreasonbar').prop('checked', !pulseConfig.getBool('showproductionbar'));
-    $('#showreasonbar').change(function () {
-      applyBarChoice(!$('#showreasonbar').is(':checked'));
+
+    const showreasonbarEl = document.getElementById('showreasonbar');
+    showreasonbarEl.checked = !pulseConfig.getBool('showproductionbar');
+    showreasonbarEl.addEventListener('change', function () {
+      applyBarChoice(!this.checked);
     });
   }
 
@@ -117,18 +119,18 @@ class RunningPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues () {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     // BAR (reason / production state)
     setDefaultChecked('showproductionbar');
 
-    $('#showreasonbar').prop('checked', !pulseConfig.getDefaultBool('showproductionbar'));
-    $('#showreasonbar').change();
-    $('#showreasonbar').removeAttr('overridden');
+    document.getElementById('showreasonbar').checked = !pulseConfig.getDefaultBool('showproductionbar');
+    document.getElementById('showreasonbar').dispatchEvent(new Event('change', { bubbles: true }));
+    document.getElementById('showreasonbar').removeAttribute('overridden');
   }
 
   /**
@@ -197,65 +199,52 @@ class RunningPage extends pulsePage.BasePage {
     let displayCNCValue = pulseConfig.getBool('currentdisplay.displaycncvalue', true);
 
     if (addProductionMachining) {
-      $('x-productionmachiningstatus').show();
-    }
-    else {
-      $('x-productionmachiningstatus').hide();
+      document.querySelectorAll('x-productionmachiningstatus').forEach(el => el.style.display = '');
+    } else {
+      document.querySelectorAll('x-productionmachiningstatus').forEach(el => el.style.display = 'none');
     }
     if (displayJob) {
-      $('x-lastworkinformation').show();
-    }
-    else {
-      $('x-lastworkinformation').hide();
+      document.querySelectorAll('x-lastworkinformation').forEach(el => el.style.display = '');
+    } else {
+      document.querySelectorAll('x-lastworkinformation').forEach(el => el.style.display = 'none');
     }
     if (displayShift) {
-      $('x-lastShift').show();
-    }
-    else {
-      $('x-lastShift').hide();
+      document.querySelectorAll('x-lastShift').forEach(el => el.style.display = '');
+    } else {
+      document.querySelectorAll('x-lastShift').forEach(el => el.style.display = 'none');
     }
     if (displayCNCValue) {
-      $('x-currentcncvalue').show();
+      document.querySelectorAll('x-currentcncvalue').forEach(el => el.style.display = '');
+    } else {
+      document.querySelectorAll('x-currentcncvalue').forEach(el => el.style.display = 'none');
     }
-    else {
-      $('x-currentcncvalue').hide();
-    }
-
-    // Bars are now managed by x-barstack reading pulseConfig directly.
-    // Only non-bar elements need explicit show/hide here.
 
     const showCncValue = pulseConfig.getBool('showcoloredbar.cncvalue', true);
-    if (showCncValue) {
-      $('x-fieldlegends').show();
-    }
-    else {
-      $('x-fieldlegends').hide();
-    }
+    document.querySelectorAll('x-fieldlegends').forEach(el => {
+      el.style.display = showCncValue ? '' : 'none';
+    });
 
     const showproductionbar = pulseConfig.getBool('showproductionbar', false);
-    if (showproductionbar) {
-      $('x-reasongroups').hide();
-      $('x-productionstatelegends').show();
-    }
-    else {
-      $('x-reasongroups').show();
-      $('x-productionstatelegends').hide();
-    }
+    document.querySelectorAll('x-reasongroups').forEach(el => {
+      el.style.display = showproductionbar ? 'none' : '';
+    });
+    document.querySelectorAll('x-productionstatelegends').forEach(el => {
+      el.style.display = showproductionbar ? '' : 'none';
+    });
   }
 }
 
-$(document).ready(function () {
-  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new RunningPage());
 
-  // In live mode, the time navigation header is hidden
-  // (the live running page has no period selection).
   let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
   if (tmpContexts && tmpContexts.includes('live')) {
-    $('.running-header').hide();
+    document.querySelector('.running-header').style.display = 'none';
   }
 
-  // x-datetimegraduation cannot handle resize when hidden at mount time —
-  // force load after the page is visible.
-  $('x-datetimegraduation').load(); // DTG can not manage resize when hidden
-});
+  document.querySelectorAll('x-datetimegraduation').forEach(el => el.load());
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new RunningPage());
+  });
+}

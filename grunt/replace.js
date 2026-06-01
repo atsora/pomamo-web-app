@@ -53,7 +53,6 @@ module.exports = {
       ]
     },
     files: [
-      { src: 'dist-es2015/lib/jquery/jquery.js', dest: 'dist-es2015/lib/jquery/jquery.js' },
       { src: 'dist-es2015/lib/moment/moment.js', dest: 'dist-es2015/lib/moment/moment.js' }
     ]
   },

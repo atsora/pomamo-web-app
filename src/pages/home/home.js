@@ -37,9 +37,18 @@ class HomePage extends pulsePage.BasePage {
 
 }
 
-$(document).ready(function () {
-  // Disable the navigation panel entry (current page).
-  $('#homebtn').addClass('disabled');
-
+if (document.readyState !== 'loading') {
+  const homeBtnEl = document.getElementById('homebtn');
+  if (homeBtnEl) {
+    homeBtnEl.classList.add('disabled');
+  }
   pulsePage.preparePage(new HomePage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    const homeBtnEl = document.getElementById('homebtn');
+    if (homeBtnEl) {
+      homeBtnEl.classList.add('disabled');
+    }
+    pulsePage.preparePage(new HomePage());
+  });
+}

@@ -62,8 +62,15 @@ class MachineSpecificationPage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Init
   initOptionValues() {
-    $('#machinesperpage').val(1).change();
-    $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+    const machinesPerPageInput = document.getElementById('machinesperpage');
+    if (machinesPerPageInput) {
+      machinesPerPageInput.value = 1;
+      machinesPerPageInput.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    const rotationDelayInput = document.getElementById('rotationdelay');
+    if (rotationDelayInput) {
+      rotationDelayInput.value = pulseConfig.getInt('rotationdelay', 10);
+    }
   }
 
   /**
@@ -72,7 +79,11 @@ class MachineSpecificationPage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
-    $('#rotationdelay').val(10).removeAttr('overridden');
+    const rotationDelayInput = document.getElementById('rotationdelay');
+    if (rotationDelayInput) {
+      rotationDelayInput.value = 10;
+      rotationDelayInput.removeAttribute('overridden');
+    }
   }
 
   /**
@@ -85,7 +96,8 @@ class MachineSpecificationPage extends pulsePage.BasePage {
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
     const delay = document.getElementById('rotationdelay');
-    const result = (delay && !$(delay).is(':hidden')) ? `&rotationdelay=${delay.value}` : '';
+    const isHidden = delay && delay.style.display === 'none';
+    const result = (delay && !isHidden) ? `&rotationdelay=${delay.value}` : '';
     return `&machinesperpage=1${result}`;
   }
 
@@ -119,6 +131,12 @@ class MachineSpecificationPage extends pulsePage.BasePage {
   }
 }
 
-$(document).ready(function() {
+if (document.readyState !== 'loading') {
+  initMachineSpecificationPage();
+} else {
+  document.addEventListener('DOMContentLoaded', initMachineSpecificationPage);
+}
+
+function initMachineSpecificationPage() {
   pulsePage.preparePage(new MachineSpecificationPage());
-});
+}

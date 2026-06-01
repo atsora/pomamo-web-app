@@ -68,30 +68,33 @@ class PlantPage extends pulsePage.BasePage {
    * (sized and positioned to match the source rect).
    */
   static fillSVG () {
-    let divToFill = $('.svg-plant-display').find('.machine');
+    let divToFill = document.querySelector('.svg-plant-display').querySelectorAll('.machine');
     for (let i = 0; i < divToFill.length; i++) {
       if (divToFill[i].hasAttribute('atsora:machine-id')) {
-        let machid = divToFill[i].getAttribute('atsora:machine-id'); // getAttributeNS failed
+        let machid = divToFill[i].getAttribute('atsora:machine-id');
 
-        let button = $('<x-reasonbutton></x-reasonbutton>')
-          .attr('machine-id', machid)
-          .addClass('svg-embedded'); // Keep it for isVisible call
+        let button = document.createElement('x-reasonbutton');
+        button.setAttribute('machine-id', machid);
+        button.classList.add('svg-embedded');
 
         let foreign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+        foreign.setAttribute('width', divToFill[i].getAttribute('width'));
+        foreign.setAttribute('height', divToFill[i].getAttribute('height'));
+        foreign.setAttribute('x', divToFill[i].getAttribute('x'));
+        foreign.setAttribute('y', divToFill[i].getAttribute('y'));
+        foreign.appendChild(button);
 
-        $(foreign).attr('width', divToFill[i].getAttribute('width'));
-        $(foreign).attr('height', divToFill[i].getAttribute('height'));
-        $(foreign).attr('x', divToFill[i].getAttribute('x'));
-        $(foreign).attr('y', divToFill[i].getAttribute('y'));
-        $(foreign).append(button);
-
-        $(foreign).insertAfter(divToFill[i]);
+        divToFill[i].parentNode.insertBefore(foreign, divToFill[i].nextSibling);
       }
     }
   }
 
 }
 
-$(document).ready(function () {
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new PlantPage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new PlantPage());
+  });
+}

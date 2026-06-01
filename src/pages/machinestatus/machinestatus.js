@@ -105,331 +105,392 @@ class MachineStatusPage extends pulsePage.BasePage {
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
     let isLive = tmpContexts && tmpContexts.includes('live');
 
-    const defaultLayoutChk = $('#defaultlayout');
-    const rotationSettings = $('.rotation-settings');
-    const machinesPerPageInput = $('#machinesperpage');
+    const defaultLayoutChk = document.getElementById('defaultlayout');
+    const rotationSettings = document.querySelector('.rotation-settings');
+    const machinesPerPageInput = document.getElementById('machinesperpage');
 
     if (!isLive) {
       // Historical mode: rotation hidden, infinite page, scroll CSS injected
-      defaultLayoutChk.closest('.param-row').hide();
-      defaultLayoutChk.parent().hide();
-      rotationSettings.hide();
+      if (defaultLayoutChk) {
+        let row = defaultLayoutChk.closest('.param-row');
+        if (row) row.style.display = 'none';
+        if (defaultLayoutChk.parentElement) defaultLayoutChk.parentElement.style.display = 'none';
+        defaultLayoutChk.checked = false;
+      }
+      if (rotationSettings) rotationSettings.style.display = 'none';
 
       pulseConfig.set('defaultlayout', false);
       pulseConfig.set('machinesperpage', 10000);
 
-      defaultLayoutChk.prop('checked', false);
-      machinesPerPageInput.val(10000);
+      if (machinesPerPageInput) machinesPerPageInput.value = 10000;
 
       // Scroll & grid sizing handled by .pulse-content:not(.appcontext-live) overrides in machinestatus.less
     } else {
       // Live mode: standard rotation layout
-      defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
+      if (defaultLayoutChk) {
+        defaultLayoutChk.checked = pulseConfig.getBool('defaultlayout', true);
 
-      defaultLayoutChk.change(() => {
-        let isDefault = defaultLayoutChk.is(':checked');
-        pulseConfig.set('defaultlayout', isDefault);
-        if (isDefault) {
-          rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
-          $('#machinesperpage').val(12).change();
-        } else {
-          rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
-        }
-      }).trigger('change');
+        defaultLayoutChk.addEventListener('change', () => {
+          let isDefault = defaultLayoutChk.checked;
+          pulseConfig.set('defaultlayout', isDefault);
+          if (isDefault) {
+            if (rotationSettings) {
+              rotationSettings.style.opacity = '0.5';
+              rotationSettings.querySelectorAll('input').forEach(input => input.disabled = true);
+            }
+            if (machinesPerPageInput) {
+              machinesPerPageInput.value = 12;
+              machinesPerPageInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          } else {
+            if (rotationSettings) {
+              rotationSettings.style.opacity = '1';
+              rotationSettings.querySelectorAll('input').forEach(input => input.disabled = false);
+            }
+          }
+        });
+        defaultLayoutChk.dispatchEvent(new Event('change', { bubbles: true }));
+      }
 
-      machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
-      $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+      if (machinesPerPageInput) machinesPerPageInput.value = pulseConfig.getInt('machinesperpage', 12);
+      let rotationDelayInput = document.getElementById('rotationdelay');
+      if (rotationDelayInput) rotationDelayInput.value = pulseConfig.getInt('rotationdelay', 10);
     }
     // --- END LIVE/HISTORICAL ---
 
     // showworkinfo = Show Operation
-    $('#showworkinfo').prop('checked', pulseConfig.getBool('showworkinfo'));
-    if (pulseConfig.getDefaultBool('showworkinfo') != pulseConfig.getBool('showworkinfo')) {
-      $('#showworkinfo').attr('overridden', 'true');
-    }
-    $('#showworkinfo').change(function () {
-      pulseConfig.set('showworkinfo', $('#showworkinfo').is(':checked'));
+    const showWorkInfoChk = document.getElementById('showworkinfo');
+    if (showWorkInfoChk) {
+      showWorkInfoChk.checked = pulseConfig.getBool('showworkinfo');
+      if (pulseConfig.getDefaultBool('showworkinfo') != pulseConfig.getBool('showworkinfo')) {
+        showWorkInfoChk.setAttribute('overridden', 'true');
+      }
+      showWorkInfoChk.addEventListener('change', function () {
+        pulseConfig.set('showworkinfo', showWorkInfoChk.checked);
 
-      let showworkinfo = pulseConfig.getBool('showworkinfo');
-      if (showworkinfo) {
-        $('x-currentworkinfo').show();
-      }
-      else {
-        $('x-currentworkinfo').hide();
-      }
-    });
+        let showworkinfo = pulseConfig.getBool('showworkinfo');
+        if (showworkinfo) {
+          document.querySelectorAll('x-currentworkinfo').forEach(el => el.style.display = '');
+        }
+        else {
+          document.querySelectorAll('x-currentworkinfo').forEach(el => el.style.display = 'none');
+        }
+      });
+    }
 
     // Pie range: Shift or Day (mutually exclusive radios)
-    $('#displayshiftrange').prop('checked', pulseConfig.getBool('displayshiftrange'));
-    $('#pierangeisday').prop('checked', !pulseConfig.getBool('displayshiftrange'));
-    $('#displayshiftrange').change(function () {
-      let displayshiftrange = $('#displayshiftrange').is(':checked');
-      // Store
-      pulseConfig.set('displayshiftrange', displayshiftrange);
-      // Display / Dispatch
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'displayshiftrange' });
-    });
-    $('#pierangeisday').change(function () {
-      let displayshiftrange = !$('#pierangeisday').is(':checked');
-      // Store
-      pulseConfig.set('displayshiftrange', displayshiftrange);
-      // Display / Dispatch
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'displayshiftrange' });
-    });
+    const displayShiftRangeRadio = document.getElementById('displayshiftrange');
+    const pieRangeIsDayRadio = document.getElementById('pierangeisday');
+    if (displayShiftRangeRadio && pieRangeIsDayRadio) {
+      displayShiftRangeRadio.checked = pulseConfig.getBool('displayshiftrange');
+      pieRangeIsDayRadio.checked = !pulseConfig.getBool('displayshiftrange');
+      displayShiftRangeRadio.addEventListener('change', function () {
+        let displayshiftrange = displayShiftRangeRadio.checked;
+        // Store
+        pulseConfig.set('displayshiftrange', displayshiftrange);
+        // Display / Dispatch
+        eventBus.EventBus.dispatchToAll('configChangeEvent',
+          { 'config': 'displayshiftrange' });
+      });
+      pieRangeIsDayRadio.addEventListener('change', function () {
+        let displayshiftrange = !pieRangeIsDayRadio.checked;
+        // Store
+        pulseConfig.set('displayshiftrange', displayshiftrange);
+        // Display / Dispatch
+        eventBus.EventBus.dispatchToAll('configChangeEvent',
+          { 'config': 'displayshiftrange' });
+      });
+    }
 
     // Motion display: Time or Percent (mutually exclusive radios).
     // When time mode is selected, showtarget is unchecked and disabled (incompatible).
-    $('#displaymotiontime').prop('checked', pulseConfig.getBool('displaymotiontime'));
-    $('#displaymotionpercent').prop('checked', !pulseConfig.getBool('displaymotiontime'));
-    $('#displaymotiontime').change(function () {
-      let displaymotiontime = $('#displaymotiontime').is(':checked');
-      // Store
-      pulseConfig.set('displaymotiontime', displaymotiontime);
-      // Display
-      if (displaymotiontime) {
-        // daily
-        $('.machinestatus-daily-info').find('x-motiontime').show();
-        $('.machinestatus-daily-info').find('x-motionpercentage').hide();
-        // weekly
-        $('.machinestatus-weekly-info').find('x-motiontime').show();
-        $('.machinestatus-weekly-info').find('x-motionpercentage').hide();
-        // Reset show target (incompatible with time mode)
-        $('#showtarget').prop('checked', false);
-        $('#showtarget').change();
-        $('#showtarget').prop('disabled', true);  //hide();
-      }
-      else {
-        /// daily
-        $('.machinestatus-daily-info').find('x-motiontime').hide();
-        $('.machinestatus-daily-info').find('x-motionpercentage').show();
-        // weekly
-        $('.machinestatus-weekly-info').find('x-motiontime').hide();
-        $('.machinestatus-weekly-info').find('x-motionpercentage').show();
-        // Allow show target
-        $('#showtarget').prop('disabled', false); // .show();
-      }
-    });
-    $('#displaymotionpercent').change(function () {
-      let displaymotiontime = !$('#displaymotionpercent').is(':checked');
-      // Store
-      pulseConfig.set('displaymotiontime', displaymotiontime);
-      // Display
-      if (displaymotiontime) {
-        /// daily
-        $('.machinestatus-daily-info').find('x-motiontime').show();
-        $('.machinestatus-daily-info').find('x-motionpercentage').hide();
-        // weekly
-        $('.machinestatus-weekly-info').find('x-motiontime').show();
-        $('.machinestatus-weekly-info').find('x-motionpercentage').hide();
-        // Reset show target (incompatible with time mode)
-        $('#showtarget').prop('checked', false);
-        $('#showtarget').change();
-        $('#showtarget').prop('disabled', true); //.hide();
-      }
-      else {
-        /// daily
-        $('.machinestatus-daily-info').find('x-motiontime').hide();
-        $('.machinestatus-daily-info').find('x-motionpercentage').show();
-        // weekly
-        $('.machinestatus-weekly-info').find('x-motiontime').hide();
-        $('.machinestatus-weekly-info').find('x-motionpercentage').show();
-        // Allow show target
-        $('#showtarget').prop('disabled', false); //.show();
-      }
-    });
+    const displayMotionTimeRadio = document.getElementById('displaymotiontime');
+    const displayMotionPercentRadio = document.getElementById('displaymotionpercent');
+    if (displayMotionTimeRadio && displayMotionPercentRadio) {
+      displayMotionTimeRadio.checked = pulseConfig.getBool('displaymotiontime');
+      displayMotionPercentRadio.checked = !pulseConfig.getBool('displaymotiontime');
+      displayMotionTimeRadio.addEventListener('change', function () {
+        let displaymotiontime = displayMotionTimeRadio.checked;
+        // Store
+        pulseConfig.set('displaymotiontime', displaymotiontime);
+        // Display
+        if (displaymotiontime) {
+          // daily
+          document.querySelectorAll('.machinestatus-daily-info x-motiontime').forEach(el => el.style.display = 'block');
+          document.querySelectorAll('.machinestatus-daily-info x-motionpercentage').forEach(el => el.style.display = 'none');
+          // weekly
+          document.querySelectorAll('.machinestatus-weekly-info x-motiontime').forEach(el => el.style.display = 'block');
+          document.querySelectorAll('.machinestatus-weekly-info x-motionpercentage').forEach(el => el.style.display = 'none');
+          // Reset show target (incompatible with time mode)
+          const showTargetChk = document.getElementById('showtarget');
+          if (showTargetChk) {
+            showTargetChk.checked = false;
+            showTargetChk.dispatchEvent(new Event('change', { bubbles: true }));
+            showTargetChk.disabled = true;
+          }
+        }
+        else {
+          // daily
+          document.querySelectorAll('.machinestatus-daily-info x-motiontime').forEach(el => el.style.display = 'none');
+          document.querySelectorAll('.machinestatus-daily-info x-motionpercentage').forEach(el => el.style.display = 'block');
+          // weekly
+          document.querySelectorAll('.machinestatus-weekly-info x-motiontime').forEach(el => el.style.display = 'none');
+          document.querySelectorAll('.machinestatus-weekly-info x-motionpercentage').forEach(el => el.style.display = 'block');
+          // Allow show target
+          const showTargetChk = document.getElementById('showtarget');
+          if (showTargetChk) showTargetChk.disabled = false;
+        }
+      });
+      displayMotionPercentRadio.addEventListener('change', function () {
+        let displaymotiontime = !displayMotionPercentRadio.checked;
+        // Store
+        pulseConfig.set('displaymotiontime', displaymotiontime);
+        // Display
+        if (displaymotiontime) {
+          // daily
+          document.querySelectorAll('.machinestatus-daily-info x-motiontime').forEach(el => el.style.display = 'block');
+          document.querySelectorAll('.machinestatus-daily-info x-motionpercentage').forEach(el => el.style.display = 'none');
+          // weekly
+          document.querySelectorAll('.machinestatus-weekly-info x-motiontime').forEach(el => el.style.display = 'block');
+          document.querySelectorAll('.machinestatus-weekly-info x-motionpercentage').forEach(el => el.style.display = 'none');
+          // Reset show target (incompatible with time mode)
+          const showTargetChk = document.getElementById('showtarget');
+          if (showTargetChk) {
+            showTargetChk.checked = false;
+            showTargetChk.dispatchEvent(new Event('change', { bubbles: true }));
+            showTargetChk.disabled = true;
+          }
+        }
+        else {
+          // daily
+          document.querySelectorAll('.machinestatus-daily-info x-motiontime').forEach(el => el.style.display = 'none');
+          document.querySelectorAll('.machinestatus-daily-info x-motionpercentage').forEach(el => el.style.display = 'block');
+          // weekly
+          document.querySelectorAll('.machinestatus-weekly-info x-motiontime').forEach(el => el.style.display = 'none');
+          document.querySelectorAll('.machinestatus-weekly-info x-motionpercentage').forEach(el => el.style.display = 'block');
+          // Allow show target
+          const showTargetChk = document.getElementById('showtarget');
+          if (showTargetChk) showTargetChk.disabled = false;
+        }
+      });
+    }
 
     // Target: shows/hides .machinestatus-target — disabled when in time mode
-    $('#showtarget').prop('checked', pulseConfig.getBool('showtarget'));
-    if (pulseConfig.getDefaultBool('showtarget') != pulseConfig.getBool('showtarget')) {
-      $('#showtarget').attr('overridden', 'true');
+    const showTargetChk = document.getElementById('showtarget');
+    if (showTargetChk) {
+      showTargetChk.checked = pulseConfig.getBool('showtarget');
+      if (pulseConfig.getDefaultBool('showtarget') != pulseConfig.getBool('showtarget')) {
+        showTargetChk.setAttribute('overridden', 'true');
+      }
+      showTargetChk.addEventListener('change', function () {
+        let showtarget = showTargetChk.checked;
+        // Store
+        pulseConfig.set('showtarget', showtarget);
+        // Display
+        if (showtarget) {
+          document.querySelectorAll('.machinestatus-target').forEach(el => el.style.display = '');
+        }
+        else {
+          document.querySelectorAll('.machinestatus-target').forEach(el => el.style.display = 'none');
+        }
+      });
     }
-    $('#showtarget').change(function () {
-      let showtarget = $('#showtarget').is(':checked');
-      // Store
-      pulseConfig.set('showtarget', showtarget);
-      // Display
-      if (showtarget) {
-        $('.machinestatus-target').show();
-      }
-      else {
-        $('.machinestatus-target').hide();
-      }
-    });
 
     // Current Tool / Sequence:
     // #showcurrent is a parent checkbox that controls .showcurrentdetails subgroup visibility.
     // #showcurrenttool and #showcurrentsequence are mutually exclusive: checking one unchecks the other.
-    $('#showcurrent').prop('checked', (pulseConfig.getBool('showcurrenttool') || pulseConfig.getBool('showcurrentsequence')));
-    $('#showcurrent').change(function () {
-      let showcurrent = $('#showcurrent').is(':checked');
-      // Store / Display
-      if (showcurrent == false) {
-        $('#showcurrenttool').prop('checked', false);
-        $('#showcurrentsequence').prop('checked', false);
-        $('#showcurrenttool').change();
-        $('#showcurrentsequence').change();
+    const showCurrentChk = document.getElementById('showcurrent');
+    const showCurrentToolChk = document.getElementById('showcurrenttool');
+    const showCurrentSequenceChk = document.getElementById('showcurrentsequence');
+    if (showCurrentChk && showCurrentToolChk && showCurrentSequenceChk) {
+      showCurrentChk.checked = (pulseConfig.getBool('showcurrenttool') || pulseConfig.getBool('showcurrentsequence'));
+      showCurrentChk.addEventListener('change', function () {
+        let showcurrent = showCurrentChk.checked;
+        // Store / Display
+        if (showcurrent == false) {
+          showCurrentToolChk.checked = false;
+          showCurrentSequenceChk.checked = false;
+          showCurrentToolChk.dispatchEvent(new Event('change', { bubbles: true }));
+          showCurrentSequenceChk.dispatchEvent(new Event('change', { bubbles: true }));
 
-        // Visibility of subgroups
-        $('.showcurrentdetails').hide();
-      }
-      else {
-        // Visibility of subgroups
-        $('.showcurrentdetails').show();
-
-        // Default: auto-check tool if neither tool nor sequence is checked
-        if (!$('#showcurrenttool').is(':checked') && !$('#showcurrentsequence').is(':checked')) {
-          $('#showcurrenttool').prop('checked', true);
-          pulseConfig.set('showcurrenttool', true);
+          // Visibility of subgroups
+          document.querySelectorAll('.showcurrentdetails').forEach(el => el.style.display = 'none');
         }
+        else {
+          // Visibility of subgroups
+          document.querySelectorAll('.showcurrentdetails').forEach(el => el.style.display = '');
 
-        $('#showcurrenttool').change();
-        $('#showcurrentsequence').change();
-      }
-    });
-    $('#showcurrent').trigger('change'); // To open/close subgroup
+          // Default: auto-check tool if neither tool nor sequence is checked
+          if (!showCurrentToolChk.checked && !showCurrentSequenceChk.checked) {
+            showCurrentToolChk.checked = true;
+            pulseConfig.set('showcurrenttool', true);
+          }
 
-    $('#showcurrenttool').prop('checked',
-      pulseConfig.getBool('showcurrenttool'));
-    if (pulseConfig.getDefaultBool('showcurrenttool') != pulseConfig.getBool('showcurrenttool'))
-      $('#showcurrenttool').attr('overridden', 'true');
-    $('#showcurrenttool').change(function () {
-      let showcurrenttool = $('#showcurrenttool').is(':checked');
-      // Store
-      pulseConfig.set('showcurrenttool', showcurrenttool);
-      // Display
-      if (showcurrenttool) {
-        $('.machinestatus-current-tool-div').show();
-        // Mutually exclusive: hide sequence
-        pulseConfig.set('showcurrentsequence', false);
-        $('.machinestatus-current-sequence-div').hide();
-      }
-      else {
-        $('.machinestatus-current-tool-div').hide();
-      }
-    });
+          showCurrentToolChk.dispatchEvent(new Event('change', { bubbles: true }));
+          showCurrentSequenceChk.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+      showCurrentChk.dispatchEvent(new Event('change', { bubbles: true }));
 
-    $('#showcurrentsequence').prop('checked', pulseConfig.getBool('showcurrentsequence'));
-    if (pulseConfig.getDefaultBool('showcurrentsequence') != pulseConfig.getBool('showcurrentsequence'))
-      $('#showcurrentsequence').attr('overridden', 'true');
-    $('#showcurrentsequence').change(function () {
-      let showcurrentsequence = $('#showcurrentsequence').is(':checked');
-      // Store
-      pulseConfig.set('showcurrentsequence', showcurrentsequence);
-      // Display
-      if (showcurrentsequence) {
-        $('.machinestatus-current-sequence-div').show();
-        // Mutually exclusive: hide tool
-        pulseConfig.set('showcurrenttool', false);
-        $('.machinestatus-current-tool-div').hide();
-      }
-      else {
-        $('.machinestatus-current-sequence-div').hide();
-      }
-    });
+      showCurrentToolChk.checked = pulseConfig.getBool('showcurrenttool');
+      if (pulseConfig.getDefaultBool('showcurrenttool') != pulseConfig.getBool('showcurrenttool'))
+        showCurrentToolChk.setAttribute('overridden', 'true');
+      showCurrentToolChk.addEventListener('change', function () {
+        let showcurrenttool = showCurrentToolChk.checked;
+        // Store
+        pulseConfig.set('showcurrenttool', showcurrenttool);
+        // Display
+        if (showcurrenttool) {
+          document.querySelectorAll('.machinestatus-current-tool-div').forEach(el => el.style.display = '');
+          // Mutually exclusive: hide sequence
+          pulseConfig.set('showcurrentsequence', false);
+          document.querySelectorAll('.machinestatus-current-sequence-div').forEach(el => el.style.display = 'none');
+        }
+        else {
+          document.querySelectorAll('.machinestatus-current-tool-div').forEach(el => el.style.display = 'none');
+        }
+      });
+
+      showCurrentSequenceChk.checked = pulseConfig.getBool('showcurrentsequence');
+      if (pulseConfig.getDefaultBool('showcurrentsequence') != pulseConfig.getBool('showcurrentsequence'))
+        showCurrentSequenceChk.setAttribute('overridden', 'true');
+      showCurrentSequenceChk.addEventListener('change', function () {
+        let showcurrentsequence = showCurrentSequenceChk.checked;
+        // Store
+        pulseConfig.set('showcurrentsequence', showcurrentsequence);
+        // Display
+        if (showcurrentsequence) {
+          document.querySelectorAll('.machinestatus-current-sequence-div').forEach(el => el.style.display = '');
+          // Mutually exclusive: hide tool
+          pulseConfig.set('showcurrenttool', false);
+          document.querySelectorAll('.machinestatus-current-tool-div').forEach(el => el.style.display = 'none');
+        }
+        else {
+          document.querySelectorAll('.machinestatus-current-sequence-div').forEach(el => el.style.display = 'none');
+        }
+      });
+    }
 
     // Alarm
-    $('#showalarm').prop('checked', pulseConfig.getBool('showalarm'));
-    if (pulseConfig.getDefaultBool('showalarm') != pulseConfig.getBool('showalarm')) {
-      $('#showalarm').attr('overridden', 'true');
+    const showAlarmChk = document.getElementById('showalarm');
+    if (showAlarmChk) {
+      showAlarmChk.checked = pulseConfig.getBool('showalarm');
+      if (pulseConfig.getDefaultBool('showalarm') != pulseConfig.getBool('showalarm')) {
+        showAlarmChk.setAttribute('overridden', 'true');
+      }
+      showAlarmChk.addEventListener('change', function () {
+        let showalarm = showAlarmChk.checked;
+        // Store
+        pulseConfig.set('showalarm', showalarm);
+        // Display
+        if (showalarm) {
+          document.querySelectorAll('x-currenticoncncalarm').forEach(el => el.style.display = '');
+        }
+        else {
+          document.querySelectorAll('x-currenticoncncalarm').forEach(el => el.style.display = 'none');
+        }
+      });
     }
-    $('#showalarm').change(function () {
-      let showalarm = $('#showalarm').is(':checked');
-      // Store
-      pulseConfig.set('showalarm', showalarm);
-      // Display
-      if (showalarm) {
-        $('x-currenticoncncalarm').show();
-      }
-      else {
-        $('x-currenticoncncalarm').hide();
-      }
-    });
 
     // Stacklight
-    $('#showstacklight').prop('checked', pulseConfig.getBool('showstacklight'));
-    if (pulseConfig.getDefaultBool('showstacklight') != pulseConfig.getBool('showstacklight')) {
-      $('#showstacklight').attr('overridden', 'true');
+    const showStackLightChk = document.getElementById('showstacklight');
+    if (showStackLightChk) {
+      showStackLightChk.checked = pulseConfig.getBool('showstacklight');
+      if (pulseConfig.getDefaultBool('showstacklight') != pulseConfig.getBool('showstacklight')) {
+        showStackLightChk.setAttribute('overridden', 'true');
+      }
+      showStackLightChk.addEventListener('change', function () {
+        let showstacklight = showStackLightChk.checked;
+        // Store
+        pulseConfig.set('showstacklight', showstacklight);
+        // Display
+        if (showstacklight) {
+          document.querySelectorAll('x-stacklight').forEach(el => el.style.display = '');
+        }
+        else {
+          document.querySelectorAll('x-stacklight').forEach(el => el.style.display = 'none');
+        }
+      });
     }
-    $('#showstacklight').change(function () {
-      let showstacklight = $('#showstacklight').is(':checked');
-      // Store
-      pulseConfig.set('showstacklight', showstacklight);
-      // Display
-      if (showstacklight) {
-        $('x-stacklight').show();
-      }
-      else {
-        $('x-stacklight').hide();
-      }
-    });
 
     // Weekly bar: parent checkbox controls .machinestatus-weekly-info and .showweeklydetails subgroup
-    $('#showweeklybar').prop('checked', pulseConfig.getBool('showweeklybar'));
-    if (pulseConfig.getDefaultBool('showweeklybar') != pulseConfig.getBool('showweeklybar')) {
-      $('#showweeklybar').attr('overridden', 'true');
+    const showWeeklyBarChk = document.getElementById('showweeklybar');
+    if (showWeeklyBarChk) {
+      showWeeklyBarChk.checked = pulseConfig.getBool('showweeklybar');
+      if (pulseConfig.getDefaultBool('showweeklybar') != pulseConfig.getBool('showweeklybar')) {
+        showWeeklyBarChk.setAttribute('overridden', 'true');
+      }
+      showWeeklyBarChk.addEventListener('change', function () {
+        let showweeklybar = showWeeklyBarChk.checked;
+        // Store
+        pulseConfig.set('showweeklybar', showweeklybar);
+        // Display
+        if (showweeklybar) {
+          document.querySelectorAll('.machinestatus-weekly-info').forEach(el => el.style.display = '');
+          document.querySelectorAll('.machinestatus-weekly-bar-position').forEach(el => el.style.display = '');
+
+          // Visibility of subgroups
+          document.querySelectorAll('.showweeklydetails').forEach(el => el.style.display = '');
+        }
+        else {
+          document.querySelectorAll('.machinestatus-weekly-info').forEach(el => el.style.display = 'none');
+          document.querySelectorAll('.machinestatus-weekly-bar-position').forEach(el => el.style.display = 'none');
+
+          // Visibility of subgroups
+          document.querySelectorAll('.showweeklydetails').forEach(el => el.style.display = 'none');
+        }
+      });
+      showWeeklyBarChk.dispatchEvent(new Event('change', { bubbles: true }));
     }
-    $('#showweeklybar').change(function () {
-      let showweeklybar = $('#showweeklybar').is(':checked');
-      // Store
-      pulseConfig.set('showweeklybar', showweeklybar);
-      // Display
-      if (showweeklybar) {
-        $('.machinestatus-weekly-info').show();
-        $('.machinestatus-weekly-bar-position').show();
-
-        // Visibility of subgroups
-        $('.showweeklydetails').show();
-      }
-      else {
-        $('.machinestatus-weekly-info').hide();
-        $('.machinestatus-weekly-bar-position').hide();
-
-        // Visibility of subgroups
-        $('.showweeklydetails').hide();
-      }
-    });
-    $('#showweeklybar').trigger('change'); // To open/close subgroup
 
     // Weekly range: current week or last 7 days (mutually exclusive radios).
     // Drives #period-for-week attributes (exclude-now, displayweekrange) and .machinestatus-label text.
     let weeklyshowcurrentweek = pulseConfig.getBool('weeklyshowcurrentweek');
-    $('#showlast7days').prop('checked', !weeklyshowcurrentweek);
-    $('#showlast7days').change(function () {
-      let weeklyshowcurrentweek = !$('#showlast7days').is(':checked');
-      // Store
-      pulseConfig.set('weeklyshowcurrentweek', weeklyshowcurrentweek);
-      // Display
-      if (weeklyshowcurrentweek) {
-        $('#period-for-week')[0].setAttribute('exclude-now', 'false');
-        $('#period-for-week')[0].setAttribute('displayweekrange', 'true');
-        $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.week', 'Week'));
-      }
-      else {
-        $('#period-for-week')[0].setAttribute('exclude-now', 'true');
-        $('#period-for-week')[0].setAttribute('displayweekrange', 'false');
-        $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.days', '(7 days)'));
-      }
-    });
+    const showLast7DaysRadio = document.getElementById('showlast7days');
+    const showCurrentWeekRadio = document.getElementById('showcurrentweek');
+    if (showLast7DaysRadio && showCurrentWeekRadio) {
+      showLast7DaysRadio.checked = !weeklyshowcurrentweek;
+      showLast7DaysRadio.addEventListener('change', function () {
+        let weeklyshowcurrentweek = !showLast7DaysRadio.checked;
+        // Store
+        pulseConfig.set('weeklyshowcurrentweek', weeklyshowcurrentweek);
+        // Display
+        const periodForWeekEl = document.getElementById('period-for-week');
+        if (periodForWeekEl) {
+          if (weeklyshowcurrentweek) {
+            periodForWeekEl.setAttribute('exclude-now', 'false');
+            periodForWeekEl.setAttribute('displayweekrange', 'true');
+            document.querySelectorAll('.machinestatus-label').forEach(el => el.textContent = pulseConfig.pulseTranslate('content.week', 'Week'));
+          }
+          else {
+            periodForWeekEl.setAttribute('exclude-now', 'true');
+            periodForWeekEl.setAttribute('displayweekrange', 'false');
+            document.querySelectorAll('.machinestatus-label').forEach(el => el.textContent = pulseConfig.pulseTranslate('content.days', '(7 days)'));
+          }
+        }
+      });
 
-    $('#showcurrentweek').prop('checked', weeklyshowcurrentweek);
-    $('#showcurrentweek').change(function () {
-      let weeklyshowcurrentweek = $('#showcurrentweek').is(':checked');
-      // Store
-      pulseConfig.set('weeklyshowcurrentweek', weeklyshowcurrentweek);
-      // Display
-      if (weeklyshowcurrentweek) {
-        $('#period-for-week')[0].setAttribute('exclude-now', 'false');
-        $('#period-for-week')[0].setAttribute('displayweekrange', 'true');
-        $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.week', 'Week'));
-      }
-      else {
-        $('#period-for-week')[0].setAttribute('exclude-now', 'true');
-        $('#period-for-week')[0].setAttribute('displayweekrange', 'false');
-        $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.days', '(7 days)'));
-      }
-    });
+      showCurrentWeekRadio.checked = weeklyshowcurrentweek;
+      showCurrentWeekRadio.addEventListener('change', function () {
+        let weeklyshowcurrentweek = showCurrentWeekRadio.checked;
+        // Store
+        pulseConfig.set('weeklyshowcurrentweek', weeklyshowcurrentweek);
+        // Display
+        const periodForWeekEl = document.getElementById('period-for-week');
+        if (periodForWeekEl) {
+          if (weeklyshowcurrentweek) {
+            periodForWeekEl.setAttribute('exclude-now', 'false');
+            periodForWeekEl.setAttribute('displayweekrange', 'true');
+            document.querySelectorAll('.machinestatus-label').forEach(el => el.textContent = pulseConfig.pulseTranslate('content.week', 'Week'));
+          }
+          else {
+            periodForWeekEl.setAttribute('exclude-now', 'true');
+            periodForWeekEl.setAttribute('displayweekrange', 'false');
+            document.querySelectorAll('.machinestatus-label').forEach(el => el.textContent = pulseConfig.pulseTranslate('content.days', '(7 days)'));
+          }
+        }
+      });
+    }
   }
 
   /**
@@ -443,10 +504,11 @@ class MachineStatusPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     // showworkinfo
@@ -454,15 +516,21 @@ class MachineStatusPage extends pulsePage.BasePage {
 
     // Shift / Day
     setDefaultChecked('displayshiftrange');
-    $('#pierangeisday').prop('checked', !pulseConfig.getDefaultBool('displayshiftrange'));
-    $('#pierangeisday').change();
-    $('#pierangeisday').removeAttr('overridden');
+    const pieRangeEl = document.getElementById('pierangeisday');
+    if (pieRangeEl) {
+      pieRangeEl.checked = !pulseConfig.getDefaultBool('displayshiftrange');
+      pieRangeEl.dispatchEvent(new Event('change', { bubbles: true }));
+      pieRangeEl.removeAttribute('overridden');
+    }
 
     // Percent / Time
     setDefaultChecked('displaymotiontime');
-    $('#displaymotionpercent').prop('checked', !pulseConfig.getDefaultBool('displaymotiontime'));
-    $('#displaymotionpercent').change();
-    $('#displaymotionpercent').removeAttr('overridden');
+    const displayMotionPercentEl = document.getElementById('displaymotionpercent');
+    if (displayMotionPercentEl) {
+      displayMotionPercentEl.checked = !pulseConfig.getDefaultBool('displaymotiontime');
+      displayMotionPercentEl.dispatchEvent(new Event('change', { bubbles: true }));
+      displayMotionPercentEl.removeAttribute('overridden');
+    }
 
     // Target
     setDefaultChecked('showtarget');
@@ -470,9 +538,12 @@ class MachineStatusPage extends pulsePage.BasePage {
     // Tools / Sequence
     const showcurrentDefault = pulseConfig.getDefaultBool('showcurrenttool')
       || pulseConfig.getDefaultBool('showcurrentsequence');
-    $('#showcurrent').prop('checked', showcurrentDefault);
-    $('#showcurrent').change();
-    $('#showcurrent').removeAttr('overridden');
+    const showCurrentEl = document.getElementById('showcurrent');
+    if (showCurrentEl) {
+      showCurrentEl.checked = showcurrentDefault;
+      showCurrentEl.dispatchEvent(new Event('change', { bubbles: true }));
+      showCurrentEl.removeAttribute('overridden');
+    }
 
     setDefaultChecked('showcurrenttool');
     setDefaultChecked('showcurrentsequence');
@@ -482,10 +553,11 @@ class MachineStatusPage extends pulsePage.BasePage {
     setDefaultChecked('showstacklight');
     setDefaultChecked('showweeklybar');
 
-    $('#showcurrentweek').prop('checked',
-      pulseConfig.getDefaultBool('weeklyshowcurrentweek'));
-    $('#showcurrentweek').change();
-    //$('#showcurrentweek').removeAttr('overridden');
+    const showCurrentWeekEl = document.getElementById('showcurrentweek');
+    if (showCurrentWeekEl) {
+      showCurrentWeekEl.checked = pulseConfig.getDefaultBool('weeklyshowcurrentweek');
+      showCurrentWeekEl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
 
     // Layout - live mode only
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
@@ -524,7 +596,9 @@ class MachineStatusPage extends pulsePage.BasePage {
 
     let result = options.map(opt => {
       const el = document.getElementById(opt.id);
-      if (!el || $(el).is(':hidden')) return '';
+      if (!el) return '';
+      const isHidden = el.style.display === 'none';
+      if (isHidden) return '';
       const paramName = opt.param || opt.id;
       if (opt.type === 'value') {
         return `&${paramName}=${el.value}`;
@@ -533,7 +607,8 @@ class MachineStatusPage extends pulsePage.BasePage {
     }).join('');
 
     // showcurrenttool and showcurrentsequence are conditional on parent #showcurrent
-    if (document.getElementById('showcurrent')?.checked) {
+    const showCurrentEl = document.getElementById('showcurrent');
+    if (showCurrentEl?.checked) {
       result += `&showcurrenttool=${document.getElementById('showcurrenttool')?.checked}`;
       result += `&showcurrentsequence=${document.getElementById('showcurrentsequence')?.checked}`;
     } else {
@@ -541,7 +616,8 @@ class MachineStatusPage extends pulsePage.BasePage {
     }
 
     // weeklyshowcurrentweek is only relevant when the weekly section is shown
-    if (document.getElementById('showweeklybar')?.checked) {
+    const showWeeklyBarEl = document.getElementById('showweeklybar');
+    if (showWeeklyBarEl?.checked) {
       result += `&weeklyshowcurrentweek=${document.getElementById('showcurrentweek')?.checked}`;
     }
 
@@ -582,95 +658,103 @@ class MachineStatusPage extends pulsePage.BasePage {
     // allows the native page configuration (not in options) of the bars : show reason bar == always -> idem for SHOW x-reasongroups
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     if (showworkinfo) {
-      $('x-currentworkinfo').show();
+      document.querySelectorAll('x-currentworkinfo').forEach(el => el.style.display = '');
     }
     else {
-      $('x-currentworkinfo').hide();
+      document.querySelectorAll('x-currentworkinfo').forEach(el => el.style.display = 'none');
     }
 
     let displaymotiontime = pulseConfig.getBool('displaymotiontime');
     if (displaymotiontime) {
       // daily
-      $('.machinestatus-daily-info').find('x-motiontime').show();
-      $('.machinestatus-daily-info').find('x-motionpercentage').hide();
+      document.querySelectorAll('.machinestatus-daily-info x-motiontime').forEach(el => el.style.display = 'block');
+      document.querySelectorAll('.machinestatus-daily-info x-motionpercentage').forEach(el => el.style.display = 'none');
       // weekly
-      $('.machinestatus-weekly-info').find('x-motiontime').show();
-      $('.machinestatus-weekly-info').find('x-motionpercentage').hide();
+      document.querySelectorAll('.machinestatus-weekly-info x-motiontime').forEach(el => el.style.display = 'block');
+      document.querySelectorAll('.machinestatus-weekly-info x-motionpercentage').forEach(el => el.style.display = 'none');
       // Reset show target (incompatible with time mode)
-      $('#showtarget').prop('checked', false);
-      $('#showtarget').change();
-      $('#showtarget').prop('disabled', true); // .hide();
+      const showTargetEl = document.getElementById('showtarget');
+      showTargetEl.checked = false;
+      showTargetEl.dispatchEvent(new Event('change', { bubbles: true }));
+      showTargetEl.disabled = true;
     }
     else {
       // daily
-      $('.machinestatus-daily-info').find('x-motiontime').hide();
-      $('.machinestatus-daily-info').find('x-motionpercentage').show();
+      document.querySelectorAll('.machinestatus-daily-info x-motiontime').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.machinestatus-daily-info x-motionpercentage').forEach(el => el.style.display = 'block');
       // weekly
-      $('.machinestatus-weekly-info').find('x-motiontime').hide();
-      $('.machinestatus-weekly-info').find('x-motionpercentage').show();
+      document.querySelectorAll('.machinestatus-weekly-info x-motiontime').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.machinestatus-weekly-info x-motionpercentage').forEach(el => el.style.display = 'block');
       // Allow show target
-      $('#showtarget').prop('disabled', false); // .show();
+      document.getElementById('showtarget').disabled = false;
     }
 
     let showtarget = pulseConfig.getBool('showtarget');
     if (showtarget) {
-      $('.machinestatus-target').show();
+      document.querySelectorAll('.machinestatus-target').forEach(el => el.style.display = '');
     }
     else {
-      $('.machinestatus-target').hide();
+      document.querySelectorAll('.machinestatus-target').forEach(el => el.style.display = 'none');
     }
     let showcurrenttool = pulseConfig.getBool('showcurrenttool');
     if (showcurrenttool) {
-      $('.machinestatus-current-tool-div').show();
+      document.querySelectorAll('.machinestatus-current-tool-div').forEach(el => el.style.display = '');
     }
     else {
-      $('.machinestatus-current-tool-div').hide();
+      document.querySelectorAll('.machinestatus-current-tool-div').forEach(el => el.style.display = 'none');
     }
     let showcurrentsequence = pulseConfig.getBool('showcurrentsequence');
     if (showcurrentsequence) {
-      $('.machinestatus-current-sequence-div').show();
+      document.querySelectorAll('.machinestatus-current-sequence-div').forEach(el => el.style.display = '');
     }
     else {
-      $('.machinestatus-current-sequence-div').hide();
+      document.querySelectorAll('.machinestatus-current-sequence-div').forEach(el => el.style.display = 'none');
     }
     let showalarm = pulseConfig.getBool('showalarm');
     if (showalarm) {
-      $('x-currenticoncncalarm').show();
+      document.querySelectorAll('x-currenticoncncalarm').forEach(el => el.style.display = '');
     }
     else {
-      $('x-currenticoncncalarm').hide();
+      document.querySelectorAll('x-currenticoncncalarm').forEach(el => el.style.display = 'none');
     }
     let showstacklight = pulseConfig.getBool('showstacklight');
     if (showstacklight) {
-      $('x-stacklight').show();
+      document.querySelectorAll('x-stacklight').forEach(el => el.style.display = '');
     }
     else {
-      $('x-stacklight').hide();
+      document.querySelectorAll('x-stacklight').forEach(el => el.style.display = 'none');
     }
     let showweeklybar = pulseConfig.getBool('showweeklybar');
     if (showweeklybar) {
-      $('.machinestatus-weekly-info').show();
-      $('.machinestatus-weekly-bar-position').show();
+      document.querySelectorAll('.machinestatus-weekly-info').forEach(el => el.style.display = '');
+      document.querySelectorAll('.machinestatus-weekly-bar-position').forEach(el => el.style.display = '');
     }
     else {
-      $('.machinestatus-weekly-info').hide();
-      $('.machinestatus-weekly-bar-position').hide();
+      document.querySelectorAll('.machinestatus-weekly-info').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.machinestatus-weekly-bar-position').forEach(el => el.style.display = 'none');
     }
     let weeklyshowcurrentweek = pulseConfig.getBool('weeklyshowcurrentweek');
+    const periodForWeekEl = document.getElementById('period-for-week');
     if (weeklyshowcurrentweek) {
-      $('#period-for-week')[0].setAttribute('exclude-now', 'false');
-      $('#period-for-week')[0].setAttribute('displayweekrange', 'true');
-      $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.week', 'Week'));
+      periodForWeekEl.setAttribute('exclude-now', 'false');
+      periodForWeekEl.setAttribute('displayweekrange', 'true');
+      document.querySelectorAll('.machinestatus-label').forEach(el => el.textContent = pulseConfig.pulseTranslate('content.week', 'Week'));
     }
     else {
-      $('#period-for-week')[0].setAttribute('exclude-now', 'true');
-      $('#period-for-week')[0].setAttribute('displayweekrange', 'false');
-      $('.machinestatus-label').html(pulseConfig.pulseTranslate('content.days', '(7 days)'));
+      periodForWeekEl.setAttribute('exclude-now', 'true');
+      periodForWeekEl.setAttribute('displayweekrange', 'false');
+      document.querySelectorAll('.machinestatus-label').forEach(el => el.textContent = pulseConfig.pulseTranslate('content.days', '(7 days)'));
     }
 
   }
 }
 
-$(document).ready(function () {
+if (document.readyState !== 'loading') {
+  initMachineStatusPage();
+} else {
+  document.addEventListener('DOMContentLoaded', initMachineStatusPage);
+}
+
+function initMachineStatusPage() {
   pulsePage.preparePage(new MachineStatusPage());
-});
+}

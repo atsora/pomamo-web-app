@@ -89,99 +89,102 @@ class OeeViewPage extends pulsePage.BasePage {
     let isLive = tmpContexts && tmpContexts.includes('live');
 
     // --- ROTATION LAYOUT OPTIONS ---
-    const defaultLayoutChk = $('#defaultlayout');
-    const rotationSettings = $('.rotation-settings');
-    const machinesPerPageInput = $('#machinesperpage');
+    const defaultLayoutChk = document.getElementById('defaultlayout');
+    const rotationSettings = document.querySelector('.rotation-settings');
+    const machinesPerPageInput = document.getElementById('machinesperpage');
 
     if (!isLive) {
-      // HISTORICAL MODE: disable rotation, enable vertical scroll
+      if (defaultLayoutChk) {
+        const paramRow = defaultLayoutChk.closest('.param-row');
+        if (paramRow) paramRow.style.display = 'none';
+        if (defaultLayoutChk.parentElement) defaultLayoutChk.parentElement.style.display = 'none';
+        defaultLayoutChk.checked = false;
+      }
+      if (rotationSettings) rotationSettings.style.display = 'none';
 
-      // 1. Hide rotation options in the panel
-      defaultLayoutChk.closest('.param-row').hide(); // if .param-row structure exists
-      defaultLayoutChk.parent().hide(); // fallback
-      rotationSettings.hide();
-
-      // 2. Force "show all" configuration
-      // Force custom mode (not default) to accept a large page count
       pulseConfig.set('defaultlayout', false);
-      // Set a huge number so the rotation engine treats everything as one page
       pulseConfig.set('machinesperpage', 10000);
 
-      // Sync inputs to avoid confusion
-      defaultLayoutChk.prop('checked', false);
-      machinesPerPageInput.val(10000);
-
-      // Scroll & grid sizing handled by .pulse-content:not(.appcontext-live) overrides in oeeview.less
+      if (machinesPerPageInput) machinesPerPageInput.value = 10000;
 
     } else {
-      // LIVE MODE: standard behavior (rotation)
+      if (defaultLayoutChk) {
+        defaultLayoutChk.checked = pulseConfig.getBool('defaultlayout', true);
 
-      // Initialize from config
-      defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
+        defaultLayoutChk.addEventListener('change', () => {
+          let isDefault = defaultLayoutChk.checked;
+          pulseConfig.set('defaultlayout', isDefault);
 
-      // When "Default" is checked, gray out manual inputs
-      defaultLayoutChk.change(() => {
-        let isDefault = defaultLayoutChk.is(':checked');
-        pulseConfig.set('defaultlayout', isDefault);
+          if (isDefault) {
+            if (rotationSettings) {
+              rotationSettings.style.opacity = '0.5';
+              rotationSettings.querySelectorAll('input').forEach(inp => inp.disabled = true);
+            }
+            const mpInput = document.getElementById('machinesperpage');
+            if (mpInput) {
+              mpInput.value = 12;
+              mpInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          } else {
+            if (rotationSettings) {
+              rotationSettings.style.opacity = '1';
+              rotationSettings.querySelectorAll('input').forEach(inp => inp.disabled = false);
+            }
+          }
+        });
+        defaultLayoutChk.dispatchEvent(new Event('change', { bubbles: true }));
+      }
 
-        if (isDefault) {
-          rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
-          $('#machinesperpage').val(12).change(); // force max
-        } else {
-          rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
-        }
-      }).trigger('change');
-
-      // Initialize values
-      machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
-      $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+      if (machinesPerPageInput) machinesPerPageInput.value = pulseConfig.getInt('machinesperpage', 12);
+      const rotationDelayInput = document.getElementById('rotationdelay');
+      if (rotationDelayInput) rotationDelayInput.value = pulseConfig.getInt('rotationdelay', 10);
     }
 
-    // --- COMMON OPTIONS (live + historical) ---
-
-    // Display mode: percent or ratio
     this._productionGaugeDisplayMode();
 
-    // Thresholds
-    const thresholdTarget = $('#thresholdtargetproductionbar');
-    const thresholdRedInput = $('#thresholdredproductionbar');
+    const thresholdTarget = document.getElementById('thresholdtargetproductionbar');
+    const thresholdRedInput = document.getElementById('thresholdredproductionbar');
 
-    thresholdTarget.val(pulseConfig.getFloat('thresholdtargetproduction', 80));
-    thresholdRedInput.val(pulseConfig.getFloat('thresholdredproduction', 60));
-
-    if (pulseConfig.getDefaultFloat('thresholdtargetproduction') !== pulseConfig.getFloat('thresholdtargetproduction')) {
-      thresholdTarget.attr('overridden', 'true');
-    }
-    if (pulseConfig.getDefaultFloat('thresholdredproduction') !== pulseConfig.getFloat('thresholdredproduction')) {
-      thresholdRedInput.attr('overridden', 'true');
-    }
-
-    thresholdTarget.change(function () {
-      this._verficationThresholds(thresholdTarget.val(), thresholdRedInput.val());
-    }.bind(this));
-
-    thresholdRedInput.change(function () {
-      this._verficationThresholds(thresholdTarget.val(), thresholdRedInput.val());
-    }.bind(this));
-
-    // showworkinfo = Show Operation
-    const showWorkInfoChk = $('#showworkinfo');
-    showWorkInfoChk.prop('checked', pulseConfig.getBool('showworkinfo'));
-    if (pulseConfig.getDefaultBool('showworkinfo') != pulseConfig.getBool('showworkinfo')) {
-      showWorkInfoChk.attr('overridden', 'true');
-    }
-
-    showWorkInfoChk.change(function () {
-      let isChecked = showWorkInfoChk.is(':checked');
-      pulseConfig.set('showworkinfo', isChecked);
-
-      if (isChecked) {
-        $('x-workinfo').show();
-      } else {
-        $('x-workinfo').hide();
+    if (thresholdTarget) {
+      thresholdTarget.value = pulseConfig.getFloat('thresholdtargetproduction', 80);
+      if (pulseConfig.getDefaultFloat('thresholdtargetproduction') !== pulseConfig.getFloat('thresholdtargetproduction')) {
+        thresholdTarget.setAttribute('overridden', 'true');
       }
-    });
-    showWorkInfoChk.trigger('change');
+      thresholdTarget.addEventListener('change', () => {
+        const ttVal = thresholdTarget.value;
+        const trVal = thresholdRedInput ? thresholdRedInput.value : '';
+        this._verficationThresholds(ttVal, trVal);
+      });
+    }
+
+    if (thresholdRedInput) {
+      thresholdRedInput.value = pulseConfig.getFloat('thresholdredproduction', 60);
+      if (pulseConfig.getDefaultFloat('thresholdredproduction') !== pulseConfig.getFloat('thresholdredproduction')) {
+        thresholdRedInput.setAttribute('overridden', 'true');
+      }
+      thresholdRedInput.addEventListener('change', () => {
+        const ttVal = thresholdTarget ? thresholdTarget.value : '';
+        const trVal = thresholdRedInput.value;
+        this._verficationThresholds(ttVal, trVal);
+      });
+    }
+
+    const showWorkInfoChk = document.getElementById('showworkinfo');
+    if (showWorkInfoChk) {
+      showWorkInfoChk.checked = pulseConfig.getBool('showworkinfo');
+      if (pulseConfig.getDefaultBool('showworkinfo') != pulseConfig.getBool('showworkinfo')) {
+        showWorkInfoChk.setAttribute('overridden', 'true');
+      }
+
+      showWorkInfoChk.addEventListener('change', function () {
+        let isChecked = this.checked;
+        pulseConfig.set('showworkinfo', isChecked);
+        document.querySelectorAll('x-workinfo').forEach(el => {
+          el.style.display = isChecked ? '' : 'none';
+        });
+      });
+      showWorkInfoChk.dispatchEvent(new Event('change', { bubbles: true }));
+    }
   }
 
   /**
@@ -197,33 +200,39 @@ class OeeViewPage extends pulsePage.BasePage {
    */
   // Initialize the production gauge display mode radios
   _productionGaugeDisplayMode() {
-    const showPercentRadio = $('#productiongaugepercent');
-    const showRatioRadio = $('#productiongaugeratio');
+    const showPercentRadio = document.getElementById('productiongaugepercent');
+    const showRatioRadio = document.getElementById('productiongaugeratio');
 
-    if (pulseConfig.getBool('showpercent')) {
-      showPercentRadio.prop('checked', true);
-    } else {
-      showRatioRadio.prop('checked', true);
-    }
-
-    if (pulseConfig.getDefaultBool('showpercent') !== pulseConfig.getBool('showpercent')) {
-      showPercentRadio.attr('overridden', 'true');
-      showRatioRadio.attr('overridden', 'true');
-    }
-
-    showPercentRadio.change(function () {
-      if (showPercentRadio.is(':checked')) {
-        pulseConfig.set('showpercent', true);
-        $('x-productiongauge').attr('display-mode', 'percent');
+    if (showPercentRadio && showRatioRadio) {
+      if (pulseConfig.getBool('showpercent')) {
+        showPercentRadio.checked = true;
+      } else {
+        showRatioRadio.checked = true;
       }
-    });
 
-    showRatioRadio.change(function () {
-      if (showRatioRadio.is(':checked')) {
-        pulseConfig.set('showpercent', false);
-        $('x-productiongauge').attr('display-mode', 'ratio');
+      if (pulseConfig.getDefaultBool('showpercent') !== pulseConfig.getBool('showpercent')) {
+        showPercentRadio.setAttribute('overridden', 'true');
+        showRatioRadio.setAttribute('overridden', 'true');
       }
-    });
+
+      showPercentRadio.addEventListener('change', function () {
+        if (showPercentRadio.checked) {
+          pulseConfig.set('showpercent', true);
+          document.querySelectorAll('x-productiongauge').forEach(el => {
+            el.setAttribute('display-mode', 'percent');
+          });
+        }
+      });
+
+      showRatioRadio.addEventListener('change', function () {
+        if (showRatioRadio.checked) {
+          pulseConfig.set('showpercent', false);
+          document.querySelectorAll('x-productiongauge').forEach(el => {
+            el.setAttribute('display-mode', 'ratio');
+          });
+        }
+      });
+    }
   }
 
   /**
@@ -315,28 +324,33 @@ class OeeViewPage extends pulsePage.BasePage {
    */
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.val(value);
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.value = value;
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultRadioGroup = (value, valueToIdMap, { trigger = true } = {}) => {
       Object.values(valueToIdMap).forEach((id) => {
-        $('#' + id).removeAttr('overridden');
+        const el = document.getElementById(id);
+        if (el) el.removeAttribute('overridden');
       });
       const targetId = valueToIdMap[value];
       if (targetId) {
-        const element = $('#' + targetId);
-        element.prop('checked', true);
-        if (trigger) element.change();
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.checked = true;
+          if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+        }
       }
     };
 
@@ -382,7 +396,7 @@ class OeeViewPage extends pulsePage.BasePage {
     return options.map(opt => {
       const el = document.getElementById(opt.id);
       // [MODIF] If element is hidden (historical mode), skip it
-      if (!el || $(el).is(':hidden')) return '';
+      if (!el || (el.offsetWidth === 0 && el.offsetHeight === 0 && el.getClientRects().length === 0)) return '';
 
       const paramName = opt.param || opt.id;
       if (opt.type === 'checkbox' || opt.type === 'radio') {
@@ -404,26 +418,29 @@ class OeeViewPage extends pulsePage.BasePage {
   buildContent() {
     let showPercent = pulseConfig.getBool('showpercent');
     let displayMode = showPercent ? 'percent' : 'ratio';
-    $('x-productiongauge').attr('display-mode', displayMode);
+    document.querySelectorAll('x-productiongauge').forEach(el => {
+      el.setAttribute('display-mode', displayMode);
+    });
 
     let showworkinfo = pulseConfig.getBool('showworkinfo');
-    if (showworkinfo) {
-      $('x-workinfo').show();
-    } else {
-      $('x-workinfo').hide();
-    }
+    document.querySelectorAll('x-workinfo').forEach(el => {
+      el.style.display = showworkinfo ? '' : 'none';
+    });
   }
 }
 
-$(document).ready(function () {
-  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new OeeViewPage());
-
-  // In live mode, the period is managed in real time by x-periodmanager —
-  // x-periodtoolbar (manual period navigation) is irrelevant and hidden.
   let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
-  // Hide period toolbar if context is "live"
   if (tmpContexts && tmpContexts.includes('live')) {
-    $('x-periodtoolbar').hide();
+    document.querySelectorAll('x-periodtoolbar').forEach(el => el.style.display = 'none');
   }
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new OeeViewPage());
+    let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
+    if (tmpContexts && tmpContexts.includes('live')) {
+      document.querySelectorAll('x-periodtoolbar').forEach(el => el.style.display = 'none');
+    }
+  });
+}
