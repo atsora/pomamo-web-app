@@ -241,5 +241,23 @@ module.exports = {
       src: 'src/pages/template_login.html',
       dest: 'dist-es2015/validate.html'
     }]
+  },
+  'vue-tasks': {
+    options: {
+      content: { pagename: 'vue-tasks' }
+    },
+    files: [{
+      src: 'src/pages/template.html',
+      dest: 'dist-es2015/vue-tasks.html'
+    }]
+  },
+  'vue-execution': {
+    options: {
+      content: { pagename: 'vue-execution' }
+    },
+    files: [{
+      src: 'src/pages/template.html',
+      dest: 'dist-es2015/vue-execution.html'
+    }]
   }
 }

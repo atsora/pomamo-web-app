@@ -153,6 +153,12 @@ SPDX-License-Identifier: Apache-2.0
           </div>
         </div>
 
+        <!-- Vue app container: hidden by default, revealed by common_page.js on vue-* pages -->
+        <div id="vue-app-container" style="display:none;">
+          <div id="vue-app"></div>
+          <div id="vue-overlay-target"></div>
+        </div>
+
         <div class="pulse-mainarea">
           <div class="pulse-mainarea-full">
             <div class="pulse-mainarea-inner">
@@ -259,6 +265,9 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
   </div>
+  <!-- Vue app bundle (built from atsora-vue via pnpm build; hashes patched by patch-pulse-template) -->
+  <link rel="stylesheet" href="./vue-dist/static/index.css">
+  <script type="module" src="./vue-dist/static/index.js"></script>
 </body>
 
 </html>

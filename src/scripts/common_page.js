@@ -114,6 +114,50 @@ var closeParameterPanel = exports.closeParameterPanel = function (instant) {
   if (btn) btn.classList.remove('activated');
 };
 
+// --- Vue <-> Pulse integration ----------------------------------------------
+// The Vue app (atsora-vue) is mounted once into #vue-app and driven at runtime
+// through the bridge it exposes on window (see atsora-vue/src/pulse/bridges.ts):
+//   window.__vueRouter            - Vue Router instance
+//   window.__vueSetMachines(ids)  - push the selected machine ids to the Vue store
+//   window.__vueOpenExecDialog(id?) - open the task execution dialog in the Vue app
+//   window.__setLocale(locale)    - sync the Pulse language into Vue i18n
+
+// Maps a Pulse nav page (vue-*) to its Vue router route.
+var vuePageRoutes = {
+  'vue-tasks': '/tasks',
+  'vue-execution': '/execution'
+};
+
+// Current machine id selection, read straight from x-machineselection.
+var getSelectedMachines = function () {
+  let el = qs('x-machineselection');
+  return (el && typeof el.getMachinesArray === 'function') ? el.getMachinesArray() : [];
+};
+
+// The Vue bundle is a deferred ES module, so the bridge may not be ready when a
+// vue-* page is first prepared. Run cb as soon as window.__vueRouter exists.
+var whenVueReady = function (cb) {
+  if (window.__vueRouter) { cb(); return; }
+  let attempts = 0;
+  let timer = setInterval(function () {
+    if (window.__vueRouter) { clearInterval(timer); cb(); }
+    else if (++attempts > 100) clearInterval(timer); // give up after ~5s
+  }, 50);
+};
+
+// Show the Vue container and navigate to the route for the given vue-* page.
+var showVuePage = function (pageName) {
+  let route = vuePageRoutes[pageName] || ('/' + pageName.replace('vue-', ''));
+  let mainArea = qs('.pulse-mainarea');
+  if (mainArea) mainArea.style.display = 'none';
+  let container = qs('#vue-app-container');
+  if (container) container.style.display = 'flex';
+  whenVueReady(function () {
+    if (window.__vueSetMachines) window.__vueSetMachines(getSelectedMachines());
+    window.__vueRouter.push(route);
+  });
+};
+
 var populateNavigationPanel = function () {
   let currentPage = window.location.href.replace(/(.*\/)([^\\]*)(\.html.*)/, '$2');
   let displayedPages = pulseConfig.getArray('displayedPages');
@@ -632,6 +676,8 @@ var themeManager = {
       let stale = document.querySelectorAll('link[rel=stylesheet][href*="./styles/style_' + oldTheme + '/' + pageName + '.css"]');
       for (let i = 0; i < stale.length; i++) stale[i].remove();
     }
+    // Sync Vue/PrimeVue/Tailwind dark mode (PrimeVue darkModeSelector = '.dark' on <html>).
+    document.documentElement.classList.toggle('dark', name === 'dark');
   },
   current: function () { return pulseConfig.getString('theme', 'dark'); }
 };
@@ -772,6 +818,11 @@ exports.preparePage = function (currentPageMethods) {
     _allMachinesCache = ids.map(s => String(s).trim()).filter(s => s !== '');
     _currentRotationIndex = 0;
     startRotationEngine();
+    // Forward the selection to the Vue app while its container is visible.
+    let vueContainer = qs('#vue-app-container');
+    if (window.__vueSetMachines && vueContainer && vueContainer.offsetParent !== null) {
+      window.__vueSetMachines(_allMachinesCache);
+    }
   };
   eventBus.EventBus.addGlobalEventListener(this, 'machineListChanged', onMachineListChanged);
 
@@ -802,6 +853,9 @@ exports.preparePage = function (currentPageMethods) {
   }
 
   let pageNameFromUrl = pulseUtility.getCurrentPageName();
+  // A vue-* page loaded directly (e.g. vue-tasks.html): reveal the Vue container
+  // and route to it once the Vue bridge is ready.
+  if (pageNameFromUrl.startsWith('vue-')) showVuePage(pageNameFromUrl);
   let title1 = pulseConfig.pulseTranslate('general.title', 'Atsora Tracking');
   let title2 = pulseConfig.pulseTranslate('pages.' + pageNameFromUrl + '.title', '');
   let titleEl = document.head.querySelector('title');

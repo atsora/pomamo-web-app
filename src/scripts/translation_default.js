@@ -232,6 +232,12 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   },
   motionsummary: {
     title: 'Motion summary'
+  },
+  'vue-tasks': {
+    title: 'Tasks'
+  },
+  'vue-execution': {
+    title: 'Execution'
   }
 };
 
@@ -460,6 +466,12 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   },
   motionsummary: {
     title: 'Statut courant'
+  },
+  'vue-tasks': {
+    title: 'Tâches'
+  },
+  'vue-execution': {
+    title: 'Exécution'
   }
 };
 
@@ -688,6 +700,12 @@ ATSORA_LOCALE_CATALOG.de.pages = {
   },
   motionsummary: {
     title: 'Betriebsübersicht'
+  },
+  'vue-tasks': {
+    title: 'Aufgaben'
+  },
+  'vue-execution': {
+    title: 'Ausführung'
   }
 };
 
