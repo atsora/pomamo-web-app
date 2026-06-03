@@ -32,6 +32,19 @@
 @import "x-productionbar/x-productionbar.less";
 @import "x-productiongauge/x-productiongauge.less";
 @import "x-currenticoncncalarm/x-currenticoncncalarm.less";
+@import "x-taskslist/x-taskslist.less";
+
+// Optional task list (toggled by the `showtasklist` option, hidden by default).
+// Fixed, narrow column so the production tracker graph keeps its flexible space
+// (a `width:100%` basis here would shrink the graph — basis 0 — down to nothing).
+.tasklist-content {
+  flex: 0 0 240px;
+  width: 240px;
+  max-width: 240px;
+  min-height: 8em;
+  overflow: auto;
+  box-sizing: border-box;
+}
 
 
 // ==========================================
@@ -833,6 +846,13 @@ x-machinetab .machinetab-machine-cell {
   }
   .stats-perf-wrapper {
     flex-direction: column !important;
+  }
+  // Column layout: the task list spans the full width (the desktop fixed
+  // 240px basis would otherwise become a fixed height in column mode).
+  .tasklist-content {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
   }
   .title-number-content {
     display: none !important;

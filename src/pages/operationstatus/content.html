@@ -7,12 +7,21 @@ SPDX-License-Identifier: Apache-2.0
 
 <x-signalbanner from-machine-selection></x-signalbanner>
 
-<div class='main-table-box'>
-  <x-rotationprogress display-mode="bar"></x-rotationprogress>
+<div class="operationstatus-layout">
+  <div class='main-table-box'>
+    <x-rotationprogress display-mode="bar"></x-rotationprogress>
 
-  <x-periodmanager period-context="operationstatus" exclude-now='false'></x-periodmanager>
+    <x-periodmanager period-context="operationstatus" exclude-now='false'></x-periodmanager>
 
-  <x-groupgrid templateid='boxtoclone'></x-groupgrid>
+    <x-groupgrid templateid='boxtoclone'></x-groupgrid>
 
-  <x-rotationprogress display-mode="text"></x-rotationprogress>
+    <x-rotationprogress display-mode="text"></x-rotationprogress>
+  </div>
+
+  <!-- Right-side task nav (toggled by the `showtasklist` option, hidden by default).
+       `all-machines`: tasks across every machine for the current role (no single
+       machine tracked on this page — it shows the whole group grid). -->
+  <aside class="tasklist-nav">
+    <x-taskslist all-machines></x-taskslist>
+  </aside>
 </div>

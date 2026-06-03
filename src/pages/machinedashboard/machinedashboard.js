@@ -16,6 +16,7 @@ require('x-datetimegraduation/x-datetimegraduation');
 require('x-barstack/x-barstack'); // pulls in all bar components
 require('x-toollifemachine/x-toollifemachine');
 require('x-productiontrackergraph/x-productiontrackergraph');
+require('x-taskslist/x-taskslist');
 require('x-reasongroups/x-reasongroups');
 require('x-fieldlegends/x-fieldlegends');
 require('x-machinemodelegends/x-machinemodelegends');
@@ -181,6 +182,19 @@ class machinedashboardPage extends pulsePage.BasePage {
         let show = showTrackerGraphCB.checked;
         pulseConfig.set('showproductiontrackergraph', show);
         _setDisplayAll('x-productiontrackergraph', show ? '' : 'none');
+      });
+    }
+
+    // --- SHOW TASK LIST ---
+    const showTaskListCB = document.getElementById('showtasklist');
+    if (showTaskListCB) {
+      showTaskListCB.checked = pulseConfig.getBool('showtasklist');
+      if (pulseConfig.getDefaultBool('showtasklist') != pulseConfig.getBool('showtasklist'))
+        showTaskListCB.setAttribute('overridden', 'true');
+      showTaskListCB.addEventListener('change', function () {
+        let show = showTaskListCB.checked;
+        pulseConfig.set('showtasklist', show);
+        _setDisplayAll('.tasklist-content', show ? '' : 'none');
       });
     }
 
@@ -492,6 +506,9 @@ class machinedashboardPage extends pulsePage.BasePage {
     // Production tracker graph
     setDefaultChecked('showproductiontrackergraph');
 
+    // Task list
+    setDefaultChecked('showtasklist');
+
     // Production bar
     setDefaultChecked('showproductionbar');
     setDefaultRadioGroup(pulseConfig.getDefaultBool('showpercent') ? 'percent' : 'ratio', {
@@ -528,6 +545,7 @@ class machinedashboardPage extends pulsePage.BasePage {
     const options = [
       { id: 'showChangedTools', type: 'checkbox' },
       { id: 'showproductiontrackergraph', type: 'checkbox' },
+      { id: 'showtasklist', type: 'checkbox' },
       { id: 'openStopClassification', type: 'checkbox' },
       { id: 'stopClassificationReopenDelay', type: 'value' },
       { id: 'showproductionbar', type: 'checkbox' },
@@ -586,6 +604,9 @@ class machinedashboardPage extends pulsePage.BasePage {
 
     let showproductiontrackergraph = pulseConfig.getBool('showproductiontrackergraph');
     _setDisplayAll('x-productiontrackergraph', showproductiontrackergraph ? '' : 'none');
+
+    let showtasklist = pulseConfig.getBool('showtasklist');
+    _setDisplayAll('.tasklist-content', showtasklist ? '' : 'none');
 
     let showproductionbar = pulseConfig.getBool('showproductionbar');
     _setDisplayAll('x-productionbar', showproductionbar ? '' : 'none');

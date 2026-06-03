@@ -33,7 +33,30 @@
 @import "x-reasonslotlist/x-reasonslotlist.less";
 @import "x-unansweredreasonslotlist/x-unansweredreasonslotlist.less";
 @import "x-motionpercentage/x-motionpercentage.less";
+@import "x-taskslist/x-taskslist.less";
 @import "style.less";
+
+
+// Right-side task nav: main grid on the left, task list aside on the right.
+// The aside is toggled by the `showtasklist` option (hidden by default).
+.operationstatus-layout {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.operationstatus-layout .main-table-box {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+}
+.tasklist-nav {
+  flex: 0 0 240px;
+  min-width: 0;
+  overflow: auto;
+  box-sizing: border-box;
+}
 
 
 // === MODE NORMAL (defaut, em/rem) ===

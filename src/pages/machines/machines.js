@@ -26,6 +26,7 @@ require('x-cycleprogressbar/x-cycleprogressbar');
 require('x-performancebar/x-performancebar');
 require('x-productionmachiningstatus/x-productionmachiningstatus');
 require('x-toollifemachine/x-toollifemachine');
+require('x-task/x-task');
 
 require('x-cyclesinperiod/x-cyclesinperiod');
 

@@ -25,6 +25,7 @@ require('x-toollifemachine/x-toollifemachine');
 require('x-reasonbutton/x-reasonbutton');
 require('x-lastmachinestatus/x-lastmachinestatus');
 require('x-rotationprogress/x-rotationprogress');
+require('x-taskslist/x-taskslist');
 
 /* For Bar display and some defaultpie */
 require('x-periodmanager/x-periodmanager');
@@ -231,6 +232,21 @@ class OperationStatusPage extends pulsePage.BasePage {
         });
       });
     };
+
+    // --- SHOW TASK LIST (right-side nav) ---
+    const showTaskListEl = document.getElementById('showtasklist');
+    if (showTaskListEl) {
+      showTaskListEl.checked = pulseConfig.getBool('showtasklist');
+      if (pulseConfig.getDefaultBool('showtasklist') != pulseConfig.getBool('showtasklist'))
+        showTaskListEl.setAttribute('overridden', 'true');
+      showTaskListEl.addEventListener('change', function () {
+        pulseConfig.set('showtasklist', this.checked);
+        document.querySelectorAll('.tasklist-nav').forEach(el => {
+          el.style.display = this.checked ? '' : 'none';
+        });
+      });
+      showTaskListEl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
 
     const showworkinfoEl = document.getElementById('showworkinfo');
     showworkinfoEl.checked = pulseConfig.getBool('showworkinfo');
@@ -736,6 +752,7 @@ class OperationStatusPage extends pulsePage.BasePage {
       }
     };
 
+    setDefaultChecked('showtasklist');
     setDefaultChecked('showworkinfo');
     setDefaultRadioGroup(pulseConfig.getDefaultBool('showworkinfosmall') ? 'small' : 'big', {
       small: 'showworkinfosmall',
@@ -800,6 +817,7 @@ class OperationStatusPage extends pulsePage.BasePage {
   // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
     const options = [
+      { id: 'showtasklist', type: 'checkbox' },
       { id: 'showworkinfo', type: 'checkbox' },
       { id: 'showworkinfosmall', type: 'checkbox' },
       { id: 'showcurrentmachinestatuslogo', type: 'checkbox' },
@@ -938,6 +956,11 @@ class OperationStatusPage extends pulsePage.BasePage {
    *  - utilization bar + barshowpercent
    */
   buildContent() {
+    let showtasklist = pulseConfig.getBool('showtasklist');
+    document.querySelectorAll('.tasklist-nav').forEach(el => {
+      el.style.display = showtasklist ? '' : 'none';
+    });
+
     let showworkinfo = pulseConfig.getBool('showworkinfo');
     let showproduction = pulseConfig.getBool('showproduction');
 

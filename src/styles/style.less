@@ -433,6 +433,14 @@ body {
     display: flex;
     flex-direction: column;
   }
+
+  // Pulse already frames the area with this container's border + radius, so drop
+  // the Vue page card's own border/radius — it fills the container seamlessly
+  // (the container's overflow clips the content to the rounded corners).
+  [data-vue-page-content] {
+    border: none;
+    border-radius: 0;
+  }
 }
 
 .pulse-mainarea {
