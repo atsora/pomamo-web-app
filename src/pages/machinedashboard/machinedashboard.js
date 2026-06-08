@@ -1,5 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
-// Copyright (C) 2025 Atsora Solutions
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -59,7 +59,8 @@ function _setDisplayAll(selector, value) {
  *  - `showproductiondisplay`         : show production gauge/pie
  *  - `showproductiongauge`           : gauge (true) or pie chart (false)
  *  - `thresholdtargetproduction` / `thresholdredproduction` : color thresholds
- *  - `showcncalarmicon`              : show the per-machine CNC alarm icon
+ *  - `showalarm`                     : show the per-machine CNC alarm icon
+ *  - `showUnknownAlarm`              : include unknown (non-focused) alarms in the icon query
  *
  * @extends pulsePage.BasePage
  */
@@ -135,7 +136,7 @@ class machinedashboardPage extends pulsePage.BasePage {
    *  6. showpercent            — % vs ratio radios (x-productionbar + x-productiongauge)
    *  7. showproductiondisplay + showproductiongauge — gauge vs pie (nested)
    *  8. thresholds             — color thresholds (validated via `_verficationThresholds`)
-   *  9. showcncalarmicon       — CNC alarm icon visibility
+   *  9. showalarm              — CNC alarm icon visibility (+ showUnknownAlarm sub-option)
    *
    * Final triggers: manually fires key option listeners to sync visual state
    * as soon as the panel opens.
@@ -292,16 +293,31 @@ class machinedashboardPage extends pulsePage.BasePage {
         () => this._verficationThresholds(thresholdTarget ? thresholdTarget.value : '', thresholdRedInput.value, true));
     }
 
-    // --- 9. SHOW CNC ALARM ICON ---
-    const showCncAlarmIconCB = document.getElementById('showcncalarmicon');
-    if (showCncAlarmIconCB) {
-      showCncAlarmIconCB.checked = pulseConfig.getBool('showcncalarmicon');
-      if (pulseConfig.getDefaultBool('showcncalarmicon') != pulseConfig.getBool('showcncalarmicon'))
-        showCncAlarmIconCB.setAttribute('overridden', 'true');
-      showCncAlarmIconCB.addEventListener('change', function () {
-        let show = showCncAlarmIconCB.checked;
-        pulseConfig.set('showcncalarmicon', show);
+    // --- 9. SHOW CURRENT ALARM (CNC alarm icon) ---
+    const showAlarmCB = document.getElementById('showalarm');
+    if (showAlarmCB) {
+      showAlarmCB.checked = pulseConfig.getBool('showalarm');
+      if (pulseConfig.getDefaultBool('showalarm') != pulseConfig.getBool('showalarm'))
+        showAlarmCB.setAttribute('overridden', 'true');
+      showAlarmCB.addEventListener('change', function () {
+        let show = showAlarmCB.checked;
+        pulseConfig.set('showalarm', show);
         _setDisplayAll('.cncalarmicon-content', show ? 'flex' : 'none');
+        document.querySelectorAll('.showalarmdetails').forEach(el => {
+          el.style.display = show ? '' : 'none';
+        });
+      });
+    }
+
+    // Alarm sub-option: include unknown (non-focused) alarms in the icon query
+    const showUnknownAlarmCB = document.getElementById('showUnknownAlarm');
+    if (showUnknownAlarmCB) {
+      showUnknownAlarmCB.checked = pulseConfig.getBool('showUnknownAlarm');
+      if (pulseConfig.getDefaultBool('showUnknownAlarm') != pulseConfig.getBool('showUnknownAlarm'))
+        showUnknownAlarmCB.setAttribute('overridden', 'true');
+      showUnknownAlarmCB.addEventListener('change', function () {
+        pulseConfig.set('showUnknownAlarm', showUnknownAlarmCB.checked);
+        eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'showUnknownAlarm' });
       });
     }
 
@@ -310,7 +326,7 @@ class machinedashboardPage extends pulsePage.BasePage {
     if (openStopCB) openStopCB.dispatchEvent(new Event('change', { bubbles: true }));
     if (showBarCB) showBarCB.dispatchEvent(new Event('change', { bubbles: true }));
     if (showProdDisplayCB) showProdDisplayCB.dispatchEvent(new Event('change', { bubbles: true }));
-    if (showCncAlarmIconCB) showCncAlarmIconCB.dispatchEvent(new Event('change', { bubbles: true }));
+    if (showAlarmCB) showAlarmCB.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   /**
@@ -512,7 +528,8 @@ class machinedashboardPage extends pulsePage.BasePage {
     setDefaultValue('thresholdredproductionbar', pulseConfig.getDefaultFloat('thresholdredproduction'));
 
     // CNC alarm icon
-    setDefaultChecked('showcncalarmicon');
+    setDefaultChecked('showalarm');
+    setDefaultChecked('showUnknownAlarm');
   }
 
   /**
@@ -536,7 +553,8 @@ class machinedashboardPage extends pulsePage.BasePage {
       { id: 'productiongauge', type: 'radio', param: 'showproductiongauge' },
       { id: 'thresholdtargetproductionbar', type: 'value', param: 'thresholdtargetproduction' },
       { id: 'thresholdredproductionbar', type: 'value', param: 'thresholdredproduction' },
-      { id: 'showcncalarmicon', type: 'checkbox' }
+      { id: 'showalarm', type: 'checkbox' },
+      { id: 'showUnknownAlarm', type: 'checkbox' }
     ];
 
     return options.map(opt => {
@@ -566,7 +584,7 @@ class machinedashboardPage extends pulsePage.BasePage {
    *  - `showproductionbar`                             → x-productionbar + `.performancebar-bar-border`
    *  - `showChangedTools`                              → `.changedtools-content`
    *  - `showpercent`                                   → `display-mode` attribute on x-productionbar + x-productiongauge
-   *  - `showcncalarmicon`                              → `.cncalarmicon-content`
+   *  - `showalarm`                                     → `.cncalarmicon-content`
    *
    * Note: bars (x-barstack) read pulseConfig directly — no need to drive them here.
    */
@@ -594,7 +612,7 @@ class machinedashboardPage extends pulsePage.BasePage {
     let showChangedTools = pulseConfig.getBool('showChangedTools');
     _setDisplayAll('.changedtools-content', showChangedTools ? 'flex' : 'none');
 
-    let showCncAlarmIcon = pulseConfig.getBool('showcncalarmicon');
+    let showCncAlarmIcon = pulseConfig.getBool('showalarm');
     _setDisplayAll('.cncalarmicon-content', showCncAlarmIcon ? 'flex' : 'none');
 
     // Apply display mode (percent/ratio) to freshly created clones

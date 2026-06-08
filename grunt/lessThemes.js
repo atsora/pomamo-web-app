@@ -1,3 +1,8 @@
+// Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2023-2026 Atsora Solutions
+//
+// SPDX-License-Identifier: Apache-2.0
+
 // WARNING ! 'dist-es2015/styles' directory MUST exist before starting lessTheme (copy:css do it)
 module.exports = {
   build : {
