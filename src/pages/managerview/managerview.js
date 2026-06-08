@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -64,88 +65,99 @@ class ManagerViewPage extends pulsePage.BasePage {
   // CONFIG PANEL - Init
   initOptionValues() {
     // Shift
-    $('#displayshiftrangemanagerview').prop('checked', pulseConfig.getBool('displayshiftrange'));
-    if (pulseConfig.getDefaultBool('displayshiftrange') != pulseConfig.getBool('displayshiftrange'))
-      $('#displayshiftrangemanagerview').attr('overridden', 'true');
-    $('#displayshiftrangemanagerview').change(function () {
-      let displayShift = $('#displayshiftrangemanagerview').is(':checked');
-      // Store
-      pulseConfig.set('displayshiftrange', displayShift);
-      // Dispatch
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'displayshiftrange' });
-      // Show / Hide linked config
-      if (displayShift) {
-        $('#timeframemanagerview').hide();
-      }
-      else {
-        $('#timeframemanagerview').show();
-      }
-    });
-    $('#displayshiftrangemanagerview').change();
+    const shiftRangeEl = document.getElementById('displayshiftrangemanagerview');
+    const timeframeEl = document.getElementById('timeframemanagerview');
+    if (shiftRangeEl) {
+      shiftRangeEl.checked = pulseConfig.getBool('displayshiftrange');
+      if (pulseConfig.getDefaultBool('displayshiftrange') != pulseConfig.getBool('displayshiftrange'))
+        shiftRangeEl.setAttribute('overridden', 'true');
+      shiftRangeEl.addEventListener('change', function () {
+        let displayShift = shiftRangeEl.checked;
+        // Store
+        pulseConfig.set('displayshiftrange', displayShift);
+        // Dispatch
+        eventBus.EventBus.dispatchToAll('configChangeEvent',
+          { 'config': 'displayshiftrange' });
+        // Show / Hide linked config
+        if (timeframeEl) {
+          timeframeEl.style.display = displayShift ? 'none' : '';
+        }
+      });
+      shiftRangeEl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
 
     // Days / Hours
-    $('#displaydaysrange').val(pulseConfig.getInt('displaydaysrange'));
-    if (pulseConfig.getDefaultInt('displaydaysrange') != pulseConfig.getInt('displaydaysrange')) {
-      $('#displaydaysrange').attr('overridden', 'true');
+    const daysRangeEl = document.getElementById('displaydaysrange');
+    const hoursRangeEl = document.getElementById('displayhoursrange');
+    if (daysRangeEl) {
+      daysRangeEl.value = pulseConfig.getInt('displaydaysrange');
+      if (pulseConfig.getDefaultInt('displaydaysrange') != pulseConfig.getInt('displaydaysrange')) {
+        daysRangeEl.setAttribute('overridden', 'true');
+      }
     }
     var changeDays = function () {
-      $('#displaydaysrange').attr('overridden', true);
-      let displaydaysrange = $('#displaydaysrange').val();
+      if (!daysRangeEl || !hoursRangeEl) return;
+      daysRangeEl.setAttribute('overridden', 'true');
+      let displaydaysrange = daysRangeEl.value;
       // Display
-      let displayhoursrange = $('#displayhoursrange').val();
-      if (displaydaysrange == '0'
-        && displayhoursrange == '0') {
-        $('#displaydaysrange').addClass('missing-config');
-        $('#displayhoursrange').addClass('missing-config');
+      let displayhoursrange = hoursRangeEl.value;
+      if (displaydaysrange == '0' && displayhoursrange == '0') {
+        daysRangeEl.classList.add('missing-config');
+        hoursRangeEl.classList.add('missing-config');
       }
       else {
         // Store both in case of 0 value and previous missing config
         pulseConfig.set('displaydaysrange', displaydaysrange);
         pulseConfig.set('displayhoursrange', displayhoursrange);
         // Display
-        $('#displaydaysrange').removeClass('missing-config');
-        $('#displayhoursrange').removeClass('missing-config');
+        daysRangeEl.classList.remove('missing-config');
+        hoursRangeEl.classList.remove('missing-config');
 
         eventBus.EventBus.dispatchToAll('configChangeEvent',
           { 'config': 'displaydaysrange' });
       }
     };
-    $('#displaydaysrange').bind('input', changeDays);
-    $('#displaydaysrange').change(changeDays);
+    if (daysRangeEl) {
+      daysRangeEl.addEventListener('input', changeDays);
+      daysRangeEl.addEventListener('change', changeDays);
+    }
 
     // Hours
-    $('#displayhoursrange').val(pulseConfig.getInt('displayhoursrange'));
-    if (pulseConfig.getDefaultInt('displayhoursrange') != pulseConfig.getInt('displayhoursrange')) {
-      $('#displayhoursrange').attr('overridden', 'true');
+    if (hoursRangeEl) {
+      hoursRangeEl.value = pulseConfig.getInt('displayhoursrange');
+      if (pulseConfig.getDefaultInt('displayhoursrange') != pulseConfig.getInt('displayhoursrange')) {
+        hoursRangeEl.setAttribute('overridden', 'true');
+      }
+      hoursRangeEl.addEventListener('change', function () {
+        this.setAttribute('overridden', 'true');
+      });
     }
-    $('#displayhoursrange').change(function () {
-      $(this).attr('overridden', true);
-    });
     var changeHours = function () {
-      $('#displayhoursrange').attr('overridden', true);
-      let displayhoursrange = $('#displayhoursrange').val();
+      if (!daysRangeEl || !hoursRangeEl) return;
+      hoursRangeEl.setAttribute('overridden', 'true');
+      let displayhoursrange = hoursRangeEl.value;
       // Display
-      let displaydaysrange = $('#displaydaysrange').val();
-      if (displaydaysrange == '0'
-        && displayhoursrange == '0') {
-        $('#displaydaysrange').addClass('missing-config');
-        $('#displayhoursrange').addClass('missing-config');
+      let displaydaysrange = daysRangeEl.value;
+      if (displaydaysrange == '0' && displayhoursrange == '0') {
+        daysRangeEl.classList.add('missing-config');
+        hoursRangeEl.classList.add('missing-config');
       }
       else {
         // Store both in case of 0 value and previous missing config
         pulseConfig.set('displaydaysrange', displaydaysrange);
         pulseConfig.set('displayhoursrange', displayhoursrange);
         // Display
-        $('#displaydaysrange').removeClass('missing-config');
-        $('#displayhoursrange').removeClass('missing-config');
+        daysRangeEl.classList.remove('missing-config');
+        hoursRangeEl.classList.remove('missing-config');
 
         eventBus.EventBus.dispatchToAll('configChangeEvent',
           { 'config': 'displayhoursrange' });
       }
     };
-    $('#displayhoursrange').bind('input', changeHours);
-    $('#displayhoursrange').change(changeHours);
+    if (hoursRangeEl) {
+      hoursRangeEl.addEventListener('input', changeHours);
+      hoursRangeEl.addEventListener('change', changeHours);
+    }
   }
 
   /**
@@ -162,17 +174,17 @@ class ManagerViewPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.val(value);
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.value = value;
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     setDefaultValue('displayhoursrange', 0);
@@ -250,23 +262,21 @@ class ManagerViewPage extends pulsePage.BasePage {
     // allows the native page configuration (not in options) of the bars : show reason bar == always -> idem for SHOW x-reasongroups
 
     let displayJob = pulseConfig.getBool('currentdisplay.displayjob', false);
-    if (displayJob)  // == LastWorkinformation
-      $('x-lastworkinformation').show();
-    else
-      $('x-lastworkinformation').hide();
+    document.querySelectorAll('x-lastworkinformation').forEach(el => {
+      el.style.display = displayJob ? '' : 'none';
+    });
 
-    // Bars are now managed by x-barstack reading pulseConfig directly.
-    // Only non-bar elements need explicit show/hide here.
     const showCncValue = pulseConfig.getBool('showcoloredbar.cncvalue', false);
-    if (showCncValue) {
-      $('x-fieldlegends').show();
-    } else {
-      $('x-fieldlegends').hide();
-    }
+    document.querySelectorAll('x-fieldlegends').forEach(el => {
+      el.style.display = showCncValue ? '' : 'none';
+    });
   }
 }
 
-$(document).ready(function () {
-  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new ManagerViewPage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new ManagerViewPage());
+  });
+}

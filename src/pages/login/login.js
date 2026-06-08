@@ -1,5 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
-// Copyright (C) 2025 Atsora Solutions
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -43,7 +43,13 @@ class LoginPage extends pulsePage.BasePage {
 
 }
 
-$(document).ready(function () {
+if (document.readyState !== 'loading') {
+  initLoginPage();
+} else {
+  document.addEventListener('DOMContentLoaded', initLoginPage);
+}
+
+function initLoginPage() {
   // Same as buildContent = remove extra URL parameters
   let url = window.location.href;
   if (-1 != url.search('AppContext=')) {
@@ -61,41 +67,51 @@ $(document).ready(function () {
   }
 
   // Disable the navigation panel, an other page must be chosen first
-  $('#homebtn').addClass('disabled');
+  const homeBtnEl = document.getElementById('homebtn');
+  if (homeBtnEl) {
+    homeBtnEl.classList.add('disabled');
+  }
 
   let useLogin = pulseConfig.getBool('useLogin', false);
+  const loginConnectionElements = document.querySelectorAll('x-loginconnection');
+  const allowLoginButtonElements = document.querySelectorAll('.allow-login-button');
+
   if (useLogin) {
-    $('x-loginconnection').show();
-    $('.allow-login-button').hide();
+    loginConnectionElements.forEach(el => el.style.display = '');
+    allowLoginButtonElements.forEach(el => el.style.display = 'none');
   }
   else { // not useLogin
-    $('x-loginconnection').hide();
-    $('.allow-login-button').show();
+    loginConnectionElements.forEach(el => el.style.display = 'none');
+    allowLoginButtonElements.forEach(el => el.style.display = '');
 
     // Add buttons
-    let hidden = $('<div></div>').addClass('login-hidden');
-    $('.allow-login-button').append(hidden);
+    allowLoginButtonElements.forEach(allowLoginButton => {
+      let hidden = document.createElement('div');
+      hidden.className = 'login-hidden';
+      allowLoginButton.appendChild(hidden);
 
-    let visible = $('<div></div>').addClass('login-visible');
-    $('.allow-login-button').append(visible);
+      let visible = document.createElement('div');
+      visible.className = 'login-visible';
+      allowLoginButton.appendChild(visible);
 
-    pulseSvg.inlineBackgroundSvg(hidden);
-    pulseSvg.inlineBackgroundSvg(visible);
+      pulseSvg.inlineBackgroundSvg(hidden);
+      pulseSvg.inlineBackgroundSvg(visible);
 
-    // Show / hide (default)
-    $(hidden).show();
-    $(visible).hide();
+      // Show / hide (default)
+      hidden.style.display = '';
+      visible.style.display = 'none';
 
-    $(hidden).click(function () {
-      $(visible).show();
-      $(hidden).hide();
-      $('x-loginconnection').show();
-    });
+      hidden.addEventListener('click', function () {
+        visible.style.display = '';
+        hidden.style.display = 'none';
+        loginConnectionElements.forEach(el => el.style.display = '');
+      });
 
-    $(visible).click(function () {
-      $(hidden).show();
-      $(visible).hide();
-      $('x-loginconnection').hide();
+      visible.addEventListener('click', function () {
+        hidden.style.display = '';
+        visible.style.display = 'none';
+        loginConnectionElements.forEach(el => el.style.display = 'none');
+      });
     });
 
     //if (!pulseConfig.currentRoleOrAppContextIsDefined()) { // NO ROLE is selected -> always here
@@ -108,51 +124,56 @@ $(document).ready(function () {
       img.src = url;
     }
 
-    let sectionLoginRoles = $('.login-roles');
+    let sectionLoginRoles = document.querySelector('.login-roles');
 
-    // Browse all roles
     for (let iRole = 0; iRole < roles.length; iRole++) {
       let role = roles[iRole];
       let roleConf = (PULSE_DEFAULT_CONFIG.roles && PULSE_DEFAULT_CONFIG.roles[role.role]) || {};
       if (!roleConf.noAccess) {
-        let container = $('<div></div>').addClass('select-role-div').attr('role', role.role);
-        let img = $('<div></div>').addClass('select-role-image');
+        let container = document.createElement('div');
+        container.className = 'select-role-div';
+        container.setAttribute('role', role.role);
+
+        let img = document.createElement('div');
+        img.className = 'select-role-image';
         let imgUrl = 'images/role-' + role.role + '.svg';
         imageExists(imgUrl, function (exists) {
           if (exists) {
-            img.css('backgroundImage', 'url(' + imgUrl + ')');
+            img.style.backgroundImage = 'url(' + imgUrl + ')';
           }
           else {
-            img.css('backgroundImage', 'url(images/role-default.svg)');
+            img.style.backgroundImage = 'url(images/role-default.svg)';
           }
           pulseSvg.inlineBackgroundSvg(img);
         });
 
-        container.append(img);
+        container.appendChild(img);
         let roleLabel = (ATSORA_CATALOG && ATSORA_CATALOG.general && ATSORA_CATALOG.general.roles)
           ? (ATSORA_CATALOG.general.roles[role.role] || role.role)
           : role.role;
-        let text = $('<div>' + roleLabel + '</div>');
-        container.append(text);
+        let text = document.createElement('div');
+        text.textContent = roleLabel;
+        container.appendChild(text);
 
-        container.click(function () {
-          let selectedRole = $(this).attr('role');
-
-          // Set the role
+        container.addEventListener('click', function () {
+          let selectedRole = this.getAttribute('role');
           pulseLogin.storeRole(selectedRole);
-
-          // Redirect through shared config logic (firstPage or fallback to home).
           pulseConfig.goToFirstPage(selectedRole);
         });
 
-        sectionLoginRoles.append(container);
+        sectionLoginRoles.appendChild(container);
       }
     }
   }
-  // Configuration panel disabled
-  $('#configpanelbtn').addClass('disabled');
-  $('#pulse-panel-parameter').hide();
 
-  // Prepare the page globally
+  const configpanelbtnEl = document.getElementById('configpanelbtn');
+  if (configpanelbtnEl) {
+    configpanelbtnEl.classList.add('disabled');
+  }
+  const pulsePanelParameterEl = document.getElementById('pulse-panel-parameter');
+  if (pulsePanelParameterEl) {
+    pulsePanelParameterEl.style.display = 'none';
+  }
+
   pulsePage.preparePage(new LoginPage());
-});
+}

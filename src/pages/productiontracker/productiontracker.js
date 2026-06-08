@@ -1,5 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
-// Copyright (C) 2025 Atsora Solutions
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -64,50 +64,52 @@ class ProductionTrackerPage extends pulsePage.BasePage {
   // CONFIG PANEL - Init
   initOptionValues() {
     var self = this;
-    // Prepare custom inputs / Visibilities
 
-    $('#thresholdtargetproduction').val(pulseConfig.getInt('thresholdtargetproduction'));
-    var changetarget = function () {
-      if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
-        $(this).attr('overridden', true);
-        // Store
-        if (pulseUtility.isInteger($('#thresholdtargetproduction').val())) {
-          // Display / Dispatch
-          eventBus.EventBus.dispatchToAll('configChangeEvent',
-            { 'config': 'thresholdtargetproduction' });
+    const thresholdTargetEl = document.getElementById('thresholdtargetproduction');
+    const thresholdRedEl = document.getElementById('thresholdredproduction');
+
+    if (thresholdTargetEl) {
+      thresholdTargetEl.value = pulseConfig.getInt('thresholdtargetproduction');
+      var changetarget = function () {
+        if (self._verficationThresholds(thresholdTargetEl.value, thresholdRedEl ? thresholdRedEl.value : '')) {
+          thresholdTargetEl.setAttribute('overridden', true);
+          if (pulseUtility.isInteger(thresholdTargetEl.value)) {
+            eventBus.EventBus.dispatchToAll('configChangeEvent',
+              { 'config': 'thresholdtargetproduction' });
+          }
         }
-      }
-    };
-    $('#thresholdtargetproduction').bind('input', changetarget);
-    $('#thresholdtargetproduction').change(changetarget);
-
-    $('#thresholdredproduction').val(pulseConfig.getInt('thresholdredproduction'));
-    var changeRed = function () {
-      if (self._verficationThresholds($('#thresholdtargetproduction').val(), $('#thresholdredproduction').val())) {
-        $(this).attr('overridden', true);
-        // Store
-        if (pulseUtility.isInteger($('#thresholdredproduction').val())) {
-          // Display / Dispatch
-          eventBus.EventBus.dispatchToAll('configChangeEvent',
-            { 'config': 'thresholdredproduction' });
-        }
-      }
-    };
-    $('#thresholdredproduction').bind('input', changeRed);
-    $('#thresholdredproduction').change(changeRed);
-
-    // showreservecapacity
-    $('#showreservecapacity').prop('checked', pulseConfig.getBool('showreservecapacity'));
-    if (pulseConfig.getDefaultBool('showreservecapacity') != pulseConfig.getBool('showreservecapacity')) {
-      $('#showreservecapacity').attr('overridden', 'true');
+      };
+      thresholdTargetEl.addEventListener('input', changetarget);
+      thresholdTargetEl.addEventListener('change', changetarget);
     }
-    $('#showreservecapacity').change(function () {
-      pulseConfig.set('showreservecapacity', $('#showreservecapacity').is(':checked'));
 
-      eventBus.EventBus.dispatchToAll('configChangeEvent',
-        { 'config': 'showreservecapacity' });
-    });
+    if (thresholdRedEl) {
+      thresholdRedEl.value = pulseConfig.getInt('thresholdredproduction');
+      var changeRed = function () {
+        if (self._verficationThresholds(thresholdTargetEl ? thresholdTargetEl.value : '', thresholdRedEl.value)) {
+          thresholdRedEl.setAttribute('overridden', true);
+          if (pulseUtility.isInteger(thresholdRedEl.value)) {
+            eventBus.EventBus.dispatchToAll('configChangeEvent',
+              { 'config': 'thresholdredproduction' });
+          }
+        }
+      };
+      thresholdRedEl.addEventListener('input', changeRed);
+      thresholdRedEl.addEventListener('change', changeRed);
+    }
 
+    const showreservecapacityEl = document.getElementById('showreservecapacity');
+    if (showreservecapacityEl) {
+      showreservecapacityEl.checked = pulseConfig.getBool('showreservecapacity');
+      if (pulseConfig.getDefaultBool('showreservecapacity') != pulseConfig.getBool('showreservecapacity')) {
+        showreservecapacityEl.setAttribute('overridden', 'true');
+      }
+      showreservecapacityEl.addEventListener('change', function () {
+        pulseConfig.set('showreservecapacity', this.checked);
+        eventBus.EventBus.dispatchToAll('configChangeEvent',
+          { 'config': 'showreservecapacity' });
+      });
+    }
   }
 
   /**
@@ -185,17 +187,17 @@ class ProductionTrackerPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.val(value);
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.value = value;
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     setDefaultValue('thresholdtargetproduction', pulseConfig.getDefaultInt('thresholdtargetproduction'));
@@ -263,7 +265,10 @@ class ProductionTrackerPage extends pulsePage.BasePage {
 
 }
 
-$(document).ready(function () {
-  // Start the page lifecycle (getMissingConfigs → initOptionValues → buildContent).
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new ProductionTrackerPage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new ProductionTrackerPage());
+  });
+}

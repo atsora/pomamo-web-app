@@ -1,7 +1,9 @@
 /*
- * Copyright (C) 2025-2026 Atsora Solutions
+ * Copyright (C) 2009-2023 Lemoine Automation Technologies
+ * Copyright (C) 2023-2026 Atsora Solutions
+ *
+ * SPDX-License-Identifier: Apache-2.0
  */
-
 
 // Global
 @import "x-signalbanner/x-signalbanner.less";
@@ -56,6 +58,12 @@
   flex-basis: 200px;
   flex-shrink: 0;
   flex-grow: 0;
+
+  // ≤ 1 machine: x-machinetabnav signals `data-single-machine="true"` and
+  // collapses itself; the wrapper also collapses so the dashboard fills the row.
+  &:has(x-machinetabnav[data-single-machine="true"]) {
+    display: none;
+  }
 }
 
 // Collapse the picker when the selection only contains one machine —
@@ -219,10 +227,13 @@ x-machinetab .machinetab-machine-cell {
 .tile-content {
   display: flex;
   flex-direction: column;
-  height: 20em;
+  // The footer moved out to be a direct child of .tile (sticky), so this box
+  // now wraps only the chronology and sizes to its content instead of the
+  // former fixed 20em (which would otherwise leave a large empty gap).
+  height: auto;
   min-height: 0;
   overflow: hidden;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 }
 
 .info-content {
@@ -628,6 +639,12 @@ x-machinetab .machinetab-machine-cell {
     overflow: hidden;
     flex-wrap: wrap;
     margin-bottom: 2em;
+
+    // Last in-flow child of .tile (not sticky on purpose): `justify-content:
+    // space-between` on .tile pins it to the bottom when the content fits
+    // (stable while navigating periods on a normal viewport), and it falls to
+    // the END of the scroll when the content overflows (small viewport) instead
+    // of overlaying the other elements.
   }
 
   .stops-content {

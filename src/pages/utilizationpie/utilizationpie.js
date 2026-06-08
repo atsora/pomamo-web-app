@@ -1,5 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
-// Copyright (C) 2025 Atsora Solutions
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -47,38 +47,53 @@ class UtilizationPiePage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Init
   initOptionValues() {
-    const defaultLayoutChk = $('#defaultlayout');
-    const rotationSettings = $('.rotation-settings');
-    const machinesPerPageInput = $('#machinesperpage');
+    const defaultLayoutChk = document.getElementById('defaultlayout');
+    const rotationSettings = document.querySelector('.rotation-settings');
+    const machinesPerPageInput = document.getElementById('machinesperpage');
 
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
     let isLive = tmpContexts && tmpContexts.includes('live');
 
     if (!isLive) {
-      defaultLayoutChk.closest('.param-row').hide();
-      defaultLayoutChk.parent().hide();
-      rotationSettings.hide();
+      if (defaultLayoutChk) {
+        const paramRow = defaultLayoutChk.closest('.param-row');
+        if (paramRow) paramRow.style.display = 'none';
+        if (defaultLayoutChk.parentElement) defaultLayoutChk.parentElement.style.display = 'none';
+        defaultLayoutChk.checked = false;
+      }
+      if (rotationSettings) rotationSettings.style.display = 'none';
       pulseConfig.set('defaultlayout', false);
       pulseConfig.set('machinesperpage', 10000);
-      defaultLayoutChk.prop('checked', false);
-      machinesPerPageInput.val(10000);
-      // Scroll & grid sizing handled by .pulse-content:not(.appcontext-live) overrides in utilizationpie.less
+      if (machinesPerPageInput) machinesPerPageInput.value = 10000;
     } else {
-      defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
-      if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
-        defaultLayoutChk.attr('overridden', true);
-      defaultLayoutChk.change(() => {
-        let isDefault = defaultLayoutChk.is(':checked');
-        pulseConfig.set('defaultlayout', isDefault);
-        if (isDefault) {
-          rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
-          machinesPerPageInput.val(12).change();
-        } else {
-          rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
-        }
-      }).trigger('change');
-      machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 12));
-      $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+      if (defaultLayoutChk) {
+        defaultLayoutChk.checked = pulseConfig.getBool('defaultlayout', true);
+        if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
+          defaultLayoutChk.setAttribute('overridden', true);
+        defaultLayoutChk.addEventListener('change', () => {
+          let isDefault = defaultLayoutChk.checked;
+          pulseConfig.set('defaultlayout', isDefault);
+          if (isDefault) {
+            if (rotationSettings) {
+              rotationSettings.style.opacity = '0.5';
+              rotationSettings.querySelectorAll('input').forEach(inp => inp.disabled = true);
+            }
+            if (machinesPerPageInput) {
+              machinesPerPageInput.value = 12;
+              machinesPerPageInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          } else {
+            if (rotationSettings) {
+              rotationSettings.style.opacity = '1';
+              rotationSettings.querySelectorAll('input').forEach(inp => inp.disabled = false);
+            }
+          }
+        });
+        defaultLayoutChk.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      if (machinesPerPageInput) machinesPerPageInput.value = pulseConfig.getInt('machinesperpage', 12);
+      const rotationDelayInput = document.getElementById('rotationdelay');
+      if (rotationDelayInput) rotationDelayInput.value = pulseConfig.getInt('rotationdelay', 10);
     }
   }
 
@@ -87,19 +102,24 @@ class UtilizationPiePage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
-    // Layout: default rotation (defaultlayout=true, 12 per page)
-    $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
-    $('#machinesperpage').val(12).removeAttr('overridden');
-    $('#rotationdelay').val(10).removeAttr('overridden');
+    const defaultLayoutEl = document.getElementById('defaultlayout');
+    if (defaultLayoutEl) {
+      defaultLayoutEl.checked = true;
+      defaultLayoutEl.dispatchEvent(new Event('change', { bubbles: true }));
+      defaultLayoutEl.removeAttribute('overridden');
+    }
+    const machinesEl = document.getElementById('machinesperpage');
+    if (machinesEl) {
+      machinesEl.value = 12;
+      machinesEl.removeAttribute('overridden');
+    }
+    const delayEl = document.getElementById('rotationdelay');
+    if (delayEl) {
+      delayEl.value = 10;
+      delayEl.removeAttribute('overridden');
+    }
   }
 
-  /**
-   * Serializes active options as URL query string parameters.
-   * Hidden elements (e.g. rotation inputs when defaultlayout=true) are skipped.
-   *
-   * @returns {string} Query string fragment.
-   */
-  // CONFIG PANEL - Function to read custom inputs
   getOptionValues() {
     const options = [
       { id: 'defaultlayout', type: 'checkbox' },
@@ -109,7 +129,9 @@ class UtilizationPiePage extends pulsePage.BasePage {
 
     return options.map(opt => {
       const el = document.getElementById(opt.id);
-      if (!el || $(el).is(':hidden')) return '';
+      if (!el) return '';
+      const isHidden = (el.offsetWidth === 0 && el.offsetHeight === 0) || el.offsetParent === null;
+      if (isHidden) return '';
       const paramName = opt.param || opt.id;
       if (opt.type === 'value') return `&${paramName}=${el.value}`;
       return `&${paramName}=${el.checked}`;
@@ -144,6 +166,10 @@ class UtilizationPiePage extends pulsePage.BasePage {
 }
 
 
-$(document).ready(function() {
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new UtilizationPiePage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function() {
+    pulsePage.preparePage(new UtilizationPiePage());
+  });
+}

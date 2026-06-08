@@ -1,5 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
-// Copyright (C) 2025 Atsora Solutions
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -39,7 +39,13 @@ class IndexPage extends pulsePage.BasePage {
 
 }
 
-$(document).ready(function () {
+if (document.readyState !== 'loading') {
+  initIndexPage();
+} else {
+  document.addEventListener('DOMContentLoaded', initIndexPage);
+}
+
+function initIndexPage() {
   // If the URL didn't include `index.html`, append `home.html` instead.
   if (-1 == window.location.href.indexOf('index.html')) {
     window.open(window.location.href + 'home.html', '_self');
@@ -53,8 +59,14 @@ $(document).ready(function () {
   window.open(pageToDisplay, '_self');
 
   // Configuration panel disabled
-  $('#configpanelbtn').addClass('disabled');
-  $('#pulse-panel-parameter').hide();
+  const configPanelBtn = document.getElementById('configpanelbtn');
+  if (configPanelBtn) {
+    configPanelBtn.classList.add('disabled');
+  }
+  const pulsePanelParam = document.getElementById('pulse-panel-parameter');
+  if (pulsePanelParam) {
+    pulsePanelParam.style.display = 'none';
+  }
 
   pulsePage.preparePage(new IndexPage());
-});
+}

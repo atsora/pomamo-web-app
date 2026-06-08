@@ -1,5 +1,6 @@
 <!--
-Copyright (C) 2025-2026 Atsora Solutions
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+Copyright (C) 2023-2026 Atsora Solutions
 
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -98,23 +99,26 @@ SPDX-License-Identifier: Apache-2.0
             main-bar="reason" auto-min-height></x-barstack>
         </div>
       </div>
+    </div>
 
-      <div class="dashboard-footer">
-        <div class="stops-content text-box btn">
-          <x-unansweredreasonnumber period-context="machinedashboard" machine-context="PulseWebApp"
-            status-context="PulseWebApp"></x-unansweredreasonnumber>
-        </div>
+    <!-- Footer kept as a direct child of .tile so `position: sticky; bottom: 0`
+         pins it to the bottom of the scrolling tile (it would be trapped by
+         .tile-content's overflow:hidden otherwise). -->
+    <div class="dashboard-footer">
+      <div class="stops-content text-box btn">
+        <x-unansweredreasonnumber period-context="machinedashboard" machine-context="PulseWebApp"
+          status-context="PulseWebApp"></x-unansweredreasonnumber>
+      </div>
 
-        <div class="period-content">
-          <x-periodtoolbar period-context="machinedashboard" displayshiftrange=true></x-periodtoolbar>
-        </div>
+      <div class="period-content">
+        <x-periodtoolbar period-context="machinedashboard" displayshiftrange=true></x-periodtoolbar>
+      </div>
 
-        <div class="dailydate-content">
-          <x-clock display-date=true></x-clock>
-        </div>
-        <div class="hour-content">
-          <x-clock display-seconds=false></x-clock>
-        </div>
+      <div class="dailydate-content">
+        <x-clock display-date=true></x-clock>
+      </div>
+      <div class="hour-content">
+        <x-clock display-seconds=false></x-clock>
       </div>
     </div>
   </div>

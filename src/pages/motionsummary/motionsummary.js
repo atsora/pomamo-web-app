@@ -1,5 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
-// Copyright (C) 2025 Atsora Solutions
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -44,27 +44,40 @@ class MotionSummaryPage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Init
   initOptionValues() {
-    const defaultLayoutChk = $('#defaultlayout');
-    const rotationSettings = $('.rotation-settings');
-    const machinesPerPageInput = $('#machinesperpage');
+    const defaultLayoutChk = document.getElementById('defaultlayout');
+    const rotationSettings = document.querySelector('.rotation-settings');
+    const machinesPerPageInput = document.getElementById('machinesperpage');
 
-    defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
-    if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
-      defaultLayoutChk.attr('overridden', true);
+    if (defaultLayoutChk) {
+      defaultLayoutChk.checked = pulseConfig.getBool('defaultlayout', true);
+      if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
+        defaultLayoutChk.setAttribute('overridden', true);
 
-    defaultLayoutChk.change(() => {
-      let isDefault = defaultLayoutChk.is(':checked');
-      pulseConfig.set('defaultlayout', isDefault);
-      if (isDefault) {
-        rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
-        machinesPerPageInput.val(16).change();
-      } else {
-        rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
-      }
-    }).trigger('change');
+      defaultLayoutChk.addEventListener('change', () => {
+        let isDefault = defaultLayoutChk.checked;
+        pulseConfig.set('defaultlayout', isDefault);
+        if (isDefault) {
+          if (rotationSettings) {
+            rotationSettings.style.opacity = '0.5';
+            rotationSettings.querySelectorAll('input').forEach(input => input.disabled = true);
+          }
+          if (machinesPerPageInput) {
+            machinesPerPageInput.value = 16;
+            machinesPerPageInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        } else {
+          if (rotationSettings) {
+            rotationSettings.style.opacity = '1';
+            rotationSettings.querySelectorAll('input').forEach(input => input.disabled = false);
+          }
+        }
+      });
+      defaultLayoutChk.dispatchEvent(new Event('change', { bubbles: true }));
+    }
 
-    machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 16));
-    $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+    if (machinesPerPageInput) machinesPerPageInput.value = pulseConfig.getInt('machinesperpage', 16);
+    const rotationDelayInput = document.getElementById('rotationdelay');
+    if (rotationDelayInput) rotationDelayInput.value = pulseConfig.getInt('rotationdelay', 10);
   }
 
   /**
@@ -72,9 +85,22 @@ class MotionSummaryPage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
-    $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
-    $('#machinesperpage').val(16).removeAttr('overridden');
-    $('#rotationdelay').val(10).removeAttr('overridden');
+    const defaultLayoutEl = document.getElementById('defaultlayout');
+    if (defaultLayoutEl) {
+      defaultLayoutEl.checked = true;
+      defaultLayoutEl.dispatchEvent(new Event('change', { bubbles: true }));
+      defaultLayoutEl.removeAttribute('overridden');
+    }
+    const machinesPerPageEl = document.getElementById('machinesperpage');
+    if (machinesPerPageEl) {
+      machinesPerPageEl.value = 16;
+      machinesPerPageEl.removeAttribute('overridden');
+    }
+    const rotationDelayEl = document.getElementById('rotationdelay');
+    if (rotationDelayEl) {
+      rotationDelayEl.value = 10;
+      rotationDelayEl.removeAttribute('overridden');
+    }
   }
 
   /**
@@ -93,7 +119,9 @@ class MotionSummaryPage extends pulsePage.BasePage {
 
     return options.map(opt => {
       const el = document.getElementById(opt.id);
-      if (!el || $(el).is(':hidden')) return '';
+      if (!el) return '';
+      const isHidden = el.style.display === 'none';
+      if (isHidden) return '';
       const paramName = opt.param || opt.id;
       if (opt.type === 'value') return `&${paramName}=${el.value}`;
       return `&${paramName}=${el.checked}`;
@@ -127,6 +155,12 @@ class MotionSummaryPage extends pulsePage.BasePage {
   }
 }
 
-$(document).ready(function() {
+if (document.readyState !== 'loading') {
+  initMotionSummaryPage();
+} else {
+  document.addEventListener('DOMContentLoaded', initMotionSummaryPage);
+}
+
+function initMotionSummaryPage() {
   pulsePage.preparePage(new MotionSummaryPage());
-});
+}

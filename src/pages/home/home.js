@@ -1,5 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
-// Copyright (C) 2025 Atsora Solutions
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -37,9 +37,18 @@ class HomePage extends pulsePage.BasePage {
 
 }
 
-$(document).ready(function () {
-  // Disable the navigation panel entry (current page).
-  $('#homebtn').addClass('disabled');
-
+if (document.readyState !== 'loading') {
+  const homeBtnEl = document.getElementById('homebtn');
+  if (homeBtnEl) {
+    homeBtnEl.classList.add('disabled');
+  }
   pulsePage.preparePage(new HomePage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    const homeBtnEl = document.getElementById('homebtn');
+    if (homeBtnEl) {
+      homeBtnEl.classList.add('disabled');
+    }
+    pulsePage.preparePage(new HomePage());
+  });
+}

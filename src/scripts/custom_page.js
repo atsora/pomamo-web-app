@@ -1,5 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
-// Copyright (C) 2025 Atsora Solutions
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -105,6 +105,10 @@ class CustomPage extends pulsePage.BasePage {
   }
 }
 
-$(document).ready(function () {
+function _onReady (fn) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+  else fn();
+}
+_onReady(function () {
   pulsePage.preparePage(new CustomPage());
 });

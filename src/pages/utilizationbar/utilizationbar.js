@@ -1,5 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
-// Copyright (C) 2025 Atsora Solutions
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -68,76 +68,84 @@ class UtilizationBarPage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Init
   initOptionValues() {
-    // Layout
-    const defaultLayoutChk = $('#defaultlayout');
-    const rotationSettings = $('.rotation-settings');
-    const machinesPerPageInput = $('#machinesperpage');
+    const defaultLayoutChk = document.getElementById('defaultlayout');
+    const rotationSettings = document.querySelector('.rotation-settings');
+    const machinesPerPageInput = document.getElementById('machinesperpage');
 
-    defaultLayoutChk.prop('checked', pulseConfig.getBool('defaultlayout', true));
-    if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
-      defaultLayoutChk.attr('overridden', true);
+    if (defaultLayoutChk) {
+      defaultLayoutChk.checked = pulseConfig.getBool('defaultlayout', true);
+      if (pulseConfig.getDefaultBool('defaultlayout') !== pulseConfig.getBool('defaultlayout', true))
+        defaultLayoutChk.setAttribute('overridden', true);
 
-    defaultLayoutChk.change(() => {
-      let isDefault = defaultLayoutChk.is(':checked');
-      pulseConfig.set('defaultlayout', isDefault);
-      if (isDefault) {
-        rotationSettings.css('opacity', '0.5').find('input').prop('disabled', true);
-        machinesPerPageInput.val(16).change();
-      } else {
-        rotationSettings.css('opacity', '1').find('input').prop('disabled', false);
-      }
-    }).trigger('change');
+      defaultLayoutChk.addEventListener('change', () => {
+        let isDefault = defaultLayoutChk.checked;
+        pulseConfig.set('defaultlayout', isDefault);
+        if (isDefault) {
+          if (rotationSettings) {
+            rotationSettings.style.opacity = '0.5';
+            rotationSettings.querySelectorAll('input').forEach(inp => inp.disabled = true);
+          }
+          if (machinesPerPageInput) {
+            machinesPerPageInput.value = 16;
+            machinesPerPageInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        } else {
+          if (rotationSettings) {
+            rotationSettings.style.opacity = '1';
+            rotationSettings.querySelectorAll('input').forEach(inp => inp.disabled = false);
+          }
+        }
+      });
+      defaultLayoutChk.dispatchEvent(new Event('change', { bubbles: true }));
+    }
 
-    machinesPerPageInput.val(pulseConfig.getInt('machinesperpage', 16));
-    $('#rotationdelay').val(pulseConfig.getInt('rotationdelay', 10));
+    if (machinesPerPageInput) machinesPerPageInput.value = pulseConfig.getInt('machinesperpage', 16);
+    const rotationDelayInput = document.getElementById('rotationdelay');
+    if (rotationDelayInput) rotationDelayInput.value = pulseConfig.getInt('rotationdelay', 10);
 
-    // show clock
-    $('#showclockutilization').prop('checked', pulseConfig.getBool('showclock'));
-    if (pulseConfig.getDefaultBool('showclock') != pulseConfig.getBool('showclock'))
-      $('#showclockutilization').attr('overridden', true);
-    $('#showclockutilization').change(function () {
-      let showclock = $('#showclockutilization').is(':checked');
-      // Store
-      pulseConfig.set('showclock', showclock);
-      // Display
-      if (showclock) {
-        $('x-clock').show();
-      }
-      else {
-        $('x-clock').hide();
-      }
-    });
+    const showclockutilizationEl = document.getElementById('showclockutilization');
+    if (showclockutilizationEl) {
+      showclockutilizationEl.checked = pulseConfig.getBool('showclock');
+      if (pulseConfig.getDefaultBool('showclock') != pulseConfig.getBool('showclock'))
+        showclockutilizationEl.setAttribute('overridden', true);
+      showclockutilizationEl.addEventListener('change', function () {
+        let showclock = this.checked;
+        pulseConfig.set('showclock', showclock);
+        document.querySelectorAll('x-clock').forEach(el => {
+          el.style.display = showclock ? '' : 'none';
+        });
+      });
+    }
 
-    // Days / Hours: load current range — if days > 0, show in days mode; otherwise hours mode
     let days = pulseConfig.getInt('displaydaysrange');
     let hours = pulseConfig.getInt('displayhoursrange');
-    if (days > 0) {
-      $('#displaydayshours').val(days);
+    const displayDaysHoursEl = document.getElementById('displaydayshours');
+    const displayIsDaysEl = document.getElementById('displayisdays');
+    const displayIsHoursEl = document.getElementById('displayishours');
 
-      $('#displayisdays').prop('checked', true);
-      $('#displayishours').prop('checked', false);
+    if (days > 0) {
+      displayDaysHoursEl.value = days;
+      displayIsDaysEl.checked = true;
+      displayIsHoursEl.checked = false;
     }
     else {
-      $('#displaydayshours').val(hours);
-
-      $('#displayisdays').prop('checked', false);
-      $('#displayishours').prop('checked', true);
+      displayDaysHoursEl.value = hours;
+      displayIsDaysEl.checked = false;
+      displayIsHoursEl.checked = true;
     }
 
     var changeDaysHours = function () {
-      let isDays = $('#displayisdays').is(':checked');
-
-      let nb = ($('#displaydayshours').val());
+      let isDays = displayIsDaysEl.checked;
+      let nb = displayDaysHoursEl.value;
       pulseConfig.set('displaydaysrange', isDays ? nb : 0);
       pulseConfig.set('displayhoursrange', isDays ? 0 : nb);
-
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'displaydaysrange' });
     };
 
-    $('#displaydayshours').bind('input', changeDaysHours);
-    $('#displayisdays').change(changeDaysHours);
-    $('#displayishours').change(changeDaysHours);
+    displayDaysHoursEl.addEventListener('input', changeDaysHours);
+    displayIsDaysEl.addEventListener('change', changeDaysHours);
+    displayIsHoursEl.addEventListener('change', changeDaysHours);
   }
 
   /**
@@ -149,31 +157,47 @@ class UtilizationBarPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues() {
     const setDefaultChecked = (id, configKey = id, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', pulseConfig.getDefaultBool(configKey));
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.checked = pulseConfig.getDefaultBool(configKey);
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.val(value);
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.value = value;
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     setDefaultChecked('showclockutilization', 'showclock');
 
-    // 1 day
     setDefaultValue('displaydayshours', pulseConfig.getDefaultInt('displaydaysrange'));
-    $('#displayisdays').prop('checked', true);
-    $('#displayisdays').change();
-    $('#displayisdays').removeAttr('overridden');
+    const displayIsDaysEl = document.getElementById('displayisdays');
+    if (displayIsDaysEl) {
+      displayIsDaysEl.checked = true;
+      displayIsDaysEl.dispatchEvent(new Event('change', { bubbles: true }));
+      displayIsDaysEl.removeAttribute('overridden');
+    }
 
-    // Layout: default rotation (defaultlayout=true, 16 per page)
-    $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
-    $('#machinesperpage').val(16).removeAttr('overridden');
-    $('#rotationdelay').val(10).removeAttr('overridden');
+    const defaultLayoutEl = document.getElementById('defaultlayout');
+    if (defaultLayoutEl) {
+      defaultLayoutEl.checked = true;
+      defaultLayoutEl.dispatchEvent(new Event('change', { bubbles: true }));
+      defaultLayoutEl.removeAttribute('overridden');
+    }
+    const machinesPerPageEl = document.getElementById('machinesperpage');
+    if (machinesPerPageEl) {
+      machinesPerPageEl.value = 16;
+      machinesPerPageEl.removeAttribute('overridden');
+    }
+    const rotationDelayEl = document.getElementById('rotationdelay');
+    if (rotationDelayEl) {
+      rotationDelayEl.value = 10;
+      rotationDelayEl.removeAttribute('overridden');
+    }
   }
 
   /**
@@ -199,7 +223,9 @@ class UtilizationBarPage extends pulsePage.BasePage {
 
     let optionsValues = options.map(opt => {
       const el = document.getElementById(opt.id);
-      if (!el || $(el).is(':hidden')) return '';
+      if (!el) return '';
+      const isHidden = (el.offsetWidth === 0 && el.offsetHeight === 0) || el.offsetParent === null;
+      if (isHidden) return '';
       const paramName = opt.param || opt.id;
       if (opt.type === 'value') return `&${paramName}=${el.value}`;
       return `&${paramName}=${el.checked}`;
@@ -256,19 +282,18 @@ class UtilizationBarPage extends pulsePage.BasePage {
    * Shows or hides `x-clock` based on the `showclock` config value.
    */
   buildContent() {
-    // show clock
     let showclock = pulseConfig.getBool('showclock');
-    if (showclock) {
-      $('x-clock').show();
-    }
-    else {
-      $('x-clock').hide();
-    }
-
+    document.querySelectorAll('x-clock').forEach(el => {
+      el.style.display = showclock ? '' : 'none';
+    });
   }
 
 }
 
-$(document).ready(function () {
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new UtilizationBarPage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new UtilizationBarPage());
+  });
+}

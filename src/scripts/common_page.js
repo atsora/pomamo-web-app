@@ -1,4 +1,6 @@
-// Copyright (C) 2009-2025 Atsora Solutions
+// Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2023-2026 Atsora Solutions
+//
 // SPDX-License-Identifier: Apache-2.0
 
 var pulseUtility = require('pulseUtility');
@@ -24,44 +26,124 @@ require('x-loginpasswordbutton/x-loginpasswordbutton');
 require('x-loginchangepasswordbutton/x-loginchangepasswordbutton');
 require('x-loginconnection/x-loginconnection');
 
-// --- VARIABLES POUR LE MOTEUR DE ROTATION ---
+// Helpers
+function qs (sel) { return document.querySelector(sel); }
+function qsa (sel) { return document.querySelectorAll(sel); }
+function addClass (sel, cls) { let el = (typeof sel === 'string') ? qs(sel) : sel; if (el) el.classList.add(cls); }
+function removeClass (sel, cls) { let el = (typeof sel === 'string') ? qs(sel) : sel; if (el) el.classList.remove(cls); }
+function hasClass (sel, cls) { let el = (typeof sel === 'string') ? qs(sel) : sel; return el ? el.classList.contains(cls) : false; }
+
+// --- Rotation engine state ---
 var _rotationTimer = null;
 var _allMachinesCache = [];
 var _currentRotationIndex = 0;
 
 exports.BasePage = class BasePage {
-  constructor() {
+  constructor () {
     this.showMachineselection = true;
   }
 }
 
-// ... (Panel Functions unchanged) ...
-var openNavigationPanel = function(f){$('.menuicon').addClass('tooltip_disabled');if($('#navigationpanelbtn').hasClass('disabled'))return;if(f)$('#pulse-panel-navigation').addClass('notransition');else $('#pulse-panel-navigation').removeClass('notransition');$('#pulse-inner').removeClass('pulse-panel-navigation-collapsed');$('#navigationpanelbtn').addClass('activated');};
-var closeNavigationPanel = function(f){$('.menuicon').removeClass('tooltip_disabled');if(f)$('#pulse-panel-navigation').addClass('notransition');else $('#pulse-panel-navigation').removeClass('notransition');$('#pulse-inner').addClass('pulse-panel-navigation-collapsed');$('#navigationpanelbtn').removeClass('activated');};
-var initParameterPanel = function(){$('.param-group-title').click(function(e){let g=$(this).parents('.param-group');let c=$(g).find('.param-group-content').first();if(c.is(':visible')){c.hide();}else{c.css('display','flex');}$(g).removeClass('opened');});}
-var openParameterPanel = exports.openParameterPanel = function(f){if($('#configpanelbtn').hasClass('disabled'))return;if(f)$('#pulse-panel-parameter').addClass('notransition');else $('#pulse-panel-parameter').removeClass('notransition');$('#pulse-inner').removeClass('pulse-panel-parameter-collapsed');$('#configpanelbtn').addClass('activated');};
-var closeParameterPanel = exports.closeParameterPanel = function(f){if(f)$('#pulse-panel-parameter').addClass('notransition');else $('#pulse-panel-parameter').removeClass('notransition');$('#pulse-inner').addClass('pulse-panel-parameter-collapsed');$('#configpanelbtn').removeClass('activated');};
+// --- Panel functions ---
+var openNavigationPanel = function (instant) {
+  let icons = qsa('.menuicon');
+  for (let i = 0; i < icons.length; i++) icons[i].classList.add('tooltip_disabled');
+  let btn = qs('#navigationpanelbtn');
+  if (btn && btn.classList.contains('disabled')) return;
+  let panel = qs('#pulse-panel-navigation');
+  if (panel) {
+    if (instant) panel.classList.add('notransition');
+    else panel.classList.remove('notransition');
+  }
+  let inner = qs('#pulse-inner');
+  if (inner) inner.classList.remove('pulse-panel-navigation-collapsed');
+  if (btn) btn.classList.add('activated');
+};
+var closeNavigationPanel = function (instant) {
+  let icons = qsa('.menuicon');
+  for (let i = 0; i < icons.length; i++) icons[i].classList.remove('tooltip_disabled');
+  let panel = qs('#pulse-panel-navigation');
+  if (panel) {
+    if (instant) panel.classList.add('notransition');
+    else panel.classList.remove('notransition');
+  }
+  let inner = qs('#pulse-inner');
+  if (inner) inner.classList.add('pulse-panel-navigation-collapsed');
+  let btn = qs('#navigationpanelbtn');
+  if (btn) btn.classList.remove('activated');
+};
+var initParameterPanel = function () {
+  let titles = qsa('.param-group-title');
+  for (let i = 0; i < titles.length; i++) {
+    titles[i].addEventListener('click', function () {
+      let group = this.closest('.param-group');
+      if (!group) return;
+      let content = group.querySelector('.param-group-content');
+      if (!content) return;
+      // is(':visible') equivalent
+      let isVisible = content.offsetParent !== null;
+      if (isVisible) {
+        content.style.display = 'none';
+      }
+      else {
+        content.style.display = 'flex';
+      }
+      group.classList.remove('opened');
+    });
+  }
+};
+var openParameterPanel = exports.openParameterPanel = function (instant) {
+  let btn = qs('#configpanelbtn');
+  if (btn && btn.classList.contains('disabled')) return;
+  let panel = qs('#pulse-panel-parameter');
+  if (panel) {
+    if (instant) panel.classList.add('notransition');
+    else panel.classList.remove('notransition');
+  }
+  let inner = qs('#pulse-inner');
+  if (inner) inner.classList.remove('pulse-panel-parameter-collapsed');
+  if (btn) btn.classList.add('activated');
+};
+var closeParameterPanel = exports.closeParameterPanel = function (instant) {
+  let panel = qs('#pulse-panel-parameter');
+  if (panel) {
+    if (instant) panel.classList.add('notransition');
+    else panel.classList.remove('notransition');
+  }
+  let inner = qs('#pulse-inner');
+  if (inner) inner.classList.add('pulse-panel-parameter-collapsed');
+  let btn = qs('#configpanelbtn');
+  if (btn) btn.classList.remove('activated');
+};
 
 var populateNavigationPanel = function () {
   let currentPage = window.location.href.replace(/(.*\/)([^\\]*)(\.html.*)/, '$2');
   let displayedPages = pulseConfig.getArray('displayedPages');
   let displayedApps = pulseConfig.getArray('displayedApps');
-  if (displayedApps == null || displayedApps.length == 0) { $('#pulse-panel-navigation').hide(); $('#navigationpanelbtn').addClass('disabled'); return; }
+  if (displayedApps == null || displayedApps.length == 0) {
+    let panel = qs('#pulse-panel-navigation'); if (panel) panel.style.display = 'none';
+    let btn = qs('#navigationpanelbtn'); if (btn) btn.classList.add('disabled');
+    return;
+  }
 
   let currentAppIsAllowed = false;
   let firstTarget = null;
-  let appDiv = $('.navbar-apps');
+  let appDiv = qs('.navbar-apps');
   for (let iApp = 0; iApp < displayedApps.length; iApp++) {
     let app = displayedApps[iApp];
-    let appImg = $('<div></div>').addClass('navbar-app-content');
+    let appImg = document.createElement('div');
+    appImg.className = 'navbar-app-content';
     let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
-    if ((app == 'PulseWebApp') || (app == 'AtrackingWebApp')) { if (tmpContexts.length == 0) appImg.addClass('selected'); }
-    else if (app == 'Live') { if (tmpContexts.length > 0) if (tmpContexts[0] == 'live') appImg.addClass('selected'); }
-    let link = $('<a></a>').addClass('navbar-app-container').attr('app', app).append(appImg);
+    if ((app == 'PulseWebApp') || (app == 'AtrackingWebApp')) { if (tmpContexts.length == 0) appImg.classList.add('selected'); }
+    else if (app == 'Live') { if (tmpContexts.length > 0) if (tmpContexts[0] == 'live') appImg.classList.add('selected'); }
+    let link = document.createElement('a');
+    link.className = 'navbar-app-container';
+    link.setAttribute('app', app);
+    link.appendChild(appImg);
     if (displayedApps.length > 1) {
       let imgUrl = 'images/app-' + app + '.svg';
-      appImg.css('backgroundImage', 'url(' + imgUrl + ')');
-      appDiv.append(link);
+      appImg.style.backgroundImage = 'url(' + imgUrl + ')';
+      if (appDiv) appDiv.appendChild(link);
       pulseSvg.inlineBackgroundSvg(appImg);
     }
     let targetUrl = window.location.href;
@@ -81,7 +163,7 @@ var populateNavigationPanel = function () {
       case 'Reports': {
         pulseUtility.addToolTip(link, pulseConfig.pulseTranslate('content.reports', 'Reports'));
         targetUrl = pulseConfig.getString('reportpath', 'http://serveraddress:8080/atrackingreporting/');
-        link.attr('target', '_blank');
+        link.setAttribute('target', '_blank');
       } break;
       default: {
         pulseUtility.addToolTip(link, app);
@@ -94,22 +176,28 @@ var populateNavigationPanel = function () {
         if (tmpMainPath.length > 0) targetUrl = pulseUtility.changeURLParameter(targetUrl, 'mainpath', tmpMainPath[0]);
       }
     }
-    link.attr('href', targetUrl);
+    link.setAttribute('href', targetUrl);
     if (iApp == 0) firstTarget = targetUrl;
   }
   if (!currentAppIsAllowed) { if (window.location.href != firstTarget) { window.location.href = firstTarget; return; } }
 
-  if (displayedPages == null || displayedPages.length == 0) { $('#pulse-panel-navigation').hide(); $('#navigationpanelbtn').addClass('disabled'); return; }
+  if (displayedPages == null || displayedPages.length == 0) {
+    let panel = qs('#pulse-panel-navigation'); if (panel) panel.style.display = 'none';
+    let btn = qs('#navigationpanelbtn'); if (btn) btn.classList.add('disabled');
+    return;
+  }
   let customPages = pulseConfig.getArray('customPages');
   let allDisplayedPages = displayedPages.concat(customPages);
-  $('#navigationpanelbtn').removeClass('disabled');
+  let navBtn = qs('#navigationpanelbtn'); if (navBtn) navBtn.classList.remove('disabled');
 
   let textOrNothing = (pulseConfig.getString('menuType') == 'textOrNothing');
-  if (!textOrNothing) $('#pulse-inner').addClass('navigation-always-visible');
+  let inner = qs('#pulse-inner');
+  if (!textOrNothing && inner) inner.classList.add('navigation-always-visible');
 
   let mapTextMenu = {};
   allDisplayedPages.unshift('home');
-  let ul = $('#navbar > ul');
+  let ul = qs('#navbar > ul');
+  if (ul == null) return;
   for (let i = 0; i < allDisplayedPages.length; i++) {
     let pageName = allDisplayedPages[i];
     let title = pulseConfig.pulseTranslate('pages.' + pageName + '.title', pageName);
@@ -117,40 +205,84 @@ var populateNavigationPanel = function () {
     let li = null;
     let selection = (pageName == currentPage);
     if (textOrNothing) {
-      if (subtitle == '') li = $('<li data="' + pageName + '"><span class="menutext">' + title + '</span></li>');
+      if (subtitle == '') {
+        li = document.createElement('li');
+        li.setAttribute('data', pageName);
+        li.innerHTML = '<span class="menutext">' + title + '</span>';
+      }
       else {
-        if (title in mapTextMenu) { li = mapTextMenu[title]; li.find('ul').append($('<li ' + (selection ? ' class="selected" ' : '') + 'data="' + pageName + '">' + subtitle + '</li>')); }
-        else { li = $('<li class="expandable"><span class="menutext">' + title + '</span><ul><li ' + (selection ? ' class="selected" ' : '') + 'data="' + pageName + '">' + subtitle + '</li></ul></li>'); mapTextMenu[title] = li; }
+        if (title in mapTextMenu) {
+          li = mapTextMenu[title];
+          let subUl = li.querySelector('ul');
+          if (subUl) {
+            let subLi = document.createElement('li');
+            if (selection) subLi.className = 'selected';
+            subLi.setAttribute('data', pageName);
+            subLi.textContent = subtitle;
+            subUl.appendChild(subLi);
+          }
+        }
+        else {
+          li = document.createElement('li');
+          li.className = 'expandable';
+          li.innerHTML = '<span class="menutext">' + title + '</span><ul><li ' + (selection ? ' class="selected" ' : '') + 'data="' + pageName + '">' + subtitle + '</li></ul>';
+          mapTextMenu[title] = li;
+        }
       }
     }
     else {
       if (subtitle != '') title += ' (' + subtitle + ')';
-      li = $('<li data="' + pageName + '"><div class="menuicon"></div><span class="menutext">' + title + '</span></li>');
-      li.find('.menuicon').css('background-image', 'url(images/' + pageName + '-icon.svg)');
-      pulseUtility.addToolTip(li.find('.menuicon'), title);
+      li = document.createElement('li');
+      li.setAttribute('data', pageName);
+      li.innerHTML = '<div class="menuicon"></div><span class="menutext">' + title + '</span>';
+      let menuicon = li.querySelector('.menuicon');
+      if (menuicon) {
+        menuicon.style.backgroundImage = 'url(images/' + pageName + '-icon.svg)';
+        pulseUtility.addToolTip(menuicon, title);
+      }
     }
-    if (selection) li.addClass('selected');
-    ul.append(li);
+    if (selection) li.classList.add('selected');
+    ul.appendChild(li);
     pulseSvg.inlineBackgroundSvg('li[data="' + pageName + '"] .menuicon');
   }
 };
 
 var setNavigationLinks = function () {
-  $('#navbar > ul > li.expandable > span').click(function () {
-    let previousState = $(this).parent().find('ul').is(':visible');
-    $('#navbar > ul > li > ul').hide();
-    $('#navbar > ul > li > span').css('align-content', 'center');
-    if (!previousState) { $(this).parent().find('ul').show(); $('#navbar > ul > li > span').css('align-content', 'start'); }
-  });
+  let expandableSpans = qsa('#navbar > ul > li.expandable > span');
+  for (let i = 0; i < expandableSpans.length; i++) {
+    expandableSpans[i].addEventListener('click', function () {
+      let parentLi = this.parentElement;
+      let subUl = parentLi ? parentLi.querySelector('ul') : null;
+      let previousState = subUl ? (subUl.offsetParent !== null) : false;
+      let allSubUls = qsa('#navbar > ul > li > ul');
+      for (let j = 0; j < allSubUls.length; j++) allSubUls[j].style.display = 'none';
+      let allSpans = qsa('#navbar > ul > li > span');
+      for (let j = 0; j < allSpans.length; j++) allSpans[j].style.alignContent = 'center';
+      if (!previousState && subUl) {
+        // `style.display = ''` clears inline only — CSS `.expandable > ul`
+        // sets `display: none`, so we must force `block` to override it
+        // (jQuery `.show()` did this implicitly).
+        subUl.style.display = 'block';
+        for (let j = 0; j < allSpans.length; j++) allSpans[j].style.alignContent = 'start';
+      }
+    });
+  }
   let fullURL = window.location.pathname;
-  $('#navbar li').each(function () {
-    if (fullURL.indexOf('/' + $(this).attr('data') + '.html') !== -1) {
-      $(this).addClass('selected');
-      let grandParent = $(this).parent().parent();
-      if (grandParent.hasClass('expandable')) { grandParent.addClass('selected'); grandParent.find('ul').css('display', 'block'); }
+  let navLis = qsa('#navbar li');
+  for (let i = 0; i < navLis.length; i++) {
+    let liEl = navLis[i];
+    let dataAttr = liEl.getAttribute('data');
+    if (dataAttr && fullURL.indexOf('/' + dataAttr + '.html') !== -1) {
+      liEl.classList.add('selected');
+      let grandParent = liEl.parentElement ? liEl.parentElement.parentElement : null;
+      if (grandParent && grandParent.classList.contains('expandable')) {
+        grandParent.classList.add('selected');
+        let gpUl = grandParent.querySelector('ul');
+        if (gpUl) gpUl.style.display = 'block';
+      }
     }
-    $(this).click(function () {
-      let attribute = $(this).attr('data');
+    liEl.addEventListener('click', function () {
+      let attribute = this.getAttribute('data');
       if (attribute != null && attribute != '' && fullURL.indexOf('/' + attribute + '.html') == -1) {
         let newfullURL = pulseUtility.changePageName(window.location.href, attribute);
         // strip ancestor params: drill-down context is page-scoped, a sidebar click is a fresh navigation
@@ -159,21 +291,35 @@ var setNavigationLinks = function () {
         window.location.href = u.toString();
       }
     });
-  });
+  }
 };
 
 var animatePanels = function () {
-  $('#navigationpanelbtn').click(function (e) {
-    if ($('#pulse-inner').hasClass('pulse-panel-navigation-collapsed')) { openNavigationPanel(false); if ($(window).width() <= 685) closeParameterPanel(false); }
-    else { closeNavigationPanel(false); }
+  let navBtn = qs('#navigationpanelbtn');
+  if (navBtn) navBtn.addEventListener('click', function () {
+    let inner = qs('#pulse-inner');
+    if (inner && inner.classList.contains('pulse-panel-navigation-collapsed')) {
+      openNavigationPanel(false);
+      if (window.innerWidth <= 685) closeParameterPanel(false);
+    }
+    else {
+      closeNavigationPanel(false);
+    }
   });
-  $('#configpanelbtn').click(function (e) {
-    if ($('#pulse-inner').hasClass('pulse-panel-parameter-collapsed')) { openParameterPanel(); if ($(window).width() <= 685) closeNavigationPanel(false); }
-    else { closeParameterPanel(false); }
+  let cfgBtn = qs('#configpanelbtn');
+  if (cfgBtn) cfgBtn.addEventListener('click', function () {
+    let inner = qs('#pulse-inner');
+    if (inner && inner.classList.contains('pulse-panel-parameter-collapsed')) {
+      openParameterPanel();
+      if (window.innerWidth <= 685) closeNavigationPanel(false);
+    }
+    else {
+      closeParameterPanel(false);
+    }
   });
 }
 
-// --- MOTEUR DE ROTATION JS ---
+// --- ROTATION ENGINE ---
 var startRotationEngine = function () {
   if (_rotationTimer) {
     clearTimeout(_rotationTimer);
@@ -205,17 +351,13 @@ var startRotationEngine = function () {
 
   // Case 1: Everything fits on a single page -> No rotation
   if (_allMachinesCache.length <= perPage) {
-
-    // 1. Display all machines
     eventBus.EventBus.dispatchToAll('updateVisibleMachines', { machines: _allMachinesCache });
-
-    // 2. [FIX] Explicitly tell the progress bar to hide (Total=1, Delay=0)
+    // Explicitly tell the progress bar to hide (Total=1, Delay=0)
     eventBus.EventBus.dispatchToAll('rotationPageUpdate', {
       page: 1,
       total: 1,
       delay: 0
     });
-
     return;
   }
 
@@ -223,31 +365,26 @@ var startRotationEngine = function () {
   showNextPageLoop(perPage);
 };
 
-var showNextPageLoop = function(perPage) {
+var showNextPageLoop = function (perPage) {
   let totalPages = Math.ceil(_allMachinesCache.length / perPage);
 
-  // Calculate indices
   let start = _currentRotationIndex * perPage;
   let end = start + perPage;
 
-  // Extract IDs
   let machinesForPage = _allMachinesCache.slice(start, end);
   let currentPageNum = _currentRotationIndex + 1;
 
-  // Display the grid
   eventBus.EventBus.dispatchToAll('updateVisibleMachines', { machines: machinesForPage });
 
   let delay = pulseConfig.getInt('rotationdelay', 10) * 1000;
   if (delay < 3000) delay = 3000;
 
-  // Update progress bar
   eventBus.EventBus.dispatchToAll('rotationPageUpdate', {
     page: currentPageNum,
     total: totalPages,
     delay: delay
   });
 
-  // Prepare next index
   _currentRotationIndex++;
   if (_currentRotationIndex >= totalPages) _currentRotationIndex = 0;
 
@@ -258,85 +395,129 @@ var showNextPageLoop = function(perPage) {
 var populateConfigPanel = function (currentPageMethods) {
 
   // Machine Selection
-  $('#editmachines').click(function () { $('x-machineselection').get(0).changeMachineSelection(); }.bind($('x-machineselection').get(0)));
-  $('#machineselectionbtn').click(function () { $('x-machineselection').get(0).changeMachineSelection(); }.bind($('x-machineselection').get(0)));
-  if (currentPageMethods.showMachineselection === false) $('.group-machines').hide();
+  let machineSelection = qs('x-machineselection');
+  let editBtn = qs('#editmachines');
+  if (editBtn) editBtn.addEventListener('click', function () { if (machineSelection) machineSelection.changeMachineSelection(); });
+  let msBtn = qs('#machineselectionbtn');
+  if (msBtn) msBtn.addEventListener('click', function () { if (machineSelection) machineSelection.changeMachineSelection(); });
+  if (currentPageMethods.showMachineselection === false) {
+    let gm = qs('.group-machines'); if (gm) gm.style.display = 'none';
+  }
 
-  // Nettoyage UI
-  $('.group-pages').hide();
-  $('.config-row').remove(); $('.config-column').remove(); $('.config-pagerotation').remove();
-  $('.config-pagetitle').remove();
+  // UI cleanup
+  let gp = qs('.group-pages'); if (gp) gp.style.display = 'none';
+  qsa('.config-row').forEach(el => el.remove());
+  qsa('.config-column').forEach(el => el.remove());
+  qsa('.config-pagerotation').forEach(el => el.remove());
+  qsa('.config-pagetitle').forEach(el => el.remove());
 
   // LEGEND - show/hide option in config panel
-  $('#showlegend').change(function () {
-    $(this).attr('overridden', true);
-    pulseConfig.set('showlegend', $('#showlegend').is(':checked'));
-    showLegend();
-    $('.legend-content').resize();
-  });
-  let legendIsEmpty = ($('.legend-content')[0].childElementCount <= 1); // Always 1 child even if empty
+  let showlegendInput = qs('#showlegend');
+  if (showlegendInput) {
+    showlegendInput.addEventListener('change', function () {
+      this.setAttribute('overridden', 'true');
+      pulseConfig.set('showlegend', this.checked);
+      showLegend();
+      // Trigger a recomputation of the legend (replaces $.resize())
+      let evt = new Event('resize');
+      window.dispatchEvent(evt);
+    });
+  }
+  let legendContent = qs('.legend-content');
+  let legendIsEmpty = legendContent ? (legendContent.childElementCount <= 1) : true; // Always 1 child even if empty
   if (pulseConfig.getString('showlegend') == 'dynamic' || legendIsEmpty) {
-    $('.config-showlegend').remove();
-  } else {
-    $('#showlegend').prop('checked', pulseConfig.getBool('showlegend'));
-    if (pulseConfig.getDefaultString('showlegend') != pulseConfig.getString('showlegend')) {
-      $('#showlegend').attr('overridden', 'true');
+    let csl = qs('.config-showlegend'); if (csl) csl.remove();
+  }
+  else {
+    if (showlegendInput) {
+      showlegendInput.checked = pulseConfig.getBool('showlegend');
+      if (pulseConfig.getDefaultString('showlegend') != pulseConfig.getString('showlegend')) {
+        showlegendInput.setAttribute('overridden', 'true');
+      }
     }
   }
 
   // --- LAYOUT --- Init inputs from saved config
-  (function initLayoutInputs() {
+  (function initLayoutInputs () {
     let isDefault = pulseConfig.getBool('defaultlayout', true);
-    $('#defaultlayout').prop('checked', isDefault);
-    if (pulseConfig.getDefaultBool('defaultlayout', true) !== isDefault)
-      $('#defaultlayout').attr('overridden', 'true');
+    let dl = qs('#defaultlayout');
+    if (dl) {
+      dl.checked = isDefault;
+      if (pulseConfig.getDefaultBool('defaultlayout', true) !== isDefault) dl.setAttribute('overridden', 'true');
+    }
 
     let perPage = pulseConfig.getInt('machinesperpage', 12);
-    $('#machinesperpage').val(perPage);
-    if (pulseConfig.getDefaultInt('machinesperpage', 12) !== perPage)
-      $('#machinesperpage').attr('overridden', 'true');
+    let mpp = qs('#machinesperpage');
+    if (mpp) {
+      mpp.value = perPage;
+      if (pulseConfig.getDefaultInt('machinesperpage', 12) !== perPage) mpp.setAttribute('overridden', 'true');
+    }
 
     let delay = pulseConfig.getInt('rotationdelay', 10);
-    $('#rotationdelay').val(delay);
-    if (pulseConfig.getDefaultInt('rotationdelay', 10) !== delay)
-      $('#rotationdelay').attr('overridden', 'true');
+    let rd = qs('#rotationdelay');
+    if (rd) {
+      rd.value = delay;
+      if (pulseConfig.getDefaultInt('rotationdelay', 10) !== delay) rd.setAttribute('overridden', 'true');
+    }
   })();
 
-  $('#resetlayout').click(function (e) {
-    $('#defaultlayout').prop('checked', true).change().removeAttr('overridden');
-    $('#machinesperpage').val(12).removeAttr('overridden');
-    $('#rotationdelay').val(10).removeAttr('overridden');
+  let resetLayoutBtn = qs('#resetlayout');
+  if (resetLayoutBtn) resetLayoutBtn.addEventListener('click', function () {
+    let dl = qs('#defaultlayout');
+    if (dl) {
+      dl.checked = true;
+      dl.dispatchEvent(new Event('change'));
+      dl.removeAttribute('overridden');
+    }
+    let mpp = qs('#machinesperpage');
+    if (mpp) { mpp.value = 12; mpp.removeAttribute('overridden'); }
+    let rd = qs('#rotationdelay');
+    if (rd) { rd.value = 10; rd.removeAttribute('overridden'); }
     pulseConfig.set('defaultlayout', true);
     pulseConfig.set('machinesperpage', 12);
     pulseConfig.set('rotationdelay', 10);
     let defaultShowLegend = pulseConfig.getDefaultString('showlegend');
     if (defaultShowLegend && defaultShowLegend !== 'dynamic') {
-      $('#showlegend').prop('checked', pulseConfig.getDefaultBool('showlegend')).removeAttr('overridden');
+      let sl = qs('#showlegend');
+      if (sl) {
+        sl.checked = pulseConfig.getDefaultBool('showlegend');
+        sl.removeAttribute('overridden');
+      }
       pulseConfig.set('showlegend', pulseConfig.getDefaultBool('showlegend'));
       showLegend();
     }
     _currentRotationIndex = 0;
-
     startRotationEngine();
   });
 
   var changeDefaultLayout = function () {
-    $(this).attr('overridden', true);
-    let isDefault = $('#defaultlayout').is(':checked');
+    this.setAttribute('overridden', 'true');
+    let isDefault = this.checked;
     pulseConfig.set('defaultlayout', isDefault);
-    if (isDefault) { $('.rotation-settings').hide(); pulseConfig.set('machinesperpage', 12); }
-    else { $('.rotation-settings').show(); $('#machinesperpage').prop('disabled', false); $('#rotationdelay').prop('disabled', false); }
+    let rs = qs('.rotation-settings');
+    if (isDefault) {
+      if (rs) rs.style.display = 'none';
+      pulseConfig.set('machinesperpage', 12);
+    }
+    else {
+      if (rs) rs.style.display = '';
+      let mpp = qs('#machinesperpage'); if (mpp) mpp.disabled = false;
+      let rd = qs('#rotationdelay'); if (rd) rd.disabled = false;
+    }
     eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'layout' });
-
     _currentRotationIndex = 0;
     startRotationEngine();
   };
-  $('#defaultlayout').on('change', changeDefaultLayout);
-  if ($('#defaultlayout').is(':checked')) $('.rotation-settings').hide(); else $('.rotation-settings').show();
+  let dlInput = qs('#defaultlayout');
+  if (dlInput) {
+    dlInput.addEventListener('change', changeDefaultLayout);
+    let rs = qs('.rotation-settings');
+    if (rs) rs.style.display = dlInput.checked ? 'none' : '';
+  }
 
   var changeMachinesPerPage = function () {
-    $(this).attr('overridden', true);
-    let val = parseInt($(this).val());
+    this.setAttribute('overridden', 'true');
+    let val = parseInt(this.value);
     if (!isNaN(val)) {
       pulseConfig.set('machinesperpage', val);
       eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'layout' });
@@ -344,19 +525,30 @@ var populateConfigPanel = function (currentPageMethods) {
       startRotationEngine();
     }
   };
-  $('#machinesperpage').on('input change', changeMachinesPerPage);
+  let mppInput = qs('#machinesperpage');
+  if (mppInput) {
+    mppInput.addEventListener('input', changeMachinesPerPage);
+    mppInput.addEventListener('change', changeMachinesPerPage);
+  }
 
   var changeRotationDelay = function () {
-    $(this).attr('overridden', true);
-    let val = parseInt($(this).val());
+    this.setAttribute('overridden', 'true');
+    let val = parseInt(this.value);
     if (!isNaN(val)) {
       pulseConfig.set('rotationdelay', val);
     }
   };
-  $('#rotationdelay').on('input change', changeRotationDelay);
+  let rdInput = qs('#rotationdelay');
+  if (rdInput) {
+    rdInput.addEventListener('input', changeRotationDelay);
+    rdInput.addEventListener('change', changeRotationDelay);
+  }
 
   if (typeof currentPageMethods.initOptionValues === 'function') currentPageMethods.initOptionValues();
-  $('#resetoptions').click(function (e) { if (typeof currentPageMethods.setDefaultOptionValues === 'function') currentPageMethods.setDefaultOptionValues(); });
+  let resetOptionsBtn = qs('#resetoptions');
+  if (resetOptionsBtn) resetOptionsBtn.addEventListener('click', function () {
+    if (typeof currentPageMethods.setDefaultOptionValues === 'function') currentPageMethods.setDefaultOptionValues();
+  });
 
   var getPageFullURL = function () {
     let url = window.location.href.split('?')[0]; let nextSeparator = '?';
@@ -366,7 +558,8 @@ var populateConfigPanel = function (currentPageMethods) {
     let groupIds = pulseConfig.getArray('group', []);
     if (machineIds != 'undefined' && machineIds != null && machineIds != '' && machineIds != '-1') {
       for (let i = 0; i < machineIds.length; i++) { url += nextSeparator + 'machine=' + machineIds[i]; nextSeparator = '&'; }
-    } else { url += nextSeparator + 'machine='; nextSeparator = '&'; }
+    }
+    else { url += nextSeparator + 'machine='; nextSeparator = '&'; }
     for (let i = 1; i <= 20; i++) { let val = pulseConfig.getString('ancestor' + i); if (val && val !== '') url += '&ancestor' + i + '=' + val; else break; }
     if (pulseConfig.getBool('enableGroups', false)) {
       if (groupIds != 'undefined' && groupIds != null && groupIds != '' && groupIds != '-1') { for (let i = 0; i < groupIds.length; i++) url += '&group=' + groupIds[i]; }
@@ -376,22 +569,45 @@ var populateConfigPanel = function (currentPageMethods) {
     if (!isDefault) { url += '&machinesperpage=' + pulseConfig.getInt('machinesperpage', 12); url += '&rotationdelay=' + pulseConfig.getInt('rotationdelay', 10); }
     url += '&defaultlayout=' + isDefault;
     let showLegendEl = document.getElementById('showlegend');
-    if (showLegendEl && !$(showLegendEl).is(':hidden')) url += '&showlegend=' + showLegendEl.checked;
+    // hidden = offsetParent === null
+    if (showLegendEl && showLegendEl.offsetParent !== null) url += '&showlegend=' + showLegendEl.checked;
     if (typeof currentPageMethods.getOptionValues === 'function') url += currentPageMethods.getOptionValues();
     return url;
   }
-  $('#showurl').click(function () { let url = getPageFullURL(); pulseCustomDialog.openDialog(url, { type: 'Information', title: pulseConfig.pulseTranslate('content.bookmark', 'URL to bookmark') }); });
-  $('#copyurl').click(function () {
+  let showUrlBtn = qs('#showurl');
+  if (showUrlBtn) showUrlBtn.addEventListener('click', function () {
+    let url = getPageFullURL();
+    pulseCustomDialog.openDialog(url, { type: 'Information', title: pulseConfig.pulseTranslate('content.bookmark', 'URL to bookmark') });
+  });
+  let copyUrlBtn = qs('#copyurl');
+  if (copyUrlBtn) copyUrlBtn.addEventListener('click', function () {
     let url_to_copy = getPageFullURL();
+    let copySuccess = function () {
+      copyUrlBtn.classList.add('urlcopied');
+      copyUrlBtn.innerHTML = pulseConfig.pulseTranslate('content.success', 'Success');
+      setTimeout(function () {
+        copyUrlBtn.classList.remove('urlcopied');
+        copyUrlBtn.innerHTML = pulseConfig.pulseTranslate('content.copyurl', 'Copy URL');
+      }, 3000);
+    };
+    let copyFailure = function () {
+      copyUrlBtn.classList.add('urlcopyfailed');
+      copyUrlBtn.innerHTML = pulseConfig.pulseTranslate('content.failure', 'Failure');
+      setTimeout(function () {
+        copyUrlBtn.classList.remove('urlcopyfailed');
+        copyUrlBtn.innerHTML = pulseConfig.pulseTranslate('content.copyurl', 'Copy URL');
+      }, 3000);
+    };
     if (!navigator.clipboard) {
-      const tmp = document.createElement('textarea'); tmp.value = url_to_copy; document.body.appendChild(tmp); tmp.select();
-      if (document.execCommand('copy')) { $('#copyurl').addClass('urlcopied').html(pulseConfig.pulseTranslate('content.success', 'Success')); setTimeout(function () { $('#copyurl').removeClass('urlcopied').html(pulseConfig.pulseTranslate('content.copyurl', 'Copy URL')); }, 3000); }
-      else { $('#copyurl').addClass('urlcopyfailed').html(pulseConfig.pulseTranslate('content.failure', 'Failure')); setTimeout(function () { $('#copyurl').removeClass('urlcopyfailed').html(pulseConfig.pulseTranslate('content.copyurl', 'Copy URL')); }, 3000); }
+      const tmp = document.createElement('textarea');
+      tmp.value = url_to_copy;
+      document.body.appendChild(tmp);
+      tmp.select();
+      if (document.execCommand('copy')) copySuccess(); else copyFailure();
       document.body.removeChild(tmp);
-    } else {
-      navigator.clipboard.writeText(url_to_copy).then(
-        function () { $('#copyurl').addClass('urlcopied').html(pulseConfig.pulseTranslate('content.success', 'Success')); setTimeout(function () { $('#copyurl').removeClass('urlcopied').html(pulseConfig.pulseTranslate('content.copyurl', 'Copy URL')); }, 3000); })
-        .catch(function () { $('#copyurl').addClass('urlcopyfailed').html(pulseConfig.pulseTranslate('content.failure', 'Failure')); setTimeout(function () { $('#copyurl').removeClass('urlcopyfailed').html(pulseConfig.pulseTranslate('content.copyurl', 'Copy URL')); }, 3000); });
+    }
+    else {
+      navigator.clipboard.writeText(url_to_copy).then(copySuccess).catch(copyFailure);
     }
   });
 };
@@ -399,11 +615,25 @@ var populateConfigPanel = function (currentPageMethods) {
 var themeManager = {
   _version: '',
   load: function (name) {
-    let oldTheme = pulseConfig.getString('theme', 'dark'); pulseConfig.setGlobal('theme', name);
+    let oldTheme = pulseConfig.getString('theme', 'dark');
+    pulseConfig.setGlobal('theme', name);
     let pageName = window.location.href.replace(/(.*\/)([^\\]*)(\.html.*)/, '$2');
-    if (this._version == null || this._version == '') { this._version = $('link[rel=stylesheet][href*="style_' + oldTheme + '/' + pageName + '.css"]').attr('href').split('=')[1]; }
-    $('head').append('<link rel="stylesheet" type="text/css" href="./styles/style_' + name + '/' + pageName + '.css?v=' + this._version + '">');
-    if (oldTheme != name) { $('link[rel=stylesheet][href*="./styles/style_' + oldTheme + '/' + pageName + '.css"]').remove(); }
+    if (this._version == null || this._version == '') {
+      let oldLink = document.querySelector('link[rel=stylesheet][href*="style_' + oldTheme + '/' + pageName + '.css"]');
+      if (oldLink) {
+        let oldHref = oldLink.getAttribute('href');
+        if (oldHref) this._version = oldHref.split('=')[1];
+      }
+    }
+    let link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = './styles/style_' + name + '/' + pageName + '.css?v=' + this._version;
+    document.head.appendChild(link);
+    if (oldTheme != name) {
+      let stale = document.querySelectorAll('link[rel=stylesheet][href*="./styles/style_' + oldTheme + '/' + pageName + '.css"]');
+      for (let i = 0; i < stale.length; i++) stale[i].remove();
+    }
   },
   current: function () { return pulseConfig.getString('theme', 'dark'); }
 };
@@ -416,77 +646,99 @@ var showLegend = function () {
   var manualClickOnToggleLegend = false; // To allow hide legend before manual click
 
   var updateLegendVisibility = function () {
-    // Heights of the legend
-    let legendHeight = $('.legend-content')[0].clientHeight;
-    let legendEntryCount = $('.legend-content').children(':not(.legend-toggle)').length;
+    let legendContent = qs('.legend-content');
+    if (legendContent == null) return;
+    let legendHeight = legendContent.clientHeight;
+    let legendEntryCount = 0;
+    for (let i = 0; i < legendContent.children.length; i++) {
+      if (!legendContent.children[i].classList.contains('legend-toggle')) legendEntryCount++;
+    }
     let legendHasEntries = legendEntryCount > 0;
+    let legendWrapper = qs('.legend-wrapper');
+    let legendToggle = qs('.legend-toggle');
 
-    // Live mode: expand to 90% if grid has more than 1 row (> 2 children with 2-col grid)
+    // Live mode: expand to 95% if grid has more than 1 row
     if (pulseConfig.getString('showlegend') == 'true') {
       if (legendEntryCount > 1) {
-        $('.legend-content').css('width', '95%');
-      } else {
-        $('.legend-content').css('width', ''); // retour au 60% CSS
+        legendContent.style.width = '95%';
+      }
+      else {
+        legendContent.style.width = ''; // back to default 60% CSS
       }
     }
 
-    // Visibility of the button "Legend"
-    if (legendHasEntries && legendHeight > 2 && pulseConfig.getString('showlegend') == 'dynamic')
-      $('.legend-toggle').show();
-    else {
-      $('.legend-toggle').hide();
+    // Visibility of the "Legend" button
+    if (legendToggle) {
+      if (legendHasEntries && legendHeight > 2 && pulseConfig.getString('showlegend') == 'dynamic') {
+        legendToggle.style.display = '';
+      }
+      else {
+        legendToggle.style.display = 'none';
+      }
     }
+    let mainInner = qs('.pulse-mainarea-inner');
     if (pulseConfig.getString('showlegend') == 'false' || !legendHasEntries) {
-      $('.pulse-mainarea-inner').css('padding-bottom', '');
+      if (mainInner) mainInner.style.paddingBottom = '';
       return;
     }
 
     // if visible && at beginning && dynamic => auto-hide
-    if (!$('.legend-wrapper').hasClass('legendHidden')
+    if (legendWrapper && !legendWrapper.classList.contains('legendHidden')
       && (!manualClickOnToggleLegend)
       && (pulseConfig.getString('showlegend') == 'dynamic')) {
-      // Auto-hide by default in dynamic mode
-      $('.legend-wrapper').addClass('legendHidden');
+      legendWrapper.classList.add('legendHidden');
     }
 
-    if ($('.legend-wrapper').hasClass('legendHidden')) {
-      let currentTranslationY = parseInt($('.legend-wrapper').css('transform').split(',')[5]);
-      if (currentTranslationY > 0)
-        $('.legend-wrapper').addClass('legendHiddenNoAnimation');
-      $('.legend-wrapper').css({ 'transform': 'translateY(' + legendHeight + 'px)' });
+    if (legendWrapper && legendWrapper.classList.contains('legendHidden')) {
+      let transformStr = window.getComputedStyle(legendWrapper).transform;
+      let currentTranslationY = 0;
+      if (transformStr && transformStr !== 'none') {
+        let parts = transformStr.split(',');
+        if (parts.length >= 6) currentTranslationY = parseInt(parts[5]);
+      }
+      if (currentTranslationY > 0) legendWrapper.classList.add('legendHiddenNoAnimation');
+      legendWrapper.style.transform = 'translateY(' + legendHeight + 'px)';
     }
-    else {
+    else if (legendWrapper) {
       if (manualClickOnToggleLegend) {
-        $('.legend-wrapper').removeClass('legendHiddenNoAnimation');
-        $('.legend-wrapper').css({ 'transform': 'translateY(0)' });
+        legendWrapper.classList.remove('legendHiddenNoAnimation');
+        legendWrapper.style.transform = 'translateY(0)';
       }
     }
 
     // Push only in live view (showlegend === 'true') — other views keep the overlay
-    if (pulseConfig.getString('showlegend') === 'true' && legendHeight > 2) {
-      $('.pulse-mainarea-inner').css('padding-bottom', (legendHeight + 2) + 'px');
-    } else {
-      $('.pulse-mainarea-inner').css('padding-bottom', '');
+    if (mainInner) {
+      if (pulseConfig.getString('showlegend') === 'true' && legendHeight > 2) {
+        mainInner.style.paddingBottom = (legendHeight + 2) + 'px';
+      }
+      else {
+        mainInner.style.paddingBottom = '';
+      }
     }
   };
 
-  // ResizeObserver: recalculates whenever legend content size changes
-  // (replaces jQuery $.resize() which does not natively observe non-window elements)
-  new ResizeObserver(() => updateLegendVisibility()).observe($('.legend-content')[0]);
+  let legendContentEl = qs('.legend-content');
+  if (legendContentEl) {
+    new ResizeObserver(() => updateLegendVisibility()).observe(legendContentEl);
+  }
 
+  let legendToggleEl = qs('.legend-toggle');
+  let legendWrapperEl = qs('.legend-wrapper');
   if (pulseConfig.getString('showlegend') == 'dynamic') {
-    $('.legend-toggle').click(function () {
-      manualClickOnToggleLegend = true;
-      $('.legend-wrapper').toggleClass('legendHidden');
-      updateLegendVisibility();
-    });
-    $('.legend-content').css({ 'border-top-left-radius': '0' });
+    if (legendToggleEl) {
+      legendToggleEl.addEventListener('click', function () {
+        manualClickOnToggleLegend = true;
+        if (legendWrapperEl) legendWrapperEl.classList.toggle('legendHidden');
+        updateLegendVisibility();
+      });
+    }
+    if (legendContentEl) legendContentEl.style.borderTopLeftRadius = '0';
   }
   else if (pulseConfig.getString('showlegend') == 'false') {
-    $('.legend-wrapper').hide();
+    if (legendWrapperEl) legendWrapperEl.style.display = 'none';
   }
   else if (pulseConfig.getString('showlegend') == 'true') {
-    $('.legend-wrapper').show();
+    if (legendWrapperEl) legendWrapperEl.style.display = '';
   }
 
   updateLegendVisibility(); // Call immediately
@@ -506,9 +758,9 @@ exports.preparePage = function (currentPageMethods) {
   if (machineValues.length > 0) {
     const valMachine = machineValues.filter(v => v !== "").join(',');
     pulseConfig.set('machine', valMachine, true);
-    // [IMPORTANT FIX] Clean IDs here too
     _allMachinesCache = valMachine.split(',').map(s => s.trim());
-  } else {
+  }
+  else {
     let cfgMachines = pulseConfig.getArray('machine');
     if (cfgMachines && cfgMachines.length > 0) _allMachinesCache = cfgMachines;
   }
@@ -532,23 +784,32 @@ exports.preparePage = function (currentPageMethods) {
   if (newParams.toString()) newUrl += '?' + newParams.toString();
   window.history.replaceState({ path: newUrl }, '', newUrl);
 
-  $.ajaxSetup({ cache: false });
-  if (params.get('AppContext') == 'live') $('.pulse-content').addClass('appcontext-live');
+  // jQuery's $.ajaxSetup({cache:false}) was here; pulseService handles cache itself now.
+
+  if (params.get('AppContext') == 'live') {
+    let pc = qs('.pulse-content'); if (pc) pc.classList.add('appcontext-live');
+  }
 
   populateNavigationPanel();
   setNavigationLinks();
   initParameterPanel();
   animatePanels();
 
-  $('#fullscreenbtn').click(function () { if (isFullScreen()) exitFullScreen(); else enterFullScreen(); });
-  $('#darkthemebtn').prop('checked', themeManager.current() == 'dark');
-  $('#darkthemebtn').click(function () { themeManager.load(themeManager.current() == 'light' ? 'dark' : 'light'); });
+  let fsBtn = qs('#fullscreenbtn');
+  if (fsBtn) fsBtn.addEventListener('click', function () { if (isFullScreen()) exitFullScreen(); else enterFullScreen(); });
+  let darkBtn = qs('#darkthemebtn');
+  if (darkBtn) {
+    darkBtn.checked = (themeManager.current() == 'dark');
+    darkBtn.addEventListener('click', function () { themeManager.load(themeManager.current() == 'light' ? 'dark' : 'light'); });
+  }
 
   let pageNameFromUrl = pulseUtility.getCurrentPageName();
   let title1 = pulseConfig.pulseTranslate('general.title', 'Atsora Tracking');
   let title2 = pulseConfig.pulseTranslate('pages.' + pageNameFromUrl + '.title', '');
-  $('head').find('title').html(title2 + (title2 != '' ? ' - ' : '') + title1);
-  $('.pulse-header-title span').html((title2 != '' ? title2 : title1).toUpperCase());
+  let titleEl = document.head.querySelector('title');
+  if (titleEl) titleEl.innerHTML = title2 + (title2 != '' ? ' - ' : '') + title1;
+  let headerTitle = qs('.pulse-header-title span');
+  if (headerTitle) headerTitle.innerHTML = (title2 != '' ? title2 : title1).toUpperCase();
 
   let configOk = true;
   if (typeof currentPageMethods.getMissingConfigs === 'function') { configOk = (currentPageMethods.getMissingConfigs().length == 0); }
@@ -560,9 +821,14 @@ exports.preparePage = function (currentPageMethods) {
   showLegend();
 
   populateConfigPanel(currentPageMethods);
-  pulseSvg.inlineBackgroundSvg('#navigationpanelbtn'); pulseSvg.inlineBackgroundSvg('#configpanelbtn'); pulseSvg.inlineBackgroundSvg('#fullscreenbtn'); pulseSvg.inlineBackgroundSvg('#machineselectionbtn');
-  pulseSvg.inlineBackgroundSvg('.legend-toggle-icon-up'); pulseSvg.inlineBackgroundSvg('.legend-toggle-icon-down');
-  $('x-ancestors').each(function () { if (this.initialize) this.initialize(); });
+  pulseSvg.inlineBackgroundSvg('#navigationpanelbtn');
+  pulseSvg.inlineBackgroundSvg('#configpanelbtn');
+  pulseSvg.inlineBackgroundSvg('#fullscreenbtn');
+  pulseSvg.inlineBackgroundSvg('#machineselectionbtn');
+  pulseSvg.inlineBackgroundSvg('.legend-toggle-icon-up');
+  pulseSvg.inlineBackgroundSvg('.legend-toggle-icon-down');
+  let ancestors = qsa('x-ancestors');
+  for (let i = 0; i < ancestors.length; i++) { if (ancestors[i].initialize) ancestors[i].initialize(); }
 
   startRotationEngine();
 };

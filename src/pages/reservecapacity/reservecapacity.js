@@ -1,4 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -61,108 +62,90 @@ class ReserveCapacityPage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Init
   initOptionValues () {
-    // Check - minchart
+    const minchartcheckEl = document.getElementById('minchartcheck');
+    const minchartvalueEl = document.getElementById('minchartvalue');
+    const maxchartcheckEl = document.getElementById('maxchartcheck');
+    const maxchartvalueEl = document.getElementById('maxchartvalue');
+
     let minchartvalue = pulseConfig.get('minchartvalue');
-    $('#minchartcheck').change(function () {
-      let useMinChart = $('#minchartcheck').is(':checked');
-      // Show / Hide linked config + Store
+    minchartcheckEl.addEventListener('change', function () {
+      let useMinChart = this.checked;
       if (useMinChart) {
-        $('#minchartvalue').show();
-        // Store
-        let minchartvalue = $('#minchartvalue').val();
+        minchartvalueEl.style.display = '';
+        let minchartvalue = minchartvalueEl.value;
         if ((undefined == minchartvalue) || ('' == minchartvalue)) {
           minchartvalue = pulseConfig.getDefault('minchartvalue');
           if ((undefined == minchartvalue) || ('' == minchartvalue)) {
             minchartvalue = -70;
           }
-          $('#minchartvalue').val(minchartvalue);
+          minchartvalueEl.value = minchartvalue;
         }
         pulseConfig.set('minchartvalue', minchartvalue);
       }
       else {
-        $('#minchartvalue').hide();
-        // Store
+        minchartvalueEl.style.display = 'none';
         pulseConfig.set('minchartvalue', '');
       }
-
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'minchartvalue' });
     });
     if ((undefined == minchartvalue) || ('' == minchartvalue)) {
-      $('#minchartcheck').prop('checked', false);
-      //$('#minchartvalue').val(default); -> Not useful
+      minchartcheckEl.checked = false;
     }
     else {
-      $('#minchartcheck').prop('checked', true);
-      $('#minchartvalue').val(minchartvalue);
+      minchartcheckEl.checked = true;
+      minchartvalueEl.value = minchartvalue;
     }
-    $('#minchartcheck').change();
+    minchartcheckEl.dispatchEvent(new Event('change', { bubbles: true }));
 
-    // Value - minchart
-    /*if ('' != minchartvalue) { // Already done before
-      $('#minchartvalue').val(pulseConfig.getInt('minchartvalue'));
-    }*/
     var changeMin = function () {
-      let minchartvalue = $('#minchartvalue').val();
-      // Store
+      let minchartvalue = minchartvalueEl.value;
       pulseConfig.set('minchartvalue', minchartvalue);
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'minchartvalue' });
     };
-    $('#minchartvalue').bind('input', changeMin);
-    $('#minchartvalue').change(changeMin);
+    minchartvalueEl.addEventListener('input', changeMin);
+    minchartvalueEl.addEventListener('change', changeMin);
 
-
-    // Check - maxchart
     let maxchartvalue = pulseConfig.get('maxchartvalue');
-    $('#maxchartcheck').change(function () {
-      let useMaxChart = $('#maxchartcheck').is(':checked');
-      // Show / Hide linked config + Store
+    maxchartcheckEl.addEventListener('change', function () {
+      let useMaxChart = this.checked;
       if (useMaxChart) {
-        $('#maxchartvalue').show();
-        // Store
-        let maxchartvalue = $('#maxchartvalue').val();
+        maxchartvalueEl.style.display = '';
+        let maxchartvalue = maxchartvalueEl.value;
         if ((undefined == maxchartvalue) || ('' == maxchartvalue)) {
           maxchartvalue = pulseConfig.getDefault('maxchartvalue');
           if ((undefined == maxchartvalue) || ('' == maxchartvalue)) {
             maxchartvalue = 30;
           }
-          $('#maxchartvalue').val(maxchartvalue);
+          maxchartvalueEl.value = maxchartvalue;
         }
         pulseConfig.set('maxchartvalue', maxchartvalue);
       }
       else {
-        $('#maxchartvalue').hide();
-        // Store
+        maxchartvalueEl.style.display = 'none';
         pulseConfig.set('maxchartvalue', '');
       }
-
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'maxchartvalue' });
     });
     if ((undefined == maxchartvalue) || ('' == maxchartvalue)) {
-      $('#maxchartcheck').prop('checked', false);
-      //$('#maxchartvalue').val(default); -> not useful
+      maxchartcheckEl.checked = false;
     }
     else {
-      $('#maxchartcheck').prop('checked', true);
-      $('#maxchartvalue').val(maxchartvalue);
+      maxchartcheckEl.checked = true;
+      maxchartvalueEl.value = maxchartvalue;
     }
-    $('#maxchartcheck').change();
+    maxchartcheckEl.dispatchEvent(new Event('change', { bubbles: true }));
 
-    // Value - maxchart
-    /*if ('' != maxchartvalue) { // Already done before
-      $('#maxchartvalue').val(pulseConfig.getInt('maxchartvalue'));
-    }*/
     var changeMax = function () {
-      let maxchartvalue = $('#maxchartvalue').val();
-      // Store
+      let maxchartvalue = maxchartvalueEl.value;
       pulseConfig.set('maxchartvalue', maxchartvalue);
       eventBus.EventBus.dispatchToAll('configChangeEvent',
         { 'config': 'maxchartvalue' });
     };
-    $('#maxchartvalue').bind('input', changeMax);
-    $('#maxchartvalue').change(changeMax);
+    maxchartvalueEl.addEventListener('input', changeMax);
+    maxchartvalueEl.addEventListener('change', changeMax);
   }
 
   /**
@@ -174,35 +157,31 @@ class ReserveCapacityPage extends pulsePage.BasePage {
   // CONFIG PANEL - Default values
   setDefaultOptionValues () {
     const setDefaultCheckedValue = (id, checked, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.prop('checked', checked);
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.checked = checked;
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
     const setDefaultValue = (id, value, { trigger = true, clearOverride = true } = {}) => {
-      const element = $('#' + id);
-      element.val(value);
-      if (trigger) element.change();
-      if (clearOverride) element.removeAttr('overridden');
+      const element = document.getElementById(id);
+      element.value = value;
+      if (trigger) element.dispatchEvent(new Event('change', { bubbles: true }));
+      if (clearOverride) element.removeAttribute('overridden');
     };
 
-    // MinChart
     let minchartvalue = pulseConfig.getDefault('minchartvalue');
     if ((undefined == minchartvalue) || ('' == minchartvalue)) {
       setDefaultCheckedValue('minchartcheck', false);
-      //$('#minchartvalue').val(-70); // Not useful. Keep previous value
     }
     else {
       setDefaultCheckedValue('minchartcheck', true);
       setDefaultValue('minchartvalue', minchartvalue);
     }
 
-    // MaxChart
     let maxchartvalue = pulseConfig.getDefault('maxchartvalue');
     if ((undefined == maxchartvalue) || ('' == maxchartvalue)) {
       setDefaultCheckedValue('maxchartcheck', false);
-      //$('#maxchartvalue').val(30); // Not useful. Keep previous value
     }
     else {
       setDefaultCheckedValue('maxchartcheck', true);
@@ -280,6 +259,10 @@ class ReserveCapacityPage extends pulsePage.BasePage {
 
 }
 
-$(document).ready(function () {
+if (document.readyState !== 'loading') {
   pulsePage.preparePage(new ReserveCapacityPage());
-});
+} else {
+  document.addEventListener('DOMContentLoaded', function () {
+    pulsePage.preparePage(new ReserveCapacityPage());
+  });
+}

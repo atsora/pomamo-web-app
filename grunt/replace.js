@@ -1,3 +1,8 @@
+// Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2023-2026 Atsora Solutions
+//
+// SPDX-License-Identifier: Apache-2.0
+
 module.exports = {
   html: {
     options: {
@@ -53,7 +58,6 @@ module.exports = {
       ]
     },
     files: [
-      { src: 'dist-es2015/lib/jquery/jquery.js', dest: 'dist-es2015/lib/jquery/jquery.js' },
       { src: 'dist-es2015/lib/moment/moment.js', dest: 'dist-es2015/lib/moment/moment.js' }
     ]
   },
