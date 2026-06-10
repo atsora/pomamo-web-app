@@ -5,6 +5,7 @@
 /bower_components
 /dist
 /dist-es2015
+/dist-vite
 /external
 /node_modules
 package-lock.json

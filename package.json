@@ -40,7 +40,8 @@
     "grunt-shell": "~2.1.0",
     "grunt-subgrunt": "^1.2.0",
     "load-grunt-config": "^4.0.1",
-    "time-grunt": "^1.4.0"
+    "time-grunt": "^1.4.0",
+    "vite": "^5"
   },
   "optionalDependencies": {
     "chokidar": "^3.5.3"
