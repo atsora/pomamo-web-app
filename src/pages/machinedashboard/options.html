@@ -1,6 +1,6 @@
 <!--
 Copyright (C) 2009-2023 Lemoine Automation Technologies
-Copyright (C) 2025 Atsora Solutions
+Copyright (C) 2023-2026 Atsora Solutions
 
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -116,12 +116,19 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
 
-    <!-- CNC alarm icon -->
+    <!-- Current alarm settings -->
     <div class="labelsubgroup">
       <div class='labelheader'>
-        <label for="showcncalarmicon"><x-tr key="options.showCncAlarmIcon"
-            default="Show CNC alarm icon"></x-tr></label>
-        <input type="checkbox" id="showcncalarmicon" autocomplete="off" />
+        <label for="showalarm"><x-tr key="options.showCurrentAlarm"
+            default="Show current alarm"></x-tr></label>
+        <input type="checkbox" id="showalarm" autocomplete="off" />
+      </div>
+      <div class="subgroup showalarmdetails">
+        <div class='inlined-radio'>
+          <input type="checkbox" id="showUnknownAlarm" autocomplete="off" />
+          <label for="showUnknownAlarm"><x-tr key="options.alarmsUnknown"
+              default="show unknown alarms"></x-tr></label>
+        </div>
       </div>
     </div>
   </div>

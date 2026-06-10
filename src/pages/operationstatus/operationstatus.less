@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2009-2023 Lemoine Automation Technologies
- * Copyright (C) 2025 Atsora Solutions
+ * Copyright (C) 2023-2026 Atsora Solutions
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -334,9 +334,15 @@ x-groupgrid {
         align-items: center;
         overflow: hidden;
 
+        // Collapse to zero size when there is no alarm icon yet — but do NOT use
+        // display:none. The inner x-currenticoncncalarm gates its rendering on
+        // isVisible (offsetParent !== null); display:none makes offsetParent null,
+        // so the component never renders, never produces a .pulse-icon-cncalarm,
+        // and the container stays collapsed forever (deadlock — left icon missing
+        // while the detailed bottom one, which has no such collapse, renders fine).
+        // flex:0 + the existing overflow:hidden hide it while keeping it in layout.
         &:not(:has(.pulse-icon-cncalarm)) {
           flex: 0 0 0;
-          display: none;
         }
 
         x-currenticoncncalarm {

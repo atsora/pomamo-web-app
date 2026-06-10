@@ -1,5 +1,5 @@
 // Copyright (C) 2009-2023 Lemoine Automation Technologies
-// Copyright (C) 2025 Atsora Solutions
+// Copyright (C) 2023-2026 Atsora Solutions
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -378,6 +378,10 @@ class MachineStatusPage extends pulsePage.BasePage {
       if (pulseConfig.getDefaultBool('showalarm') != pulseConfig.getBool('showalarm')) {
         showAlarmChk.setAttribute('overridden', 'true');
       }
+      // Sub-options visible only while the alarm icon is shown
+      document.querySelectorAll('.showalarmdetails').forEach(el => {
+        el.style.display = showAlarmChk.checked ? '' : 'none';
+      });
       showAlarmChk.addEventListener('change', function () {
         let showalarm = showAlarmChk.checked;
         // Store
@@ -389,6 +393,22 @@ class MachineStatusPage extends pulsePage.BasePage {
         else {
           document.querySelectorAll('x-currenticoncncalarm').forEach(el => el.style.display = 'none');
         }
+        document.querySelectorAll('.showalarmdetails').forEach(el => {
+          el.style.display = showalarm ? '' : 'none';
+        });
+      });
+    }
+
+    // Alarm sub-option: include unknown (non-focused) alarms in the icon query
+    const showUnknownAlarmChk = document.getElementById('showUnknownAlarm');
+    if (showUnknownAlarmChk) {
+      showUnknownAlarmChk.checked = pulseConfig.getBool('showUnknownAlarm');
+      if (pulseConfig.getDefaultBool('showUnknownAlarm') != pulseConfig.getBool('showUnknownAlarm')) {
+        showUnknownAlarmChk.setAttribute('overridden', 'true');
+      }
+      showUnknownAlarmChk.addEventListener('change', function () {
+        pulseConfig.set('showUnknownAlarm', showUnknownAlarmChk.checked);
+        eventBus.EventBus.dispatchToAll('configChangeEvent', { 'config': 'showUnknownAlarm' });
       });
     }
 
@@ -550,6 +570,7 @@ class MachineStatusPage extends pulsePage.BasePage {
 
     // Alarm
     setDefaultChecked('showalarm');
+    setDefaultChecked('showUnknownAlarm');
     setDefaultChecked('showstacklight');
     setDefaultChecked('showweeklybar');
 
@@ -586,6 +607,7 @@ class MachineStatusPage extends pulsePage.BasePage {
       { id: 'displaymotiontime', type: 'checkbox' },
       { id: 'showtarget', type: 'checkbox' },
       { id: 'showalarm', type: 'checkbox' },
+      { id: 'showUnknownAlarm', type: 'checkbox' },
       { id: 'showstacklight', type: 'checkbox' },
       { id: 'showweeklybar', type: 'checkbox' },
       // Rotation
