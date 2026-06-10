@@ -1,3 +1,8 @@
+// Copyright (C) 2009-2023 Lemoine Automation Technologies
+// Copyright (C) 2023-2026 Atsora Solutions
+//
+// SPDX-License-Identifier: Apache-2.0
+
 module.exports = {
   exportsdev: {
     files: [
@@ -89,6 +94,20 @@ module.exports = {
       { 'dist-es2015/.htaccess': '.htaccess' }
     ]
   },
+  vuedist: {
+    // Copy the built Vue app into the Pulse bundle. The source lives in the local
+    // input dir external/vue-dist/, populated by the root orchestrator (rebuild.sh)
+    // from atsora-vue/dist/. This grunt build never reaches into a sibling repo —
+    // the .sh is the only thing that knows the submodules sit side by side.
+    files: [
+      {
+        expand: true,
+        cwd: 'external/vue-dist/',
+        src: ['**/*'],
+        dest: 'dist-es2015/vue-dist/'
+      }
+    ]
+  },
   css: {
     files: [
       { // customize.less -> tmp file needed to generate customize.css
@@ -129,6 +148,16 @@ module.exports = {
       }
     ]
   },
+  configOverride: {
+    // Override `config_default.js` with the deployed one. The source lives in the
+    // local input dir external/config_default.js, staged by the root orchestrator
+    // (rebuild.sh) from pomamo-web-app-config/ — no sibling-repo path here.
+    // Used in the `default` build target only — release/beta keep the generic
+    // `src/scripts/config_default.js`.
+    files: [
+      { 'dist-es2015/scripts/config_default.js': 'external/config_default.js' }
+    ]
+  },
   custompages: { /* we could copy all directory... */
     files: [
       {
@@ -151,6 +180,8 @@ module.exports = {
     ]
   },
   configEmpty: {
+    // Ships an EMPTY config_install.js — release/installer scenarios only.
+    // Not used by the `default`/`dev` (local) builds, which use configLocal below.
     files: [
       {
         expand: true,
@@ -163,11 +194,22 @@ module.exports = {
       }
     ]
   },
+  configLocal: {
+    // Local dev build: install the real config_install.js (from config/) directly,
+    // so the `default`/`dev` aliases produce a ready-to-run bundle without any
+    // post-build restore step. (There is no src/scripts/config_install.js, so this
+    // is the single source of config_install.js for local builds.)
+    files: [
+      { 'dist-es2015/scripts/config_install.js': 'config/config_install.js' }
+    ]
+  },
   jslib: {
     files: [
-      { 'dist-es2015/lib/jquery/jquery.js': 'node_modules/@bower_components/jquery/dist/jquery.min.js' },
       { 'dist-es2015/lib/moment/moment.js': 'node_modules/@bower_components/momentjs/min/moment-with-locales.min.js' },
-      { 'dist-es2015/lib/d3/d3.min.js': 'node_modules/d3/dist/d3.min.js' }
+      { 'dist-es2015/lib/d3/d3.min.js': 'node_modules/d3/dist/d3.min.js' },
+      // TODO: jQuery is being phased out (jQuery → vanilla migration in progress).
+      // Kept in the bundle until the last `$()` usage in pomamo-web-components is removed.
+      { 'dist-es2015/lib/jquery/jquery.js': 'node_modules/@bower_components/jquery/dist/jquery.js' }
     ]
   },
   release: {
@@ -175,7 +217,7 @@ module.exports = {
       {
         expand: true,
         cwd: 'dist-es2015/',
-        src: ['images/**', 'lib/**', 'scripts/**', 'styles/**'],
+        src: ['images/**', 'lib/**', 'scripts/**', 'styles/**', 'vue-dist/**'],
         dest: 'dist/'
       }
     ]
@@ -185,7 +227,7 @@ module.exports = {
       {
         expand: true,
         cwd: 'dist-es2015/',
-        src: ['images/**', 'lib/**', 'scripts/**', 'styles/**'],
+        src: ['images/**', 'lib/**', 'scripts/**', 'styles/**', 'vue-dist/**'],
         dest: 'dist/'
       },
       {

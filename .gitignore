@@ -5,6 +5,7 @@
 /bower_components
 /dist
 /dist-es2015
+/external
 /node_modules
 package-lock.json
 *.msi

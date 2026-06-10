@@ -265,15 +265,16 @@ SPDX-License-Identifier: Apache-2.0
       </div>
     </div>
   </div>
-  <!-- Vue app bundle (built from atsora-vue via pnpm build; hashes patched by patch-pulse-template).
+  <!-- Vue app bundle (built from atsora-vue via pnpm build). Fixed file names (index.js / index.css);
+       cache-busting is the `?v=` query, rewritten to the build version by grunt replace:html.
        Auto-loaded on vue-* pages (full app). On other Pulse pages it is NOT loaded eagerly (PrimeVue
        would inject global <style> that could leak into Pulse) — instead window.__loadVue is exposed so
        a Pulse page can mount the Vue app lazily on demand (e.g. to open the task execution popup over
        the page, on first task click). The CSS link is scoped to #vue-app, so loading it everywhere is harmless. -->
-  <link rel="stylesheet" href="./vue-dist/static/index.CZTnsm2q.css">
+  <link rel="stylesheet" href="./vue-dist/static/index.css?v=">
   <script type="module">
     window.__loadVue = function () {
-      window.__vueLoading = window.__vueLoading || import('./vue-dist/static/index.1HlUrMA_.js');
+      window.__vueLoading = window.__vueLoading || import('./vue-dist/static/index.js?v=');
       return window.__vueLoading;
     };
     if (/(^|\/)vue-[^/]*\.html$/.test(location.pathname))
