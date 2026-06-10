@@ -2,6 +2,7 @@
     "default": [
         "clean",
         "copy:js",
+        "copy:configOverride",
         "copy:jslib",
         "browserify",
         "copy:webconfig",
@@ -21,6 +22,7 @@
         "clean",
         "clean:dist",
         "copy:js",
+        "copy:configOverride",
         "copy:jslib",
         "browserify",
         "copy:webconfig",
@@ -40,6 +42,7 @@
         "clean",
         "clean:dist",
         "copy:js",
+        "copy:configOverride",
         "copy:jslib",
         "browserify",
         "copy:webconfig",
