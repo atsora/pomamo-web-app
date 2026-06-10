@@ -163,6 +163,15 @@ module.exports = {
       }
     ]
   },
+  configOverride: {
+    // Override config_default.js with the deployed one. The source lives in the
+    // local input dir external/config_default.js, staged by the root orchestrator
+    // (rebuild.sh / build.sh) from pomamo-web-app-config/ — no sibling-repo path
+    // here, so the build works through the superproject.
+    files: [
+      { 'dist-es2015/scripts/config_default.js': 'external/config_default.js' }
+    ]
+  },
   jslib: {
     files: [
       { 'dist-es2015/lib/jquery/jquery.js': 'node_modules/@bower_components/jquery/dist/jquery.min.js' },
