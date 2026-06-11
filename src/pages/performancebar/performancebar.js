@@ -3,22 +3,22 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
 
-require('x-reasonbutton/x-reasonbutton');
-require('x-machinedisplay/x-machinedisplay');
-require('x-periodmanager/x-periodmanager');
-require('x-performancebar/x-performancebar');
-require('x-motionpercentage/x-motionpercentage');
-require('x-motiontime/x-motiontime');
+import 'x-reasonbutton/x-reasonbutton';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-periodmanager/x-periodmanager';
+import 'x-performancebar/x-performancebar';
+import 'x-motionpercentage/x-motionpercentage';
+import 'x-motiontime/x-motiontime';
 
-require('x-machinemodelegends/x-machinemodelegends');
-require('x-reasongroups/x-reasongroups');
+import 'x-machinemodelegends/x-machinemodelegends';
+import 'x-reasongroups/x-reasongroups';
 
-require('x-groupgrid/x-groupgrid');
-require('x-rotationprogress/x-rotationprogress');
-require('x-tr/x-tr');
+import 'x-groupgrid/x-groupgrid';
+import 'x-rotationprogress/x-rotationprogress';
+import 'x-tr/x-tr';
 
 /**
  * Performance Bar page — grid view of performance bars per machine.

@@ -3,13 +3,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
-var pulseSvg = require('pulseSvg');
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
+import * as pulseSvg from 'pulseSvg';
 
-require('x-machinedisplay/x-machinedisplay');
-require('x-reasonbutton/x-reasonbutton');
-require('x-tr/x-tr');
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-reasonbutton/x-reasonbutton';
+import 'x-tr/x-tr';
 
 /**
  * Plant page — SVG floor-plan view with embedded reason buttons.

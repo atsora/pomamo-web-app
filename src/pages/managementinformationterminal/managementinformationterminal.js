@@ -3,22 +3,22 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseUtility = require('pulseUtility');
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
-var eventBus = require('eventBus');
+import * as pulseUtility from 'pulseUtility';
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
+import * as eventBus from 'eventBus';
 
-require('x-groupsingroup/x-groupsingroup');
+import 'x-groupsingroup/x-groupsingroup';
 
-require('x-periodmanager/x-periodmanager');
-require('x-ancestors/x-ancestors');
-require('x-machinedisplay/x-machinedisplay');
-require('x-workinfo/x-workinfo');
-require('x-defaultpie/x-defaultpie');
-require('x-freetext/x-freetext');
-require('x-zoominpagebutton/x-zoominpagebutton');
-require('x-showrunningdialogbutton/x-showrunningdialogbutton');
-require('x-tr/x-tr');
+import 'x-periodmanager/x-periodmanager';
+import 'x-ancestors/x-ancestors';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-workinfo/x-workinfo';
+import 'x-defaultpie/x-defaultpie';
+import 'x-freetext/x-freetext';
+import 'x-zoominpagebutton/x-zoominpagebutton';
+import 'x-showrunningdialogbutton/x-showrunningdialogbutton';
+import 'x-tr/x-tr';
 
 /**
  * Management Information Terminal page — hierarchical view with default

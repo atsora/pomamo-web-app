@@ -3,42 +3,42 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
 
-require('x-machinetab/x-machinetab');
-require('x-machinetabnav/x-machinetabnav');
-require('x-machinedisplay/x-machinedisplay');
-require('x-lastserialnumber/x-lastserialnumber');
-require('x-lastworkinformationbar/x-lastworkinformationbar');
-require('x-lastmachinestatetemplate/x-lastmachinestatetemplate');
-require('x-lastmachinestatus/x-lastmachinestatus');
-require('x-unansweredreasonnumber/x-unansweredreasonnumber');
-require('x-reasonbutton/x-reasonbutton');
-require('x-periodmanager/x-periodmanager');
-require('x-datetimegraduation/x-datetimegraduation');
-require('x-barstack/x-barstack');
-require('x-motionpercentage/x-motionpercentage');
-require('x-motiontime/x-motiontime');
+import 'x-machinetab/x-machinetab';
+import 'x-machinetabnav/x-machinetabnav';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-lastserialnumber/x-lastserialnumber';
+import 'x-lastworkinformationbar/x-lastworkinformationbar';
+import 'x-lastmachinestatetemplate/x-lastmachinestatetemplate';
+import 'x-lastmachinestatus/x-lastmachinestatus';
+import 'x-unansweredreasonnumber/x-unansweredreasonnumber';
+import 'x-reasonbutton/x-reasonbutton';
+import 'x-periodmanager/x-periodmanager';
+import 'x-datetimegraduation/x-datetimegraduation';
+import 'x-barstack/x-barstack';
+import 'x-motionpercentage/x-motionpercentage';
+import 'x-motiontime/x-motiontime';
 
-require('x-savemachinestatetemplate/x-savemachinestatetemplate');
-require('x-cycleprogressbar/x-cycleprogressbar');
-require('x-performancebar/x-performancebar');
-require('x-productionmachiningstatus/x-productionmachiningstatus');
-require('x-toollifemachine/x-toollifemachine');
-require('x-task/x-task');
+import 'x-savemachinestatetemplate/x-savemachinestatetemplate';
+import 'x-cycleprogressbar/x-cycleprogressbar';
+import 'x-performancebar/x-performancebar';
+import 'x-productionmachiningstatus/x-productionmachiningstatus';
+import 'x-toollifemachine/x-toollifemachine';
+import 'x-task/x-task';
 
-require('x-cyclesinperiod/x-cyclesinperiod');
+import 'x-cyclesinperiod/x-cyclesinperiod';
 
-require('x-reasongroups/x-reasongroups');
-require('x-fieldlegends/x-fieldlegends');
-require('x-machinemodelegends/x-machinemodelegends');
+import 'x-reasongroups/x-reasongroups';
+import 'x-fieldlegends/x-fieldlegends';
+import 'x-machinemodelegends/x-machinemodelegends';
 
 // Pies
-require('x-partproductionstatuspie/x-partproductionstatuspie');
-require('x-performancegauge/x-performancegauge');
+import 'x-partproductionstatuspie/x-partproductionstatuspie';
+import 'x-performancegauge/x-performancegauge';
 
-require('x-tr/x-tr');
+import 'x-tr/x-tr';
 
 /**
  * Machines page — detailed per-machine view with stacked status bars.

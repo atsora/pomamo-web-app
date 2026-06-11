@@ -3,12 +3,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseUtility = require('pulseUtility');
-var pulseLogin = require('pulseLogin');
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
-var pulseSvg = require('pulseSvg');
-require('x-tr/x-tr');
+import * as pulseUtility from 'pulseUtility';
+import * as pulseLogin from 'pulseLogin';
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
+import * as pulseSvg from 'pulseSvg';
+import 'x-tr/x-tr';
 
 /**
  * Login page — role / authentication entry point.

@@ -3,38 +3,38 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulseUtility = require('pulseUtility');
-var pulsePage = require('pulsePage');
-var eventBus = require('eventBus');
+import * as pulseConfig from 'pulseConfig';
+import * as pulseUtility from 'pulseUtility';
+import * as pulsePage from 'pulsePage';
+import * as eventBus from 'eventBus';
 
-require('x-groupgrid/x-groupgrid');
+import 'x-groupgrid/x-groupgrid';
 
-require('x-machinedisplay/x-machinedisplay');
-require('x-currentworkinfo/x-currentworkinfo');
-require('x-workinfo/x-workinfo');
-require('x-production/x-production');
-require('x-currentsequence/x-currentsequence');
-require('x-currenttool/x-currenttool');
-require('x-currenticoncncalarm/x-currenticoncncalarm');
-require('x-defaultpie/x-defaultpie');
-require('x-freetext/x-freetext');
-require('x-currentisofile/x-currentisofile');
-require('x-stacklight/x-stacklight');
-require('x-toollifemachine/x-toollifemachine');
-require('x-reasonbutton/x-reasonbutton');
-require('x-lastmachinestatus/x-lastmachinestatus');
-require('x-rotationprogress/x-rotationprogress');
-require('x-taskslist/x-taskslist');
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-currentworkinfo/x-currentworkinfo';
+import 'x-workinfo/x-workinfo';
+import 'x-production/x-production';
+import 'x-currentsequence/x-currentsequence';
+import 'x-currenttool/x-currenttool';
+import 'x-currenticoncncalarm/x-currenticoncncalarm';
+import 'x-defaultpie/x-defaultpie';
+import 'x-freetext/x-freetext';
+import 'x-currentisofile/x-currentisofile';
+import 'x-stacklight/x-stacklight';
+import 'x-toollifemachine/x-toollifemachine';
+import 'x-reasonbutton/x-reasonbutton';
+import 'x-lastmachinestatus/x-lastmachinestatus';
+import 'x-rotationprogress/x-rotationprogress';
+import 'x-taskslist/x-taskslist';
 
 /* For Bar display and some defaultpie */
-require('x-periodmanager/x-periodmanager');
-require('x-datetimegraduation/x-datetimegraduation');
-require('x-barstack/x-barstack'); // pulls in all bar components
+import 'x-periodmanager/x-periodmanager';
+import 'x-datetimegraduation/x-datetimegraduation';
+import 'x-barstack/x-barstack'; // pulls in all bar components
 /* end Bar display  */
-require('x-motionpercentage/x-motionpercentage');
+import 'x-motionpercentage/x-motionpercentage';
 
-require('x-tr/x-tr');
+import 'x-tr/x-tr';
 
 /**
  * Operation Status page — grid view of per-machine operation dashboards.

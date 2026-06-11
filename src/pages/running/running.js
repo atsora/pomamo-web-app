@@ -3,30 +3,30 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulseUtility = require('pulseUtility');
-var pulsePage = require('pulsePage');
+import * as pulseConfig from 'pulseConfig';
+import * as pulseUtility from 'pulseUtility';
+import * as pulsePage from 'pulsePage';
 
-require('x-grouplist/x-grouplist');
-require('x-rotationprogress/x-rotationprogress');
+import 'x-grouplist/x-grouplist';
+import 'x-rotationprogress/x-rotationprogress';
 
-require('x-machinedisplay/x-machinedisplay');
-require('x-productionmachiningstatus/x-productionmachiningstatus');
-require('x-lastworkinformation/x-lastworkinformation');
-require('x-currentcncvalue/x-currentcncvalue');
-require('x-lastshift/x-lastshift');
-require('x-datetimegraduation/x-datetimegraduation');
-require('x-barstack/x-barstack'); // pulls in all bar components
-require('x-motionpercentage/x-motionpercentage');
-require('x-motiontime/x-motiontime');
-require('x-periodtoolbar/x-periodtoolbar');
-require('x-reasonbutton/x-reasonbutton');
-require('x-clock/x-clock');
-require('x-productionstatelegends/x-productionstatelegends');
-require('x-reasongroups/x-reasongroups');
-require('x-fieldlegends/x-fieldlegends');
-require('x-machinemodelegends/x-machinemodelegends');
-require('x-tr/x-tr');
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-productionmachiningstatus/x-productionmachiningstatus';
+import 'x-lastworkinformation/x-lastworkinformation';
+import 'x-currentcncvalue/x-currentcncvalue';
+import 'x-lastshift/x-lastshift';
+import 'x-datetimegraduation/x-datetimegraduation';
+import 'x-barstack/x-barstack'; // pulls in all bar components
+import 'x-motionpercentage/x-motionpercentage';
+import 'x-motiontime/x-motiontime';
+import 'x-periodtoolbar/x-periodtoolbar';
+import 'x-reasonbutton/x-reasonbutton';
+import 'x-clock/x-clock';
+import 'x-productionstatelegends/x-productionstatelegends';
+import 'x-reasongroups/x-reasongroups';
+import 'x-fieldlegends/x-fieldlegends';
+import 'x-machinemodelegends/x-machinemodelegends';
+import 'x-tr/x-tr';
 
 /**
  * Running page — real-time per-machine view with status bars and operation info.

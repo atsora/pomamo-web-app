@@ -168,9 +168,15 @@
   class PulseShell extends HTMLElement {
     connectedCallback () {
       // connectedCallback fires on the start tag, before our <template> children
-      // are parsed. Assemble once the subtree is available.
+      // are parsed. Assemble once the subtree is available. 'readystatechange'
+      // (-> interactive) fires when the DOM is fully parsed and BEFORE deferred /
+      // module scripts execute (HTML spec 'the end' order), so the page module
+      // always finds the assembled chrome. DOMContentLoaded is kept as a safety
+      // net; _assemble is idempotent.
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', this._assemble.bind(this), { once: true });
+        var assemble = this._assemble.bind(this);
+        document.addEventListener('readystatechange', assemble, { once: true });
+        document.addEventListener('DOMContentLoaded', assemble, { once: true });
       }
       else {
         this._assemble();

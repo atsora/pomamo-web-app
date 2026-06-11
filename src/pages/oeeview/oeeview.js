@@ -2,23 +2,23 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulsePage = require('pulsePage');
-var pulseConfig = require('pulseConfig');
-var pulseUtility = require('pulseUtility');
-var eventBus = require('eventBus');
+import * as pulsePage from 'pulsePage';
+import * as pulseConfig from 'pulseConfig';
+import * as pulseUtility from 'pulseUtility';
+import * as eventBus from 'eventBus';
 
-require('x-tr/x-tr');
-require('x-periodmanager/x-periodmanager');
-require('x-groupgrid/x-groupgrid');
-require('x-machinedisplay/x-machinedisplay');
-require('x-reasonbutton/x-reasonbutton');
-require('x-lastmachinestatus/x-lastmachinestatus');
-require('x-rotationprogress/x-rotationprogress');
-require('x-production/x-production');
-require('x-productionshiftgoal/x-productionshiftgoal');
-require('x-productiongauge/x-productiongauge');
-require('x-periodtoolbar/x-periodtoolbar');
-require('x-workinfo/x-workinfo');
+import 'x-tr/x-tr';
+import 'x-periodmanager/x-periodmanager';
+import 'x-groupgrid/x-groupgrid';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-reasonbutton/x-reasonbutton';
+import 'x-lastmachinestatus/x-lastmachinestatus';
+import 'x-rotationprogress/x-rotationprogress';
+import 'x-production/x-production';
+import 'x-productionshiftgoal/x-productionshiftgoal';
+import 'x-productiongauge/x-productiongauge';
+import 'x-periodtoolbar/x-periodtoolbar';
+import 'x-workinfo/x-workinfo';
 
 
 /**

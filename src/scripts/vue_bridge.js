@@ -13,7 +13,7 @@
 //   window.__setLocale(locale)      - sync the Pulse language into Vue i18n
 //   window.__loadVue()              - lazily import/mount the Vue bundle on demand
 
-var eventBus = require('eventBus');
+import * as eventBus from 'eventBus';
 
 function qs (sel) { return document.querySelector(sel); }
 
@@ -108,11 +108,11 @@ function handleVuePageLoad (pageName, pendingTaskId) {
   }
 }
 
-exports.setResolvedMachinesGetter = setResolvedMachinesGetter;
-exports.getSelectedMachines = getSelectedMachines;
-exports.whenVueReady = whenVueReady;
-exports.showVuePage = showVuePage;
-exports.setMachines = setMachines;
-exports.openTaskInstance = openTaskInstance;
-exports.registerTaskClickListener = registerTaskClickListener;
-exports.handleVuePageLoad = handleVuePageLoad;
+export { setResolvedMachinesGetter };
+export { getSelectedMachines };
+export { whenVueReady };
+export { showVuePage };
+export { setMachines };
+export { openTaskInstance };
+export { registerTaskClickListener };
+export { handleVuePageLoad };

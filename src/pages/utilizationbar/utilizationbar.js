@@ -3,24 +3,24 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulseUtility = require('pulseUtility');
-var pulsePage = require('pulsePage');
-var eventBus = require('eventBus');
+import * as pulseConfig from 'pulseConfig';
+import * as pulseUtility from 'pulseUtility';
+import * as pulsePage from 'pulsePage';
+import * as eventBus from 'eventBus';
 
-require('x-reasonbutton/x-reasonbutton');
-require('x-machinedisplay/x-machinedisplay');
-require('x-barstack/x-barstack'); // pulls in all bar components
-require('x-motionpercentage/x-motionpercentage');
-require('x-datetimegraduation/x-datetimegraduation');
-require('x-clock/x-clock');
-require('x-periodmanager/x-periodmanager');
-require('x-machinemodelegends/x-machinemodelegends');
-require('x-reasongroups/x-reasongroups');
+import 'x-reasonbutton/x-reasonbutton';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-barstack/x-barstack'; // pulls in all bar components
+import 'x-motionpercentage/x-motionpercentage';
+import 'x-datetimegraduation/x-datetimegraduation';
+import 'x-clock/x-clock';
+import 'x-periodmanager/x-periodmanager';
+import 'x-machinemodelegends/x-machinemodelegends';
+import 'x-reasongroups/x-reasongroups';
 
-require('x-groupgrid/x-groupgrid');
-require('x-rotationprogress/x-rotationprogress');
-require('x-tr/x-tr');
+import 'x-groupgrid/x-groupgrid';
+import 'x-rotationprogress/x-rotationprogress';
+import 'x-tr/x-tr';
 
 /**
  * Utilization Bar page — grid view of utilization bars per machine.

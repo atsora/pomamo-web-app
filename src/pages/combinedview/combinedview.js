@@ -3,26 +3,26 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulseUtility = require('pulseUtility');
-var pulsePage = require('pulsePage');
-var eventBus = require('eventBus');
+import * as pulseConfig from 'pulseConfig';
+import * as pulseUtility from 'pulseUtility';
+import * as pulsePage from 'pulsePage';
+import * as eventBus from 'eventBus';
 
-require('x-runningbutton/x-runningbutton');
-require('x-machinedisplay/x-machinedisplay');
-require('x-performancetarget/x-performancetarget');
-require('x-currenticoncncalarm/x-currenticoncncalarm');
-require('x-stacklight/x-stacklight');
-require('x-runningslotpie/x-runningslotpie');
-require('x-motionpercentage/x-motionpercentage');
-require('x-datetimegraduation/x-datetimegraduation');
-require('x-barstack/x-barstack'); // pulls in all bar components
-require('x-periodmanager/x-periodmanager');
-require('x-machinemodelegends/x-machinemodelegends');
-require('x-runninglegends/x-runninglegends');
-require('x-groupgrid/x-groupgrid');
-require('x-rotationprogress/x-rotationprogress');
-require('x-tr/x-tr');
+import 'x-runningbutton/x-runningbutton';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-performancetarget/x-performancetarget';
+import 'x-currenticoncncalarm/x-currenticoncncalarm';
+import 'x-stacklight/x-stacklight';
+import 'x-runningslotpie/x-runningslotpie';
+import 'x-motionpercentage/x-motionpercentage';
+import 'x-datetimegraduation/x-datetimegraduation';
+import 'x-barstack/x-barstack'; // pulls in all bar components
+import 'x-periodmanager/x-periodmanager';
+import 'x-machinemodelegends/x-machinemodelegends';
+import 'x-runninglegends/x-runninglegends';
+import 'x-groupgrid/x-groupgrid';
+import 'x-rotationprogress/x-rotationprogress';
+import 'x-tr/x-tr';
 
 /**
  * Combined View page — grid view combining status bars and machine indicators.

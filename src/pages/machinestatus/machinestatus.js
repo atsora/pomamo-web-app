@@ -3,32 +3,32 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulseUtility = require('pulseUtility');
-var pulsePage = require('pulsePage');
-var eventBus = require('eventBus');
+import * as pulseConfig from 'pulseConfig';
+import * as pulseUtility from 'pulseUtility';
+import * as pulsePage from 'pulsePage';
+import * as eventBus from 'eventBus';
 
-require('x-reasonbutton/x-reasonbutton');
-require('x-machinedisplay/x-machinedisplay');
-require('x-currentworkinfo/x-currentworkinfo');
-require('x-freetext/x-freetext');
-require('x-performancetarget/x-performancetarget');
-require('x-currentsequence/x-currentsequence');
-require('x-currenttool/x-currenttool');
-require('x-currenticoncncalarm/x-currenticoncncalarm');
-require('x-stacklight/x-stacklight');
-require('x-reasonslotpie/x-reasonslotpie');
-require('x-motionpercentage/x-motionpercentage');
-require('x-motiontime/x-motiontime');
-require('x-datetimegraduation/x-datetimegraduation');
-require('x-barstack/x-barstack'); // pulls in all bar components
-require('x-periodmanager/x-periodmanager');
-require('x-machinemodelegends/x-machinemodelegends');
-require('x-reasongroups/x-reasongroups');
+import 'x-reasonbutton/x-reasonbutton';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-currentworkinfo/x-currentworkinfo';
+import 'x-freetext/x-freetext';
+import 'x-performancetarget/x-performancetarget';
+import 'x-currentsequence/x-currentsequence';
+import 'x-currenttool/x-currenttool';
+import 'x-currenticoncncalarm/x-currenticoncncalarm';
+import 'x-stacklight/x-stacklight';
+import 'x-reasonslotpie/x-reasonslotpie';
+import 'x-motionpercentage/x-motionpercentage';
+import 'x-motiontime/x-motiontime';
+import 'x-datetimegraduation/x-datetimegraduation';
+import 'x-barstack/x-barstack'; // pulls in all bar components
+import 'x-periodmanager/x-periodmanager';
+import 'x-machinemodelegends/x-machinemodelegends';
+import 'x-reasongroups/x-reasongroups';
 
-require('x-groupgrid/x-groupgrid');
-require('x-rotationprogress/x-rotationprogress');
-require('x-tr/x-tr');
+import 'x-groupgrid/x-groupgrid';
+import 'x-rotationprogress/x-rotationprogress';
+import 'x-tr/x-tr';
 
 /**
  * Machine Status page — grid view of per-machine status dashboards.

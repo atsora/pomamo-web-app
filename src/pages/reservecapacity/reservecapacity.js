@@ -3,20 +3,20 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulseUtility = require('pulseUtility');
-var pulsePage = require('pulsePage');
-var eventBus = require('eventBus');
+import * as pulseConfig from 'pulseConfig';
+import * as pulseUtility from 'pulseUtility';
+import * as pulsePage from 'pulsePage';
+import * as eventBus from 'eventBus';
 
-require('x-periodmanager/x-periodmanager');
-require('x-ancestors/x-ancestors');
-require('x-machinedisplay/x-machinedisplay');
-require('x-groupsingroup/x-groupsingroup');
-require('x-zoominpagebutton/x-zoominpagebutton');
-require('x-showrunningdialogbutton/x-showrunningdialogbutton');
-require('x-tr/x-tr');
+import 'x-periodmanager/x-periodmanager';
+import 'x-ancestors/x-ancestors';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-groupsingroup/x-groupsingroup';
+import 'x-zoominpagebutton/x-zoominpagebutton';
+import 'x-showrunningdialogbutton/x-showrunningdialogbutton';
+import 'x-tr/x-tr';
 
-require('x-chartreservecapacity/x-chartreservecapacity');
+import 'x-chartreservecapacity/x-chartreservecapacity';
 
 /**
  * Reserve Capacity page — hierarchical reserve-capacity chart view.

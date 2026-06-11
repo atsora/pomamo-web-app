@@ -3,20 +3,20 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulseUtility = require('pulseUtility');
-var pulsePage = require('pulsePage');
+import * as pulseConfig from 'pulseConfig';
+import * as pulseUtility from 'pulseUtility';
+import * as pulsePage from 'pulsePage';
 
-require('x-reasonbutton/x-reasonbutton');
-require('x-machinedisplay/x-machinedisplay');
-require('x-reasonslotpie/x-reasonslotpie');
-require('x-motionpercentage/x-motionpercentage');
-require('x-periodmanager/x-periodmanager');
-require('x-machinemodelegends/x-machinemodelegends');
-require('x-reasongroups/x-reasongroups');
-require('x-groupgrid/x-groupgrid');
-require('x-rotationprogress/x-rotationprogress');
-require('x-tr/x-tr');
+import 'x-reasonbutton/x-reasonbutton';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-reasonslotpie/x-reasonslotpie';
+import 'x-motionpercentage/x-motionpercentage';
+import 'x-periodmanager/x-periodmanager';
+import 'x-machinemodelegends/x-machinemodelegends';
+import 'x-reasongroups/x-reasongroups';
+import 'x-groupgrid/x-groupgrid';
+import 'x-rotationprogress/x-rotationprogress';
+import 'x-tr/x-tr';
 
 /**
  * Utilization Pie page — grid view of utilization pie charts per machine.

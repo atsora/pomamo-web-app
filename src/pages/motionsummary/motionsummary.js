@@ -3,17 +3,17 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
 
-require('x-reasonbutton/x-reasonbutton');
-require('x-machinedisplay/x-machinedisplay');
-require('x-machinemodelegends/x-machinemodelegends');
-require('x-reasongroups/x-reasongroups');
+import 'x-reasonbutton/x-reasonbutton';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-machinemodelegends/x-machinemodelegends';
+import 'x-reasongroups/x-reasongroups';
 
-require('x-groupgrid/x-groupgrid');
-require('x-rotationprogress/x-rotationprogress');
-require('x-tr/x-tr');
+import 'x-groupgrid/x-groupgrid';
+import 'x-rotationprogress/x-rotationprogress';
+import 'x-tr/x-tr';
 
 /**
  * Motion Summary page — grid view of motion summary bars per machine.

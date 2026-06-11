@@ -3,20 +3,20 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseUtility = require('pulseUtility');
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
-var eventBus = require('eventBus');
+import * as pulseUtility from 'pulseUtility';
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
+import * as eventBus from 'eventBus';
 
-require('x-groupsingroup/x-groupsingroup');
+import 'x-groupsingroup/x-groupsingroup';
 
-require('x-periodmanager/x-periodmanager');
-require('x-ancestors/x-ancestors');
-require('x-machinedisplay/x-machinedisplay');
-require('x-productiontrackertable/x-productiontrackertable');
-require('x-zoominpagebutton/x-zoominpagebutton');
-require('x-showrunningdialogbutton/x-showrunningdialogbutton');
-require('x-tr/x-tr');
+import 'x-periodmanager/x-periodmanager';
+import 'x-ancestors/x-ancestors';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-productiontrackertable/x-productiontrackertable';
+import 'x-zoominpagebutton/x-zoominpagebutton';
+import 'x-showrunningdialogbutton/x-showrunningdialogbutton';
+import 'x-tr/x-tr';
 
 /**
  * Production Tracker page — production tracking by machine group (table view).

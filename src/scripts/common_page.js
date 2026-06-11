@@ -3,29 +3,29 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseUtility = require('pulseUtility');
-var pulseLogin = require('pulseLogin');
-var pulseConfig = require('pulseConfig');
-var pulseSvg = require('pulseSvg');
-var eventBus = require('eventBus');
-var pulseCustomDialog = require('pulseCustomDialog');
-var vueBridge = require('vue_bridge'); // Vue <-> Pulse integration (see vue_bridge.js)
+import * as pulseUtility from 'pulseUtility';
+import * as pulseLogin from 'pulseLogin';
+import * as pulseConfig from 'pulseConfig';
+import * as pulseSvg from 'pulseSvg';
+import * as eventBus from 'eventBus';
+import pulseCustomDialog from 'pulseCustomDialog';
+import * as vueBridge from 'vue_bridge'; // Vue <-> Pulse integration (see vue_bridge.js)
 
 // Global imports
-require('x-message/x-message');
-require('x-signalbanner/x-signalbanner');
-require('x-checkcurrenttime/x-checkcurrenttime');
-require('x-checkserveraccess/x-checkserveraccess');
-require('x-checkpath/x-checkpath');
-require('x-checkversion/x-checkversion');
-require('x-checkconfigupdate/x-checkconfigupdate');
-require('x-checklogin/x-checklogin');
-require('x-logindisplay/x-logindisplay');
-require('x-machineselection/x-machineselection');
-require('x-modificationmanager/x-modificationmanager');
-require('x-loginpasswordbutton/x-loginpasswordbutton');
-require('x-loginchangepasswordbutton/x-loginchangepasswordbutton');
-require('x-loginconnection/x-loginconnection');
+import 'x-message/x-message';
+import 'x-signalbanner/x-signalbanner';
+import 'x-checkcurrenttime/x-checkcurrenttime';
+import 'x-checkserveraccess/x-checkserveraccess';
+import 'x-checkpath/x-checkpath';
+import 'x-checkversion/x-checkversion';
+import 'x-checkconfigupdate/x-checkconfigupdate';
+import 'x-checklogin/x-checklogin';
+import 'x-logindisplay/x-logindisplay';
+import 'x-machineselection/x-machineselection';
+import 'x-modificationmanager/x-modificationmanager';
+import 'x-loginpasswordbutton/x-loginpasswordbutton';
+import 'x-loginchangepasswordbutton/x-loginchangepasswordbutton';
+import 'x-loginconnection/x-loginconnection';
 
 // Helpers
 function qs (sel) { return document.querySelector(sel); }
@@ -42,7 +42,7 @@ var _currentRotationIndex = 0;
 // Let the Vue bridge read the resolved machine cache (rotation source of truth).
 vueBridge.setResolvedMachinesGetter(function () { return _allMachinesCache; });
 
-exports.BasePage = class BasePage {
+export const BasePage = class BasePage {
   constructor () {
     this.showMachineselection = true;
   }
@@ -96,7 +96,7 @@ var initParameterPanel = function () {
     });
   }
 };
-var openParameterPanel = exports.openParameterPanel = function (instant) {
+export var openParameterPanel = function (instant) {
   let btn = qs('#configpanelbtn');
   if (btn && btn.classList.contains('disabled')) return;
   let panel = qs('#pulse-panel-parameter');
@@ -108,7 +108,7 @@ var openParameterPanel = exports.openParameterPanel = function (instant) {
   if (inner) inner.classList.remove('pulse-panel-parameter-collapsed');
   if (btn) btn.classList.add('activated');
 };
-var closeParameterPanel = exports.closeParameterPanel = function (instant) {
+export var closeParameterPanel = function (instant) {
   let panel = qs('#pulse-panel-parameter');
   if (panel) {
     if (instant) panel.classList.add('notransition');
@@ -752,7 +752,7 @@ var showLegend = function () {
   updateLegendVisibility(); // Call immediately
 };
 
-exports.preparePage = function (currentPageMethods) {
+export function preparePage (currentPageMethods) {
   pulseConfig.setGlobal('machine', ''); pulseConfig.setGlobal('group', '');
   pulseConfig.set('machine', ''); pulseConfig.set('group', ''); // clear stale page-specific keys
   for (let i = 1; i <= 20; i++) { pulseConfig.set('ancestor' + i, ''); }
@@ -788,11 +788,15 @@ exports.preparePage = function (currentPageMethods) {
     startRotationEngine();
     vueBridge.setMachines(_allMachinesCache); // forward the selection to the Vue store
   };
-  eventBus.EventBus.addGlobalEventListener(this, 'machineListChanged', onMachineListChanged);
+  // Stable scope handle for the page-global listeners. `this` is NOT usable here
+  // since the ESM migration: module/strict-mode `this` is undefined (in sloppy
+  // CommonJS it silently was globalThis), and the event bus expects a scope object.
+  const pageScope = { getInfo: () => 'common_page' };
+  eventBus.EventBus.addGlobalEventListener(pageScope, 'machineListChanged', onMachineListChanged);
 
   // Task components (x-task, x-taskslist, x-cycletask) dispatch 'openTaskInstance'
   // on click → open the Vue execution popup in place (overlay, lazy-loaded). See vue_bridge.js.
-  vueBridge.registerTaskClickListener(this);
+  vueBridge.registerTaskClickListener(pageScope);
 
   const newParams = new URLSearchParams();
   if (params.has('AppContext')) newParams.set('AppContext', params.get('AppContext'));

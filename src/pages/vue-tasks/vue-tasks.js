@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulsePage = require('pulsePage');
+import * as pulsePage from 'pulsePage';
 
-require('x-tr/x-tr');
+import 'x-tr/x-tr';
 
 class VueTasksPage extends pulsePage.BasePage {}
 

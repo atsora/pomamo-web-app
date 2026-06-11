@@ -4,9 +4,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 //var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
-var pulseUtility = require('pulseUtility');
-require('x-tr/x-tr');
+import * as pulsePage from 'pulsePage';
+import * as pulseUtility from 'pulseUtility';
+import 'x-tr/x-tr';
 
 //require('x-loginconnection/x-loginconnection');
 

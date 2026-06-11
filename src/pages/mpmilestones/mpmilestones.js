@@ -3,15 +3,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
 
-require('x-milestonesmanager/x-milestonesmanager');
-require('x-machinedisplay/x-machinedisplay');
+import 'x-milestonesmanager/x-milestonesmanager';
+import 'x-machinedisplay/x-machinedisplay';
 
-require('x-groupgrid/x-groupgrid');
-require('x-rotationprogress/x-rotationprogress');
-require('x-tr/x-tr');
+import 'x-groupgrid/x-groupgrid';
+import 'x-rotationprogress/x-rotationprogress';
+import 'x-tr/x-tr';
 
 /**
  * Milestones page — grid view of per-machine milestone managers.

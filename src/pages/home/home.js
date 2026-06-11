@@ -3,10 +3,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulsePage = require('pulsePage');
-var pulseConfig = require('pulseConfig');
+import * as pulsePage from 'pulsePage';
+import * as pulseConfig from 'pulseConfig';
 
-require('x-tr/x-tr');
+import 'x-tr/x-tr';
 
 /**
  * Home page — landing view, mostly static welcome content.

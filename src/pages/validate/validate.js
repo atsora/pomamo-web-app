@@ -3,10 +3,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
 
-require('x-validatetoken/x-validatetoken');
+import 'x-validatetoken/x-validatetoken';
 
 /**
  * Validate page — token-validation gate after an OAuth-style redirect.

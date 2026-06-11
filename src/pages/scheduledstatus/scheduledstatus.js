@@ -3,15 +3,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
 
-require('x-grouplist/x-grouplist');
-require('x-rotationprogress/x-rotationprogress');
+import 'x-grouplist/x-grouplist';
+import 'x-rotationprogress/x-rotationprogress';
 
-require('x-machinedisplay/x-machinedisplay');
-require('x-lastmachinestatetemplate/x-lastmachinestatetemplate');
-require('x-tr/x-tr');
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-lastmachinestatetemplate/x-lastmachinestatetemplate';
+import 'x-tr/x-tr';
 
 /**
  * Scheduled Status page — list view of scheduled machine state templates.

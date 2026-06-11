@@ -3,16 +3,16 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
-var eventBus = require('eventBus');
-var pulseUtility = require('pulseUtility');
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
+import * as eventBus from 'eventBus';
+import * as pulseUtility from 'pulseUtility';
 
-require('x-grouplist/x-grouplist');
-require('x-rotationprogress/x-rotationprogress');
-require('x-productionmachiningstatus/x-productionmachiningstatus');
-require('x-machinedisplay/x-machinedisplay');
-require('x-tr/x-tr');
+import 'x-grouplist/x-grouplist';
+import 'x-rotationprogress/x-rotationprogress';
+import 'x-productionmachiningstatus/x-productionmachiningstatus';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-tr/x-tr';
 
 /**
  * Production Machining page — list view of machining production status per machine.

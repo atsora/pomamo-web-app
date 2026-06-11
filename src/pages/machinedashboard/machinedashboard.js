@@ -3,35 +3,35 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-var pulseConfig = require('pulseConfig');
-var pulsePage = require('pulsePage');
-var eventBus = require('eventBus');
+import * as pulseConfig from 'pulseConfig';
+import * as pulsePage from 'pulsePage';
+import * as eventBus from 'eventBus';
 
-require('x-machinetab/x-machinetab');
-require('x-machinetabnav/x-machinetabnav');
-require('x-machinedisplay/x-machinedisplay');
-require('x-lastmachinestatus/x-lastmachinestatus');
-require('x-unansweredreasonnumber/x-unansweredreasonnumber');
-require('x-datetimegraduation/x-datetimegraduation');
-require('x-barstack/x-barstack'); // pulls in all bar components
-require('x-toollifemachine/x-toollifemachine');
-require('x-productiontrackergraph/x-productiontrackergraph');
-require('x-taskslist/x-taskslist');
-require('x-reasongroups/x-reasongroups');
-require('x-fieldlegends/x-fieldlegends');
-require('x-machinemodelegends/x-machinemodelegends');
-require('x-productionshiftgoal/x-productionshiftgoal');
-require('x-workinfo/x-workinfo');
-require('x-production/x-production');
-require('x-tr/x-tr');
-require('x-openstopclassificationlistener/x-openstopclassificationlistener');
-require('x-defaultpie/x-defaultpie');
-require('x-motionpercentage/x-motionpercentage');
+import 'x-machinetab/x-machinetab';
+import 'x-machinetabnav/x-machinetabnav';
+import 'x-machinedisplay/x-machinedisplay';
+import 'x-lastmachinestatus/x-lastmachinestatus';
+import 'x-unansweredreasonnumber/x-unansweredreasonnumber';
+import 'x-datetimegraduation/x-datetimegraduation';
+import 'x-barstack/x-barstack'; // pulls in all bar components
+import 'x-toollifemachine/x-toollifemachine';
+import 'x-productiontrackergraph/x-productiontrackergraph';
+import 'x-taskslist/x-taskslist';
+import 'x-reasongroups/x-reasongroups';
+import 'x-fieldlegends/x-fieldlegends';
+import 'x-machinemodelegends/x-machinemodelegends';
+import 'x-productionshiftgoal/x-productionshiftgoal';
+import 'x-workinfo/x-workinfo';
+import 'x-production/x-production';
+import 'x-tr/x-tr';
+import 'x-openstopclassificationlistener/x-openstopclassificationlistener';
+import 'x-defaultpie/x-defaultpie';
+import 'x-motionpercentage/x-motionpercentage';
 /* require('x-scrapstatus/x-scrapstatus'); */
-require('x-periodmanager/x-periodmanager');
-require('x-productionbar/x-productionbar');
-require('x-productiongauge/x-productiongauge');
-require('x-currenticoncncalarm/x-currenticoncncalarm');
+import 'x-periodmanager/x-periodmanager';
+import 'x-productionbar/x-productionbar';
+import 'x-productiongauge/x-productiongauge';
+import 'x-currenticoncncalarm/x-currenticoncncalarm';
 
 // Vanilla helpers — keep call sites compact while still null-guarding.
 function _setEach(selector, mutator) {
