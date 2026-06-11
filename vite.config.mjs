@@ -35,7 +35,7 @@ const NAME_ALIASES = {
   pulsePage: resolve('src/scripts/common_page.js'),
 }
 
-function browserifyPaths () {
+export function browserifyPaths () {
   // A bare specifier that is a file in one of these dirs resolves to it.
   // Handles vue_bridge (src/scripts), x-foo/x-foo (package root), pulse.* libs, etc.
   const dirs = [resolve('src/scripts'), resolve(pwc, 'libraries'), pwc]

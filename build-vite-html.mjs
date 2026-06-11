@@ -35,7 +35,7 @@ await build({
   build: {
     outDir: resolve('dist-vite-pure'),
     emptyOutDir: true,
-    minify: false,
+    minify: 'esbuild',
     rollupOptions: { input },
   },
 })
