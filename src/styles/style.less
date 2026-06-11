@@ -298,9 +298,9 @@ body {
     color: @box_text_color;
     border-top-left-radius: 0.3cqw;
     border-top-right-radius: 0.3cqw;
-    border-left: 1px solid darken(@box_color, 10%);
-    border-right: 1px solid darken(@box_color, 10%);
-    border-top: 1px solid darken(@box_color, 10%);
+    border-left: 1px solid @box_color_darken10;
+    border-right: 1px solid @box_color_darken10;
+    border-top: 1px solid @box_color_darken10;
     z-index: 25;
 
     box-sizing: border-box;
@@ -322,9 +322,9 @@ body {
       position: absolute;
       bottom: 100%;
       left: -1px; // align with legend-content left border
-      border-left: 1px solid darken(@box_color, 10%);
-      border-right: 1px solid darken(@box_color, 10%);
-      border-top: 1px solid darken(@box_color, 10%);
+      border-left: 1px solid @box_color_darken10;
+      border-right: 1px solid @box_color_darken10;
+      border-top: 1px solid @box_color_darken10;
       border-top-left-radius: 0.3cqw;
       border-top-right-radius: 0.3cqw;
       cursor: pointer;
@@ -489,8 +489,8 @@ body {
 
 // HEADER
 
-@header_background_color_1: lighten(@color_window, 4%);
-@header_background_color_2: darken(@color_window, 4%);
+@header_background_color_1: @color_window_lighten4;
+@header_background_color_2: @color_window_darken4;
 
 .pulse-header {
   display: flex;
@@ -499,7 +499,7 @@ body {
   height: 38px;
   padding: 4px 1px;
   box-sizing: border-box;
-  color: fade(@color_text, 90%);
+  color: @color_text_fade90;
   z-index: 100;
   flex: 0 0 auto;
   position: relative;
@@ -598,7 +598,7 @@ body {
 .title {
   font-weight: bold;
   text-transform: uppercase;
-  color: fade(@color_text, 90%);
+  color: @color_text_fade90;
   cursor: default;
 }
 
@@ -1003,8 +1003,8 @@ body {
         }
 
         &:hover {
-          border-color: lighten(@color_highlight, 15%);
-          background-color: lighten(@color_highlight, 15%);
+          border-color: @color_highlight_lighten15;
+          background-color: @color_highlight_lighten15;
         }
       }
 
@@ -1050,10 +1050,10 @@ body {
         }
 
         &:hover {
-          border-color: lighten(@color_highlight, 15%);
+          border-color: @color_highlight_lighten15;
 
           &::after {
-            background-color: lighten(@color_highlight, 15%);
+            background-color: @color_highlight_lighten15;
           }
         }
       }
@@ -1280,7 +1280,7 @@ x-motiontime {
   background: none;
   color: @color_red;
   background-color: @color_white;
-  border-color: darken(@color_white, 10%);
+  border-color: @color_white_darken10;
   margin: 0;
   padding: 4px;
   overflow: auto;

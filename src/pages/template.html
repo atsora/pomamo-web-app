@@ -38,34 +38,12 @@ SPDX-License-Identifier: Apache-2.0
     }
   </style>
 
-  <script>
-    // Initialize theme (before the page is loaded => cannot use PulseConfig here)
-    var currentTheme = 'dark';
-    if (typeof localStorage != 'undefined')
-      currentTheme = JSON.parse(localStorage.getItem('PULSE.PulseWebApp.theme'));
-    /* if (currentTheme == '' || currentTheme == null)
-      currentTheme = JSON.parse(localStorage.getItem('PULSE.pulsewebapp.theme')); */
-    if (currentTheme == '' || currentTheme == null)
-      currentTheme = 'dark';
-
-    var head = document.getElementsByTagName('head')[0];
-    /*{ // For PWC exports - do nothing - included elsewhere */
-    { // For custom PAGES :
-      var s = document.createElement('link');
-      s.setAttribute('type', 'text/css');
-      s.setAttribute('rel', 'stylesheet');
-      // CUSTOM allowed : replace {{pagename}}.css with custom_page.css
-      s.setAttribute('href', './styles/style_' + currentTheme + '/{{pagename}}.css?v=');
-      head.appendChild(s);
-    }
-    { // For customers' specializations :
-      var s = document.createElement('link');
-      s.setAttribute('type', 'text/css');
-      s.setAttribute('rel', 'stylesheet');
-      s.setAttribute('href', './styles/style_' + currentTheme + '/customize.css?v=');
-      head.appendChild(s);
-    }
-  </script>
+  <!-- Theme bootstrap + page CSS loading. Blocking script in <head> (runs before paint,
+       no theme flash). All logic is in scripts/theme-init.js: it toggles the `dark` class
+       on <html>, derives the page name from the URL, and loads theme-colors.css (CSS vars
+       for both themes) + the page CSS + customize.css. The ?v= is rewritten by grunt and
+       propagated to the CSS by the script itself. No more {{pagename}} placeholder here. -->
+  <script type="text/javascript" src="./scripts/theme-init.js?v="></script>
 
   <!--script src="https://unpkg.com/@webcomponents/custom-elements"></script-->
   <script type="text/javascript" src="./lib/moment/moment.js?v="></script>
