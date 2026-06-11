@@ -9,25 +9,20 @@
 // images, vue bundle) are PUBLIC assets: Vite copies publicDir verbatim and leaves
 // their "/scripts/…" tags untouched. Output -> dist-vite-pure/.
 //
-// NOTE (PoC): the public assets are staged from the grunt build (dist-es2015) for
-// now — owning that staging cleanly is the later "assets" phase.
+// The public assets are staged by build-public.mjs from their real sources
+// (src/scripts, pwc libraries, config repo, node_modules, dist-vite/styles) — the
+// whole app build is now grunt-independent.
 
 import { build } from 'vite'
-import { readdirSync, existsSync, rmSync, mkdirSync, cpSync } from 'node:fs'
+import { readdirSync } from 'node:fs'
 import { resolve, basename } from 'node:path'
+import { execSync } from 'node:child_process'
 
 const stagingRoot = resolve('dist-vite-pages')
 const publicDir = resolve('dist-vite-public')
-const grunt = resolve('dist-es2015')
 
-// Stage the public (non-bundled) assets from the grunt output.
-rmSync(publicDir, { recursive: true, force: true })
-mkdirSync(publicDir, { recursive: true })
-for (const sub of ['scripts', 'lib', 'styles', 'images', 'vue-dist']) {
-  if (existsSync(resolve(grunt, sub))) {
-    cpSync(resolve(grunt, sub), resolve(publicDir, sub), { recursive: true })
-  }
-}
+// Stage the public (non-bundled) assets from their real sources (no grunt).
+execSync('node build-public.mjs', { stdio: 'inherit' })
 
 const htmls = readdirSync(stagingRoot).filter(f => f.endsWith('.html'))
 const input = Object.fromEntries(htmls.map(f => [basename(f, '.html'), resolve(stagingRoot, f)]))
