@@ -118,11 +118,12 @@ class MachinesPage extends pulsePage.BasePage {
     lastStatusElements.forEach(el => el.style.display = 'none');
 
     for (let i = 0; i < componentsToDisplay.length; i++) {
-      let component = document.querySelector(componentsToDisplay[i]);
-      if (component) {
+      // querySelectorAll (not querySelector): reveal the component on EVERY machine
+      // tile, matching the original jQuery $(sel).parents('.machine-component').show().
+      document.querySelectorAll(componentsToDisplay[i]).forEach(function (component) {
         let parent = component.closest('.machine-component');
         if (parent) parent.style.display = '';
-      }
+      });
 
       if (componentsToDisplay[i] == 'coloredbar') {
         let bars = document.querySelectorAll('.div-bar-and-percent');
