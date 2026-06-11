@@ -13,20 +13,46 @@ import { defineConfig } from 'vite'
 
 const pwc = resolve('node_modules/@atsora/pomamo-web-components')
 
-// Replicate grunt-browserify's `paths` resolution: a bare specifier that is a
-// file in one of these dirs resolves to it. Handles vue_bridge (src/scripts),
-// x-foo/x-foo (package root), pulse.* libraries, etc.
-function browserifyPaths() {
+// Replicate grunt-browserify's `paths` resolution AND its name aliases in a
+// single resolveId plugin.
+//
+// Why both here (and NOT in Vite's resolve.alias): @rollup/plugin-commonjs only
+// transforms CommonJS modules whose ids come through the normal plugin resolveId
+// chain. Modules resolved via Vite's resolve.alias are left UNtransformed, so
+// their raw require()/exports survive into the bundle -> "require is not defined"
+// at runtime (and it cascades: e.g. pulse.customdialog.js stays raw, leaking its
+// require('x-alertdialog/...') too). Resolving the libraries here, exactly like
+// the x-* components, makes commonjs transform them all.
+const NAME_ALIASES = {
+  pulseUtility: resolve(pwc, 'libraries/pulse.utility.js'),
+  pulseConfig: resolve(pwc, 'libraries/pulse.config.js'),
+  pulseLogin: resolve(pwc, 'libraries/pulse.login.js'),
+  pulseService: resolve(pwc, 'libraries/pulse.service.js'),
+  pulseRange: resolve(pwc, 'libraries/pulse.range.js'),
+  pulseSvg: resolve(pwc, 'libraries/pulse.svg.js'),
+  pulseCustomDialog: resolve(pwc, 'libraries/pulse.customdialog.js'),
+  eventBus: resolve(pwc, 'libraries/EventBus.js'),
+  pulsePage: resolve('src/scripts/common_page.js'),
+}
+
+function browserifyPaths () {
+  // A bare specifier that is a file in one of these dirs resolves to it.
+  // Handles vue_bridge (src/scripts), x-foo/x-foo (package root), pulse.* libs, etc.
   const dirs = [resolve('src/scripts'), resolve(pwc, 'libraries'), pwc]
   return {
     name: 'browserify-paths',
-    resolveId(source) {
-      if (source.startsWith('.') || source.startsWith('\0') || isAbsolute(source))
+    resolveId (source) {
+      if (Object.prototype.hasOwnProperty.call(NAME_ALIASES, source)) {
+        return NAME_ALIASES[source]
+      }
+      if (source.startsWith('.') || source.startsWith('\0') || isAbsolute(source)) {
         return null
+      }
       for (const dir of dirs) {
         for (const candidate of [resolve(dir, source), resolve(dir, `${source}.js`)]) {
-          if (existsSync(candidate) && statSync(candidate).isFile())
+          if (existsSync(candidate) && statSync(candidate).isFile()) {
             return candidate
+          }
         }
       }
       return null
@@ -36,20 +62,6 @@ function browserifyPaths() {
 
 export default defineConfig({
   plugins: [browserifyPaths()],
-  // grunt-browserify's name aliases (the name differs from the file name).
-  resolve: {
-    alias: {
-      pulseUtility: resolve(pwc, 'libraries/pulse.utility.js'),
-      pulseConfig: resolve(pwc, 'libraries/pulse.config.js'),
-      pulseLogin: resolve(pwc, 'libraries/pulse.login.js'),
-      pulseService: resolve(pwc, 'libraries/pulse.service.js'),
-      pulseRange: resolve(pwc, 'libraries/pulse.range.js'),
-      pulseSvg: resolve(pwc, 'libraries/pulse.svg.js'),
-      pulseCustomDialog: resolve(pwc, 'libraries/pulse.customdialog.js'),
-      eventBus: resolve(pwc, 'libraries/EventBus.js'),
-      pulsePage: resolve('src/scripts/common_page.js'),
-    },
-  },
   build: {
     outDir: 'dist-vite',
     emptyOutDir: false, // build-pages.mjs clears it once, then appends per page
