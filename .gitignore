@@ -6,6 +6,9 @@
 /dist
 /dist-es2015
 /dist-vite
+/dist-vite-pages
+/dist-vite-public
+/dist-vite-pure
 /external
 /node_modules
 package-lock.json
