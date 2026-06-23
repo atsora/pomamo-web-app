@@ -6,7 +6,7 @@
 // from their REAL sources — no grunt dependency. Mirrors grunt copy.js + jslib:
 //   scripts  <- src/scripts/*.js + pwc/libraries/{config,translation}*.js
 //               + config/config_install.js + the deployed config_default.js
-//   lib      <- @bower_components/momentjs, node_modules/d3
+//   lib      <- moment, node_modules/d3
 //   styles   <- dist-vite/styles (the compile-once CSS from build/styles.mjs)
 //   images   <- pwc/images + src/images + src/pages/**/*.svg
 //   vue-dist <- external/vue-dist (if staged)
@@ -67,7 +67,7 @@ copyTo(deployed, resolve(scripts, 'config_default.js'))
 // jquery is gone: nothing loads lib/jquery/jquery.js any more (template.html
 // only pulls moment + d3, and the JS sources are jQuery-free outside the mocks).
 const LIB = {
-  'lib/moment/moment.js': 'node_modules/@bower_components/momentjs/min/moment-with-locales.min.js',
+  'lib/moment/moment.js': 'node_modules/moment/min/moment-with-locales.min.js',
   'lib/d3/d3.min.js': 'node_modules/d3/dist/d3.min.js',
 }
 for (const [dst, src] of Object.entries(LIB)) copyTo(src, resolve(out, dst))
