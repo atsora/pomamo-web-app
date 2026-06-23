@@ -14,6 +14,11 @@ import { resolve } from 'node:path'
 const pagesDir = resolve('src/pages')
 const out = resolve('dist-vite-pages')
 
+// The version (hardcoded in package.json) replaces the WebAppVersion placeholder —
+// like grunt replace.js did. The login/validate templates carry it inline; the
+// normal pages' label lives in pulse-shell.js (handled by build/public.mjs).
+const version = JSON.parse(readFileSync('package.json', 'utf8')).version
+
 // login / validate use the standalone login template (no <pulse-shell>).
 const LOGIN_TEMPLATE = new Set(['login', 'validate'])
 
@@ -27,6 +32,7 @@ function bake (page) {
 
   // 1. {{pagename}} -> page name (resolves the bake paths + the JS src).
   html = html.replaceAll('{{pagename}}', page)
+  html = html.replaceAll('WebAppVersion', version)
 
   // 2. partial includes: <!--(bake <relpath>)--> -> file content (relative to src/pages).
   html = html.replace(/<!--\(bake\s+(.+?)\)-->/g, (_, rel) => {

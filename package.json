@@ -21,26 +21,11 @@
     "@webcomponents/webcomponentsjs": "^2.4.3",
     "core-js": "~3.30.2",
     "d3": "^6.2.0",
-    "grunt-cli": "^1.5.0",
     "markdown-it": "^12.0.4",
     "regenerator-runtime": "~0.13.5"
   },
   "devDependencies": {
-    "grunt": "^1.6.1",
-    "grunt-bake": "^1.9.0",
-    "grunt-browserify": "~6.0.0",
-    "grunt-contrib-clean": "~1.0.0",
-    "grunt-contrib-concat": "~1.0.0",
-    "grunt-contrib-copy": "~1.0.0",
-    "grunt-contrib-less": "^2.0.0",
-    "grunt-contrib-obfuscator": "^8.0.0",
-    "grunt-jsdoc": "^2.4.1",
-    "grunt-less-themes": "~0.0.5",
-    "grunt-replace": "~2.0.2",
-    "grunt-shell": "~2.1.0",
-    "grunt-subgrunt": "^1.2.0",
-    "load-grunt-config": "^4.0.1",
-    "time-grunt": "^1.4.0",
+    "javascript-obfuscator": "^2.19.1",
     "vite": "^5"
   },
   "optionalDependencies": {

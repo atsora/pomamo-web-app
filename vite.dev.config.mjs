@@ -4,34 +4,77 @@
 //
 // Dev server for the Pulse pages — the Vite payoff: native ESM serving with HMR.
 // Generate the entry HTML + public assets once, then start the server:
-//   node build-html.mjs && node build-public.mjs && vite --config vite.dev.config.mjs
+//   node build/bake.mjs && node build/public.mjs && vite --config vite.dev.config.mjs
 //
 // Since the ESM migration (CommonJS -> import/export across the whole module
 // graph), the dev server serves the source natively: edit a page's JS and the
-// browser hot-reloads it, no rebuild. Editing the template/partials still needs a
-// re-run of build-html.mjs (baked at generation time — moving the bake into a
-// transformIndexHtml plugin would HMR them too, a later refinement).
+// browser hot-reloads it. And (cssHmr below) edit a page/component .less and the
+// styles hot-swap live. Editing the template/partials still needs a re-run of
+// build/bake.mjs (baked at generation time).
 
-import { resolve } from 'node:path'
+import { resolve, basename } from 'node:path'
+import { existsSync, realpathSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import { browserifyPaths } from './vite.config.mjs'
 
+const pwc = resolve('node_modules/@atsora/pomamo-web-components')
+const pwcReal = realpathSync(pwc) // symlink -> sibling repo; fs.allow + CSS url() assets need the real path
+
+// CSS HMR (dev only): pull each page's .less INTO the Vite module graph so editing a
+// page/component .less hot-swaps the styles, no reload. Normally theme-init.js loads
+// the page CSS at runtime via loadCss('/styles/<page>.css'); here we (a) inject an
+// import of the page .less (Vite compiles+watches it, with the bridge prepended), and
+// (b) serve that static /styles/<page>.css EMPTY so the two don't double up.
+// theme-colors.css / customize.css keep loading statically (page-independent).
+function cssHmr () {
+  return {
+    name: 'pulse-css-hmr',
+    transformIndexHtml: {
+      order: 'pre',
+      handler (html, ctx) {
+        const page = basename(ctx.filename || ctx.path || '', '.html')
+        if (!existsSync(resolve('src/pages', page, `${page}.less`))) return html
+        return html.replace('</head>', `  <script type="module">import '/src/pages/${page}/${page}.less'</script>\n</head>`)
+      },
+    },
+    configureServer (server) {
+      server.middlewares.use((req, res, next) => {
+        const m = /^\/styles\/([a-z0-9_-]+)\.css(\?.*)?$/i.exec(req.url || '')
+        if (m && existsSync(resolve('src/pages', m[1], `${m[1]}.less`))) {
+          res.setHeader('Content-Type', 'text/css')
+          res.end('/* page CSS provided by Vite (HMR) */')
+          return
+        }
+        next()
+      })
+    },
+  }
+}
+
 export default defineConfig({
-  root: resolve('dist-vite-pages'),       // the generated entry HTML (build-html.mjs)
-  publicDir: resolve('dist-vite-public'), // staged head deps / styles / images (build-public.mjs)
-  plugins: [browserifyPaths()],
+  root: resolve('dist-vite-pages'),       // the generated entry HTML (build/bake.mjs)
+  publicDir: resolve('dist-vite-public'), // staged head deps / styles / images (build/public.mjs)
+  plugins: [browserifyPaths(), cssHmr()],
   appType: 'mpa',
   // The entry HTML references the page JS as ../src/... (file-relative, for the
-  // rollup build). In dev that URL-resolves to /src/... against the root (which is
-  // dist-vite-pages, with no src) — alias it back to the real source tree.
+  // rollup build). In dev that URL-resolves to /src/... against the root — alias it.
   resolve: { alias: { '/src': resolve('src') } },
+  css: {
+    preprocessorOptions: {
+      less: {
+        // resolve the bridge (theme.less) + component/style @imports, like build/styles' INC
+        paths: [resolve('src/styles'), pwc, resolve(pwc, 'libraries'), resolve(pwc, 'libraries/themes')],
+        additionalData: '@import (once) "theme.less";\n', // prepend the bridge (build/styles' wrapper)
+        modifyVars: { imagedir: '../images' },            // ../../images (served, clamped) -> ../images (Vite resolves relative to source)
+      },
+    },
+  },
   // No esbuild dep discovery: it doesn't go through browserify-paths' resolveId, so
-  // it can't resolve the bare aliases (pulsecomponent, pulseSvg…). Sources are
-  // served on demand through the plugin chain instead. The few npm deps that are
-  // still CommonJS must be listed for pre-bundling (ESM deps are served as-is).
+  // it can't resolve the bare aliases (pulsecomponent, pulseSvg…). Sources are served
+  // on demand through the plugin chain. The few CommonJS npm deps are pre-bundled.
   optimizeDeps: { noDiscovery: true, include: ['markdown-it'] },
   server: {
     port: 5180,
-    fs: { allow: [resolve('.')] },        // allow the ../src module entries + node_modules
+    fs: { allow: [resolve('.'), pwcReal] }, // app dir + the symlinked pwc (component .less + images)
   },
 })

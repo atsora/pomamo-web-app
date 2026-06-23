@@ -2,10 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 //
-// Phase 1 of the Grunt -> Vite migration: bundle the Pulse pages' JS with Vite
-// (replacing grunt-browserify), in PARALLEL to the existing Grunt build so
-// nothing breaks. The per-page entries/output are driven by build-pages.mjs
-// (one self-contained iife bundle per page, like browserify). Output -> dist-vite/.
+// Vite config for the Pulse app build (replaces grunt-browserify): resolves the
+// libraries (browserify-paths aliases) and handles CommonJS so each page's JS gets
+// bundled + hashed. The per-page entries/output are driven by build/bundle.mjs.
 
 import { isAbsolute, resolve } from 'node:path'
 import { existsSync, statSync } from 'node:fs'
@@ -64,7 +63,7 @@ export default defineConfig({
   plugins: [browserifyPaths()],
   build: {
     outDir: 'dist-vite',
-    emptyOutDir: false, // build-pages.mjs clears it once, then appends per page
+    emptyOutDir: false, // build/bundle.mjs manages dist-vite-pure/ itself
     minify: false,
     // Everything (pages + libraries + x-* components) is CommonJS.
     commonjsOptions: {

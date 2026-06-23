@@ -6,13 +6,13 @@
 // from their REAL sources — no grunt dependency. Mirrors grunt copy.js + jslib:
 //   scripts  <- src/scripts/*.js + pwc/libraries/{config,translation}*.js
 //               + config/config_install.js + the deployed config_default.js
-//   lib      <- @bower_components/momentjs, node_modules/d3, @bower_components/jquery
-//   styles   <- dist-vite/styles (the compile-once CSS from build-styles.mjs)
+//   lib      <- @bower_components/momentjs, node_modules/d3
+//   styles   <- dist-vite/styles (the compile-once CSS from build/styles.mjs)
 //   images   <- pwc/images + src/images + src/pages/**/*.svg
 //   vue-dist <- external/vue-dist (if staged)
 // Output -> dist-vite-public/ (gitignored), used as Vite publicDir.
 
-import { readdirSync, copyFileSync, mkdirSync, rmSync, existsSync, cpSync, statSync } from 'node:fs'
+import { readdirSync, readFileSync, writeFileSync, copyFileSync, mkdirSync, rmSync, existsSync, cpSync, statSync } from 'node:fs'
 import { resolve, dirname, basename, join } from 'node:path'
 import { execSync } from 'node:child_process'
 
@@ -41,8 +41,16 @@ const scripts = resolve(out, 'scripts')
 mkdirSync(scripts, { recursive: true })
 // 1. src/scripts/*.js, minus the ones that are bundled (not loaded as classic scripts).
 const SKIP = new Set(['common.js', 'common_page.js'])
+// The version (hardcoded in package.json) replaces the WebAppVersion placeholder in
+// the chrome (pulse-shell.js options panel) — like grunt replace.js did for the pages.
+const version = JSON.parse(readFileSync('package.json', 'utf8')).version
 for (const f of readdirSync('src/scripts').filter(f => f.endsWith('.js') && !SKIP.has(f))) {
-  copyFileSync(resolve('src/scripts', f), resolve(scripts, f))
+  if (f === 'pulse-shell.js') {
+    writeFileSync(resolve(scripts, f), readFileSync(resolve('src/scripts', f), 'utf8').replaceAll('WebAppVersion', version))
+  }
+  else {
+    copyFileSync(resolve('src/scripts', f), resolve(scripts, f))
+  }
 }
 // 2. pwc libraries: config_component_*.js / translation_component_*.js.
 for (const f of readdirSync(resolve(pwc, 'libraries')).filter(f => /^(config|translation).*\.js$/.test(f))) {
@@ -55,16 +63,17 @@ const deployed = existsSync('external/config_default.js') ? 'external/config_def
   : '../pomamo-web-app-config/config_default.js'
 copyTo(deployed, resolve(scripts, 'config_default.js'))
 
-// --- lib (moment / d3 / jquery) ---
+// --- lib (moment / d3) ---
+// jquery is gone: nothing loads lib/jquery/jquery.js any more (template.html
+// only pulls moment + d3, and the JS sources are jQuery-free outside the mocks).
 const LIB = {
   'lib/moment/moment.js': 'node_modules/@bower_components/momentjs/min/moment-with-locales.min.js',
   'lib/d3/d3.min.js': 'node_modules/d3/dist/d3.min.js',
-  'lib/jquery/jquery.js': 'node_modules/@bower_components/jquery/dist/jquery.js',
 }
 for (const [dst, src] of Object.entries(LIB)) copyTo(src, resolve(out, dst))
 
 // --- styles (compile-once CSS) ---
-execSync('node build-styles.mjs', { stdio: 'inherit' })
+execSync('node build/styles.mjs', { stdio: 'inherit' })
 cpSync(resolve('dist-vite/styles'), resolve(out, 'styles'), { recursive: true })
 
 // --- images ---

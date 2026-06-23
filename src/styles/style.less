@@ -154,6 +154,17 @@ body {
   min-height: 0; // allow children to shrink inside flex column
 }
 
+// <pulse-shell> wraps the chrome (header + #pulse-inner) as a custom element,
+// which defaults to display:inline. Make it a transparent flex-column filler so
+// #pulse-inner keeps taking the height left below the header, exactly as when the
+// chrome was a direct child of .pulse-content.
+pulse-shell {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 // Mixin: restores vh/vw dimensions for live and touch screens
 .adaptive-vh-vw-layout() {
   .pulse-header {
