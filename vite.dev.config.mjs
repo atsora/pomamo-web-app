@@ -51,10 +51,33 @@ function cssHmr () {
   }
 }
 
+// Dev only: with DEV_ALL_PAGES the nav lists pages that ship no <page>-icon.svg, so it
+// requests a missing icon -> 404 noise. Serve an empty (invisible) SVG instead: the page
+// keeps its icon-less nav entry, no console error. Prod is unaffected — the real nav
+// (config_default) only lists pages that have an icon. Real icons still serve normally
+// (we only step in when the file is absent).
+function navIconFallback () {
+  const empty = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"></svg>'
+  return {
+    name: 'pulse-nav-icon-fallback',
+    configureServer (server) {
+      server.middlewares.use((req, res, next) => {
+        const path = (req.url || '').split('?')[0]
+        if (/^\/images\/[\w-]+-icon\.svg$/i.test(path) && !existsSync(resolve('dist-vite-public', path.slice(1)))) {
+          res.setHeader('Content-Type', 'image/svg+xml')
+          res.end(empty)
+          return
+        }
+        next()
+      })
+    },
+  }
+}
+
 export default defineConfig({
   root: resolve('dist-vite-pages'),       // the generated entry HTML (build/bake.mjs)
   publicDir: resolve('dist-vite-public'), // staged head deps / styles / images (build/public.mjs)
-  plugins: [browserifyPaths(), cssHmr()],
+  plugins: [browserifyPaths(), cssHmr(), navIconFallback()],
   appType: 'mpa',
   // The entry HTML references the page JS as ../src/... (file-relative, for the
   // rollup build). In dev that URL-resolves to /src/... against the root — alias it.
