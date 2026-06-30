@@ -34,6 +34,7 @@
 @import "x-unansweredreasonslotlist/x-unansweredreasonslotlist.less";
 @import "x-motionpercentage/x-motionpercentage.less";
 @import "x-taskslist/x-taskslist.less";
+@import "x-task/x-task.less";
 @import "style.less";
 
 
@@ -216,6 +217,78 @@ x-groupgrid {
     overflow: hidden;
     font-size: 1em !important;
     &.workinfo-big { font-size: 1.5em !important; }
+
+    // workinfo-small only: workinfo block on the left, next task card on the
+    // right (`shownexttask` option — hidden by default, like the other show*
+    // options. Force-hidden in workinfo-big: no room for a task card there).
+    &.workinfo-small {
+      flex-direction: row;
+      align-items: center;
+    }
+    &.workinfo-big .operationstatus-nexttask-div {
+      display: none !important;
+    }
+
+    .operationstatus-workinfo-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 auto;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .operationstatus-nexttask-div {
+      // flex-shrink:0 — the workinfo block (flex:1, already ellipsized) absorbs
+      // the squeeze instead; without this the card was crushed down to ~77px
+      // (not even enough room for the category/state badges) and the timer
+      // collapsed to 0 width.
+      flex: 0 0 auto;
+      min-width: 95px;
+      max-width: 50%;
+      overflow: hidden;
+
+      x-task {
+        display: block;
+        width: 100%;
+        min-width: 0;
+      }
+
+      // Compact override: x-task is sized for standalone use (21px, 224px-wide
+      // card) — shrink it to fit the tile header, and keep only the main/next
+      // task (the tab strip that switches between several pending tasks is
+      // not needed here).
+      .task-content {
+        font-size: 11px !important;
+        row-gap: 2px;
+      }
+      .task-main-task {
+        min-width: 0 !important;
+        padding: 4px 8px;
+        background-color: @color_background_alternate;
+      }
+      .task-tabs {
+        display: none !important;
+      }
+      .task-main-task-bot-side {
+        column-gap: 8px;
+      }
+
+      // The timer text (e.g. a long duration) must clip instead of growing
+      // the card — constrain + ellipsize rather than letting the flex item
+      // expand past its share of `.task-main-task-bot-side`.
+      .task-main-task-timer {
+        min-width: 0;
+        overflow: hidden;
+      }
+      .task-main-task-timer-span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
 
     x-currentworkinfo, x-workinfo {
       text-align: center;
@@ -614,6 +687,10 @@ x-redstacklightbar { display: none !important; }
     .operationstatus-top-div {
       font-size: clamp(10px, 5cqh, 5vh) !important;
       &.workinfo-big { font-size: clamp(10px, 7cqh, 5vh) !important; }
+
+      .operationstatus-nexttask-div .task-content {
+        font-size: clamp(8px, 3cqh, 3vh) !important;
+      }
     }
 
     .operationstatus-middle-div {

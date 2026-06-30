@@ -26,6 +26,7 @@ import 'x-reasonbutton/x-reasonbutton';
 import 'x-lastmachinestatus/x-lastmachinestatus';
 import 'x-rotationprogress/x-rotationprogress';
 import 'x-taskslist/x-taskslist';
+import 'x-task/x-task';
 
 /* For Bar display and some defaultpie */
 import 'x-periodmanager/x-periodmanager';
@@ -48,6 +49,9 @@ import 'x-tr/x-tr';
  *
  * Configurable options:
  *  - `defaultlayout` / `machinesperpage` / `rotationdelay`    : rotation — live mode only (12/page)
+ *  - `showtasklist`                         : show the right-side task nav (x-taskslist, all machines)
+ *  - `shownexttask`                         : show the next-task card (x-task) in `.operationstatus-top-div`,
+ *                                             workinfo-small only — main task only, tabs hidden
  *  - `showworkinfo`                         : show workinfo component; when `showproduction` is on,
  *                                             shows x-workinfo; otherwise x-currentworkinfo
  *  - `showworkinfobig` / `showworkinfosmall`: workinfo font size radios; drives `_applyTopDisplaySizing`
@@ -246,6 +250,21 @@ class OperationStatusPage extends pulsePage.BasePage {
         });
       });
       showTaskListEl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    // --- SHOW NEXT TASK (x-task card, workinfo-small only) ---
+    const showNextTaskEl = document.getElementById('shownexttask');
+    if (showNextTaskEl) {
+      showNextTaskEl.checked = pulseConfig.getBool('shownexttask');
+      if (pulseConfig.getDefaultBool('shownexttask') != pulseConfig.getBool('shownexttask'))
+        showNextTaskEl.setAttribute('overridden', 'true');
+      showNextTaskEl.addEventListener('change', function () {
+        pulseConfig.set('shownexttask', this.checked);
+        document.querySelectorAll('.operationstatus-nexttask-div').forEach(el => {
+          el.style.display = this.checked ? '' : 'none';
+        });
+      });
+      showNextTaskEl.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     const showworkinfoEl = document.getElementById('showworkinfo');
@@ -753,6 +772,7 @@ class OperationStatusPage extends pulsePage.BasePage {
     };
 
     setDefaultChecked('showtasklist');
+    setDefaultChecked('shownexttask');
     setDefaultChecked('showworkinfo');
     setDefaultRadioGroup(pulseConfig.getDefaultBool('showworkinfosmall') ? 'small' : 'big', {
       small: 'showworkinfosmall',
@@ -818,6 +838,7 @@ class OperationStatusPage extends pulsePage.BasePage {
   getOptionValues() {
     const options = [
       { id: 'showtasklist', type: 'checkbox' },
+      { id: 'shownexttask', type: 'checkbox' },
       { id: 'showworkinfo', type: 'checkbox' },
       { id: 'showworkinfosmall', type: 'checkbox' },
       { id: 'showcurrentmachinestatuslogo', type: 'checkbox' },
@@ -959,6 +980,11 @@ class OperationStatusPage extends pulsePage.BasePage {
     let showtasklist = pulseConfig.getBool('showtasklist');
     document.querySelectorAll('.tasklist-nav').forEach(el => {
       el.style.display = showtasklist ? '' : 'none';
+    });
+
+    let shownexttask = pulseConfig.getBool('shownexttask');
+    document.querySelectorAll('.operationstatus-nexttask-div').forEach(el => {
+      el.style.display = shownexttask ? '' : 'none';
     });
 
     let showworkinfo = pulseConfig.getBool('showworkinfo');

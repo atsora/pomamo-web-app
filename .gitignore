@@ -12,6 +12,12 @@
 /external
 /node_modules
 package-lock.json
+/.yarn/*
+!/.yarn/patches
+!/.yarn/plugins
+!/.yarn/releases
+!/.yarn/sdks
+!/.yarn/versions
 *.msi
 Installer/CustomActions/Visual studio projects/*/.vs
 Installer/CustomActions/Visual studio projects/*/*/bin
