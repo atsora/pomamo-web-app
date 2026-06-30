@@ -79,7 +79,8 @@ class RunningPage extends pulsePage.BasePage {
   initOptionValues () {
     let allowproductionbar = pulseConfig.getBool('allowproductionbar');
     if (!allowproductionbar) {
-      document.querySelector('.group-options').style.display = 'none';
+      let groupOptions = document.querySelector('.group-options');
+      if (groupOptions) groupOptions.style.display = 'none';
     }
 
     const showproductionbarEl = document.getElementById('showproductionbar');
@@ -239,7 +240,8 @@ if (document.readyState !== 'loading') {
 
   let tmpContexts = pulseUtility.getURLParameterValues(window.location.href, 'AppContext');
   if (tmpContexts && tmpContexts.includes('live')) {
-    document.querySelector('.running-header').style.display = 'none';
+    let runningHeader = document.querySelector('.running-header');
+    if (runningHeader) runningHeader.style.display = 'none';
   }
 
   document.querySelectorAll('x-datetimegraduation').forEach(el => el.load());

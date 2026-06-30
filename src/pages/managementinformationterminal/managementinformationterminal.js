@@ -163,7 +163,8 @@ class ManagementInformationTerminalPage extends pulsePage.BasePage {
       errorMessage.style.color = 'red';
       errorMessage.style.fontSize = '0.9em';
       errorMessage.style.marginTop = '5px';
-      document.querySelector('.thresholdunitispart').appendChild(errorMessage);
+      let thresholdContainer = document.querySelector('.thresholdunitispart');
+      if (thresholdContainer) thresholdContainer.appendChild(errorMessage);
     }
 
     // Check if values are valid numbers
