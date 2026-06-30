@@ -17,9 +17,17 @@ SPDX-License-Identifier: Apache-2.0
     <div class="tile-content">
 
       <div class="operationstatus-top-div">
-        <x-currentworkinfo></x-currentworkinfo>
-        <x-workinfo></x-workinfo>
-        <x-production></x-production>
+        <div class="operationstatus-workinfo-block">
+          <x-currentworkinfo></x-currentworkinfo>
+          <x-workinfo></x-workinfo>
+          <x-production></x-production>
+        </div>
+        <!-- Next task to perform on this machine (workinfo-small only). The tabs
+             that let x-task switch between several pending tasks are hidden here
+             (see operationstatus.less) — only the main/next task card is shown. -->
+        <div class="operationstatus-nexttask-div">
+          <x-task></x-task>
+        </div>
       </div>
 
       <div class="operationstatus-middle-div">

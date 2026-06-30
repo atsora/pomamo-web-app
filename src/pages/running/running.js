@@ -26,6 +26,7 @@ import 'x-productionstatelegends/x-productionstatelegends';
 import 'x-reasongroups/x-reasongroups';
 import 'x-fieldlegends/x-fieldlegends';
 import 'x-machinemodelegends/x-machinemodelegends';
+import 'x-taskslist/x-taskslist';
 import 'x-tr/x-tr';
 
 /**
@@ -43,10 +44,13 @@ import 'x-tr/x-tr';
  *
  * The bar option is only exposed if `allowproductionbar` = true in the config.
  *
+ * Right-side task nav (x-taskslist, `all-machines`) is toggled by the `showtasklist`
+ * option, hidden by default — same pattern as the operationstatus page.
+ *
  * Components: x-grouplist, x-barstack, x-machinedisplay, x-lastworkinformation,
  * x-currentcncvalue, x-lastshift, x-productionmachiningstatus, x-periodtoolbar, x-clock,
  * x-reasonbutton, x-reasongroups, x-fieldlegends, x-machinemodelegends,
- * x-productionstatelegends.
+ * x-productionstatelegends, x-taskslist.
  *
  * @extends pulsePage.BasePage
  */
@@ -81,6 +85,21 @@ class RunningPage extends pulsePage.BasePage {
     if (!allowproductionbar) {
       let groupOptions = document.querySelector('.group-options');
       if (groupOptions) groupOptions.style.display = 'none';
+    }
+
+    // --- SHOW TASK LIST (right-side nav) ---
+    const showTaskListEl = document.getElementById('showtasklist');
+    if (showTaskListEl) {
+      showTaskListEl.checked = pulseConfig.getBool('showtasklist');
+      if (pulseConfig.getDefaultBool('showtasklist') != pulseConfig.getBool('showtasklist'))
+        showTaskListEl.setAttribute('overridden', 'true');
+      showTaskListEl.addEventListener('change', function () {
+        pulseConfig.set('showtasklist', this.checked);
+        document.querySelectorAll('.tasklist-nav').forEach(el => {
+          el.style.display = this.checked ? '' : 'none';
+        });
+      });
+      showTaskListEl.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     const showproductionbarEl = document.getElementById('showproductionbar');
@@ -126,6 +145,8 @@ class RunningPage extends pulsePage.BasePage {
       if (clearOverride) element.removeAttribute('overridden');
     };
 
+    setDefaultChecked('showtasklist');
+
     // BAR (reason / production state)
     setDefaultChecked('showproductionbar');
 
@@ -146,6 +167,7 @@ class RunningPage extends pulsePage.BasePage {
   // the param element is used when id is different in the dom but could be patched if needed
   getOptionValues () {
     const options = [
+      { id: 'showtasklist', type: 'checkbox' },
       { id: 'showproductionbar', type: 'checkbox' }
     ];
 
@@ -181,6 +203,8 @@ class RunningPage extends pulsePage.BasePage {
   /**
    * Applies the current configuration to DOM components.
    *
+   * `showtasklist` toggles the `.tasklist-nav` aside (hidden by default).
+   *
    * Components driven by `currentdisplay.*` (independent configs, not linked):
    *  - `displayjobshiftpartcount` → x-productionmachiningstatus
    *  - `displayjob`               → x-lastworkinformation
@@ -194,6 +218,11 @@ class RunningPage extends pulsePage.BasePage {
    * Note: bars (x-barstack) read pulseConfig directly — no need to drive them here.
    */
   buildContent () {
+    let showtasklist = pulseConfig.getBool('showtasklist');
+    document.querySelectorAll('.tasklist-nav').forEach(el => {
+      el.style.display = showtasklist ? '' : 'none';
+    });
+
     let addProductionMachining = pulseConfig.getBool('currentdisplay.displayjobshiftpartcount', false);
     let displayJob = pulseConfig.getBool('currentdisplay.displayjob', true);
     let displayShift = pulseConfig.getBool('currentdisplay.displayshift', true);

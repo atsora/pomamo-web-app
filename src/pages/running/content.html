@@ -7,21 +7,30 @@ SPDX-License-Identifier: Apache-2.0
 
 <x-signalbanner from-machine-selection></x-signalbanner>
 
+<div class="running-layout">
+  <div class="main-table-box">
+    <div class='running-header'>
+      <x-periodtoolbar period-context="running"></x-periodtoolbar>
+      <div class="div-datetime">
+        <label class="label-current"><x-tr key="content.currentColon" default="Current:"></x-tr></label>
+        <x-clock display-seconds=false></x-clock>
+      </div>
+    </div>
 
-<div class='running-header'>
-  <x-periodtoolbar period-context="running"></x-periodtoolbar>
-  <div class="div-datetime">
-    <label class="label-current"><x-tr key="content.currentColon" default="Current:"></x-tr></label>
-    <x-clock display-seconds=false></x-clock>
+    <x-rotationprogress display-mode="bar"></x-rotationprogress>
+
+    <div class="tile">
+      <x-datetimegraduation period-context="running"></x-datetimegraduation>
+      <x-grouplist templateid='boxtoclone'></x-grouplist>
+    </div>
+
+    <x-rotationprogress display-mode="text"></x-rotationprogress>
   </div>
+
+  <!-- Right-side task nav (toggled by the `showtasklist` option, hidden by default).
+       `all-machines`: tasks across every machine for the current role (mirrors
+       operationstatus — no single machine tracked on this page). -->
+  <aside class="tasklist-nav">
+    <x-taskslist all-machines></x-taskslist>
+  </aside>
 </div>
-
-
-<x-rotationprogress display-mode="bar"></x-rotationprogress>
-
-<div class="tile">
-  <x-datetimegraduation period-context="running"></x-datetimegraduation>
-  <x-grouplist templateid='boxtoclone'></x-grouplist>
-</div>
-
-<x-rotationprogress display-mode="text"></x-rotationprogress>
