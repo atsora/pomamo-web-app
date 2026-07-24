@@ -47,9 +47,12 @@ function bake (page) {
     new RegExp(`<script\\s+async[^>]*src="\\./es2015/${page}\\.js\\?v="[^>]*></script>`),
     `<script type="module" src="../src/pages/${page}/${page}.js"></script>`)
 
-  // 4. drop the manual ?v= cache-bust (Vite hashes the bundle; public assets are
-  //    served verbatim and don't need it).
-  html = html.replaceAll('?v=', '')
+  // 4. Fill the ?v= cache-bust placeholders with the app version. Vite hashes the
+  //    bundled JS entries, so they don't need it. But the public CSS files
+  //    (styles/*.css, loaded dynamically by theme-init.js) are NOT hashed — they
+  //    rely on theme-init.js reading its own ?v= to propagate to the CSS loads.
+  //    The page's Vite module entry was already rewritten in step 3 (no ?v= there).
+  html = html.replaceAll('?v=', `?v=${version}`)
 
   // 5. the classic head scripts/links (theme-init, pulse-shell, config_*, lib, …)
   //    are NOT bundled — they are public assets. Reference them with a ROOT-ABSOLUTE
@@ -62,8 +65,8 @@ function bake (page) {
   //    import @vite-ignore so Vite leaves it as a runtime import to the public
   //    /vue-dist bundle (otherwise Vite tries to resolve/open it at build time).
   html = html.replace('<script type="module">', '<script>')
-  html = html.replace(/import\(\s*['"]\.?\/vue-dist\/static\/index\.js['"]\s*\)/,
-    "import(/* @vite-ignore */ '/vue-dist/static/index.js')")
+  html = html.replace(/import\(\s*['"]\.?\/vue-dist\/static\/index\.js(\?v=[^'"]*)?['"]\s*\)/,
+    (_, query) => `import(/* @vite-ignore */ '/vue-dist/static/index.js${query || ''}')`)
 
   return html
 }
