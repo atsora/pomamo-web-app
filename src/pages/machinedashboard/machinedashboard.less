@@ -35,6 +35,7 @@
 @import "x-productiongauge/x-productiongauge.less";
 @import "x-currenticoncncalarm/x-currenticoncncalarm.less";
 @import "x-taskslist/x-taskslist.less";
+@import "x-lastmachinestatetemplate/x-lastmachinestatetemplate.less";
 
 // Optional task list (toggled by the `showtasklist` option, hidden by default).
 // Fixed, narrow column so the production tracker graph keeps its flexible space
@@ -294,6 +295,18 @@ x-machinetab .machinetab-machine-cell {
       width: 100%;
       padding: 0 10px;
       box-sizing: border-box;
+    }
+  }
+
+  x-lastmachinestatetemplate {
+    height: 100%;
+
+    .pulse-cellbar-main {
+      height: 100%;
+
+      .pulse-cellbar-first {
+        height: 100%;
+      }
     }
   }
 

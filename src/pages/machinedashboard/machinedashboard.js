@@ -32,6 +32,7 @@ import 'x-periodmanager/x-periodmanager';
 import 'x-productionbar/x-productionbar';
 import 'x-productiongauge/x-productiongauge';
 import 'x-currenticoncncalarm/x-currenticoncncalarm';
+import 'x-lastmachinestatetemplate/x-lastmachinestatetemplate';
 
 // Vanilla helpers — keep call sites compact while still null-guarding.
 function _setEach(selector, mutator) {

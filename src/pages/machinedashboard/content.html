@@ -13,7 +13,8 @@ SPDX-License-Identifier: Apache-2.0
   <div class="machinetab-list" id="machine-tabs-panel">
     <div class="hidden-content">
       <div id="machinedashboard-boxtoclone">
-        <x-machinetab machine-id="" machine-context="PulseWebApp" status-context="PulseWebApp" period-context="machinedashboard"></x-machinetab>
+        <x-machinetab machine-id="" machine-context="PulseWebApp" status-context="PulseWebApp"
+          period-context="machinedashboard"></x-machinetab>
       </div>
     </div>
     <x-machinetabnav templateid="machinedashboard-boxtoclone" machine-context="PulseWebApp"></x-machinetabnav>
@@ -31,6 +32,10 @@ SPDX-License-Identifier: Apache-2.0
 
       <div class="nav-content">
         <div class="info-content">
+          <div class="text-box info-box clickable">
+            <x-lastmachinestatetemplate machine-context="PulseWebApp" period-context="machinedashboard">
+            </x-lastmachinestatetemplate>
+          </div>
           <div class="text-box info-box">
             <x-workinfo machine-context="PulseWebApp"></x-workinfo>
             <x-tr class="text" key="content.reference" default="Reference"></x-tr>
@@ -38,7 +43,6 @@ SPDX-License-Identifier: Apache-2.0
         </div>
       </div>
     </div>
-
     <div class="stats-content">
       <div class="stats-perf-wrapper">
         <div class="performance-stats-container">
@@ -66,8 +70,8 @@ SPDX-License-Identifier: Apache-2.0
                   period-context="machinedashboard"></x-productionbar>
               </div>
               <div class="cncalarmicon-content">
-                <x-currenticoncncalarm machine-context="PulseWebApp"
-                  status-context="PulseWebApp" showAlarmBelowIcon="true"></x-currenticoncncalarm>
+                <x-currenticoncncalarm machine-context="PulseWebApp" status-context="PulseWebApp"
+                  showAlarmBelowIcon="true"></x-currenticoncncalarm>
               </div>
             </div>
 
