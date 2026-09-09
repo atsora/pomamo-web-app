@@ -5,7 +5,7 @@
 
 var PULSE_DEFAULT_CONFIG = PULSE_DEFAULT_CONFIG || {};
 
-/* 
+/*
  * ** Please keep this comment ** *
  * Global configuration : each next line overload previous ones
  * PULSE_DEFAULT_CONFIG.general -> def in PWC
@@ -47,7 +47,7 @@ PULSE_DEFAULT_CONFIG.general.menuType = 'fullOrIcon';
 */
 PULSE_DEFAULT_CONFIG.general.customTitle = false;
 
-PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarmsat and currenticoncncalarm == default 
+PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarmsat and currenticoncncalarm == default
 
 // Default range for all pages :
 PULSE_DEFAULT_CONFIG.general.displayshiftrange = false;
@@ -70,9 +70,9 @@ PULSE_DEFAULT_CONFIG.general.showcoloredbar = {
   click: {
     allbars: 'none' // each bar can be overloaded. Possible values: none, change, popup, details
   },
-  showdetails: [ 
+  showdetails: [
   ],
-  showpopup: [ 
+  showpopup: [
   ]
 };
 
@@ -350,7 +350,7 @@ PULSE_DEFAULT_CONFIG.roles.support.showcoloredbar = {
 // CAN be overload in custom config
 /* ********** ********** ********** ********** */
 PULSE_DEFAULT_CONFIG.rolespages = {
-  // EVERYTHING CAN BE OVERLOADED here in CUSTOM file !  
+  // EVERYTHING CAN BE OVERLOADED here in CUSTOM file !
   live: {
     operationstatus: {
       canUseRowsToSetHeight: true
@@ -417,9 +417,12 @@ PULSE_DEFAULT_CONFIG.rolespages = {
   },
   operator: {
     machines: {
-      // Yes. Keep it empty to allow modifications
+      componentsToDisplay: [
+      ] // Customize it
     },
     running: {
+      showcoloredbar: {
+      }
       // Yes. Keep it empty to allow modifications
     },
     machinespecification: {
