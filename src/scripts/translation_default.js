@@ -139,7 +139,22 @@ ATSORA_LOCALE_CATALOG.default.dialog = {
 
 ATSORA_LOCALE_CATALOG.default.error = {
   machineRequired: 'Please select at least one machine',
-  min1hour: 'Please select at least one hour'
+  min1hour: 'Please select at least one hour',
+  // Keyed by XMLHttpRequest status, read by pulseService.getAjaxErrorMessage.
+  // 0 means the browser got no response at all, not that the network is down.
+  ajax: {
+    0: 'No response from the server',
+    400: 'Bad request',
+    401: 'Unauthorised access',
+    403: 'Forbidden resource, cannot be accessed',
+    404: 'Requested page not found',
+    500: 'Internal Server Error',
+    501: 'Not implemented',
+    502: 'Bad Gateway or Proxy Error',
+    503: 'Service Unavailable',
+    504: 'Gateway Timeout',
+    520: 'Unknown Error'
+  }
 }
 
 ATSORA_LOCALE_CATALOG.default.pages = {
@@ -376,7 +391,20 @@ ATSORA_LOCALE_CATALOG.fr.dialog = {
 
 ATSORA_LOCALE_CATALOG.fr.error = {
   machineRequired: 'Prière de sélectionner au-moins une machine',
-  min1hour: 'Prière de sélectionner au-moins une heure'
+  min1hour: 'Prière de sélectionner au-moins une heure',
+  ajax: {
+    0: 'Pas de réponse du serveur',
+    400: 'Requête incorrecte',
+    401: 'Accès non autorisé',
+    403: 'Ressource interdite, accès impossible',
+    404: 'Page demandée introuvable',
+    500: 'Erreur interne du serveur',
+    501: 'Non implémenté',
+    502: 'Erreur de passerelle ou de proxy',
+    503: 'Service indisponible',
+    504: "Délai d'attente de la passerelle dépassé",
+    520: 'Erreur inconnue'
+  }
 }
 
 ATSORA_LOCALE_CATALOG.fr.pages = {
@@ -612,7 +640,20 @@ ATSORA_LOCALE_CATALOG.de.dialog = {
 
 ATSORA_LOCALE_CATALOG.de.error = {
   machineRequired: 'Bitte mindestens eine Maschine auswählen',
-  min1hour: 'Bitte mindestens eine Stunde auswählen'
+  min1hour: 'Bitte mindestens eine Stunde auswählen',
+  ajax: {
+    0: 'Keine Antwort vom Server',
+    400: 'Ungültige Anfrage',
+    401: 'Nicht autorisierter Zugriff',
+    403: 'Gesperrte Ressource, Zugriff nicht möglich',
+    404: 'Angeforderte Seite nicht gefunden',
+    500: 'Interner Serverfehler',
+    501: 'Nicht implementiert',
+    502: 'Gateway- oder Proxy-Fehler',
+    503: 'Dienst nicht verfügbar',
+    504: 'Gateway-Zeitüberschreitung',
+    520: 'Unbekannter Fehler'
+  }
 }
 
 ATSORA_LOCALE_CATALOG.de.pages = {
