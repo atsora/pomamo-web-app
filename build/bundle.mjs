@@ -42,6 +42,32 @@ await build({
   },
 })
 
+// Undo bake.mjs step 5, now that Vite is done reading the HTML. Those classic
+// head scripts were made root-absolute purely to keep Vite from trying to bundle
+// non-module scripts; shipped that way they only resolve when the app sits at the
+// root of a site, while the installer deploys it under IIS as /AtrackingWebApp/,
+// where every one of them 404s. Everything the app ships is addressed relative to
+// the page again, as it was before the Vite migration.
+const outRoot = resolve('dist-vite-pure')
+let relativized = 0
+
+for (const f of readdirSync(outRoot).filter(name => name.endsWith('.html'))) {
+  const p = resolve(outRoot, f)
+  const before = readFileSync(p, 'utf8')
+  const after = before
+    // src="/scripts/…" -> src="./scripts/…", leaving protocol-relative //host untouched
+    .replace(/\b(src|href)="\/(?!\/)/g, '$1="./')
+    // the @vite-ignore dynamic import of the external Vue bundle (step 6)
+    .replace(/(['"])\/vue-dist\//g, '$1./vue-dist/')
+
+  if (after !== before) {
+    writeFileSync(p, after)
+    relativized++
+  }
+}
+
+process.stdout.write(`Made ${relativized} pages path-relative again.\n`)
+
 // Release == obfuscate the bundled JS, like the old grunt 'obfuscator' task (which
 // ran javascript-obfuscator over the browserified output). Same engine, default
 // options. Beta leaves the esbuild-minified bundles readable-ish (not obfuscated).

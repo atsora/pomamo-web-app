@@ -61,6 +61,12 @@ export function browserifyPaths () {
 
 export default defineConfig({
   plugins: [browserifyPaths()],
+  // Relative base, like atsora-vue, so each page resolves its chunks from
+  // wherever the app happens to be served. Vite defaults to '/', which emitted
+  // absolute "/assets/…" tags: served from a subdirectory (the installer
+  // deploys under IIS as /AtrackingWebApp/) every module 404s, and the browser
+  // reports it as a blocked text/html MIME type rather than a missing file.
+  base: './',
   build: {
     outDir: 'dist-vite',
     emptyOutDir: false, // build/bundle.mjs manages dist-vite-pure/ itself
