@@ -94,6 +94,7 @@ ATSORA_LOCALE_CATALOG.default.parameters = {
 }
 
 ATSORA_LOCALE_CATALOG.default.content = {
+  maintenance: 'The system is currently under maintenance',
   actual: 'actual',
   actualVsTarget: 'actual/target',
   bookmark: 'URL to bookmark',
@@ -346,6 +347,7 @@ ATSORA_LOCALE_CATALOG.fr.parameters = {
 }
 
 ATSORA_LOCALE_CATALOG.fr.content = {
+  maintenance: 'Le système est actuellement en maintenance',
   actual: 'données courantes',
   actualVsTarget: 'données courantes/objectif',
   bookmark: 'URL à enregistrer',
@@ -595,6 +597,7 @@ ATSORA_LOCALE_CATALOG.de.parameters = {
 }
 
 ATSORA_LOCALE_CATALOG.de.content = {
+  maintenance: 'Das System wird derzeit gewartet',
   actual: 'Ist-Wert',
   actualVsTarget: 'Ist/Soll',
   bookmark: 'URL als Lesezeichen',
