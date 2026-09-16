@@ -306,6 +306,39 @@ x-machinetab .machinetab-machine-cell {
 
       .pulse-cellbar-first {
         height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      // Same shape as the "Reference" box on the right: the value on top, the
+      // label below in a smaller regular weight. The separator, the ':' of the
+      // one-line bars of the machines and scheduled status pages, is dropped.
+      .lastmachinestate-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        row-gap: 8px;
+        max-width: 100%;
+      }
+
+      .lastmachinestate-value {
+        order: 1;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .lastmachinestate-label {
+        order: 2;
+        font-size: 1.8vh;
+        font-weight: normal;
+      }
+
+      .lastmachinestate-separator {
+        display: none;
       }
     }
   }
