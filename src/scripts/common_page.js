@@ -404,7 +404,15 @@ var showNextPageLoop = function (perPage) {
 // restores images\customer-logo.* explicitly; on Linux no package owns the path).
 // Nothing to compile, nothing to style: if no candidate loads, the anchors in
 // pulse-shell.js stay hidden.
-const CUSTOMER_LOGO_FILES = ['images/customer-logo.svg', 'images/customer-logo.png'];
+// Candidates in order of preference: vector first, then lossless + transparency,
+// then the lossy formats. Only the first one that loads is used.
+const CUSTOMER_LOGO_FILES = [
+  'images/customer-logo.svg',
+  'images/customer-logo.png',
+  'images/customer-logo.webp',
+  'images/customer-logo.jpg',
+  'images/customer-logo.jpeg'
+];
 
 var setupCustomerLogo = function () {
   // 'none' | 'header' | 'corner' | 'both'. Resolved per page by pulseConfig

@@ -83,6 +83,12 @@ walk(resolve(pwc, 'images'), p => { if (/\.(svg|png|jpg|ico)$/i.test(p)) copyFil
 if (existsSync('src/images')) cpSync('src/images', images, { recursive: true })
 walk('src/pages', p => { if (p.endsWith('.svg')) copyFileSync(p, resolve(images, basename(p))) })
 
+// --- web.config (IIS) ---
+// Declares image/webp at the root of the app: that type is absent from the default
+// IIS MIME map before Windows Server 2022, so a customer-logo.webp dropped in
+// images/ would answer 404.3. Apache ignores the file, so it is harmless in the .deb.
+copyTo('web.config', resolve(out, 'web.config'))
+
 // --- vue bundle (optional) ---
 if (existsSync('external/vue-dist')) cpSync('external/vue-dist', resolve(out, 'vue-dist'), { recursive: true })
 

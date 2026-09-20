@@ -51,7 +51,8 @@ PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarm
 
 /* customerlogo: where to display the customer logo, per page or globally.
 * The image itself is a file the customer drops into the deployed images/ folder
-* (customer-logo.svg or customer-logo.png) - it is never shipped by the build.
+* (customer-logo.svg, .png, .webp, .jpg or .jpeg) - it is never shipped by the
+* build, the first one found is used.
 * Nothing is displayed if no such file is found, whatever this setting.
 * - 'none'   : no logo (default)
 * - 'header' : top bar, left of the machine selection button (left of the full
