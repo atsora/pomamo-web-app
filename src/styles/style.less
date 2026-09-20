@@ -517,23 +517,10 @@ pulse-shell {
   justify-content: space-between;
   gap: 5px;
 
-  &:before {
-    /* customer logo if needed */
-    content: "";
-    //background-image: @customer_logo;
-    background-position: center right;
-    background-repeat: no-repeat;
-    background-size: contain;
-    position: absolute;
-    opacity: 0.3;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 237px;
-    width: 20%;
-    height: 60%;
-    z-index: -1;
-    pointer-events: none;
-  }
+  // The customer logo is NOT a pseudo-element any more: it is a real <img> flex
+  // child (.customer-logo-header, see pulse-shell.js) so it reflows by itself
+  // when .group-machines is hidden. The old absolutely-positioned &:before with
+  // its hardcoded right: 237px is gone.
 
   &:after {
     /* main logo */
@@ -618,6 +605,37 @@ pulse-shell {
   align-items: center;
   height: 100%;
   box-sizing: border-box;
+}
+
+// CUSTOMER LOGO
+//
+// Two <img> anchors emitted by pulse-shell.js, hidden until common_page finds an
+// images/customer-logo.svg|png dropped by the customer (setupCustomerLogo). <img>
+// rather than a background-image on purpose: width: auto sizes it from the file's
+// own aspect ratio, so no per-customer CSS is ever needed.
+.customer-logo[hidden] {
+  display: none;
+}
+
+.customer-logo-header {
+  flex: 0 1 auto; // may shrink on narrow headers rather than push the buttons out
+  min-width: 0;
+  height: 100%;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain; // keep the ratio when the flex box is squeezed
+}
+
+// Bottom-right corner of the main area (.pulse-mainarea is position: relative).
+.customer-logo-corner {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  max-width: 160px;
+  max-height: 40px;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .pulse-header-close-to-right {

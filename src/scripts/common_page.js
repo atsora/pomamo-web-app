@@ -398,6 +398,41 @@ var showNextPageLoop = function (perPage) {
 };
 
 
+// --- Customer logo ---
+// The logo is a file the customer DROPS into the deployed images/ folder. The
+// generic build never ships one, so nothing overwrites it on upgrade (the MSI
+// restores images\customer-logo.* explicitly; on Linux no package owns the path).
+// Nothing to compile, nothing to style: if no candidate loads, the anchors in
+// pulse-shell.js stay hidden.
+const CUSTOMER_LOGO_FILES = ['images/customer-logo.svg', 'images/customer-logo.png'];
+
+var setupCustomerLogo = function () {
+  // 'none' | 'header' | 'corner' | 'both'. Resolved per page by pulseConfig
+  // (url > localStorage > role+page > role > page > general), so a customer sets
+  // it in scripts/config_custom.js — no rebuild.
+  let where = pulseConfig.getString('customerlogo', 'none');
+  if (where == '' || where == 'none') return;
+
+  let targets = [];
+  if (where == 'header' || where == 'both') targets.push(qs('.customer-logo-header'));
+  if (where == 'corner' || where == 'both') targets.push(qs('.customer-logo-corner'));
+  targets = targets.filter(el => el != null);
+  if (targets.length == 0) return;
+
+  // First candidate that actually loads wins; none -> leave the anchors hidden.
+  let tryFile = function (i) {
+    if (i >= CUSTOMER_LOGO_FILES.length) return;
+    let probe = new Image();
+    probe.addEventListener('load', function () {
+      targets.forEach(el => { el.src = CUSTOMER_LOGO_FILES[i]; el.hidden = false; });
+    });
+    probe.addEventListener('error', function () { tryFile(i + 1); });
+    probe.src = CUSTOMER_LOGO_FILES[i];
+  };
+  tryFile(0);
+};
+
+
 var populateConfigPanel = function (currentPageMethods) {
 
   // Machine Selection
@@ -853,6 +888,7 @@ export function preparePage (currentPageMethods) {
   pulseSvg.inlineBackgroundSvg('#machineselectionbtn');
   pulseSvg.inlineBackgroundSvg('.legend-toggle-icon-up');
   pulseSvg.inlineBackgroundSvg('.legend-toggle-icon-down');
+  setupCustomerLogo();
   let ancestors = qsa('x-ancestors');
   for (let i = 0; i < ancestors.length; i++) { if (ancestors[i].initialize) ancestors[i].initialize(); }
 

@@ -49,6 +49,19 @@ PULSE_DEFAULT_CONFIG.general.customTitle = false;
 
 PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarmsat and currenticoncncalarm == default
 
+/* customerlogo: where to display the customer logo, per page or globally.
+* The image itself is a file the customer drops into the deployed images/ folder
+* (customer-logo.svg or customer-logo.png) - it is never shipped by the build.
+* Nothing is displayed if no such file is found, whatever this setting.
+* - 'none'   : no logo (default)
+* - 'header' : top bar, left of the machine selection button (left of the full
+*              screen button on the pages with no machine selection)
+* - 'corner' : bottom right corner of the page
+* - 'both'   : header + corner
+* Overload it per page in config_custom.js: PULSE_DEFAULT_CONFIG.pages.<page>.customerlogo
+*/
+PULSE_DEFAULT_CONFIG.general.customerlogo = 'none';
+
 // Default range for all pages :
 PULSE_DEFAULT_CONFIG.general.displayshiftrange = false;
 PULSE_DEFAULT_CONFIG.general.displaydaysrange = 1;

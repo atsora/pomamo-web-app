@@ -45,6 +45,11 @@
     '    <div class="navbar-apps"></div>',
     '  </div>',
     '  <div class="pulse-header-title title"><span></span></div>',
+    // Customer logo anchor: a real flex child placed BEFORE .group-machines, so it
+    // sits left of #machineselectionbtn and falls back against #fullscreenbtn on its
+    // own when common_page hides .group-machines. Stays hidden until common_page
+    // finds an images/customer-logo.* file (setupCustomerLogo).
+    '  <img class="customer-logo customer-logo-header" alt="" hidden>',
     '  <div class="pulse-header-close-to-right group-machines">',
     '    <button id="machineselectionbtn" title="MachineSelection" role="button"></button>',
     '  </div>',
@@ -92,6 +97,9 @@
     '        </div>',
     '        <div id="pulse-pagination"></div>',
     '      </div>',
+    // Second customer logo anchor, bottom-right corner of the main area
+    // (.pulse-mainarea is position: relative).
+    '      <img class="customer-logo customer-logo-corner" alt="" hidden>',
     '    </div>',
     '  </div>',
 
