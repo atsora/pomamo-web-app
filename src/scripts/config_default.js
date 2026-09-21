@@ -53,6 +53,9 @@ PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarm
 * The image itself is a file the customer drops into the deployed images/ folder
 * (customer-logo.svg, .png, .webp, .jpg or .jpeg) - it is never shipped by the
 * build, the first one found is used.
+* Per theme, optionally: customer-logo-dark.<ext> and customer-logo-light.<ext>
+* override customer-logo.<ext> for the dark / light theme, and the displayed logo
+* follows the theme switch. A single customer-logo.<ext> serves both themes.
 * Nothing is displayed if no such file is found, whatever this setting.
 * - 'none'   : no logo (default)
 * - 'header' : top bar, left of the machine selection button (left of the full

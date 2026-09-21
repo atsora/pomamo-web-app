@@ -401,18 +401,68 @@ var showNextPageLoop = function (perPage) {
 // --- Customer logo ---
 // The logo is a file the customer DROPS into the deployed images/ folder. The
 // generic build never ships one, so nothing overwrites it on upgrade (the MSI
-// restores images\customer-logo.* explicitly; on Linux no package owns the path).
+// restores images\customer-logo* explicitly; on Linux no package owns the path).
 // Nothing to compile, nothing to style: if no candidate loads, the anchors in
 // pulse-shell.js stay hidden.
-// Candidates in order of preference: vector first, then lossless + transparency,
-// then the lossy formats. Only the first one that loads is used.
-const CUSTOMER_LOGO_FILES = [
-  'images/customer-logo.svg',
-  'images/customer-logo.png',
-  'images/customer-logo.webp',
-  'images/customer-logo.jpg',
-  'images/customer-logo.jpeg'
-];
+//
+// File names: customer-logo.<ext> is used in both themes; customer-logo-dark.<ext>
+// and customer-logo-light.<ext> override it for one theme when the customer needs
+// two versions (a logo readable on a dark background is rarely readable on a light
+// one). Extensions are tried in order of preference: vector first, then lossless
+// with transparency, then the lossy formats.
+const CUSTOMER_LOGO_EXTENSIONS = ['svg', 'png', 'webp', 'jpg', 'jpeg'];
+
+var _customerLogoTargets = [];
+var _customerLogoUrls = {}; // base name -> resolved url, or null when none exists
+
+// Probe images/<base>.<ext> in order, call back with the first one that loads
+// (null when none does). Each base is probed at most once per page: switching
+// theme afterwards costs no request.
+var resolveCustomerLogo = function (base, callback) {
+  if (Object.prototype.hasOwnProperty.call(_customerLogoUrls, base)) {
+    callback(_customerLogoUrls[base]);
+    return;
+  }
+  let tryExtension = function (i) {
+    if (i >= CUSTOMER_LOGO_EXTENSIONS.length) {
+      _customerLogoUrls[base] = null;
+      callback(null);
+      return;
+    }
+    let url = 'images/' + base + '.' + CUSTOMER_LOGO_EXTENSIONS[i];
+    let probe = new Image();
+    probe.addEventListener('load', function () {
+      _customerLogoUrls[base] = url;
+      callback(url);
+    });
+    probe.addEventListener('error', function () { tryExtension(i + 1); });
+    probe.src = url;
+  };
+  tryExtension(0);
+};
+
+// Show the logo matching the theme currently applied to <html>, falling back to
+// the theme-less customer-logo.* so that dropping a single file keeps working.
+var applyCustomerLogo = function () {
+  if (_customerLogoTargets.length == 0) return;
+  let themed = document.documentElement.classList.contains('dark')
+    ? 'customer-logo-dark' : 'customer-logo-light';
+  let bases = [themed, 'customer-logo'];
+  let step = function (i) {
+    if (i >= bases.length) {
+      _customerLogoTargets.forEach(el => { el.hidden = true; });
+      return;
+    }
+    resolveCustomerLogo(bases[i], function (url) {
+      if (url == null) {
+        step(i + 1);
+        return;
+      }
+      _customerLogoTargets.forEach(el => { el.src = url; el.hidden = false; });
+    });
+  };
+  step(0);
+};
 
 var setupCustomerLogo = function () {
   // 'none' | 'header' | 'corner' | 'both'. Resolved per page by pulseConfig
@@ -424,20 +474,8 @@ var setupCustomerLogo = function () {
   let targets = [];
   if (where == 'header' || where == 'both') targets.push(qs('.customer-logo-header'));
   if (where == 'corner' || where == 'both') targets.push(qs('.customer-logo-corner'));
-  targets = targets.filter(el => el != null);
-  if (targets.length == 0) return;
-
-  // First candidate that actually loads wins; none -> leave the anchors hidden.
-  let tryFile = function (i) {
-    if (i >= CUSTOMER_LOGO_FILES.length) return;
-    let probe = new Image();
-    probe.addEventListener('load', function () {
-      targets.forEach(el => { el.src = CUSTOMER_LOGO_FILES[i]; el.hidden = false; });
-    });
-    probe.addEventListener('error', function () { tryFile(i + 1); });
-    probe.src = CUSTOMER_LOGO_FILES[i];
-  };
-  tryFile(0);
+  _customerLogoTargets = targets.filter(el => el != null);
+  applyCustomerLogo();
 };
 
 
@@ -685,6 +723,10 @@ var themeManager = {
     }
     // Sync Vue/PrimeVue/Tailwind dark mode (PrimeVue darkModeSelector = '.dark' on <html>).
     document.documentElement.classList.toggle('dark', name === 'dark');
+    // Swap to the customer logo of the new theme. The first switch to a theme not
+    // displayed yet resolves its variant; every switch after that costs no request
+    // (see resolveCustomerLogo, which memoizes per base name).
+    applyCustomerLogo();
   },
   current: function () { return pulseConfig.getString('theme', 'dark'); }
 };
