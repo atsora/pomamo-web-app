@@ -12,7 +12,7 @@
 //                                  same engine the old grunt 'release' task used)
 //
 // Obfuscation happens ONLY with --release (a release is produced only via this flag,
-// build-pulse.sh --release, or release.sh — never the plain build). Run from pomamo-web-app/.
+// build-atracking.sh --release, or release.sh — never the plain build). Run from pomamo-web-app/.
 
 import { execSync } from 'node:child_process'
 
