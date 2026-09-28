@@ -29,9 +29,9 @@
 }
 
 .browsererror-link img {
-  /* Use default :
-  height: 150px;
-  width: 150px; */
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
   margin: 10px;
 }
 

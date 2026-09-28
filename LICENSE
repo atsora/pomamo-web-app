@@ -4,10 +4,41 @@ or if it was explicitely written in the file.
 
 The full texts of the licenses are in the LICENSES folder.
 
+Generic browser compatibility pictograms:
+- src/images/chrome_browser_logo_icon_153007.png
+- src/images/edge_browser_logo_icon_152998.png
+
+These original pictograms were created for Atsora Solutions in 2026 from
+generic geometric shapes. They do not reproduce or incorporate the official
+Google Chrome or Microsoft Edge logos or any other third-party image.
+
+Copyright (C) 2026 Atsora Solutions
+License: Apache License 2.0
+License text: https://www.apache.org/licenses/LICENSE-2.0
+
+Google Chrome is a trademark of Google LLC. Microsoft Edge is a trademark of
+the Microsoft group of companies. The browser names are used only to identify
+compatible third-party products. No affiliation, sponsorship, or endorsement
+is implied.
+
+Official Firefox browser logo:
+- src/images/firefox_browser_logo.svg
+
+Source: https://searchfox.org/firefox-main/source/browser/branding/official/content/about-logo.svg
+License: Mozilla Public License 2.0 (MPL-2.0)
+License text: LICENSES/MPL-2.0.txt
+
+The distributed SVG is the unmodified Source Code Form obtained from the
+official Mozilla Firefox source tree. The Firefox logo is a trademark of the
+Mozilla Foundation in the United States and other countries. It is used only
+to identify and link to the Firefox browser. No affiliation, sponsorship, or
+endorsement by Mozilla is implied.
+
 Some images have a specific license:
-- validate.png : https://www.iconfinder.com/icons/326572/check_icon#size=24
-  Licence: MIT, Free for commercial use
-  Author: Google(http://www.google.com/design/ https://m3.material.io)
+- validate.png : https://github.com/google/material-design-icons/blob/master/symbols/web/check/materialsymbolsoutlined/check_24px.svg
+  License: Apache License 2.0
+  Author: Google / Material Symbols
+  The PNG is an enlarged and slightly thickened 24 px raster adaptation of the official `check` SVG.
 
 - warning.png : https://www.iconfinder.com/icons/173946/warning_icon#size=32
   Licence:  Free for commercial use
@@ -39,18 +70,6 @@ Some images have a specific license:
   Author: Design revision
   Free for commercial use
   Link: https://www.iconfinder.com/iconsets/glyphpack
-
-- "This is art 2" icon set
-  Creative Commons Attribution-No Derivative Works 3.0 Unported - CC-BY-ND-3.0
-  (http://creativecommons.org/licenses/by-nd/3.0/)
-  Link: https://www.iconfinder.com/iconsets/This_is_ART_2
-  Author: Svengraph http://svengraph.deviantart.com/
-
-- "Farm-fresh" icon set
-  Creative commons Attribution 3.0 United States - CC-BY-3.0-US
-  (http://creativecommons.org/licenses/by/3.0/us/)
-  Link: https://www.iconfinder.com/iconsets/fatcow
-  Author: FatCow web hosting
 
 - Icocentre icon set
   Author: IcoCentre
