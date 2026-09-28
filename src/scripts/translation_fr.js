@@ -106,7 +106,7 @@ ATSORA_LOCALE_CATALOG.fr.content = {
   part: 'pièce',
   percent: '%',
   productionState: 'état de production',
-  reason: "raison d'arrêt",
+  reason: "raison",
   reports: 'Rapports',
   sequence: 'séquence',
   time: 'heure',
