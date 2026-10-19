@@ -9,9 +9,14 @@
 // (see atsora-vue/src/pulse/bridges.ts + template.html):
 //   window.__vueRouter              - Vue Router instance
 //   window.__vueSetMachines(ids)    - push the selected machine ids to the Vue store
+//   window.__vueSetSelection(sel)   - push the selection itself (groups or machines, with names)
 //   window.__vueOpenExecDialog(id?) - open the task execution popup in the Vue app
 //   window.__setLocale(locale)      - sync the Pulse language into Vue i18n
 //   window.__loadVue()              - lazily import/mount the Vue bundle on demand
+// and, the other way, Pulse exposes:
+//   window.__pulseGetMachineSelection()  - current machine selection (as pushed by __vueSetSelection)
+//   window.__pulseGetMachineDisplay(id)  - display name of a group or machine id
+//   window.__pulseOpenMachineSelection() - open the machine selection dialog of the page
 
 import * as eventBus from 'eventBus';
 
@@ -40,6 +45,45 @@ function getSelectedMachines () {
   return (el && typeof el.getMachinesArray === 'function') ? el.getMachinesArray() : [];
 }
 
+// Current selection of x-machineselection as the user made it (groups, or
+// individual machines), with the display names: shown by the Vue app (task form).
+function getSelection () {
+  var el = qs('x-machineselection');
+  return (el && typeof el.getSelectionDisplays === 'function')
+    ? el.getSelectionDisplays()
+    : { kind: 'group', items: [] };
+}
+
+// Forward the machine selection (resolved ids + the selection itself) to Vue.
+function pushSelectionToVue (ids) {
+  if (window.__vueSetMachines) window.__vueSetMachines(ids);
+  if (window.__vueSetSelection) window.__vueSetSelection(getSelection());
+}
+
+// x-machineselection loads its selection (and the names) after its first
+// machineListChanged: forward it to Vue each time its display changes.
+document.addEventListener('selectionDisplayChanged', function (event) {
+  if (event.target && event.target.tagName === 'X-MACHINESELECTION' && window.__vueSetSelection) {
+    window.__vueSetSelection(getSelection());
+  }
+});
+
+// Vue -> Pulse: read the current selection (the push above may run before
+// x-machineselection has loaded it).
+window.__pulseGetMachineSelection = getSelection;
+
+// Vue -> Pulse: display name of a group or machine id ('' when unknown)
+window.__pulseGetMachineDisplay = function (id) {
+  var el = qs('x-machineselection');
+  return (el && typeof el.getDisplay === 'function') ? el.getDisplay(id) : '';
+};
+
+// Vue -> Pulse: open the machine selection dialog of the page, if it has one.
+window.__pulseOpenMachineSelection = function () {
+  var el = qs('x-machineselection');
+  if (el && typeof el.changeMachineSelection === 'function') el.changeMachineSelection();
+};
+
 // The Vue bundle is a deferred ES module, so the bridge may not be ready when a
 // vue-* page is first prepared. Run cb as soon as window.__vueRouter exists.
 function whenVueReady (cb) {
@@ -59,17 +103,22 @@ function showVuePage (pageName) {
   var container = qs('#vue-app-container');
   if (container) container.style.display = 'flex';
   whenVueReady(function () {
-    if (window.__vueSetMachines) window.__vueSetMachines(getSelectedMachines());
+    pushSelectionToVue(getSelectedMachines());
     window.__vueRouter.push(route);
   });
 }
 
 // Forward the resolved machine ids to the Vue store while its container is
 // visible. Called by common_page from the machineListChanged listener.
+// The selection itself (only displayed) is always forwarded: at boot, the first
+// machineListChanged may come before the container is shown.
 function setMachines (ids) {
   var container = qs('#vue-app-container');
   if (window.__vueSetMachines && container && container.offsetParent !== null) {
-    window.__vueSetMachines(ids);
+    pushSelectionToVue(ids);
+  }
+  else if (window.__vueSetSelection) {
+    window.__vueSetSelection(getSelection());
   }
 }
 
@@ -83,7 +132,7 @@ function openTaskInstance (id) {
   }
   if (window.__loadVue) window.__loadVue();
   whenVueReady(function () {
-    if (window.__vueSetMachines) window.__vueSetMachines(getSelectedMachines());
+    pushSelectionToVue(getSelectedMachines());
     if (window.__vueOpenExecDialog) window.__vueOpenExecDialog(String(id));
   });
 }
