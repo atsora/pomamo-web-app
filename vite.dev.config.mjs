@@ -12,8 +12,8 @@
 // styles hot-swap live. Editing the template/partials still needs a re-run of
 // build/bake.mjs (baked at generation time).
 
-import { resolve, basename } from 'node:path'
-import { existsSync, realpathSync } from 'node:fs'
+import { resolve, basename, extname, sep } from 'node:path'
+import { createReadStream, existsSync, realpathSync, statSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import { browserifyPaths } from './vite.config.mjs'
 
@@ -74,10 +74,37 @@ function navIconFallback () {
   }
 }
 
+// Dev only: serve the Vue bundle (vue-dist) straight from the disk. Vite keeps an
+// in-memory list of the publicDir files; `dev.sh --vue` rebuilds vue-dist with
+// --emptyOutDir, and a file deleted then rewritten under the same name (index.css,
+// unchanged chunks) drops out of that list -> 404 -> blank vue-* pages.
+function vueDistFromDisk () {
+  const root = resolve('dist-vite-public', 'vue-dist')
+  const types = {
+    '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.json': 'application/json',
+    '.svg': 'image/svg+xml', '.png': 'image/png', '.woff': 'font/woff', '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf', '.eot': 'application/vnd.ms-fontobject',
+  }
+  return {
+    name: 'pulse-vue-dist-from-disk',
+    configureServer (server) {
+      server.middlewares.use((req, res, next) => {
+        const path = decodeURIComponent((req.url || '').split('?')[0])
+        if (!path.startsWith('/vue-dist/')) return next()
+        const file = resolve(root, path.slice('/vue-dist/'.length))
+        if (!file.startsWith(root + sep) || !existsSync(file) || !statSync(file).isFile()) return next()
+        res.setHeader('Content-Type', types[extname(file).toLowerCase()] || 'application/octet-stream')
+        res.setHeader('Cache-Control', 'no-cache') // rebuilt on each change
+        createReadStream(file).pipe(res)
+      })
+    },
+  }
+}
+
 export default defineConfig({
   root: resolve('dist-vite-pages'),       // the generated entry HTML (build/bake.mjs)
   publicDir: resolve('dist-vite-public'), // staged head deps / styles / images (build/public.mjs)
-  plugins: [browserifyPaths(), cssHmr(), navIconFallback()],
+  plugins: [browserifyPaths(), cssHmr(), navIconFallback(), vueDistFromDisk()],
   appType: 'mpa',
   // The entry HTML references the page JS as ../src/... (file-relative, for the
   // rollup build). In dev that URL-resolves to /src/... against the root — alias it.
