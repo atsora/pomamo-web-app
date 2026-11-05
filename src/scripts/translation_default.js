@@ -759,6 +759,256 @@ ATSORA_LOCALE_CATALOG.de.pages = {
   }
 };
 
+// - ja translations
+
+ATSORA_LOCALE_CATALOG.ja.options = {
+  title: 'オプション',
+  layoutSettings: 'レイアウト設定',
+  defaultLayout: '既定のレイアウトを使用（12）',
+  rotationSettings: 'ローテーション設定',
+  machinesPerPage: '設備数／ページ',
+  rotationDelay: '間隔（秒）',
+  alarmsUnknown: '不明なアラームを表示',
+  alarmsWithDetails: 'アラームの詳細付き',
+  currentDataSelection: '現在…',
+  pieUtilizationPeriod: '稼働率円グラフの期間',
+  deltaPart: '個数と目標の差',
+  displayShift: 'シフトを表示',
+  displayUtilization: '稼働率を表示',
+  highlightPartCount: '生産数を強調表示',
+  openStopClassification: '停止分類のポップアップを自動的に開く',
+  productionActualVsTarget: '生産 実績／目標',
+  productionDisplay: '稼働パルス',
+  gauge: 'パフォーマンスゲージ',
+  pie: '工程ステータス',
+  productiongauge: '生産ゲージ',
+  resetButton: 'リセット',
+  showAlarms: 'アラームを表示',
+  showBar: 'バーを表示',
+  showClock: '時計を表示',
+  showcurrentmachinestatuslogo: 'ステータスのロゴを表示',
+  showcurrentmachinestatusletter: 'ステータスを表示',
+  showCurrentAlarm: '現在のアラームを表示',
+  showNcProgram: 'NC プログラムを表示',
+  showNextTask: '次のタスクを表示',
+  showOperation: '工程を表示',
+  showPartCount: '生産数を表示',
+  showPartCountInPie: '円グラフに生産数を表示',
+  showPercent: 'パーセントを表示',
+  showProductionbar: 'パフォーマンスバーを表示',
+  showPie: '円グラフを表示',
+  showRemainingCycles: '残りサイクルを表示',
+  showReserveCapacity: '余力を表示',
+  showSecondUtilizationBar: '2つ目の稼働率バーを表示',
+  showStackLights: '積層表示灯を表示',
+  showTaskList: 'タスク一覧を表示',
+  showUtilizationBar: '設備稼働率バーを表示',
+  showUtilizationTarget: '稼働率目標を表示',
+  productionGauge: '生産ゲージ',
+  maximum: '最大',
+  minimum: '最小',
+  sizeBig: '大',
+  sizeSmall: '小',
+  stopClassificationReopenDelay: '再表示までの時間（秒）',
+  timeFrame: '時間枠',
+  timeFrameDays: '日',
+  timeFrameHours: '時間',
+  timeFrameSelection: '期間：',
+  thresholdsColor: '生産／目標のしきい値の色（%）',
+  thresholdError: '目標のしきい値は赤のしきい値より大きくする必要があります',
+  thresholdMaxError: 'パーセント値は100を超えられません',
+  thresholdNaNError: 'しきい値には有効な数値を入力してください',
+  thresholdOrange: 'オレンジ',
+  thresholdPositiveError: '目標値は正の数である必要があります',
+  thresholdRed: '赤',
+  toolSelection: '工具の選択',
+  toolsExpiring: '期限切れ間近の工具',
+  showChangedTools: '工具情報を表示',
+  showCncAlarmIcon: 'CNC アラームアイコンを表示',
+  showProductionGauge: 'パフォーマンスゲージを表示',
+  showProductiontrackergraph: '生産トラッカーのグラフを表示',
+  thresholdMode: 'しきい値モード',
+  target: '目標'
+}
+
+ATSORA_LOCALE_CATALOG.ja.parameters = {
+  columns: '列',
+  copyUrl: 'URL をコピー',
+  customTitle: 'カスタムタイトル',
+  darkTheme: 'ダークテーマ',
+  displayUrl: 'URL を表示',
+  editButton: '編集',
+  machines: '設備',
+  page: 'ページ',
+  resetButton: 'リセット',
+  rotations: 'ローテーション',
+  rows: '行',
+  showLegend: '凡例を表示'
+}
+
+ATSORA_LOCALE_CATALOG.ja.content = {
+  maintenance: '現在システムはメンテナンス中です',
+  actual: '実績',
+  actualVsTarget: '実績／目標',
+  bookmark: 'ブックマーク用 URL',
+  copyurl: 'URL をコピー',
+  currentColon: '現在：',
+  currentDay: '当日',
+  currentShift: '現在のシフト',
+  currentWeek: '今週',
+  days: '（7日間）',
+  failure: '失敗',
+  inProgress: '進行中',
+  last7days: '過去7日間',
+  legend: '凡例',
+  overrides: '上書き',
+  part: '個',
+  percent: '%',
+  productionState: '生産状態',
+  reason: '理由',
+  reports: 'レポート',
+  sequence: 'シーケンス',
+  time: '時間',
+  today: '今日',
+  tool: '工具',
+  utilization: '稼働率',
+  week: '週',
+  yesterday: '昨日',
+  reference: '基準',
+  performance: 'パフォーマンス',
+  changedtools: '工具',
+  state: '状態',
+  success: '成功',
+}
+
+ATSORA_LOCALE_CATALOG.ja.dialog = {
+  confirmation: '確認',
+  details: '詳細',
+  error: 'エラー',
+  information: '情報',
+  select: '選択',
+  wait: 'お待ちください…',
+  warning: '警告'
+}
+
+ATSORA_LOCALE_CATALOG.ja.error = {
+  machineRequired: '設備を1台以上選択してください',
+  min1hour: '1時間以上を選択してください',
+  ajax: {
+    0: 'サーバーから応答がありません',
+    400: '不正なリクエスト',
+    401: '認証されていないアクセス',
+    403: 'アクセスが禁止されているリソースです',
+    404: '要求されたページが見つかりません',
+    500: 'サーバー内部エラー',
+    501: '実装されていません',
+    502: 'ゲートウェイまたはプロキシのエラー',
+    503: 'サービスを利用できません',
+    504: 'ゲートウェイのタイムアウト',
+    520: '不明なエラー'
+  }
+}
+
+ATSORA_LOCALE_CATALOG.ja.pages = {
+  index: {
+    title: 'インデックス'
+  },
+  login: {
+    title: 'ログイン'
+  },
+  home: {
+    title: 'ホーム'
+  },
+
+  // Manager and operator views
+  machines: {
+    title: '設備'
+  },
+  machinespecification: {
+    title: '設備表示：日と週'
+  },
+  oeeview: {
+    title: 'OEE ビュー'
+  },
+  machinedashboard: {
+    title: 'ダッシュボード'
+  },
+  productionmachining: {
+    title: '加工生産ステータス'
+  },
+  running: {
+    title: '稼働'
+  },
+  scheduledstatus: {
+    title: '予定ステータス'
+  },
+  toollife: {
+    title: '工具寿命'
+  },
+
+  // Manager, operator and LIVE
+  managementinformationterminal: {
+    title: '管理情報端末'
+  },
+  operationstatus: {
+    title: '工程ステータス'
+  },
+
+  // Add in plugin
+  productiontracker: {
+    title: '生産トラッカー'
+  },
+  mpmilestones: {
+    title: 'マイルストーン'
+  },
+  plant: {
+    title: '工場'
+  },
+  reservecapacity: {
+    title: '余力'
+  },
+
+  // LIVE display
+  utilizationbar: {
+    title: '稼働率',
+    subtitle: 'バー'
+  },
+  utilizationpie: {
+    title: '稼働率',
+    subtitle: '円グラフ'
+  },
+  performancebar: {
+    title: 'パフォーマンス',
+    subtitle: '横型ゲージ'
+  },
+  performancegauge: {
+    title: 'パフォーマンス',
+    subtitle: '円形ゲージ'
+  },
+  combinedview: {
+    title: '統合ビュー',
+    options: {
+      title: 'オプション',
+      reset: 'リセット',
+    }
+  },
+  machinestatus: {
+    title: '設備ステータス'
+  },
+  managerview: {
+    title: 'マネージャービュー'
+  },
+  motionsummary: {
+    title: '稼働サマリー'
+  },
+  'vue-tasks': {
+    title: 'タスク'
+  },
+  'vue-execution': {
+    title: '実行'
+  }
+};
+
 // setAtsoraLocale is defined in translation_component_default.js
 // Re-apply default locale to pick up app-level catalog entries added above
 setAtsoraLocale('default');
