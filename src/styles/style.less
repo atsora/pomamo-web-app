@@ -19,7 +19,23 @@ NEVER ADD x-tag here AND in pages -> we need to choose !
 
 @menuWidth : 271px;
 
+// Japanese fonts of each platform (macOS, Windows, Linux): Arial, Segoe UI and system-ui
+// have no Japanese glyph, list them before the generic fallback (see html:lang(ja) below)
+@font_family_ja: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Yu Gothic', Meiryo, 'Noto Sans CJK JP', 'Noto Sans JP';
+
 // STYLES DE BASE
+
+// Japanese (html lang="ja", set by setAtsoraLocale): a consistent Japanese font,
+// and not a Chinese or a serif one picked by the browser fallback
+html:lang(ja) {
+  body {
+    font-family: Arial, Helvetica, @font_family_ja, sans-serif;
+  }
+
+  #vue-app-container {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', @font_family_ja, sans-serif;
+  }
+}
 
 h1,
 h2,
