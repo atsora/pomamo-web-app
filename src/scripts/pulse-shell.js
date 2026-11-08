@@ -157,6 +157,11 @@
     '      <x-loginchangepasswordbutton showastext="true"></x-loginchangepasswordbutton>',
     '    </div>',
 
+    '    <div class="configuration-locale-area">',
+    '      <label for="localeselect"><x-tr key="parameters.language" default="Language"></x-tr></label>',
+    '      <select id="localeselect"></select>',
+    '    </div>',
+
     '    <div class="configuration-bottom-area">',
     '      <div class="configuration-bottom-area-switch">',
     '        <label class="switch">',

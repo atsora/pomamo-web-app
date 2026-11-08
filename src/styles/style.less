@@ -1223,6 +1223,34 @@ pulse-shell {
   // hides x-loginpasswordbutton and x-loginchangepasswordbutton
 }
 
+.configuration-locale-area {
+  padding: 0 10px 0 6px;
+  border-top: 1px solid @color_window_border_light;
+  height: 30px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  select {
+    height: 22px;
+    min-width: 0;
+    max-width: 14em;
+    color: inherit;
+    background-color: transparent;
+    border: 1px solid @color_window_border_light;
+    border-radius: 3px;
+
+    option {
+      color: initial;
+    }
+  }
+}
+
 .configuration-bottom-area {
   padding: 6px 10px 0 6px;
   position: static;

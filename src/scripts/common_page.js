@@ -699,6 +699,41 @@ var populateConfigPanel = function (currentPageMethods) {
   });
 };
 
+// Languages offered in the options panel, named in their own language.
+// 'default' is English (setAtsoraLocale). A locale missing from the catalogs is not offered.
+const LOCALE_NAMES = { default: 'English', fr: 'Français', de: 'Deutsch', ja: '日本語' };
+
+/**
+ * Fill the language selector of the options panel.
+ * The first option keeps the installation language (translation_locale.js), the others
+ * store the choice of the user (localStorage, read back by locale-init.js) and reload the
+ * page: the components do not translate themselves again on the fly.
+ */
+function initLocaleSelect (select) {
+  if (!select || typeof ATSORA_LOCALE_CATALOG === 'undefined') return;
+  let installation = window.ATSORA_INSTALLATION_LOCALE || 'default';
+  let addOption = function (value, text) {
+    let option = document.createElement('option');
+    option.value = value;
+    option.textContent = text;
+    select.appendChild(option);
+  };
+  addOption('', pulseConfig.pulseTranslate('parameters.installationLanguage', 'Default language')
+    + ' (' + (LOCALE_NAMES[installation] || installation) + ')');
+  for (let locale of Object.keys(LOCALE_NAMES)) {
+    if (ATSORA_LOCALE_CATALOG[locale]) addOption(locale, LOCALE_NAMES[locale]);
+  }
+  select.value = window.ATSORA_USER_LOCALE || '';
+  let label = document.querySelector('label[for="localeselect"]');
+  if (label && !label.querySelector('x-tr')) { // login page: static label
+    label.textContent = pulseConfig.pulseTranslate('parameters.language', 'Language');
+  }
+  select.addEventListener('change', function () {
+    pulseConfig.setGlobal('locale', select.value); // '' removes the choice
+    window.location.reload();
+  });
+}
+
 var themeManager = {
   _version: '',
   load: function (name) {
@@ -908,6 +943,7 @@ export function preparePage (currentPageMethods) {
     darkBtn.checked = (themeManager.current() == 'dark');
     darkBtn.addEventListener('click', function () { themeManager.load(themeManager.current() == 'light' ? 'dark' : 'light'); });
   }
+  initLocaleSelect(qs('#localeselect'));
 
   let pageNameFromUrl = pulseUtility.getCurrentPageName();
   // A vue-* page loaded directly (e.g. vue-tasks.html): reveal the Vue container,
