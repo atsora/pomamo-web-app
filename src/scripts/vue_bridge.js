@@ -17,8 +17,10 @@
 //   window.__pulseGetMachineSelection()  - current machine selection (as pushed by __vueSetSelection)
 //   window.__pulseGetMachineDisplay(id)  - display name of a group or machine id
 //   window.__pulseOpenMachineSelection() - open the machine selection dialog of the page
+//   window.__pulseGetRole()              - web app key of the role of the user ('' when none)
 
 import * as eventBus from 'eventBus';
+import * as pulseLogin from 'pulseLogin';
 
 function qs (sel) { return document.querySelector(sel); }
 
@@ -82,6 +84,12 @@ window.__pulseGetMachineDisplay = function (id) {
 window.__pulseOpenMachineSelection = function () {
   var el = qs('x-machineselection');
   if (el && typeof el.changeMachineSelection === 'function') el.changeMachineSelection();
+};
+
+// Vue -> Pulse: role of the connected user (PulseRole cookie), so that the
+// task execution lists the tasks of that role, not always the operator ones.
+window.__pulseGetRole = function () {
+  return pulseLogin.getRole();
 };
 
 // The Vue bundle is a deferred ES module, so the bridge may not be ready when a
