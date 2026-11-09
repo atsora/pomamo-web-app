@@ -782,14 +782,28 @@ pulse-shell {
 
 // NAVIGATION PANEL
 
+// The list takes the whole height of the panel, so that the pages of
+// bottomDisplayedPages are at the bottom. When there is no room left, the
+// list is higher than the panel, which scrolls, and they follow the other pages
+#navbar {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 #navbar>ul {
   padding: 0;
   margin: 0;
   display: block;
   display: flex;
   flex-direction: column;
+  flex: 1 0 auto;
   row-gap: 10px;
   align-items: left;
+
+  &>li.navbar-bottom-first {
+    margin-top: auto;
+  }
 
   &>li {
     font-weight: bold;

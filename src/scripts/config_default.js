@@ -67,7 +67,7 @@ PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarm
 PULSE_DEFAULT_CONFIG.general.customerlogo = 'none';
 
 /* configurationPages: the pages the configuration page links to, in that order
-* (one entry 'configuration' in displayedPages instead of one per page). Their
+* (one entry 'configuration' in bottomDisplayedPages instead of one per page). Their
 * titles and descriptions are the translations pages.<page>.title / .description.
 * On these pages, the navigation selects the configuration page.
 * Can be overloaded per role, e.g. in config_custom.js:
@@ -285,6 +285,20 @@ PULSE_DEFAULT_CONFIG.roles.support.displayedPages = [
 PULSE_DEFAULT_CONFIG.roles.live.displayedPages = [
 ];
 PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [
+];
+
+/* bottomDisplayedPages: pages displayed at the bottom of the navigation, in
+* that order, after a blank space (when there is no room left, they just follow
+* the pages of displayedPages) */
+PULSE_DEFAULT_CONFIG.roles.operator.bottomDisplayedPages = [
+];
+PULSE_DEFAULT_CONFIG.roles.manager.bottomDisplayedPages = [
+];
+PULSE_DEFAULT_CONFIG.roles.support.bottomDisplayedPages = [
+];
+PULSE_DEFAULT_CONFIG.roles.live.bottomDisplayedPages = [
+];
+PULSE_DEFAULT_CONFIG.roles.dev.bottomDisplayedPages = [
 ];
 
 // TOOLS

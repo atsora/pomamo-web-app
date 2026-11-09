@@ -187,13 +187,17 @@ var populateNavigationPanel = function () {
   }
   if (!currentAppIsAllowed) { if (window.location.href != firstTarget) { window.location.href = firstTarget; return; } }
 
-  if (displayedPages == null || displayedPages.length == 0) {
+  // bottomDisplayedPages: pages displayed at the bottom of the navigation, after
+  // a blank space (they just follow the other pages when there is no room left)
+  let bottomPages = pulseConfig.getArray('bottomDisplayedPages');
+  let topPages = displayedPages.concat(pulseConfig.getArray('customPages'))
+    .filter(p => bottomPages.indexOf(p) == -1);
+  if (topPages.length == 0 && bottomPages.length == 0) {
     let panel = qs('#pulse-panel-navigation'); if (panel) panel.style.display = 'none';
     let btn = qs('#navigationpanelbtn'); if (btn) btn.classList.add('disabled');
     return;
   }
-  let customPages = pulseConfig.getArray('customPages');
-  let allDisplayedPages = displayedPages.concat(customPages);
+  let allDisplayedPages = topPages.concat(bottomPages);
   let navBtn = qs('#navigationpanelbtn'); if (navBtn) navBtn.classList.remove('disabled');
 
   let textOrNothing = (pulseConfig.getString('menuType') == 'textOrNothing');
@@ -210,10 +214,13 @@ var populateNavigationPanel = function () {
 
   let mapTextMenu = {};
   allDisplayedPages.unshift('home');
+  let firstBottomIndex = 1 + topPages.length;
   let ul = qs('#navbar > ul');
   if (ul == null) return;
   for (let i = 0; i < allDisplayedPages.length; i++) {
     let pageName = allDisplayedPages[i];
+    // A text menu of the bottom pages does not group them with the top ones
+    if (i == firstBottomIndex) mapTextMenu = {};
     let title = pulseConfig.pulseTranslate('pages.' + pageName + '.title', pageName);
     let subtitle = pulseConfig.pulseTranslate('pages.' + pageName + '.subtitle', '');
     let li = null;
@@ -256,6 +263,7 @@ var populateNavigationPanel = function () {
       }
     }
     if (selection) li.classList.add('selected');
+    if (i == firstBottomIndex) li.classList.add('navbar-bottom-first');
     ul.appendChild(li);
     pulseSvg.inlineBackgroundSvg('li[data="' + pageName + '"] .menuicon');
   }
