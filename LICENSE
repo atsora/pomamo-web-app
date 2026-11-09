@@ -57,6 +57,13 @@ Some images have a specific license:
 - Many icons in WebApp
   License: CC BY 4.0 License (https://creativecommons.org/licenses/by/4.0/)
   Link: https://fontawesome.com/
+  Author: Fonticons, Inc.
+  License text: LICENSES/CC-BY-4.0.txt
+  Among them, the icons of the Vue pages (Font Awesome Free 7.1.0, solid,
+  unmodified, the attribution is kept in each file):
+  - src/images/vue-tasks-icon.svg : calendar-days
+  - src/images/vue-execution-icon.svg : clipboard-check
+  - src/images/vue-operationexplorer-icon.svg : folder-tree
 
 - other images were designed by the Lemoine Automation Technologies team
   License: CC BY-SA 4.0 License (https://creativecommons.org/licenses/by-sa/4.0/)

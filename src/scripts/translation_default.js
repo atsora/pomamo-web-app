@@ -258,6 +258,9 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   },
   'vue-execution': {
     title: 'Execution'
+  },
+  'vue-operationexplorer': {
+    title: 'Operation explorer'
   }
 };
 
@@ -510,6 +513,9 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   },
   'vue-execution': {
     title: 'Exécution'
+  },
+  'vue-operationexplorer': {
+    title: 'Explorateur d\'opérations'
   }
 };
 
@@ -762,6 +768,9 @@ ATSORA_LOCALE_CATALOG.de.pages = {
   },
   'vue-execution': {
     title: 'Ausführung'
+  },
+  'vue-operationexplorer': {
+    title: 'Arbeitsgang-Explorer'
   }
 };
 
@@ -1014,6 +1023,9 @@ ATSORA_LOCALE_CATALOG.ja.pages = {
   },
   'vue-execution': {
     title: '実行'
+  },
+  'vue-operationexplorer': {
+    title: 'オペレーションエクスプローラー'
   }
 };
 

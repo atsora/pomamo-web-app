@@ -12,7 +12,7 @@
 
 // Sync the Vue i18n locale when Pulse changes language at runtime.
 // setAtsoraLocale (translation_component_default.js) sets document.documentElement.lang;
-// the Vue bridge exposes window.__setLocale (see atsora-vue/src/pulse/bridges.ts).
+// the Vue bridge exposes window.__setLocale (see atracking-optasks/src/pulse/bridges.ts).
 (function () {
   if (typeof setAtsoraLocale !== 'function') return;
   var _original = setAtsoraLocale;

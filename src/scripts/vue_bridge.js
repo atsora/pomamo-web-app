@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // --- Vue <-> Pulse integration (bridge) -------------------------------------
-// All the glue that drives the embedded Vue app (atsora-vue) from Pulse, kept
+// All the glue that drives the embedded Vue app (atracking-optasks) from Pulse, kept
 // out of common_page.js so the generic page logic stays separate.
 //
 // The Vue app is mounted into #vue-app and exposes a bridge on window
-// (see atsora-vue/src/pulse/bridges.ts + template.html):
+// (see atracking-optasks/src/pulse/bridges.ts + template.html):
 //   window.__vueRouter              - Vue Router instance
 //   window.__vueSetMachines(ids)    - push the selected machine ids to the Vue store
 //   window.__vueSetSelection(sel)   - push the selection itself (groups or machines, with names)
@@ -27,7 +27,8 @@ function qs (sel) { return document.querySelector(sel); }
 // Maps a Pulse nav page (vue-*) to its Vue router route.
 var vuePageRoutes = {
   'vue-tasks': '/tasks',
-  'vue-execution': '/execution'
+  'vue-execution': '/execution',
+  'vue-operationexplorer': '/operation-explorer'
 };
 
 // Accessor for the resolved machine-id cache owned by common_page (populated
@@ -93,14 +94,12 @@ window.__pulseGetRole = function () {
 };
 
 // The Vue bundle is a deferred ES module, so the bridge may not be ready when a
-// vue-* page is first prepared. Run cb as soon as window.__vueRouter exists.
+// vue-* page is first prepared. Run cb as soon as window.__vueRouter exists:
+// the Vue app (atracking-vue-bridge) dispatches 'atsora:vue-ready' on window once its
+// bridge is set, however long the bundle takes to load (no time limit).
 function whenVueReady (cb) {
   if (window.__vueRouter) { cb(); return; }
-  var attempts = 0;
-  var timer = setInterval(function () {
-    if (window.__vueRouter) { clearInterval(timer); cb(); }
-    else if (++attempts > 100) clearInterval(timer); // give up after ~5s
-  }, 50);
+  window.addEventListener('atsora:vue-ready', function () { cb(); }, { once: true });
 }
 
 // Show the Vue container and navigate to the route for the given vue-* page.
