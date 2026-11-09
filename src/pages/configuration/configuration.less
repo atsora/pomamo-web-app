@@ -1,0 +1,61 @@
+// Copyright (C) 2026 Atsora Solutions
+//
+// SPDX-License-Identifier: Apache-2.0
+
+// Global :
+@import "x-signalbanner/x-signalbanner.less";
+@import "pulse.customdialog.less";
+@import "pulse.exports.light.less"; // Global import
+@import "x-machineselection/x-machineselection.less";
+
+// Local
+@import "style.less";
+
+// No legend and no page options
+.legend-content, .group-pages, .group-machines, .config-url-actions {
+  display: none !important;
+}
+
+// Links to the configuration pages
+.configuration-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 16px;
+
+  li {
+    flex: 1 1 280px;
+    max-width: 420px;
+  }
+}
+
+.configuration-link {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 16px;
+  border: 1px solid @color_window_border;
+  border-radius: 6px;
+  background-color: @color_window;
+  color: @color_text;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover, &:focus-visible {
+    border-color: @color_highlight;
+  }
+}
+
+.configuration-link-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: @color_highlight;
+}
+
+.configuration-link-description {
+  color: @color_text_alternate;
+}

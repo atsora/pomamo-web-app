@@ -28,7 +28,11 @@ function qs (sel) { return document.querySelector(sel); }
 var vuePageRoutes = {
   'vue-tasks': '/tasks',
   'vue-execution': '/execution',
-  'vue-operationexplorer': '/operation-explorer'
+  'vue-operationexplorer': '/operation-explorer',
+  // atracking-webconfig, reached from the configuration page
+  'vue-reasonconfig': '/reasons',
+  'vue-scheduledconfigtemplate': '/planning',
+  'vue-scheduledconfig': '/machinePlanning'
 };
 
 // Accessor for the resolved machine-id cache owned by common_page (populated

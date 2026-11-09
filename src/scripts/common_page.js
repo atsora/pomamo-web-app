@@ -200,6 +200,14 @@ var populateNavigationPanel = function () {
   let inner = qs('#pulse-inner');
   if (!textOrNothing && inner) inner.classList.add('navigation-always-visible');
 
+  // A page reached from the configuration page (configurationPages) selects it in
+  // the navigation, unless the page has its own entry
+  let navigationPage = currentPage;
+  if ((allDisplayedPages.indexOf(currentPage) == -1)
+    && (pulseConfig.getArray('configurationPages').indexOf(currentPage) != -1)) {
+    navigationPage = 'configuration';
+  }
+
   let mapTextMenu = {};
   allDisplayedPages.unshift('home');
   let ul = qs('#navbar > ul');
@@ -209,7 +217,7 @@ var populateNavigationPanel = function () {
     let title = pulseConfig.pulseTranslate('pages.' + pageName + '.title', pageName);
     let subtitle = pulseConfig.pulseTranslate('pages.' + pageName + '.subtitle', '');
     let li = null;
-    let selection = (pageName == currentPage);
+    let selection = (pageName == navigationPage);
     if (textOrNothing) {
       if (subtitle == '') {
         li = document.createElement('li');

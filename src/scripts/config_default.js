@@ -66,6 +66,19 @@ PULSE_DEFAULT_CONFIG.general.showUnknownAlarm = true; // used in x-detailedalarm
 */
 PULSE_DEFAULT_CONFIG.general.customerlogo = 'none';
 
+/* configurationPages: the pages the configuration page links to, in that order
+* (one entry 'configuration' in displayedPages instead of one per page). Their
+* titles and descriptions are the translations pages.<page>.title / .description.
+* On these pages, the navigation selects the configuration page.
+* Can be overloaded per role, e.g. in config_custom.js:
+* PULSE_DEFAULT_CONFIG.roles.manager.configurationPages = ['vue-scheduledconfig'];
+*/
+PULSE_DEFAULT_CONFIG.general.configurationPages = [
+  'vue-reasonconfig',
+  'vue-scheduledconfigtemplate',
+  'vue-scheduledconfig'
+];
+
 // Default range for all pages :
 PULSE_DEFAULT_CONFIG.general.displayshiftrange = false;
 PULSE_DEFAULT_CONFIG.general.displaydaysrange = 1;

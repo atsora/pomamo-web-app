@@ -64,6 +64,11 @@ Some images have a specific license:
   - src/images/vue-tasks-icon.svg : calendar-days
   - src/images/vue-execution-icon.svg : clipboard-check
   - src/images/vue-operationexplorer-icon.svg : folder-tree
+  And the icon of the configuration page (Font Awesome Free 7.1.0, solid, the
+  attribution is kept in the file), whose viewBox is enlarged (0 -49 640 610
+  instead of 0 0 640 512) so that the drawing, which goes beyond it, is not
+  clipped once inlined (the path is unmodified):
+  - src/pages/configuration/configuration-icon.svg : gears
 
 - other images were designed by the Lemoine Automation Technologies team
   License: CC BY-SA 4.0 License (https://creativecommons.org/licenses/by-sa/4.0/)

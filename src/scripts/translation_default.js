@@ -261,6 +261,21 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   },
   'vue-operationexplorer': {
     title: 'Operation explorer'
+  },
+  configuration: {
+    title: 'Configuration'
+  },
+  'vue-reasonconfig': {
+    title: 'Reasons configuration',
+    description: 'Reasons of the machine stops and their groups'
+  },
+  'vue-scheduledconfigtemplate': {
+    title: 'Planning',
+    description: 'Day and week templates of the planning, to apply on the machines'
+  },
+  'vue-scheduledconfig': {
+    title: 'Machine planning',
+    description: 'Templates applied on the machines, on a calendar'
   }
 };
 
@@ -516,6 +531,21 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   },
   'vue-operationexplorer': {
     title: 'Explorateur d\'opérations'
+  },
+  configuration: {
+    title: 'Configuration'
+  },
+  'vue-reasonconfig': {
+    title: 'Configuration des raisons',
+    description: 'Raisons des arrêts des machines et leurs groupes'
+  },
+  'vue-scheduledconfigtemplate': {
+    title: 'Planning',
+    description: 'Templates de jour et de semaine du planning, à appliquer sur les machines'
+  },
+  'vue-scheduledconfig': {
+    title: 'Planification des machines',
+    description: 'Templates appliqués sur les machines, sur un calendrier'
   }
 };
 
@@ -771,6 +801,21 @@ ATSORA_LOCALE_CATALOG.de.pages = {
   },
   'vue-operationexplorer': {
     title: 'Arbeitsgang-Explorer'
+  },
+  configuration: {
+    title: 'Konfiguration'
+  },
+  'vue-reasonconfig': {
+    title: 'Gründe-Konfiguration',
+    description: 'Gründe der Maschinenstillstände und ihre Gruppen'
+  },
+  'vue-scheduledconfigtemplate': {
+    title: 'Planung',
+    description: 'Tages- und Wochenvorlagen der Planung, auf die Maschinen anzuwenden'
+  },
+  'vue-scheduledconfig': {
+    title: 'Maschinenplanung',
+    description: 'Auf die Maschinen angewendete Vorlagen, in einem Kalender'
   }
 };
 
@@ -1026,6 +1071,21 @@ ATSORA_LOCALE_CATALOG.ja.pages = {
   },
   'vue-operationexplorer': {
     title: 'オペレーションエクスプローラー'
+  },
+  configuration: {
+    title: '設定'
+  },
+  'vue-reasonconfig': {
+    title: '理由の設定',
+    description: '設備の停止理由とそのグループ'
+  },
+  'vue-scheduledconfigtemplate': {
+    title: '計画',
+    description: '設備に適用する、計画の日テンプレートと週テンプレート'
+  },
+  'vue-scheduledconfig': {
+    title: '設備の計画',
+    description: '設備に適用されたテンプレート（カレンダー表示）'
   }
 };
 
