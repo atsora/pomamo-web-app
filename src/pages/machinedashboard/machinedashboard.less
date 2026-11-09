@@ -377,6 +377,15 @@ x-machinetab .machinetab-machine-cell {
     margin-top: 1em;
     height: fit-content;
     gap: 1em;
+    // Takes the free height between the header and the chronology (instead of
+    // the `space-between` gaps of .tile), so that the task list spans it all
+    // and lists its tasks from the top. The other blocks stay vertically
+    // centered (.performance-stats-container, chart kept at its aspect ratio).
+    flex: 1 0 auto;
+
+    > .stats-perf-wrapper {
+      flex: 1 1 auto;
+    }
 
     x-defaultpie,
     x-productiongauge {
