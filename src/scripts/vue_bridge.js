@@ -155,6 +155,11 @@ function registerTaskClickListener (ctx) {
     var id = (event.target && event.target.id) || event.id;
     openTaskInstance(id);
   });
+  // The Vue execution dialog completed a task (validated or error): forward it
+  // to the task components, so that they refresh at once
+  window.addEventListener('atsora:task-completed', function (event) {
+    eventBus.EventBus.dispatchToAll('taskCompleted', event.detail || {});
+  });
 }
 
 // On a vue-* page loaded directly (e.g. vue-tasks.html): reveal the container,
