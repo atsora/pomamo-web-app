@@ -1,0 +1,62 @@
+/*
+ * Copyright (C) 2023-2026 Atsora Solutions
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Same layout as the machine dashboard
+@import "../machinedashboard/machinedashboard.less";
+
+// Components of this page only
+@import "x-performancegauge/x-performancegauge.less";
+@import "x-motiontime/x-motiontime.less";
+
+.tile {
+  // No production tracker graph: the performance block takes the free width,
+  // next to the task list.
+  .performance-stats-container {
+    flex: 1 1 auto;
+    width: auto;
+    max-width: none;
+  }
+
+  // Performance gauge with the utilization (percent or time) at its bottom.
+  .motion-content {
+    position: relative;
+    flex: 1 1 12em;
+    min-width: 10em;
+    max-width: 28em;
+
+    // Same proportions as the SVG of the gauge (viewBox 240 x ~190), so that it
+    // fills the box instead of being reduced to fit its height.
+    x-performancegauge {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 240 / 190;
+      max-height: 40vh;
+    }
+
+    x-motionpercentage,
+    x-motiontime {
+      position: absolute;
+      bottom: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 4vh;
+      font-weight: bold;
+      line-height: 1em;
+    }
+
+    .performancegauge-svg {
+      position: relative;
+    }
+  }
+}
+
+@media @all-phones-media {
+  .tile .motion-content {
+    width: 100%;
+    max-width: 30em;
+  }
+}

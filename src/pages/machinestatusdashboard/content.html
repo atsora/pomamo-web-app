@@ -1,0 +1,132 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+Copyright (C) 2023-2026 Atsora Solutions
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<x-signalbanner from-machine-selection></x-signalbanner>
+
+<div class="main-content">
+  <x-periodmanager period-context="machinestatusdashboard" displayshiftrange="true" displaydaysrange="0"
+    displayhoursrange="0" exclude-now="false"></x-periodmanager>
+  <div class="machinetab-list" id="machine-tabs-panel">
+    <div class="hidden-content">
+      <div id="machinestatusdashboard-boxtoclone">
+        <x-machinetab machine-id="" machine-context="PulseWebApp" status-context="PulseWebApp"
+          period-context="machinestatusdashboard"></x-machinetab>
+      </div>
+    </div>
+    <x-machinetabnav templateid="machinestatusdashboard-boxtoclone" machine-context="PulseWebApp"></x-machinetabnav>
+  </div>
+  <div class="tile">
+    <div class="tile-header">
+      <div class="tile-title">
+        <div class="machine-name">
+          <x-machinedisplay machine-context="PulseWebApp"></x-machinedisplay>
+          <x-reasonbutton machine-context="PulseWebApp"></x-reasonbutton>
+        </div>
+        <x-lastmachinestatus period-context="machinestatusdashboard" machine-context="PulseWebApp"
+          status-context="PulseWebApp"></x-lastmachinestatus>
+      </div>
+
+      <div class="nav-content">
+        <div class="info-content">
+          <div class="text-box info-box clickable">
+            <x-lastmachinestatetemplate machine-context="PulseWebApp" period-context="machinestatusdashboard">
+            </x-lastmachinestatetemplate>
+          </div>
+          <div class="text-box info-box">
+            <x-workinfo machine-context="PulseWebApp"></x-workinfo>
+            <x-tr class="text" key="content.reference" default="Reference"></x-tr>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stats-content">
+      <div class="stats-perf-wrapper">
+        <div class="performance-stats-container">
+          <div class="performance-display-wrapper">
+            <!-- Optional (showproduction) -->
+            <div class="numbers-content">
+              <div class="specificnumber-content production-content">
+                <x-production machine-context="PulseWebApp" period-context="machinestatusdashboard"></x-production>
+              </div>
+              <div class="specificnumber-content">
+                <x-productionshiftgoal machine-context="PulseWebApp" period-context="machinestatusdashboard"
+                  class=" text"></x-productionshiftgoal>
+              </div>
+            </div>
+
+            <!-- Utilization (motion time / not running time) on the period, with its target -->
+            <div class="motion-content">
+              <x-performancegauge machine-context="PulseWebApp" period-context="machinestatusdashboard"
+                motion-context="machinestatusdashboard"></x-performancegauge>
+              <x-motionpercentage machine-context="PulseWebApp"
+                motion-context="machinestatusdashboard"></x-motionpercentage>
+              <x-motiontime machine-context="PulseWebApp" motion-context="machinestatusdashboard"></x-motiontime>
+            </div>
+
+            <!-- Optional (showpie) -->
+            <x-defaultpie machine-context="PulseWebApp" period-context="machinestatusdashboard"></x-defaultpie>
+          </div>
+
+          <div class="perf-tool-container">
+            <div class="cncalarmicon-content">
+              <x-currenticoncncalarm machine-context="PulseWebApp" status-context="PulseWebApp"
+                showAlarmBelowIcon="true"></x-currenticoncncalarm>
+            </div>
+
+            <div class="changedtools-content">
+              <div class="title-number-content">
+                <x-tr class="text" key="content.changedtools" default="Change of tools"></x-tr>
+              </div>
+              <div class="toollifemachine-content">
+                <x-toollifemachine machine-context="PulseWebApp" status-context="PulseWebApp"
+                  period-context="machinestatusdashboard"></x-toollifemachine>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tasklist-content">
+          <x-taskslist machine-context="PulseWebApp"></x-taskslist>
+        </div>
+      </div>
+    </div>
+
+    <div class="tile-content">
+      <div class="chronology-content">
+        <div class="title-number-content">
+          <x-tr class="text" key="content.state" default="State"></x-tr>
+        </div>
+        <div class="chart-chronology">
+          <x-datetimegraduation period-context="machinestatusdashboard"></x-datetimegraduation>
+          <x-barstack period-context="machinestatusdashboard" motion-context="PulseWebApp"
+            machine-context="PulseWebApp" main-bar="reason" auto-min-height></x-barstack>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer kept as a direct child of .tile so `position: sticky; bottom: 0`
+         pins it to the bottom of the scrolling tile (it would be trapped by
+         .tile-content's overflow:hidden otherwise). -->
+    <div class="dashboard-footer">
+      <div class="stops-content text-box btn">
+        <x-unansweredreasonnumber period-context="machinestatusdashboard" machine-context="PulseWebApp"
+          status-context="PulseWebApp"></x-unansweredreasonnumber>
+      </div>
+
+      <div class="period-content">
+        <x-periodtoolbar period-context="machinestatusdashboard" displayshiftrange=true></x-periodtoolbar>
+      </div>
+
+      <div class="dailydate-content">
+        <x-clock display-date=true></x-clock>
+      </div>
+      <div class="hour-content">
+        <x-clock display-seconds=false></x-clock>
+      </div>
+    </div>
+  </div>
+</div>

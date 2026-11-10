@@ -158,6 +158,9 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   machinedashboard: {
     title: 'Tableau de bord'
   },
+  machinestatusdashboard: {
+    title: 'Tableau de bord des états'
+  },
   machinespecification: {
     title: 'Affichage jour/semaine par machine'
   },

@@ -184,6 +184,9 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   machinedashboard: {
     title: 'Dashboard'
   },
+  machinestatusdashboard: {
+    title: 'Status dashboard'
+  },
   productionmachining: {
     title: 'Production machining status'
   },
@@ -451,6 +454,9 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   },
   machinedashboard: {
     title: 'Tableau de bord'
+  },
+  machinestatusdashboard: {
+    title: 'Tableau de bord des états'
   },
   machinespecification: {
     title: 'Affichage jour/semaine par machine'
@@ -725,6 +731,9 @@ ATSORA_LOCALE_CATALOG.de.pages = {
   machinedashboard: {
     title: 'Dashboard'
   },
+  machinestatusdashboard: {
+    title: 'Status-Dashboard'
+  },
   productionmachining: {
     title: 'Fertigungsstatus'
   },
@@ -994,6 +1003,9 @@ ATSORA_LOCALE_CATALOG.ja.pages = {
   },
   machinedashboard: {
     title: 'ダッシュボード'
+  },
+  machinestatusdashboard: {
+    title: 'ステータスダッシュボード'
   },
   productionmachining: {
     title: '加工生産ステータス'

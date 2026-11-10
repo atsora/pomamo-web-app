@@ -1,0 +1,97 @@
+<!--
+Copyright (C) 2009-2023 Lemoine Automation Technologies
+Copyright (C) 2023-2026 Atsora Solutions
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class="param-group group-options">
+  <div class="param-group-header group-options">
+    <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
+        default="reset"></x-tr></button>
+  </div>
+
+  <div class="param-group-content group-options">
+
+    <!-- Utilization of the performance gauge, in percent or in time -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showmotionpercentage"><x-tr key="options.showPercent" default="Show percent"></x-tr></label>
+        <input type="checkbox" id="showmotionpercentage" autocomplete="off" />
+      </div>
+      <div class="subgroup radiogroup showmotionpercentagedetails">
+        <div class='inlined-radio'>
+          <input type="radio" id="motiondisplaypercent" name="motiondisplay" value="motiondisplaypercent" />
+          <label for="motiondisplaypercent"><x-tr key="content.percent" default="percent"></x-tr></label>
+        </div>
+        <div class='inlined-radio'>
+          <input type="radio" id="motiondisplaytime" name="motiondisplay" value="motiondisplaytime" />
+          <label for="motiondisplaytime"><x-tr key="content.time" default="time"></x-tr></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showproduction"><x-tr key="options.showPartCount" default="Show part count"></x-tr></label>
+        <input type="checkbox" id="showproduction" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showpie"><x-tr key="options.showPie" default="Show pie"></x-tr></label>
+        <input type="checkbox" id="showpie" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showChangedTools"><x-tr key="options.showChangedTools"
+            default="Show tool information"></x-tr></label>
+        <input type="checkbox" id="showChangedTools" autocomplete="off" />
+      </div>
+    </div>
+
+    <!-- Current alarm settings -->
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showalarm"><x-tr key="options.showCurrentAlarm"
+            default="Show current alarm"></x-tr></label>
+        <input type="checkbox" id="showalarm" autocomplete="off" />
+      </div>
+      <div class="subgroup showalarmdetails">
+        <div class='inlined-radio'>
+          <input type="checkbox" id="showUnknownAlarm" autocomplete="off" />
+          <label for="showUnknownAlarm"><x-tr key="options.alarmsUnknown"
+              default="show unknown alarms"></x-tr></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showtasklist"><x-tr key="options.showTaskList"
+            default="Show task list"></x-tr></label>
+        <input type="checkbox" id="showtasklist" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="openStopClassification"><x-tr key="options.openStopClassification"
+            default="Automatically open stop classification dialog"></x-tr></label>
+        <input type="checkbox" id="openStopClassification" autocomplete="off" />
+      </div>
+      <div class="subgroup openStopClassificationDetails">
+        <div class='inlined-radio'>
+          <label for="stopClassificationReopenDelay"><x-tr key="options.stopClassificationReopenDelay"
+              default="Reopen delay (seconds)"></x-tr></label>
+          <input type="number" id="stopClassificationReopenDelay" value="0" step="1" min="0" max="3600"
+            autocomplete="off" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

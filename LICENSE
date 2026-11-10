@@ -69,6 +69,9 @@ Some images have a specific license:
   instead of 0 0 640 512) so that the drawing, which goes beyond it, is not
   clipped once inlined (the path is unmodified):
   - src/pages/configuration/configuration-icon.svg : gears
+  And the icon of the status dashboard page (Font Awesome Free 7.1.0, solid,
+  unmodified, the attribution is kept in the file):
+  - src/pages/machinestatusdashboard/machinestatusdashboard-icon.svg : gauge-high
 
 - other images were designed by the Lemoine Automation Technologies team
   License: CC BY-SA 4.0 License (https://creativecommons.org/licenses/by-sa/4.0/)
