@@ -698,14 +698,20 @@ x-machinetab .machinetab-machine-cell {
 // ==========================================
 // 7. DASHBOARD FOOTER (Toolbar & Stops)
 // ==========================================
+// Height of one row of the footer. The footer wraps on several rows when its
+// items do not fit on one (long range in the period toolbar, small viewport),
+// instead of clipping the ones that move to the next row.
+@dashboard-footer-height: 50px;
+
 .tile {
   .dashboard-footer {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    height: 50px;
-    overflow: hidden;
+    align-items: center;
     flex-wrap: wrap;
+    gap: 5px 10px;
+    flex-shrink: 0;
     margin-bottom: 2em;
 
     // Last in-flow child of .tile (not sticky on purpose): `justify-content:
@@ -718,7 +724,7 @@ x-machinetab .machinetab-machine-cell {
   .stops-content {
     display: flex;
     align-items: center;
-    height: 100%;
+    height: @dashboard-footer-height;
 
     .pulse-lastbar {
       height: 100%;
@@ -768,7 +774,7 @@ x-machinetab .machinetab-machine-cell {
   }
 
   .period-content {
-    height: 100%;
+    height: @dashboard-footer-height;
     display: flex;
     align-items: center;
     width: fit-content;
@@ -820,7 +826,7 @@ x-machinetab .machinetab-machine-cell {
 
   .dailydate-content,
   .hour-content {
-    height: 100%;
+    height: @dashboard-footer-height;
     width: 100px;
     font-weight: bold;
     display: flex;
