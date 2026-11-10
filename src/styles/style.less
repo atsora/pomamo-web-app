@@ -440,6 +440,12 @@ pulse-shell {
   }
 }
 
+// A link rendered as a PrimeVue button (Button as="router-link") is never underlined: the reset above has
+// no specificity, so it loses against `body a:hover`
+:is(#vue-app-container, #vue-overlay-target, .vue-scoped-dialog) a.p-button:hover {
+  text-decoration: none;
+}
+
 #vue-app-container {
   flex-basis: 100%;
   flex-shrink: 1;
@@ -915,10 +921,10 @@ pulse-shell {
   width: 0;
 }
 
-.pulse-panel-navigation-collapsed {
-  ul {
-    align-items: center;
-  }
+// Only the navigation: a broader `ul` selector centered the items of every list of the page
+// (PrimeVue Listbox / Tree of the Vue pages, configuration links...)
+.pulse-panel-navigation-collapsed #navbar>ul {
+  align-items: center;
 }
 
 #pulse-inner.navigation-always-visible {
