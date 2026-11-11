@@ -40,13 +40,22 @@
 // Optional task list (toggled by the `showtasklist` option, hidden by default).
 // Fixed, narrow column so the production tracker graph keeps its flexible space
 // (a `width:100%` basis here would shrink the graph — basis 0 — down to nothing).
+// The list does not take part in the height of the row: it spans the height
+// given by the other blocks and scrolls, else many tasks would make the page
+// taller than the screen.
 .tasklist-content {
   flex: 0 0 240px;
   width: 240px;
   max-width: 240px;
   min-height: 8em;
-  overflow: auto;
+  position: relative;
   box-sizing: border-box;
+
+  > x-taskslist {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+  }
 }
 
 
@@ -915,10 +924,18 @@ x-machinetab .machinetab-machine-cell {
   }
   // Column layout: the task list spans the full width (the desktop fixed
   // 240px basis would otherwise become a fixed height in column mode).
+  // No height from the other blocks in that layout: limited height instead.
   .tasklist-content {
     flex: 1 1 auto;
     width: 100%;
     max-width: 100%;
+    max-height: 50vh;
+    overflow-y: auto;
+
+    > x-taskslist {
+      position: static;
+      overflow-y: visible;
+    }
   }
   .title-number-content {
     display: none !important;
