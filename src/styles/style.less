@@ -356,7 +356,11 @@ pulse-shell {
       border-top-right-radius: 0.3cqw;
       cursor: pointer;
       pointer-events: initial;
-      width: 11cqw;
+      // At least 11cqw, wider when the label is longer (French "Légende"),
+      // instead of wrapping it on a second row, which doubles the height of the
+      // toggle and hides what is above it.
+      min-width: 11cqw;
+      white-space: nowrap;
 
       .legend-toggle-icon-up,
       .legend-toggle-icon-down {

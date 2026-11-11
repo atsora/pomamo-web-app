@@ -712,7 +712,10 @@ x-machinetab .machinetab-machine-cell {
     flex-wrap: wrap;
     gap: 5px 10px;
     flex-shrink: 0;
-    margin-bottom: 2em;
+    // Room for the legend toggle, which stays at the bottom of the page over
+    // the footer: 3.5cqw of the legend, whose width is 60% of the main area at
+    // most, so 2.1vw at most.
+    margin-bottom: ~"max(2em, calc(2.1vw + 0.5em))";
 
     // Last in-flow child of .tile (not sticky on purpose): `justify-content:
     // space-between` on .tile pins it to the bottom when the content fits
