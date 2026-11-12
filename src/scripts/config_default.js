@@ -280,6 +280,8 @@ PULSE_DEFAULT_CONFIG.roles.operator.displayedPages = [
 ];
 PULSE_DEFAULT_CONFIG.roles.manager.displayedPages = [
 ];
+PULSE_DEFAULT_CONFIG.roles.maintenance.displayedPages = [
+];
 PULSE_DEFAULT_CONFIG.roles.support.displayedPages = [
 ];
 PULSE_DEFAULT_CONFIG.roles.live.displayedPages = [
@@ -293,6 +295,8 @@ PULSE_DEFAULT_CONFIG.roles.dev.displayedPages = [
 PULSE_DEFAULT_CONFIG.roles.operator.bottomDisplayedPages = [
 ];
 PULSE_DEFAULT_CONFIG.roles.manager.bottomDisplayedPages = [
+];
+PULSE_DEFAULT_CONFIG.roles.maintenance.bottomDisplayedPages = [
 ];
 PULSE_DEFAULT_CONFIG.roles.support.bottomDisplayedPages = [
 ];
@@ -351,6 +355,15 @@ PULSE_DEFAULT_CONFIG.roles.manager.showcoloredbar = {
   showdetails: [ // == general + detailedproductionstateat
   ],
   showpopup: [ //clickDisplayedPopup: [  == same as default - mandatory to allow single change
+  ]
+};
+PULSE_DEFAULT_CONFIG.roles.maintenance.showcoloredbar = {
+  click: {
+    allbars: 'details'
+  },
+  showdetails: [
+  ],
+  showpopup: [
   ]
 };
 
@@ -429,6 +442,13 @@ PULSE_DEFAULT_CONFIG.rolespages = {
     managementinformationterminal: {
       showRunningButton: true
     },
+    running: {
+      showcoloredbar: {
+        cncvalue: true
+      }
+    }
+  },
+  maintenance: {
     running: {
       showcoloredbar: {
         cncvalue: true

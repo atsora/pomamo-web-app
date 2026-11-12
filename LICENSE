@@ -72,6 +72,12 @@ Some images have a specific license:
   And the icon of the status dashboard page (Font Awesome Free 7.1.0, solid,
   unmodified, the attribution is kept in the file):
   - src/pages/machinestatusdashboard/machinestatusdashboard-icon.svg : gauge-high
+  And the wrench of the maintenance role icon (Font Awesome Free 7.1.0, solid,
+  wrench, the attribution is kept in the file). Modified: scaled, rotated and
+  combined with the silhouette of role-manager.svg (designed by the Lemoine
+  Automation Technologies team, see below); the whole icon is under the
+  CC BY-SA 4.0 License:
+  - src/images/role-maintenance.svg : wrench
 
 - other images were designed by the Lemoine Automation Technologies team
   License: CC BY-SA 4.0 License (https://creativecommons.org/licenses/by-sa/4.0/)

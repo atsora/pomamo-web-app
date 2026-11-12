@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Role icon of the maintenance manager: the silhouette of role-manager.svg
+     with a wrench in place of the tie.
+     The wrench is the icon "wrench" of Font Awesome Free 7.1.0 (solid) by @fontawesome
+     - https://fontawesome.com License - https://fontawesome.com/license/free
+     (Icons: CC BY 4.0) Copyright 2025 Fonticons, Inc.
+     Modified: scaled, rotated and combined with the silhouette. -->
+<svg
+   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+  <path
+     transform="translate(224.5 392.5) scale(0.352) rotate(-45) translate(-271 -273)"
+     d="M509.4 98.6c7.6-7.6 20.3-5.7 24.1 4.3 6.8 17.7 10.5 37 10.5 57.1 0 88.4-71.6 160-160 160-17.5 0-34.4-2.8-50.2-8L146.9 498.9c-28.1 28.1-73.7 28.1-101.8 0s-28.1-73.7 0-101.8L232 210.2c-5.2-15.8-8-32.6-8-50.2 0-88.4 71.6-160 160-160 20.1 0 39.4 3.7 57.1 10.5 10 3.8 11.8 16.5 4.3 24.1l-88.7 88.7c-3 3-4.7 7.1-4.7 11.3l0 41.4c0 8.8 7.2 16 16 16l41.4 0c4.2 0 8.3-1.7 11.3-4.7l88.7-88.7z"
+     class="highlightcolor" fill="currentColor" />
+  <path fill="currentColor"
+     d="m 225.97307,258.6207 c 70.7,0 128,-57.3 128,-128 0,-70.699997 -57.3,-127.9999966 -128,-127.9999966 -70.7,0 -127.999994,57.2999996 -127.999994,127.9999966 0,70.7 57.299994,128 127.999994,128 z" />
+  <path fill="currentColor"
+     d="M 171.30531,511.37049 129.64155,269.71127 C 58.341537,273.39144 1.4415409,336.49552 1.4415409,414.53674 v 45.02795 c 0,28.68367 21.5000001,51.95533 47.9999961,51.95533 H 121.0984" />
+  <path fill="currentColor"
+     d="m 278.31116,511.30805 41.66376,-241.65922 c 71.30001,3.68017 128.20001,66.78425 128.20001,144.82547 v 45.02795 c 0,28.68367 -21.5,51.95533 -48,51.95533 h -71.65686" />
+</svg>
