@@ -51,6 +51,13 @@ ATSORA_LOCALE_CATALOG.default.options = {
   showTaskList: 'Show task list',
   showUtilizationBar: 'Show machine utilization bar',
   showUtilizationTarget: 'Show utilization target',
+  oeeGauges: 'Gauges',
+  oee: 'OEE',
+  ooe: 'OOE',
+  teep: 'TEEP',
+  oeeThresholds: 'OEE thresholds color (%)',
+  ooeThresholds: 'OOE thresholds color (%)',
+  teepThresholds: 'TEEP thresholds color (%)',
   productionGauge: 'Production gauge',
   maximum: 'Maximum',
   minimum: 'Minimum',
@@ -180,6 +187,9 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   },
   oeeview: {
     title: 'OEE view'
+  },
+  oeeooeteep: {
+    title: 'OEE / OOE / TEEP'
   },
   machinedashboard: {
     title: 'Dashboard'
@@ -327,6 +337,13 @@ ATSORA_LOCALE_CATALOG.fr.options = {
   showTaskList: "Afficher la liste des tâches",
   showUtilizationBar: "Afficher la barre d'utilisation des machines",
   showUtilizationTarget: "Afficher l'objectif d'utilisation",
+  oeeGauges: 'Jauges',
+  oee: 'TRS',
+  ooe: 'TRG',
+  teep: 'TRE',
+  oeeThresholds: 'Couleur des seuils du TRS (%)',
+  ooeThresholds: 'Couleur des seuils du TRG (%)',
+  teepThresholds: 'Couleur des seuils du TRE (%)',
   productionGauge: 'Jauge de production',
   maximum: 'Maximum',
   minimum: 'Minimum',
@@ -451,6 +468,9 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   },
   oeeview: {
     title: 'Vue TRS'
+  },
+  oeeooeteep: {
+    title: 'TRS / TRG / TRE'
   },
   machinedashboard: {
     title: 'Tableau de bord'
@@ -600,6 +620,13 @@ ATSORA_LOCALE_CATALOG.de.options = {
   showTaskList: 'Aufgabenliste anzeigen',
   showUtilizationBar: 'Maschinenauslastungsbalken anzeigen',
   showUtilizationTarget: 'Auslastungsziel anzeigen',
+  oeeGauges: 'Anzeigen',
+  oee: 'OEE',
+  ooe: 'OOE',
+  teep: 'TEEP',
+  oeeThresholds: 'Schwellenwertfarben OEE (%)',
+  ooeThresholds: 'Schwellenwertfarben OOE (%)',
+  teepThresholds: 'Schwellenwertfarben TEEP (%)',
   productionGauge: 'Produktionsanzeige',
   maximum: 'Maximum',
   minimum: 'Minimum',
@@ -727,6 +754,9 @@ ATSORA_LOCALE_CATALOG.de.pages = {
   },
   oeeview: {
     title: 'OEE-Ansicht'
+  },
+  oeeooeteep: {
+    title: 'OEE / OOE / TEEP'
   },
   machinedashboard: {
     title: 'Dashboard'
@@ -873,6 +903,13 @@ ATSORA_LOCALE_CATALOG.ja.options = {
   showTaskList: 'タスク一覧を表示',
   showUtilizationBar: '設備稼働率バーを表示',
   showUtilizationTarget: '稼働率目標を表示',
+  oeeGauges: 'ゲージ',
+  oee: 'OEE',
+  ooe: 'OOE',
+  teep: 'TEEP',
+  oeeThresholds: 'OEE のしきい値の色（%）',
+  ooeThresholds: 'OOE のしきい値の色（%）',
+  teepThresholds: 'TEEP のしきい値の色（%）',
   productionGauge: '生産ゲージ',
   maximum: '最大',
   minimum: '最小',
@@ -1000,6 +1037,9 @@ ATSORA_LOCALE_CATALOG.ja.pages = {
   },
   oeeview: {
     title: 'OEE ビュー'
+  },
+  oeeooeteep: {
+    title: 'OEE / OOE / TEEP'
   },
   machinedashboard: {
     title: 'ダッシュボード'

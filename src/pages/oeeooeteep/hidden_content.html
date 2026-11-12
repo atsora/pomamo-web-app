@@ -1,0 +1,29 @@
+<!--
+Copyright (C) 2026 Atsora Solutions
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class="tile" id='boxtoclone'>
+    <div class="tile-title">
+      <div class="oeeooeteep-top-title">
+        <x-machinedisplay></x-machinedisplay>
+        <x-reasonbutton></x-reasonbutton>
+      </div>
+      <x-lastmachinestatus class="lastmachinestatus-current-reason-only" period-context="oeeooeteep"></x-lastmachinestatus>
+    </div>
+    <div class="tile-content">
+      <x-workinfo></x-workinfo>
+      <div class="oee-bottom">
+        <div class="oee-number">
+          <x-production period-context="oeeooeteep"></x-production>
+          <x-productionshiftgoal period-context="oeeooeteep"></x-productionshiftgoal>
+        </div>
+        <div class="oee-gauges">
+          <x-oeegauge oee-type="oee" period-context="oeeooeteep"></x-oeegauge>
+          <x-oeegauge oee-type="ooe" period-context="oeeooeteep"></x-oeegauge>
+          <x-oeegauge oee-type="teep" period-context="oeeooeteep"></x-oeegauge>
+        </div>
+      </div>
+    </div>
+</div>

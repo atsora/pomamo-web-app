@@ -1,0 +1,362 @@
+/*
+ * Copyright (C) 2026 Atsora Solutions
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Global
+@import "x-signalbanner/x-signalbanner.less";
+@import "style.less";
+@import "pulse.exports.light.less";
+
+@import "x-periodmanager/x-periodmanager.less";
+@import "x-groupgrid/x-groupgrid.less";
+@import "x-machinedisplay/x-machinedisplay.less";
+@import "x-reasonbutton/x-reasonbutton.less";
+@import "x-lastmachinestatus/x-lastmachinestatus.less";
+@import "x-production/x-production.less";
+@import "x-productionshiftgoal/x-productionshiftgoal.less";
+@import "x-oeegauge/x-oeegauge.less";
+@import "x-periodtoolbar/x-periodtoolbar.less";
+@import "x-workinfo/x-workinfo.less";
+@import "x-stopclassification/x-stopclassification.less";
+@import "x-rotationprogress/x-rotationprogress.less";
+
+
+// === MODE NORMAL (defaut, em/rem) ===
+
+.pulse-mainarea-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+x-groupgrid {
+  overflow-y: auto !important;
+  height: 100% !important;
+
+  .groupgrid-main {
+    height: auto !important;
+    grid-auto-rows: auto !important;
+    align-content: start !important;
+    overflow: visible !important;
+  }
+
+  .groupgrid-item {
+    height: fit-content !important;
+    min-height: unset !important;
+    min-width: 0 !important;
+  }
+}
+
+// --- 1. LA TUILE (LE CONTENEUR MAÎTRE) ---
+.tile {
+  border-radius: @border_radius;
+  border: 1px solid @color_window_border;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  height: fit-content !important;
+  min-height: unset !important;
+  container-type: normal !important;
+}
+
+// --- 2. EN-TÊTE ---
+.tile-title {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 4px 10px 4px 10px;
+  gap: 0.2em;
+  background-color: @color_background_alternate;
+  color: @box_header_text_color;
+  max-height: 25%;
+
+  .oeeooeteep-top-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 1.4em !important;
+    line-height: 1.1;
+
+    x-machinedisplay {
+      font-size: 1em;
+      min-width: 0;
+      .machinedisplay-data {
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: bold;
+      }
+    }
+
+    x-reasonbutton {
+      margin-left: 0.5em;
+      flex-shrink: 0;
+      height: 1.2em;
+      width: auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .pulse-icon-content,
+      .reasonbutton-svg {
+        height: 100%;
+        width: auto;
+        display: flex;
+        align-items: center;
+      }
+
+      svg {
+        height: 100%;
+        width: auto;
+        max-width: unset;
+        max-height: 100%;
+      }
+    }
+  }
+
+  // Sous-titre Statut (Current Reason)
+  .lastmachinestatus-current-reason-only {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-size: 1em !important;
+
+    x-lastmachinestatus {
+      display: flex !important;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .pulse-cellbar-main, .pulse-cellbar-current-data {
+      border: none !important;
+      color: inherit !important;
+      height: auto !important;
+      width: auto !important;
+      border-radius: 4px;
+    }
+    .pulse-cellbar-between, .pulse-cellbar-past-data, i, svg { display: none !important; }
+    .lastmachinestatus-reason-label { display: none !important; }
+  }
+}
+
+// --- 3. CONTENU PRINCIPAL ---
+.tile-content {
+  background-color: @color_background;
+  color: @box_text_color;
+  display: flex;
+  flex-direction: column;
+
+  flex: 0 0 auto !important;
+
+  width: 100%;
+  padding: 0.6em !important;
+  box-sizing: border-box;
+  min-height: 0;
+  height: auto !important;
+
+  // Info Section (Team/Operator)
+  x-workinfo {
+    align-self: center;
+    flex-shrink: 0;
+    max-width: 100%;
+    min-height: 0;
+    font-size: 1em !important;
+  }
+
+  // Section Basse (Chiffres + Jauge)
+  .oee-bottom {
+    display: flex;
+    flex-direction: row;
+    flex: 0 0 auto !important;
+    height: 14em !important;
+
+    width: 100%;
+    overflow: hidden;
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  // Colonne de Gauche (Chiffres)
+  .oee-number {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 0;
+    gap: 0;
+    min-width: 0;
+    min-height: 0;
+    x-production,
+    x-productionshiftgoal {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    x-production {
+      flex-direction: column;
+      .production-actual-value,
+      .production-target-value {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-width: 0;
+        flex: 1 1 0px;
+        .production-actual-separator,
+        .production-target-separator {
+          display: none;
+        }
+      }
+    }
+  }
+
+  // Gauges: OEE, OOE and TEEP side by side (a hidden gauge leaves its room to the others)
+  .oee-gauges {
+    flex: 3 1 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0.5em;
+    min-width: 0;
+    min-height: 0;
+
+    x-oeegauge {
+      flex: 1 1 0;
+      min-width: 0;
+      min-height: 0;
+    }
+  }
+
+  // --- TYPOGRAPHIE ---
+
+  span, div {
+    font-weight: bold;
+  }
+
+  // Textes descriptifs (Target, Actual...)
+  .productionshiftgoal-content,
+  .production-content {
+    font-size: 1em !important;
+    line-height: 1;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Chiffres principaux
+  .production-number-actual,
+  .production-number-target,
+  .productionshiftgoal-data {
+    font-size: 3em !important;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  // Label and text of the gauges
+  .oeegauge-label {
+    font-size: 1.2em !important;
+  }
+
+  .oeegauge-text {
+    font-size: 1.6em !important;
+    line-height: 1;
+  }
+}
+
+// --- BARRE D'OUTILS EXTERNE ---
+x-periodtoolbar {
+  margin-bottom: 8px;
+  display: flex;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+
+  .periodtoolbar {
+    display: flex;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid @color_window_border;
+    width: fit-content;
+  }
+}
+
+
+// === MODE LIVE (.appcontext-live, cqh/cqw) ===
+
+.appcontext-live {
+  x-groupgrid {
+    .groupgrid-main {
+      height: 100% !important;
+      grid-auto-rows: 1fr !important;
+      overflow: hidden !important;
+    }
+    .groupgrid-item {
+      height: 100% !important;
+      min-width: auto !important;
+    }
+  }
+
+  .tile {
+    container-type: size !important;
+    container-name: maintile;
+    height: 100% !important;
+  }
+
+  .tile-title .oeeooeteep-top-title {
+    font-size: 8cqh !important;
+  }
+
+  .tile-title .lastmachinestatus-current-reason-only {
+    font-size: clamp(10px, 4cqh, 18px) !important;
+  }
+
+  .tile-content {
+    padding: 2.5cqmin !important;
+    flex: 1 1 0px !important;
+    height: auto !important;
+
+    x-workinfo {
+      font-size: 5cqh !important;
+    }
+
+    .productionshiftgoal-content,
+    .production-content {
+      font-size: 4cqw !important;
+    }
+
+    .production-number-actual,
+    .production-number-target,
+    .productionshiftgoal-data {
+      font-size: 15cqh !important;
+    }
+
+    .oeegauge-label {
+      font-size: 6cqh !important;
+    }
+
+    .oeegauge-text {
+      font-size: 8cqh !important;
+    }
+
+    .oee-bottom {
+      flex: 1 1 0px !important;
+      height: auto !important;
+    }
+  }
+}

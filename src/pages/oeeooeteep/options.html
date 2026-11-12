@@ -1,0 +1,135 @@
+<!--
+Copyright (C) 2026 Atsora Solutions
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class="param-group group-options">
+  <div class="param-group-header group-options">
+    <div class="param-group-title"><x-tr key="options.title" default="Options"></x-tr></div>
+    <button class="param-group-button" id="resetoptions"><x-tr key="options.resetButton"
+        default="reset"></x-tr></button>
+  </div>
+
+  <div class="param-group-content group-options">
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label><x-tr key="options.oeeGauges" default="Gauges"></x-tr></label>
+      </div>
+      <div class="subgroup">
+        <div class='inlined-radio'>
+          <input type="checkbox" id="showoee" autocomplete="off" />
+          <label for="showoee"><x-tr key="options.oee" default="OEE"></x-tr></label>
+        </div>
+        <div class='inlined-radio'>
+          <input type="checkbox" id="showooe" autocomplete="off" />
+          <label for="showooe"><x-tr key="options.ooe" default="OOE"></x-tr></label>
+        </div>
+        <div class='inlined-radio'>
+          <input type="checkbox" id="showteep" autocomplete="off" />
+          <label for="showteep"><x-tr key="options.teep" default="TEEP"></x-tr></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="labelsubgroup thresholds-oee">
+      <div class='labelheader'>
+        <label><x-tr key="options.oeeThresholds" default="OEE thresholds color (%)"></x-tr></label>
+      </div>
+      <div class="subgroup radiogroup">
+        <div class='inlined-radio'>
+          <label for="thresholdtargetoee"><x-tr key="options.target" default="Target"></x-tr></label>
+          <input type="number" id="thresholdtargetoee" value="0" step="1" min="0" max="100" autocomplete="off" />
+        </div>
+        <div class='inlined-radio'>
+          <label for="thresholdredoee"><x-tr key="options.thresholdRed" default="Red"></x-tr></label>
+          <input type="number" id="thresholdredoee" value="0" step="1" min="0" max="100" autocomplete="off" />
+        </div>
+      </div>
+      <div class="threshold-error"></div>
+    </div>
+
+    <div class="labelsubgroup thresholds-ooe">
+      <div class='labelheader'>
+        <label><x-tr key="options.ooeThresholds" default="OOE thresholds color (%)"></x-tr></label>
+      </div>
+      <div class="subgroup radiogroup">
+        <div class='inlined-radio'>
+          <label for="thresholdtargetooe"><x-tr key="options.target" default="Target"></x-tr></label>
+          <input type="number" id="thresholdtargetooe" value="0" step="1" min="0" max="100" autocomplete="off" />
+        </div>
+        <div class='inlined-radio'>
+          <label for="thresholdredooe"><x-tr key="options.thresholdRed" default="Red"></x-tr></label>
+          <input type="number" id="thresholdredooe" value="0" step="1" min="0" max="100" autocomplete="off" />
+        </div>
+      </div>
+      <div class="threshold-error"></div>
+    </div>
+
+    <div class="labelsubgroup thresholds-teep">
+      <div class='labelheader'>
+        <label><x-tr key="options.teepThresholds" default="TEEP thresholds color (%)"></x-tr></label>
+      </div>
+      <div class="subgroup radiogroup">
+        <div class='inlined-radio'>
+          <label for="thresholdtargetteep"><x-tr key="options.target" default="Target"></x-tr></label>
+          <input type="number" id="thresholdtargetteep" value="0" step="1" min="0" max="100" autocomplete="off" />
+        </div>
+        <div class='inlined-radio'>
+          <label for="thresholdredteep"><x-tr key="options.thresholdRed" default="Red"></x-tr></label>
+          <input type="number" id="thresholdredteep" value="0" step="1" min="0" max="100" autocomplete="off" />
+        </div>
+      </div>
+      <div class="threshold-error"></div>
+    </div>
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showpartcount"><x-tr key="options.showPartCount" default="Show part count"></x-tr></label>
+        <input type="checkbox" id="showpartcount" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="showworkinfo"><x-tr key="options.showOperation" default="Show operation"></x-tr></label>
+        <input type="checkbox" id="showworkinfo" autocomplete="off" />
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="param-group group-layout">
+  <div class="param-group-header group-layout">
+    <div class="param-group-title"><x-tr key="options.layoutSettings" default="Layout"></x-tr></div>
+    <button class="param-group-button" id="resetlayout"><x-tr key="options.resetButton" default="reset"></x-tr></button>
+  </div>
+
+  <div class="param-group-content group-layout">
+
+    <div class="labelsubgroup">
+      <div class='labelheader'>
+        <label for="defaultlayout"><x-tr key="options.defaultLayout" default="Use default layout (12)"></x-tr></label>
+        <input type="checkbox" id="defaultlayout" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="labelsubgroup rotation-settings">
+      <div class='labelheader'>
+        <label><x-tr key="options.rotationSettings" default="Rotation Settings"></x-tr></label>
+      </div>
+      <div class="subgroup">
+        <div class='inlined-radio'>
+          <label for="machinesperpage"><x-tr key="options.machinesPerPage" default="Machines / page"></x-tr></label>
+          <input type="number" id="machinesperpage" min="1" max="100" step="1" />
+        </div>
+        <div class='inlined-radio'>
+          <label for="rotationdelay"><x-tr key="options.rotationDelay" default="Delay (sec)"></x-tr></label>
+          <input type="number" id="rotationdelay" min="3" step="1" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
