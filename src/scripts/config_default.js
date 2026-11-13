@@ -34,6 +34,10 @@ PULSE_DEFAULT_CONFIG.general.showlegend = 'dynamic'; // Can be 'true', 'false', 
 PULSE_DEFAULT_CONFIG.general.enableGroups = false; // Can be 'true' to display machines by groups (including dynamic groups)
 PULSE_DEFAULT_CONFIG.general.allowpagerotation = false;
 PULSE_DEFAULT_CONFIG.general.allowproductionbar = false; // Default
+// canEditDocs: change the documents (kind, tags, new revision, new document) in the
+// pages vue-docs and vue-operationexplorer. Overload it per role in config_custom.js:
+// PULSE_DEFAULT_CONFIG.roles.operator.canEditDocs = true;
+PULSE_DEFAULT_CONFIG.general.canEditDocs = false; // Default
 
 /* menuType: can be overload by role
 * - 'fullOrIcon': icon + text or just icon, factorization per title NOT possible
@@ -317,6 +321,12 @@ PULSE_DEFAULT_CONFIG.roles.support.toollifemachine = {
 PULSE_DEFAULT_CONFIG.roles.manager.allowproductionbar = true;
 PULSE_DEFAULT_CONFIG.roles.support.allowproductionbar = true;
 PULSE_DEFAULT_CONFIG.roles.dev.allowproductionbar = true;
+
+// canEditDocs
+PULSE_DEFAULT_CONFIG.roles.manager.canEditDocs = true;
+PULSE_DEFAULT_CONFIG.roles.dev.canEditDocs = true;
+PULSE_DEFAULT_CONFIG.roles.support.canEditDocs = true;
+PULSE_DEFAULT_CONFIG.roles.maintenance.canEditDocs = true;
 
 // Special for LIVE pages. These config will overload role config
 PULSE_DEFAULT_CONFIG.roles.live.showlegend = 'true';

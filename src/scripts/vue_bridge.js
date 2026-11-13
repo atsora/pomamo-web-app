@@ -18,8 +18,13 @@
 //   window.__pulseGetMachineDisplay(id)  - display name of a group or machine id
 //   window.__pulseOpenMachineSelection() - open the machine selection dialog of the page
 //   window.__pulseGetRole()              - web app key of the role of the user ('' when none)
+//   window.__pulseGetConfig(key, def)    - value of a config key for the role and the page
+// The documents of work informations (window.__vueOpenWorkInfoDocs, atracking-opexplorer)
+// open on the window event 'atsora:open-workinfo-docs' (detail: { items: [{ kind, id, display }] }),
+// dispatched by the x-* components (x-lastworkinformation), which do not import this module.
 
 import * as eventBus from 'eventBus';
+import * as pulseConfig from 'pulseConfig';
 import * as pulseLogin from 'pulseLogin';
 
 function qs (sel) { return document.querySelector(sel); }
@@ -29,6 +34,7 @@ var vuePageRoutes = {
   'vue-tasks': '/tasks',
   'vue-execution': '/execution',
   'vue-operationexplorer': '/operation-explorer',
+  'vue-docs': '/docs',
   // atracking-webconfig, reached from the configuration page
   'vue-reasonconfig': '/reasons',
   'vue-scheduledconfigtemplate': '/planning',
@@ -97,6 +103,11 @@ window.__pulseGetRole = function () {
   return pulseLogin.getRole();
 };
 
+// Vue -> Pulse: value of a config key for the role and the page (e.g. canEditDocs)
+window.__pulseGetConfig = function (key, defaultValue) {
+  return pulseConfig.get(key, defaultValue);
+};
+
 // The Vue bundle is a deferred ES module, so the bridge may not be ready when a
 // vue-* page is first prepared. Run cb as soon as window.__vueRouter exists:
 // the Vue app (atracking-vue-bridge) dispatches 'atsora:vue-ready' on window once its
@@ -148,6 +159,24 @@ function openTaskInstance (id) {
   });
 }
 
+// Open the documents of work informations (operation, part...) in the Vue dialog, over the
+// current page. The Vue app is mounted lazily on first use (window.__loadVue). No nav.
+function openWorkInfoDocs (items) {
+  if (!items || items.length === 0) return;
+  if (window.__vueOpenWorkInfoDocs) {
+    window.__vueOpenWorkInfoDocs(items);
+    return;
+  }
+  if (window.__loadVue) window.__loadVue();
+  whenVueReady(function () {
+    if (window.__vueOpenWorkInfoDocs) window.__vueOpenWorkInfoDocs(items);
+  });
+}
+
+window.addEventListener('atsora:open-workinfo-docs', function (event) {
+  openWorkInfoDocs(event.detail && event.detail.items);
+});
+
 // Register the global 'openTaskInstance' listener — task components (x-task,
 // x-taskslist, x-cycletask) dispatch it when a task is clicked.
 function registerTaskClickListener (ctx) {
@@ -179,5 +208,6 @@ export { whenVueReady };
 export { showVuePage };
 export { setMachines };
 export { openTaskInstance };
+export { openWorkInfoDocs };
 export { registerTaskClickListener };
 export { handleVuePageLoad };

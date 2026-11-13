@@ -275,6 +275,9 @@ ATSORA_LOCALE_CATALOG.default.pages = {
   'vue-operationexplorer': {
     title: 'Operation explorer'
   },
+  'vue-docs': {
+    title: 'Documents'
+  },
   configuration: {
     title: 'Configuration'
   },
@@ -557,6 +560,9 @@ ATSORA_LOCALE_CATALOG.fr.pages = {
   },
   'vue-operationexplorer': {
     title: 'Explorateur d\'opérations'
+  },
+  'vue-docs': {
+    title: 'Documents'
   },
   configuration: {
     title: 'Configuration'
@@ -841,6 +847,9 @@ ATSORA_LOCALE_CATALOG.de.pages = {
   'vue-operationexplorer': {
     title: 'Arbeitsgang-Explorer'
   },
+  'vue-docs': {
+    title: 'Dokumente'
+  },
   configuration: {
     title: 'Konfiguration'
   },
@@ -1123,6 +1132,9 @@ ATSORA_LOCALE_CATALOG.ja.pages = {
   },
   'vue-operationexplorer': {
     title: 'オペレーションエクスプローラー'
+  },
+  'vue-docs': {
+    title: 'ドキュメント'
   },
   configuration: {
     title: '設定'
