@@ -233,6 +233,11 @@ pulse-shell {
   min-height: 0; // required so inner scroll areas can size correctly
   height: auto;
   filter: blur(0px);
+  // The collapsed #pulse-panel-parameter is moved out of #pulse-inner (translateX), its
+  // containing block (filter). 'clip', not 'hidden': it must not widen the page, which a
+  // focus or a scrollIntoView in a Vue page (or in the hidden panel) would then scroll
+  // horizontally, revealing the panel and cutting the navigation
+  overflow-x: clip;
 }
 
 #pulse-navigation-and-main {
