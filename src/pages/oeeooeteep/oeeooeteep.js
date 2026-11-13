@@ -58,7 +58,8 @@ function setVisible (selector, visible) {
  *
  * Options: display of each gauge (showoee / showooe / showteep), color thresholds
  * of each gauge (thresholdtarget<type> / thresholdred<type>), part count
- * (showpartcount, off by default) and operation (showworkinfo).
+ * (showpartcount, off by default). The operation (x-workinfo) is displayed above
+ * the part count, with it: it does not relate to the gauges.
  *
  * @extends pulsePage.BasePage
  */
@@ -136,9 +137,8 @@ class OeeOoeTeepPage extends pulsePage.BasePage {
       this._initThresholds(oeeType);
     }
 
-    // --- PART COUNT / OPERATION ---
+    // --- PART COUNT (and the operation above it) ---
     this._initCheckbox('showpartcount', false, (checked) => setVisible('.oee-number', checked));
-    this._initCheckbox('showworkinfo', true, (checked) => setVisible('x-workinfo', checked));
   }
 
   /**
@@ -256,7 +256,6 @@ class OeeOoeTeepPage extends pulsePage.BasePage {
       resetValue('thresholdred' + oeeType, pulseConfig.getDefaultFloat('thresholdred' + oeeType, OEE_TYPES[oeeType].red));
     }
     resetCheckbox('showpartcount', false);
-    resetCheckbox('showworkinfo', true);
 
     // Rotation only exists in live mode
     if (isLive()) {
@@ -276,7 +275,6 @@ class OeeOoeTeepPage extends pulsePage.BasePage {
       { id: 'thresholdtargetteep', type: 'value' },
       { id: 'thresholdredteep', type: 'value' },
       { id: 'showpartcount', type: 'checkbox' },
-      { id: 'showworkinfo', type: 'checkbox' },
       // Rotation params
       { id: 'defaultlayout', type: 'checkbox' },
       { id: 'machinesperpage', type: 'value' },
@@ -296,7 +294,6 @@ class OeeOoeTeepPage extends pulsePage.BasePage {
       setVisible('x-oeegauge[oee-type="' + oeeType + '"]', pulseConfig.getBool('show' + oeeType, true));
     }
     setVisible('.oee-number', pulseConfig.getBool('showpartcount', false));
-    setVisible('x-workinfo', pulseConfig.getBool('showworkinfo', true));
   }
 }
 

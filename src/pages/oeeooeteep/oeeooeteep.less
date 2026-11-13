@@ -163,15 +163,6 @@ x-groupgrid {
   min-height: 0;
   height: auto !important;
 
-  // Info Section (Team/Operator)
-  x-workinfo {
-    align-self: center;
-    flex-shrink: 0;
-    max-width: 100%;
-    min-height: 0;
-    font-size: 1em !important;
-  }
-
   // Section Basse (Chiffres + Jauge)
   .oee-bottom {
     display: flex;
@@ -185,16 +176,29 @@ x-groupgrid {
     min-height: 0;
   }
 
-  // Colonne de Gauche (Chiffres)
+  // Left column: the operation, then the part count (optional, hidden with the
+  // part count). As wide as its content (the gauges take the rest), at most 40 %.
   .oee-number {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex: 1 1 0;
-    gap: 0;
+    flex: 0 1 auto;
+    max-width: 40%;
+    padding: 0 0.5em;
+    gap: 0.3em;
     min-width: 0;
     min-height: 0;
+
+    // Operation, ellipsis when too long
+    x-workinfo {
+      flex-shrink: 0;
+      width: 100%;
+      min-height: 0;
+      text-align: center;
+      font-size: 1em !important;
+    }
+
     x-production,
     x-productionshiftgoal {
       width: 100%;
