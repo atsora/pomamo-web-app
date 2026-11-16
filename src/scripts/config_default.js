@@ -38,6 +38,9 @@ PULSE_DEFAULT_CONFIG.general.allowproductionbar = false; // Default
 // pages vue-docs and vue-operationexplorer. Overload it per role in config_custom.js:
 // PULSE_DEFAULT_CONFIG.roles.operator.canEditDocs = true;
 PULSE_DEFAULT_CONFIG.general.canEditDocs = false; // Default
+// tasksRefreshSeconds: seconds between two refetches of the due tasks (vue-execution
+// and the execution dialog), 0 = no refetch. Overload it per role in config_custom.js
+PULSE_DEFAULT_CONFIG.general.tasksRefreshSeconds = 60; // Default
 
 /* menuType: can be overload by role
 * - 'fullOrIcon': icon + text or just icon, factorization per title NOT possible
