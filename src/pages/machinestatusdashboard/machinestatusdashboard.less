@@ -20,6 +20,19 @@
     max-width: none;
   }
 
+  // CNC alarm on the left, tool lives on the right (under the pie, next to the
+  // task list), with a space between them when they share the row.
+  .perf-tool-container {
+    width: 100%;
+    justify-content: space-between;
+    column-gap: 2em;
+    flex-wrap: wrap;
+  }
+
+  .changedtools-content {
+    margin-left: auto;
+  }
+
   // Performance gauge with the utilization (percent or time) at its bottom.
   .motion-content {
     position: relative;
