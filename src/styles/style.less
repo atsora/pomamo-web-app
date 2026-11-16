@@ -366,13 +366,24 @@ pulse-shell {
       // toggle and hides what is above it.
       min-width: 11cqw;
       white-space: nowrap;
+      // Label then arrow, with a fixed space between them
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6cqw;
 
       .legend-toggle-icon-up,
       .legend-toggle-icon-down {
         width: 1.35cqw;
         height: 1.93cqw;
-        float: right;
-        margin: 0.5cqw;
+        flex: none;
+        order: 1; // after the label
+
+        > svg {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
       }
 
       .legend-toggle-icon-up {
