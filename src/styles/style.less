@@ -91,8 +91,10 @@ select {
 }
 
 svg {
-  // To see again after hidden at start done in template.html
-  visibility: visible !important;
+  // To see again after hidden at start done in template.html. `inherit`, not `visible`:
+  // an icon stays hidden with its hidden parent (the toggler of a leaf of a PrimeVue tree,
+  // a hidden button...), instead of showing alone
+  visibility: inherit !important;
 }
 
 /* Efficiency Colors */
