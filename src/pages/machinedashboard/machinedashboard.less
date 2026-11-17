@@ -549,12 +549,17 @@ x-machinetab .machinetab-machine-cell {
 // 5. TOOL LIFE & PERFORMANCE
 // ==========================================
 .tile {
+  // Production bar / CNC alarm on the left, tool lives on the right (next to
+  // the task list), with a space between them when they share the row.
   .perf-tool-container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 5px;
-    width: fit-content;
+    justify-content: space-between;
+    column-gap: 2em;
+    row-gap: 5px;
+    width: 100%;
   }
 
   x-productionbar {
@@ -572,6 +577,7 @@ x-machinetab .machinetab-machine-cell {
 
   .changedtools-content {
     display: flex;
+    margin-left: auto;
   }
 
   // Stack the production bar and the CNC alarm icon vertically inside the
