@@ -463,6 +463,7 @@ PULSE_DEFAULT_CONFIG.rolespages = {
   },
   maintenance: {
     running: {
+      showtasklist: true, // right-side task list shown by default
       showcoloredbar: {
         cncvalue: true
       }

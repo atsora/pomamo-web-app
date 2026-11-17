@@ -69,8 +69,8 @@ class RunningPage extends pulsePage.BasePage {
   /**
    * Initializes the options panel and binds all listeners.
    *
-   * Hides the options group if `allowproductionbar` = false (the production bar
-   * is not available in this deployed configuration).
+   * Hides the bar choice (`.bar-settings`) if `allowproductionbar` = false (the
+   * production bar is not available for this role); the other options stay visible.
    *
    * Bar radio management (showproductionbar / showreasonbar):
    *  - The two radios are linked in inverse logic (one is the NOT of the other).
@@ -81,10 +81,11 @@ class RunningPage extends pulsePage.BasePage {
    */
   // CONFIG PANEL - Init
   initOptionValues () {
+    // Without the production bar, only the bar choice is hidden: the other options
+    // (task list) stay available
     let allowproductionbar = pulseConfig.getBool('allowproductionbar');
     if (!allowproductionbar) {
-      let groupOptions = document.querySelector('.group-options');
-      if (groupOptions) groupOptions.style.display = 'none';
+      document.querySelectorAll('.bar-settings').forEach(el => el.style.display = 'none');
     }
 
     // --- SHOW TASK LIST (right-side nav) ---
