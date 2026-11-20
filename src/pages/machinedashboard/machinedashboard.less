@@ -43,10 +43,13 @@
 // The list does not take part in the height of the row: it spans the height
 // given by the other blocks and scrolls, else many tasks would make the page
 // taller than the screen.
+// Width in em of the size of the list text (x-taskslist.less), so that it
+// follows that size on every screen (phone, TV, 4K...).
 .tasklist-content {
-  flex: 0 0 240px;
-  width: 240px;
-  max-width: 240px;
+  font-size: @taskslist-font-size;
+  flex: 0 0 @taskslist-column-width;
+  width: @taskslist-column-width;
+  max-width: @taskslist-column-width;
   min-height: 8em;
   position: relative;
   box-sizing: border-box;

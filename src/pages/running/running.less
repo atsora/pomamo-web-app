@@ -144,11 +144,23 @@
   height: 100%;
   width: auto;
 }
+// Width in em of the size of the list text (x-taskslist.less)
 .tasklist-nav {
-  flex: 0 0 240px;
+  font-size: @taskslist-font-size;
+  flex: 0 0 @taskslist-column-width;
   min-width: 0;
   overflow: auto;
   box-sizing: border-box;
+}
+// Phone (portrait): no room for a column next to the table, the list goes below it
+@media @phone-media {
+  .running-layout {
+    flex-direction: column;
+  }
+  .tasklist-nav {
+    flex: 0 0 auto;
+    max-height: 40vh;
+  }
 }
 
 .tile {
