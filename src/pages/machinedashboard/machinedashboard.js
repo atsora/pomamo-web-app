@@ -27,7 +27,7 @@ import 'x-tr/x-tr';
 import 'x-openstopclassificationlistener/x-openstopclassificationlistener';
 import 'x-defaultpie/x-defaultpie';
 import 'x-motionpercentage/x-motionpercentage';
-/* require('x-scrapstatus/x-scrapstatus'); */
+import 'x-scrapstatus/x-scrapstatus';
 import 'x-periodmanager/x-periodmanager';
 import 'x-productionbar/x-productionbar';
 import 'x-productiongauge/x-productiongauge';

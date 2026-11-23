@@ -26,6 +26,7 @@ import 'x-defaultpie/x-defaultpie';
 import 'x-performancegauge/x-performancegauge';
 import 'x-motionpercentage/x-motionpercentage';
 import 'x-motiontime/x-motiontime';
+import 'x-scrapstatus/x-scrapstatus';
 import 'x-periodmanager/x-periodmanager';
 import 'x-currenticoncncalarm/x-currenticoncncalarm';
 import 'x-lastmachinestatetemplate/x-lastmachinestatetemplate';

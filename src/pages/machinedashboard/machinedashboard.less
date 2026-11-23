@@ -520,15 +520,6 @@ x-machinetab .machinetab-machine-cell {
     }
   }
 
-  .scrap-content {
-    margin-top: 25px;
-
-    .scrap-button {
-      display: flex;
-      align-items: center;
-      column-gap: 0.5em;
-    }
-  }
 
   // Big numeric outputs (production current/target, gauge label, bar label)
   // share the same font-size across all viewports.
@@ -740,6 +731,27 @@ x-machinetab .machinetab-machine-cell {
     // (stable while navigating periods on a normal viewport), and it falls to
     // the END of the scroll when the content overflows (small viewport) instead
     // of overlaying the other elements.
+  }
+
+  // Scrap of the current shift and scrap declaration (option showscrap),
+  // next to the reasons: on a single row, as high as the footer
+  .scrap-content {
+    display: flex;
+    align-items: center;
+    height: @dashboard-footer-height;
+
+    x-scrapstatus .scrapstatus-content {
+      flex-direction: row;
+      gap: 0.75em;
+
+      .scrapstatus-value {
+        font-size: 2em;
+      }
+
+      .scrapstatus-button-content {
+        font-size: 1em;
+      }
+    }
   }
 
   .stops-content {

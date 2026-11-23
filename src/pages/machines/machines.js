@@ -27,6 +27,7 @@ import 'x-performancebar/x-performancebar';
 import 'x-productionmachiningstatus/x-productionmachiningstatus';
 import 'x-toollifemachine/x-toollifemachine';
 import 'x-task/x-task';
+import 'x-scrapstatus/x-scrapstatus';
 
 import 'x-cyclesinperiod/x-cyclesinperiod';
 
@@ -100,6 +101,9 @@ class MachinesPage extends pulsePage.BasePage {
    *  - `'coloredbarwithpercent'`  : shows `.div-bar-and-percent` + `.right-percent`
    *  - `'x-reasonbutton'`         : shows the reason button inside `.tile-title`
    *  - `'title-lastmachinestatus'`: shows the last status inside the tile title
+ *
+ * For example `x-scrapstatus` displays the scrap of the current shift of each machine
+ * (not displayed by default).
    *
    * Config read: `componentsToDisplay` (Array<string>)
    */

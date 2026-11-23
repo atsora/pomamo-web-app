@@ -37,6 +37,7 @@ export function setDisplayAll (selector, value) {
  *  - `showtasklist`                  : task list (`.tasklist-content`)
  *  - `showalarm`                     : per-machine CNC alarm icon (`.cncalarmicon-content`)
  *  - `showUnknownAlarm`              : include unknown (non-focused) alarms in the icon query
+ *  - `showscrap`                     : scrap of the current shift and scrap declaration (`.scrap-content`), false by default
  *
  * A page adds its own options by overriding `initOptionValues`, `setDefaultOptionValues`,
  * `getOptionDescriptors` and `buildContent`, calling the base method first.
@@ -119,6 +120,10 @@ export class DashboardBasePage extends pulsePage.BasePage {
     // Task list
     this.bindCheckbox('showtasklist',
       show => setDisplayAll('.tasklist-content', show ? '' : 'none'));
+
+    // Scrap of the current shift
+    this.bindCheckbox('showscrap',
+      show => setDisplayAll('.scrap-content', show ? '' : 'none'));
 
     // CNC alarm icon
     this.bindCheckbox('showalarm', show => {
@@ -239,6 +244,7 @@ export class DashboardBasePage extends pulsePage.BasePage {
     this.setDefaultChecked('openStopClassification');
     this.setDefaultValue('stopClassificationReopenDelay', pulseConfig.getDefaultInt('stopClassificationReopenDelay', 0));
     this.setDefaultChecked('showtasklist');
+    this.setDefaultChecked('showscrap');
     this.setDefaultChecked('showalarm');
     this.setDefaultChecked('showUnknownAlarm');
   }
@@ -253,6 +259,7 @@ export class DashboardBasePage extends pulsePage.BasePage {
     return [
       { id: 'showChangedTools', type: 'checkbox' },
       { id: 'showtasklist', type: 'checkbox' },
+      { id: 'showscrap', type: 'checkbox' },
       { id: 'openStopClassification', type: 'checkbox' },
       { id: 'stopClassificationReopenDelay', type: 'value' },
       { id: 'showalarm', type: 'checkbox' },
@@ -285,6 +292,7 @@ export class DashboardBasePage extends pulsePage.BasePage {
    */
   buildContent () {
     setDisplayAll('.tasklist-content', pulseConfig.getBool('showtasklist') ? '' : 'none');
+    setDisplayAll('.scrap-content', pulseConfig.getBool('showscrap') ? '' : 'none');
     setDisplayAll('.changedtools-content', pulseConfig.getBool('showChangedTools') ? 'flex' : 'none');
     setDisplayAll('.cncalarmicon-content', pulseConfig.getBool('showalarm') ? 'flex' : 'none');
   }
